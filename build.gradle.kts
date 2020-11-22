@@ -48,3 +48,8 @@ val jar by tasks.getting(Jar::class) {
         attributes["Main-Class"] = "it.unibo.sampleapp.App"
     }
 }
+
+task("runMain", JavaExec::class) {
+    main = "it.unibo.sampleapp.App"
+    classpath = sourceSets["main"].runtimeClasspath
+}
