@@ -34,3 +34,11 @@ application {
     // Define the main class for the application.
     mainClassName = "it.unibo.sampleapp.App"
 }
+
+tasks.register("listPlugins") {
+    doLast {
+        project.plugins.forEach {
+            println(it)
+        }
+    }
+}
