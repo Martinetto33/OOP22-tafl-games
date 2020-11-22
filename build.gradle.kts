@@ -42,3 +42,9 @@ tasks.register("listPlugins") {
         }
     }
 }
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Main-Class"] = "it.unibo.sampleapp.App"
+    }
+}
