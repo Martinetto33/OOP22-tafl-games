@@ -37,7 +37,7 @@ public class App {
             .build() 
             // 0. Here we get a Books object (API façade)
             .volumes().list("inauthor: " + author)
-            .execute().getItems().stream()
+            .execute().getItems().parallelStream()
             .filter(v -> v.getVolumeInfo().getAuthors().stream().anyMatch(a -> a.toLowerCase().contains(author.toLowerCase())))
             .map(v -> v.getVolumeInfo().getTitle())
             // 1. Here we get a stream of book titles
