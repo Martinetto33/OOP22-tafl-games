@@ -58,23 +58,4 @@ tasks {
         // Enables JUnit 5 Jupiter module
         useJUnitPlatform()
     }
-
-    register<DefaultTask>("listPlugins") {
-        doLast {
-            project.plugins.forEach {
-                println(it)
-            }
-        }
-    }
-
-    getting(Jar::class) {
-        manifest {
-            attributes["Main-Class"] = "it.unibo.sampleapp.App"
-        }
-    }
-
-    task("runMain", JavaExec::class) {
-        main = "it.unibo.sampleapp.App"
-        classpath = sourceSets["main"].runtimeClasspath
-    }
 }
