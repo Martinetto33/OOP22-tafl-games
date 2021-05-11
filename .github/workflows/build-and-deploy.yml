@@ -1,6 +1,7 @@
 name: CI
 on:
   push:
+  pull_request:
   schedule:
     - cron: '0 3 * * SUN'
 
@@ -89,7 +90,7 @@ jobs:
         if: ${{ env.REFERENCE == 'true' }}
         uses: codecov/codecov-action@v1
       - name: Deploy
-        if: ${{ env.REFERENCE == 'true' }}
+        if: ${{ env.REFERENCE == 'true' && github.event_name == 'push' }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -116,19 +117,18 @@ jobs:
           path: ok
   CI-Complete:
     needs: Build-Success
-    if: always() && ${{ github.event_name == 'push' }}
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
         with:
           name: success
-      - run: echo '${{ toJson(github) }}'
       - shell: bash
         run: '[ -f ok ]'
   Automerge:
     needs: CI-Complete
     runs-on: ubuntu-latest
-    if: always()
+    if: always() && github.event_name == 'push'
     steps:
       - name: automerge
         uses: "DanySK/yaagha@master"
