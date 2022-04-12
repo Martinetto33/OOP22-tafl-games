@@ -5,7 +5,14 @@ on:
     branches-ignore:
       - 'autodelivery**'
       - 'bump-**'
+      - 'renovate/**'
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'README.md'
+      - 'renovate.json'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   Build:
