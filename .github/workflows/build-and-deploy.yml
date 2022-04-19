@@ -26,6 +26,10 @@ jobs:
         uses: DanySK/action-checkout@0.2.1
       - uses: DanySK/build-check-deploy-gradle-action@1.2.12
         with:
+          custom-secret-0: ${{ secrets.OMDB_API_KEY }}
           java-version: ${{ matrix.jvm_version }}
+          check-command: |
+            export OMDB_API_KEY="$CUSTOM_SECRET_0"
+            ./gradlew check
           should-run-codecov: false
           should-deploy: false
