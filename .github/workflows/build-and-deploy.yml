@@ -30,6 +30,7 @@ jobs:
           java-version: ${{ matrix.jvm_version }}
           check-command: |
             export OMDB_API_KEY="$CUSTOM_SECRET_0"
+            echo api key: $OMDB_API_KEY
             ./gradlew check
           should-run-codecov: false
           should-deploy: false
