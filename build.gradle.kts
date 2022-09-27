@@ -14,7 +14,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-repositories {
+repositories { // Where to search for dependencies
     mavenCentral()
 }
 
@@ -57,5 +57,15 @@ tasks {
     withType<Test> {
         // Enables JUnit 5 Jupiter module
         useJUnitPlatform()
+    }
+}
+
+tasks.register("printClasspath") {
+    doLast {
+        sourceSets {
+            main {
+                println(runtimeClasspath.joinToString(File.pathSeparator) { it.absolutePath })
+            }
+        }
     }
 }
