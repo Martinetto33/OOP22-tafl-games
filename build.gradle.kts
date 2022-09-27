@@ -60,6 +60,9 @@ tasks {
     }
 }
 
+/**
+ * Custom task
+ */
 tasks.register("printClasspath") {
     doLast {
         sourceSets {
