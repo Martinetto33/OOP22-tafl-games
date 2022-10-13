@@ -16,6 +16,7 @@ on:
 
 jobs:
   Build:
+    if: contains(github.repository, 'sample-gradle-project') && !github.event.repository.fork
     strategy:
       matrix:
         os: [windows, macos, ubuntu]
