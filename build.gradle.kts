@@ -51,7 +51,7 @@ application {
 tasks.test {
     useJUnitPlatform()
     testLogging {
-        events(org.gradle.api.tasks.testing.logging.TestLogEvent.values())
+        events(*org.gradle.api.tasks.testing.logging.TestLogEvent.values())
         showStandardStreams = true
     }
 }
