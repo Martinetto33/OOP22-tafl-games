@@ -48,31 +48,10 @@ application {
     mainClass.set("it.unibo.sampleapp.RateAMovie")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-tasks {
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-    }
-
-    withType<Test> {
-        // Enables JUnit 5 Jupiter module
-        useJUnitPlatform()
-    }
-}
-
-/**
- * Custom task
- */
-tasks.register("printClasspath") {
-    doLast {
-        sourceSets {
-            main {
-                println(runtimeClasspath.joinToString(File.pathSeparator) { it.absolutePath })
-            }
-        }
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events(TestLogEvent.values())
+        showStandardStreams = true
     }
 }
