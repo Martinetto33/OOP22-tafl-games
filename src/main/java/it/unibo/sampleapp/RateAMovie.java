@@ -2,16 +2,16 @@ package it.unibo.sampleapp;
 
 import com.omertron.omdbapi.OmdbApi;
 import com.omertron.omdbapi.tools.OmdbBuilder;
-import org.jooq.lambda.Unchecked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.jooq.lambda.Unchecked.function;
 
+/**
+ * Monolitic application that fetches movie rates.
+ */
 public final class RateAMovie {
     private static final String DEFAULT_MOVIE = "Breaking Bad";
     private static final String OMDB_API_KEY = System.getenv("OMDB_API_KEY");
@@ -20,6 +20,11 @@ public final class RateAMovie {
     private RateAMovie() {
     }
 
+    /**
+     * Launches the application. Expects {@code OMDB_API_KEY} to be a valid environment variable.
+     *
+     * @param args a string with the movie/series name.
+     */
     public static void main(final String[] args) {
         if (OMDB_API_KEY == null || OMDB_API_KEY.isBlank()) {
             LOGGER.error("Invalid OMDB API Key '{}', set a valid API Key as env variable OMDB_API_KEY", OMDB_API_KEY);
