@@ -32,4 +32,25 @@ public class TestVector {
         /*If multiplied by 0, the vector deltas become 0, therefore starting position and ending position coincide */
         assertTrue(w.multiplyByScalar(0).equals(new VectorImpl(new Position(-1, 1), new Position(-1, 1))));
     }
+
+    @Test
+    public void testApplyToPosition() {
+        Position p = new Position(0, 0);
+        Vector v = new VectorImpl(p, new Position(1, 2));
+        Vector w = new VectorImpl(new Position(1, 2), new Position(3, 6));
+        Position p1 = v.applyToPosition(p);
+        assertTrue(p1.equals(new Position(1, 2)));
+        assertTrue(w.applyToPosition(p).equals(new Position(2, 4)));
+        /*p has not changed */
+        assertTrue(p.equals(new Position(0, 0)));
+        /*Two vectors applied to the same point should return the same end position,
+         * no matter the order in which they are applied to the point.
+         */
+        assertTrue(w.applyToPosition(v.applyToPosition(p)).equals(new Position(3, 6)));
+        assertTrue(v.applyToPosition(w.applyToPosition(p)).equals(new Position(3, 6)));
+        /*A null vector should not return different coordinates */
+        assertTrue(new VectorImpl(p, p).applyToPosition(p).equals(p));
+        Vector w1 = w.multiplyByScalar(-1);
+        assertTrue(p1.equals(w1.applyToPosition(w.applyToPosition(p1))));
+    }
 }
