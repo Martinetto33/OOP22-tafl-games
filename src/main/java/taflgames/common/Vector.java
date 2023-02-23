@@ -1,4 +1,4 @@
-package it.unibo;
+package taflgames.common;
 
 /**
  * This class is fake for now and will model a mathematic vector.
