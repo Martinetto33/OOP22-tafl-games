@@ -32,7 +32,7 @@ public class TestVector {
         /*If multiplied by 0, the vector deltas become 0, therefore starting position and ending position coincide */
         assertTrue(w.multiplyByScalar(0).equals(new VectorImpl(new Position(-1, 1), new Position(-1, 1))));
     }
-
+    
     @Test
     public void testApplyToPosition() {
         Position p = new Position(0, 0);
