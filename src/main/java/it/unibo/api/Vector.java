@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import it.unibo.code.Position;
 
+//TODO: javadoc
+
 public interface Vector {
     public Position getStartPos();
 
@@ -28,4 +30,6 @@ public interface Vector {
     public int hashCode();
 
     public boolean equals(Object obj);
+
+    public String toString();
 }

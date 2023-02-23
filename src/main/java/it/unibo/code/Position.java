@@ -33,12 +33,7 @@ public class Position {
     public void setY(int y) {
         this.y = y;
     }
-
-    public void multiplyByInteger(int i) {
-        this.setX(this.x * i);
-        this.setY(this.y * i);
-    }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -64,4 +59,12 @@ public class Position {
         return true;
     }
 
+    public String toString() {
+        return new StringBuilder().append("[x: ")
+                                  .append(this.x)
+                                  .append(", y: ")
+                                  .append(this.y)
+                                  .append("]")
+                                  .toString();
+    }
 }

@@ -5,11 +5,12 @@ import java.util.Optional;
 import it.unibo.api.Vector;
 
 /**
- * This class is fake for now and will model a mathematic vector.
+ * This class models a mathematic vector.
+ * TODO: add javadoc
  */
 public class VectorImpl implements Vector {
     private static final int UNIT_ANGLE = 45;
-    private static final int ROUND_ANGLE = 360;
+    private static final int RIGHT_ANGLE = 90;
     private Position startPos;
     private Position endPos;
     
@@ -66,13 +67,16 @@ public class VectorImpl implements Vector {
         if (angle % VectorImpl.UNIT_ANGLE != 0) {
             return Optional.empty();
         }
-        double radAngle = this.toRadians(angle);
-        return Optional.of(new VectorImpl((int) (this.deltaX() * Math.cos(radAngle) - this.deltaY() * Math.sin(radAngle)), 
-                                          (int) (this.deltaX() * Math.sin(radAngle) + this.deltaY() * Math.cos(radAngle))));
-    }
-
-    private double toRadians(int angle) {
-        return angle * 2 * Math.PI / VectorImpl.ROUND_ANGLE;
+        /*If a vector isn't inclined by an angle which is multiple of 45°, only rotations
+         * by multiples of 90° would return a vector that hasn't changed in dimensions and would
+         * make sense in a cells grid.
+         */
+        if (this.deltaX() != this.deltaY() && angle % VectorImpl.RIGHT_ANGLE != 0) {
+            return Optional.empty();
+        }
+        double radAngle = Math.toRadians(angle);
+        return Optional.of(new VectorImpl((int) Math.round(this.deltaX() * Math.cos(radAngle) - this.deltaY() * Math.sin(radAngle)), 
+                                          (int) Math.round(this.deltaX() * Math.sin(radAngle) + this.deltaY() * Math.cos(radAngle))));
     }
 
     @Override
@@ -106,4 +110,15 @@ public class VectorImpl implements Vector {
         return true;
     }
 
+    public String toString() {
+        return new StringBuilder().append("Vector: ")
+                                  .append(this.startPos.toString())
+                                  .append(" -> ")
+                                  .append(this.endPos.toString())
+                                  .append("; deltaX = ")
+                                  .append(this.deltaX())
+                                  .append(", deltaY = ")
+                                  .append(this.deltaY())
+                                  .toString();
+    }
 }

@@ -53,4 +53,31 @@ public class TestVector {
         Vector w1 = w.multiplyByScalar(-1);
         assertTrue(p1.equals(w1.applyToPosition(w.applyToPosition(p1))));
     }
+
+    @Test
+    public void testRotation() {
+        /*Rotations occur clockwise if the angle is negative, anti-clockwise otherwise. */
+        Vector v = new VectorImpl(1, 1);
+        Vector v2 = new VectorImpl(new Position(3, 4), new Position(4, -2));
+        /*Rotations can only occur if an angle is a multiple of 45 degrees
+         * on a map represented by fixed cells.
+         */
+        assertTrue(v.rotate(32).isEmpty());
+        assertTrue(new VectorImpl(1, -1).equals(v.rotate(-90).get()));
+        assertTrue(v.rotate(0).get().equals(new VectorImpl(1, 1)));
+        Vector w = new VectorImpl(2,3);
+        /*Can't rotate an odd vector if not by multiples of
+         * 90 degrees.
+         */
+        assertTrue(w.rotate(45).isEmpty());
+        assertTrue(w.rotate(180).get().equals(new VectorImpl(-2, -3)));
+        /*The vectors resulted from rotation are applied to the origin (0, 0) */
+        assertTrue(v2.rotate(90).get().equals(new VectorImpl(new Position(0, 0), new Position(6, 1))));
+        /*By applying a 180°-rotated vector to its end position
+         * we should get back to its start position.
+         */
+        Position e = v2.getEndPos();
+        Vector opposite = v2.rotate(180).get();
+        assertTrue(opposite.applyToPosition(e).equals(v2.getStartPos()));
+    }
 }
