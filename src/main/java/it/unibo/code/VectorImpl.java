@@ -40,11 +40,10 @@ public class VectorImpl implements Vector {
     }
 
     public Vector multiplyByScalar(int scalar) {
-        Position s = new Position(this.startPos);
-        Position e = new Position(this.endPos);
-        s.multiplyByInteger(scalar);
-        e.multiplyByInteger(scalar);
-        return new VectorImpl(s, e);
+        Position e = new Position(this.startPos);
+        e.setX(e.getX() + scalar * this.deltaX());
+        e.setY(e.getY() + scalar * this.deltaY());
+        return new VectorImpl(this.startPos, e);
     }
 
     public Position applyToPosition(Position startingPoint) {
@@ -75,4 +74,36 @@ public class VectorImpl implements Vector {
     private double toRadians(int angle) {
         return angle * 2 * Math.PI / VectorImpl.ROUND_ANGLE;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((startPos == null) ? 0 : startPos.hashCode());
+        result = prime * result + ((endPos == null) ? 0 : endPos.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        VectorImpl other = (VectorImpl) obj;
+        if (startPos == null) {
+            if (other.startPos != null)
+                return false;
+        } else if (!startPos.equals(other.startPos))
+            return false;
+        if (endPos == null) {
+            if (other.endPos != null)
+                return false;
+        } else if (!endPos.equals(other.endPos))
+            return false;
+        return true;
+    }
+
 }
