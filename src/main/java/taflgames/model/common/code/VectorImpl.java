@@ -1,8 +1,8 @@
-package it.unibo.code;
+package taflgames.model.common.code;
 
 import java.util.Optional;
 
-import it.unibo.api.Vector;
+import taflgames.model.common.api.Vector;
 
 /**
  * This class models a mathematic vector.

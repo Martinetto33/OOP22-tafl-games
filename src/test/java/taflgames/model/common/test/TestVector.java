@@ -1,12 +1,12 @@
-package it.unibo;
+package taflgames.model.common.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.api.Vector;
-import it.unibo.code.Position;
-import it.unibo.code.VectorImpl;
+import taflgames.model.common.api.Vector;
+import taflgames.model.common.code.Position;
+import taflgames.model.common.code.VectorImpl;
 
 public class TestVector {
     @Test
@@ -32,7 +32,7 @@ public class TestVector {
         /*If multiplied by 0, the vector deltas become 0, therefore starting position and ending position coincide */
         assertTrue(w.multiplyByScalar(0).equals(new VectorImpl(new Position(-1, 1), new Position(-1, 1))));
     }
-    
+
     @Test
     public void testApplyToPosition() {
         Position p = new Position(0, 0);

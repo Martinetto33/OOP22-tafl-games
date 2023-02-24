@@ -1,8 +1,8 @@
-package it.unibo.api;
+package taflgames.model.common.api;
 
 import java.util.Optional;
 
-import it.unibo.code.Position;
+import taflgames.model.common.code.Position;
 
 //TODO: javadoc
 

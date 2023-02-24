@@ -1,4 +1,4 @@
-package it.unibo.code;
+package taflgames.model.common.code;
 
 /**
  * A class modelling a 2D point in space.
