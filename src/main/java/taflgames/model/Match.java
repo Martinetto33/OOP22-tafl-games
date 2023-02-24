@@ -1,9 +1,20 @@
 package taflgames.model;
 
 import taflgames.common.api.Position;
+import taflgames.common.Player;
 
 public interface Match {
     
+    /**
+     * @return the active player
+     */
+    Player getNextPlayernTurn();
+
+    /**
+     * Updates the active player.
+     */
+    void setNextPlayerInTurn();
+
     /**
      * Checks if the selected starting position is valid.
      * @param start the selected starting position
@@ -27,5 +38,11 @@ public interface Match {
      * @param destination the destination
      */
     void makeMove(Position start, Position destination);
+
+    /**
+     * Checks if the match is over.
+     * @return true if the match is over, false otherwise
+     */
+    boolean isOver();
 
 }
