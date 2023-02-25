@@ -3,8 +3,11 @@ package taflgames.model;
 import taflgames.common.api.Position;
 import taflgames.common.Player;
 
+/**
+ * Interface to interact with the game logic.
+ */
 public interface Match {
-    
+
     /**
      * @return the active player
      */
