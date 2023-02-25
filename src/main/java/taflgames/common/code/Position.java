@@ -1,4 +1,4 @@
-package taflgames.model.common.code;
+package taflgames.common.code;
 
 /**
  * A class modelling a 2D point in space.

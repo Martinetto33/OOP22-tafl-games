@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import taflgames.model.common.api.Vector;
-import taflgames.model.common.code.Position;
-import taflgames.model.common.code.VectorImpl;
+import taflgames.common.api.Vector;
+import taflgames.common.code.Position;
+import taflgames.common.code.VectorImpl;
 
 public class TestVector {
     @Test

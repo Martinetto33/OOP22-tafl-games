@@ -1,8 +1,8 @@
-package taflgames.model.common.api;
+package taflgames.common.api;
 
 import java.util.Optional;
 
-import taflgames.model.common.code.Position;
+import taflgames.common.code.Position;
 
 //TODO: javadoc
 

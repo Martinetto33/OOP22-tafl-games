@@ -1,8 +1,8 @@
-package taflgames.model.common.code;
+package taflgames.common.code;
 
 import java.util.Optional;
 
-import taflgames.model.common.api.Vector;
+import taflgames.common.api.Vector;
 
 /**
  * This class models a mathematic vector.
