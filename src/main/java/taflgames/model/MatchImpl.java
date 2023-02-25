@@ -18,7 +18,7 @@ public final class MatchImpl implements Match {
      * the players turn queue
      */
     private final LoopingIterator<Player> turnQueue;
-    private Player playerInTurn;
+    private Player activePlayer;
 
     /**
      * Creates a new match.
@@ -32,22 +32,22 @@ public final class MatchImpl implements Match {
 
     @Override
     public Player getActivePlayer() {
-        return this.playerInTurn;
+        return this.activePlayer;
     }
 
     @Override
     public void setNextActivePlayer() {
-        this.playerInTurn = this.turnQueue.next();
+        this.activePlayer = this.turnQueue.next();
     }
 
     @Override
     public boolean selectSource(final Position start) {
-        return this.board.isStartingPointValid(start, playerInTurn);
+        return this.board.isStartingPointValid(start, activePlayer);
     }
 
     @Override
     public boolean selectDestination(final Position start, final Position destination) {
-        return this.board.isDestinationValid(start, destination, playerInTurn);
+        return this.board.isDestinationValid(start, destination, activePlayer);
     }
 
     @Override
