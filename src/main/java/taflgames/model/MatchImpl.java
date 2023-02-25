@@ -7,8 +7,11 @@ import org.apache.commons.collections4.iterators.LoopingIterator;
 import taflgames.common.Player;
 import taflgames.common.api.Position;
 
+/**
+ * This class implements a match.
+ */
 public final class MatchImpl implements Match {
-    
+
     private final Board board = null;   // TO INITIALIZE
     /*
      * Using a collection from the Apache Commons Collection library to implement
@@ -17,6 +20,9 @@ public final class MatchImpl implements Match {
     private final LoopingIterator<Player> turnQueue;
     private Player playerInTurn;
 
+    /**
+     * Creates a new match.
+     */
     public MatchImpl() {
         this.turnQueue = new LoopingIterator<>(
             List.of(Player.ATTACKER, Player.DEFENDER)
