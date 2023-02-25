@@ -11,12 +11,12 @@ public interface Match {
     /**
      * @return the active player
      */
-    Player getNextPlayernTurn();
+    Player getActivePlayer();
 
     /**
      * Updates the active player.
      */
-    void setNextPlayerInTurn();
+    void setNextActivePlayer();
 
     /**
      * Checks if the selected starting position is valid.

@@ -27,16 +27,16 @@ public final class MatchImpl implements Match {
         this.turnQueue = new LoopingIterator<>(
             List.of(Player.ATTACKER, Player.DEFENDER)
         );
-        this.setNextPlayerInTurn();
+        this.setNextActivePlayer();
     }
 
     @Override
-    public Player getNextPlayernTurn() {
+    public Player getActivePlayer() {
         return this.playerInTurn;
     }
 
     @Override
-    public void setNextPlayerInTurn() {
+    public void setNextActivePlayer() {
         this.playerInTurn = this.turnQueue.next();
     }
 
