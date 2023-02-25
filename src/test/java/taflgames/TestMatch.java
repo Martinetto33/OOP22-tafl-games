@@ -8,5 +8,5 @@ import taflgames.model.Match;
  * JUnit tests for {@link Match}.
  */
 public class TestMatch {
-    
+
 }
