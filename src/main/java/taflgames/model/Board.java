@@ -1,6 +1,6 @@
 package taflgames.model;
 
-import taflgames.common.api.Position;
+import taflgames.common.code.Position;
 import taflgames.common.api.Vector;
 import taflgames.common.Player;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.commons.collections4.iterators.LoopingIterator;
 
 import taflgames.common.Player;
-import taflgames.common.api.Position;
+import taflgames.common.code.Position;
 
 /**
  * This class implements a match.
