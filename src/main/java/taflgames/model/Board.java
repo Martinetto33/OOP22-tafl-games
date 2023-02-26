@@ -10,7 +10,7 @@ public interface Board {
 
     boolean isDestinationValid(Position start, Position dest, Player player);
 
-    void updatePiecePos(Position oldPos, Position newPos);
+    void makeMove(Position oldPos, Position newPos);
 
     Position getFurthestReachablePos(Vector direction);
 
