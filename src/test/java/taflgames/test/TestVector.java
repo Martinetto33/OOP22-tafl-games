@@ -11,6 +11,10 @@ import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
 
 //CHECKSTYLE: MagicNumber OFF
+/*Magic numbers checks disabled in order to allow quicker writing of the tests; the
+ * numbers used in the creation of Positions and Vectors are not intended to be 
+ * constants, but only results to verify computations by need.
+ */
 @SuppressWarnings("PMD.ReplaceVectorWithList") /*suppressed as the design requires
 some specific methods and Lists wouldn't come in handy in this case */
 class TestVector {
