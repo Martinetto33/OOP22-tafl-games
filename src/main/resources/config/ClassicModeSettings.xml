@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+    <BoardSize>11</BoardSize>
+    <KingPosition>
+        <Position row="5" column="5"/>
+    </KingPosition>
+    <ExitsPositions>
+        <Position row="0" column="0"/>
+        <Position row="0" column="10"/>
+        <Position row="10" column="0"/>
+        <Position row="10" column="10"/>
+    </ExitsPositions>
+    <AttackerBasicPiecesNumber>24</AttackerBasicPiecesNumber>
+    <DefenderBasicPiecesNumber>12</DefenderBasicPiecesNumber>
+</Settings>
