@@ -42,9 +42,6 @@ dependencies {
     val apacheCommonsCollectionsVersion = "4.4"
     implementation("org.apache.commons:commons-collections4:$apacheCommonsCollectionsVersion")
 
-    // Jackson (JSON parser and generator for Java)
-    val jacksonVersion = "2.13.4"
-    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 }
 
 application {
