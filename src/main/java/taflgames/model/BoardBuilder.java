@@ -23,15 +23,18 @@ public class BoardBuilder {
     
     private final Map<Position, Cell> cells;
     private final Map<Player, Map<Position, Piece>> pieces;
-    private final int size;
+    private int boardSize;
 
-    public BoardBuilder(final int size) {
+    public BoardBuilder() {
         this.cells = new HashMap<>();
         this.pieces = new HashMap<>();
         for (Player player : Player.values()) {
             this.pieces.put(player, new HashMap<>());
         }
-        this.size = size;
+    }
+
+    public void addBoardSize(final int boardSize) {
+        this.boardSize = boardSize;
     }
 
     public void addThroneAndKing(final Position thronePos) {
@@ -52,8 +55,8 @@ public class BoardBuilder {
     }
 
     public void addBasicCells() {
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
+        for (int row = 0; row < this.boardSize; row++) {
+            for (int col = 0; col < this.boardSize; col++) {
                 final Position pos = new Position(row, col);
                 if (!this.cells.containsKey(pos)) {
                     this.cells.put(pos, new BasicCell());
