@@ -1,4 +1,4 @@
-package taflgames.model.memento;
+package taflgames.model.memento.api;
 
 /**
  * An interface modelling the behaviour that the Inner Class of the Piece implementation

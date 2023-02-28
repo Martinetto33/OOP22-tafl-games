@@ -1,4 +1,4 @@
-package taflgames.model.memento;
+package taflgames.model.memento.api;
 
 import java.util.List;
 

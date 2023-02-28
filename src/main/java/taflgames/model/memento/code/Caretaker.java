@@ -1,4 +1,4 @@
-package taflgames.model.memento;
+package taflgames.model.memento.code;
 
 //import java.util.ArrayList;
 //import java.util.List;
