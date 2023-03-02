@@ -97,7 +97,7 @@ public class BoardBuilder {
         });
     }
 
-    public void addBasicPieces(final int n, final Map<Player, Set<Position>> positions) {
+    public void addBasicPieces(final Map<Player, Set<Position>> positions) {
         positions.forEach((player, posSet) -> {
             for (final var pos : posSet) {
                 this.pieces.get(player).put(pos, new BasicPiece());
