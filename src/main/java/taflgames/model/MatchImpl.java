@@ -12,7 +12,7 @@ import taflgames.common.code.Position;
  */
 public final class MatchImpl implements Match {
 
-    private final Board board = null;   // TO INITIALIZE
+    private final Board board = null;
     /*
      * Using a collection from the Apache Commons Collection library to implement
      * the players turn queue
@@ -24,6 +24,9 @@ public final class MatchImpl implements Match {
      * Creates a new match.
      */
     public MatchImpl() {
+        /*
+         * TO DO: init board
+         */
         this.turnQueue = new LoopingIterator<>(
             List.of(Player.ATTACKER, Player.DEFENDER)
         );
