@@ -112,4 +112,12 @@ public class BoardBuilder {
         return new BoardImpl(this.cells, this.pieces);
     }
 
+    public Map<Position, Cell> getCells() {
+        return this.cells;
+    }
+
+    public Map<Player, Map<Position, Piece>> getPieces() {
+        return this.pieces;
+    }
+
 }
