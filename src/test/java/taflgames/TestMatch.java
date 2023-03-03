@@ -2,6 +2,7 @@ package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import taflgames.common.Player;
+import taflgames.controller.SettingsLoader;
+import taflgames.controller.SettingsLoaderImpl;
+import taflgames.model.BoardBuilder;
 import taflgames.model.Match;
 import taflgames.model.MatchImpl;
 
@@ -24,7 +28,14 @@ class TestMatch {
      */
     @BeforeEach
     void init() {
-        match = new MatchImpl();
+        final SettingsLoader loader = new SettingsLoaderImpl();
+        final BoardBuilder builder = new BoardBuilder();
+        try {
+            loader.loadClassicModeConfig(builder);
+            this.match = new MatchImpl(builder.build());
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
