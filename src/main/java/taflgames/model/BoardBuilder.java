@@ -19,6 +19,9 @@ import taflgames.model.pieces.Queen;
 import taflgames.model.pieces.Shielder;
 import taflgames.model.pieces.Swapper;
 
+/**
+ * This class builds a {@link Board}.
+ */
 public class BoardBuilder {
     
     private final Map<Position, Cell> cells;
