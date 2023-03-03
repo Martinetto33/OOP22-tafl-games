@@ -9,7 +9,7 @@ import taflgames.model.cells.Cell;
 import taflgames.model.pieces.Piece;
 
 /**
- * This class builds a {@link Board}.
+ * This class implements a {@link Board}.
  */
 public class BoardImpl implements Board {
 
