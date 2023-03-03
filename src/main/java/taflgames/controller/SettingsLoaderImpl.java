@@ -24,16 +24,16 @@ import org.xml.sax.SAXException;
 public class SettingsLoaderImpl implements SettingsLoader {
 
     private static final String SEP = System.getProperty("file.separator");
-    private static final String PATH = "config" + SEP;
+    private static final String PATH = "taflgames" + SEP + "config" + SEP;
+    private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettings.xml";
 
     public SettingsLoaderImpl() {
-        
     }
-
+    
     public void loadClassicModeConfig(final BoardBuilder boardBuilder) throws IOException {
         try {
             final InputStream configFile = Objects.requireNonNull(
-                this.getClass().getResourceAsStream(PATH + "ClassicModeSettings.xml")
+                ClassLoader.getSystemResourceAsStream(PATH + CLASSIC_CONFIG_FILE)
             );
             final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -46,9 +46,9 @@ public class SettingsLoaderImpl implements SettingsLoader {
             this.loadKingData(settings, boardBuilder);
             this.loadExitsData(settings, boardBuilder);
             this.loadBasicPiecesData(settings, boardBuilder);
-
+            
             configFile.close();
-
+            
         } catch (final ParserConfigurationException | SAXException e) {
             throw new IOException("Cannot read configuration file");
         }
@@ -56,10 +56,10 @@ public class SettingsLoaderImpl implements SettingsLoader {
 
     public void loadVariantModeConfig(final BoardBuilder boardBuilder) throws IOException {
         /*
-         * TO DO
-         */
+        * TO DO
+        */
     }
-
+    
     private void loadBoardSize(final Element settings, final BoardBuilder boardBuilder) {
         final int boardSize = Integer.parseInt(
             settings.getElementsByTagName("BoardSize").item(0).getTextContent()
