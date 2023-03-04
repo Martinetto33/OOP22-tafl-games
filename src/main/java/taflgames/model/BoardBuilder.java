@@ -1,123 +1,42 @@
 package taflgames.model;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.cells.BasicCell;
 import taflgames.model.cells.Cell;
-import taflgames.model.cells.Exit;
-import taflgames.model.cells.Slider;
-import taflgames.model.cells.Throne;
-import taflgames.model.pieces.Archer;
-import taflgames.model.pieces.BasicPiece;
-import taflgames.model.pieces.King;
 import taflgames.model.pieces.Piece;
-import taflgames.model.pieces.Queen;
-import taflgames.model.pieces.Shielder;
-import taflgames.model.pieces.Swapper;
 
 /**
  * This class builds a {@link Board}.
  */
-public class BoardBuilder {
+public interface BoardBuilder {
     
-    private final Map<Position, Cell> cells;
-    private final Map<Player, Map<Position, Piece>> pieces;
-    private int boardSize;
+    void addBoardSize(int boardSize);
 
-    public BoardBuilder() {
-        this.cells = new HashMap<>();
-        this.pieces = new HashMap<>();
-        for (Player player : Player.values()) {
-            this.pieces.put(player, new HashMap<>());
-        }
-    }
+    void addThroneAndKing(Position thronePos);
 
-    public void addBoardSize(final int boardSize) {
-        this.boardSize = boardSize;
-    }
+    void addExits(Set<Position> positions);
+    
+    void addSliders(Set<Position> positions);
 
-    public void addThroneAndKing(final Position thronePos) {
-        this.cells.put(thronePos, new Throne());
-        this.pieces.get(Player.DEFENDER).put(thronePos, new King());
-    }
+    void addBasicCells();
 
-    public void addExits(final Set<Position> positions) {
-        for (var pos : positions) {
-            this.cells.put(pos, new Exit());
-        }
-    }
+    void addQueens(Map<Player, Set<Position>> positions);
 
-    public void addSliders(final int n, final Set<Position> positions) {
-        for (final var pos : positions) {
-            this.cells.put(pos, new Slider());
-        }
-    }
+    void addArchers(Map<Player, Set<Position>> positions);
 
-    public void addBasicCells() {
-        for (int row = 0; row < this.boardSize; row++) {
-            for (int col = 0; col < this.boardSize; col++) {
-                final Position pos = new Position(row, col);
-                if (!this.cells.containsKey(pos)) {
-                    this.cells.put(pos, new BasicCell());
-                }
-            }
-        }
-    }
+    void addShields(Map<Player, Set<Position>> positions);
 
-    public void addQueens(final int n, final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Queen());
-            }
-        });
-    }
+    void addSwappers(Map<Player, Set<Position>> positions);
 
-    public void addArchers(final int n, final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Archer());
-            }
-        });
-    }
+    void addBasicPieces(Map<Player, Set<Position>> positions);
 
-    public void addShielders(final int n, final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Shielder());
-            }
-        });
-    }
+    Board build();
 
-    public void addSwappers(final int n, final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Swapper());
-            }
-        });
-    }
+    Map<Position, Cell> getCells();
 
-    public void addBasicPieces(final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new BasicPiece());
-            }
-        });
-    }
-
-    public Board build() {
-        return new BoardImpl(this.cells, this.pieces);
-    }
-
-    public Map<Position, Cell> getCells() {
-        return this.cells;
-    }
-
-    public Map<Player, Map<Position, Piece>> getPieces() {
-        return this.pieces;
-    }
-
+    Map<Player, Map<Position, Piece>> getPieces();
+    
 }
