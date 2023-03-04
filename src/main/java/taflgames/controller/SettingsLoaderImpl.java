@@ -26,6 +26,7 @@ public class SettingsLoaderImpl implements SettingsLoader {
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "config" + SEP;
     private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettings.xml";
+    private static final String VARIANT_CONFIG_FILE = "VariantModeSettings.xml";
 
     public SettingsLoaderImpl() {
     }
@@ -43,7 +44,20 @@ public class SettingsLoaderImpl implements SettingsLoader {
     }
 
     public void loadVariantModeConfig(final BoardBuilder boardBuilder) throws IOException {
-        
+        try {
+            final Element settings = getSettingsFromFile(VARIANT_CONFIG_FILE);
+            this.loadBoardSize(settings, boardBuilder);
+            this.loadKingData(settings, boardBuilder);
+            this.loadExitsData(settings, boardBuilder);
+            this.loadSlidersData(settings, boardBuilder);
+            this.loadBasicPiecesData(settings, boardBuilder);
+            this.loadQueensData(settings, boardBuilder);
+            this.loadArchersData(settings, boardBuilder);
+            this.loadShieldsData(settings, boardBuilder);
+            this.loadSwappersData(settings, boardBuilder);
+        } catch (final IOException e) {
+            throw new IOException("Cannot read configuration file");
+        }
     }
 
     private Element getSettingsFromFile(final String filename) throws IOException {
@@ -60,20 +74,6 @@ public class SettingsLoaderImpl implements SettingsLoader {
         } catch (final ParserConfigurationException | SAXException | IOException e) {
             throw new IOException();
         }
-    }
-
-    private Set<Position> getPositionsByTag(final String tagName, final Element settings) {
-        final Set<Position> positions = new HashSet<>();
-        final Element positionsElement = (Element)(settings.getElementsByTagName(tagName).item(0));
-        final int length = positionsElement.getElementsByTagName("Position").getLength();
-        for (int i = 0; i < length; i++) {
-            final Element posElem = (Element)(positionsElement.getElementsByTagName("Position").item(i));
-            positions.add(new Position(
-                Integer.parseInt(posElem.getAttribute("row")),
-                Integer.parseInt(posElem.getAttribute("column"))
-            ));
-        }
-        return positions;
     }
     
     private void loadBoardSize(final Element settings, final BoardBuilder boardBuilder) {
@@ -94,20 +94,65 @@ public class SettingsLoaderImpl implements SettingsLoader {
     }
 
     private void loadExitsData(final Element settings, final BoardBuilder boardBuilder) {
-        final Set<Position> exitsPositions = getPositionsByTag("ExitsPositions", settings);
+        final Set<Position> exitsPositions = getPositionsByTagName("ExitsPositions", settings);
         boardBuilder.addExits(exitsPositions);
     }
 
+    private void loadSlidersData(final Element settings, final BoardBuilder boardBuilder) {
+        boardBuilder.addSliders(
+            getPositionsByTagName("SlidersPositions", settings)
+        );
+    }
+
     private void loadBasicPiecesData(final Element settings, final BoardBuilder boardBuilder) {
+        boardBuilder.addBasicPieces(
+            getPiecesPositionsForEachTeam("BasicPieces", settings)
+        );
+    }
 
-        final Map<Player, Set<Position>> basicPiecesPositions = new HashMap<>();
+    private void loadQueensData(final Element settings, final BoardBuilder boardBuilder) {
+        boardBuilder.addQueens(
+            getPiecesPositionsForEachTeam("Queens", settings)
+        );
+    }
 
-        final Set<Position> attackerBasicPiecesPositions = getPositionsByTag("AttackerBasicPiecesPositions", settings);
-        basicPiecesPositions.put(Player.ATTACKER, attackerBasicPiecesPositions);
-        final Set<Position> defenderBasicPiecesPositions = getPositionsByTag("DefenderBasicPiecesPositions", settings);
-        basicPiecesPositions.put(Player.DEFENDER, defenderBasicPiecesPositions);
+    private void loadArchersData(final Element settings, final BoardBuilder boardBuilder) {
+        boardBuilder.addArchers(
+            getPiecesPositionsForEachTeam("Archers", settings)
+        );
+    }
+    
+    private void loadShieldsData(final Element settings, final BoardBuilder boardBuilder) {
+        boardBuilder.addShields(
+            getPiecesPositionsForEachTeam("Shields", settings)
+        );
+    }
 
-        boardBuilder.addBasicPieces(basicPiecesPositions);
+    private void loadSwappersData(final Element settings, final BoardBuilder boardBuilder) {
+        boardBuilder.addSwappers(
+            getPiecesPositionsForEachTeam("Swappers", settings)
+        );
+    }
+
+    private Map<Player, Set<Position>> getPiecesPositionsForEachTeam(final String piecesName, final Element settings) {
+        final Map<Player, Set<Position>> positions = new HashMap<>();
+        positions.put(Player.ATTACKER, getPositionsByTagName("Attacker" + piecesName + "Positions", settings));
+        positions.put(Player.DEFENDER, getPositionsByTagName("Defender" + piecesName + "Positions", settings));
+        return positions;
+    }
+
+    private Set<Position> getPositionsByTagName(final String tagName, final Element settings) {
+        final Set<Position> positions = new HashSet<>();
+        final Element positionsElement = (Element)(settings.getElementsByTagName(tagName).item(0));
+        final int length = positionsElement.getElementsByTagName("Position").getLength();
+        for (int i = 0; i < length; i++) {
+            final Element posElem = (Element)(positionsElement.getElementsByTagName("Position").item(i));
+            positions.add(new Position(
+                Integer.parseInt(posElem.getAttribute("row")),
+                Integer.parseInt(posElem.getAttribute("column"))
+            ));
+        }
+        return positions;
     }
 
 }
