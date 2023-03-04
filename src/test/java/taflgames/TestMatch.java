@@ -13,6 +13,7 @@ import taflgames.common.Player;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
 import taflgames.model.BoardBuilder;
+import taflgames.model.BoardBuilderImpl;
 import taflgames.model.Match;
 import taflgames.model.MatchImpl;
 
@@ -29,7 +30,7 @@ class TestMatch {
     @BeforeEach
     void init() {
         final SettingsLoader loader = new SettingsLoaderImpl();
-        final BoardBuilder builder = new BoardBuilder();
+        final BoardBuilder builder = new BoardBuilderImpl();
         try {
             loader.loadClassicModeConfig(builder);
             this.match = new MatchImpl(builder.build());
