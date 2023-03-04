@@ -32,32 +32,48 @@ public class SettingsLoaderImpl implements SettingsLoader {
     
     public void loadClassicModeConfig(final BoardBuilder boardBuilder) throws IOException {
         try {
-            final InputStream configFile = Objects.requireNonNull(
-                ClassLoader.getSystemResourceAsStream(PATH + CLASSIC_CONFIG_FILE)
-            );
-            final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-            final Document document = docBuilder.parse(configFile);
-            document.getDocumentElement().normalize();
-            
-            final NodeList nodeList = document.getElementsByTagName("Settings");
-            final Element settings = (Element)(nodeList.item(0));
+            final Element settings = getSettingsFromFile(CLASSIC_CONFIG_FILE);
             this.loadBoardSize(settings, boardBuilder);
             this.loadKingData(settings, boardBuilder);
             this.loadExitsData(settings, boardBuilder);
             this.loadBasicPiecesData(settings, boardBuilder);
-            
-            configFile.close();
-            
-        } catch (final ParserConfigurationException | SAXException e) {
+        } catch (final IOException e) {
             throw new IOException("Cannot read configuration file");
         }
     }
 
     public void loadVariantModeConfig(final BoardBuilder boardBuilder) throws IOException {
-        /*
-        * TO DO
-        */
+        
+    }
+
+    private Element getSettingsFromFile(final String filename) throws IOException {
+        try (final InputStream configFile = Objects.requireNonNull(
+            ClassLoader.getSystemResourceAsStream(PATH + filename)
+        )) {
+            final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+            final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            final Document document = docBuilder.parse(configFile);
+            document.getDocumentElement().normalize();
+            final NodeList nodeList = document.getElementsByTagName("Settings");
+            final Element settings = (Element)(nodeList.item(0));
+            return settings;
+        } catch (final ParserConfigurationException | SAXException | IOException e) {
+            throw new IOException();
+        }
+    }
+
+    private Set<Position> getPositionsByTag(final String tagName, final Element settings) {
+        final Set<Position> positions = new HashSet<>();
+        final Element positionsElement = (Element)(settings.getElementsByTagName(tagName).item(0));
+        final int length = positionsElement.getElementsByTagName("Position").getLength();
+        for (int i = 0; i < length; i++) {
+            final Element posElem = (Element)(positionsElement.getElementsByTagName("Position").item(i));
+            positions.add(new Position(
+                Integer.parseInt(posElem.getAttribute("row")),
+                Integer.parseInt(posElem.getAttribute("column"))
+            ));
+        }
+        return positions;
     }
     
     private void loadBoardSize(final Element settings, final BoardBuilder boardBuilder) {
@@ -78,47 +94,19 @@ public class SettingsLoaderImpl implements SettingsLoader {
     }
 
     private void loadExitsData(final Element settings, final BoardBuilder boardBuilder) {
-        final Set<Position> exitsPositions = new HashSet<>();
-        final Element exitsPosElem = (Element)(settings.getElementsByTagName("ExitsPositions").item(0));
-        final int length = exitsPosElem.getElementsByTagName("Position").getLength();
-        for (int i = 0; i < length; i++) {
-            final Element posElem = (Element)(exitsPosElem.getElementsByTagName("Position").item(i));
-            exitsPositions.add(new Position(
-                Integer.parseInt(posElem.getAttribute("row")),
-                Integer.parseInt(posElem.getAttribute("column"))
-            ));
-        }
+        final Set<Position> exitsPositions = getPositionsByTag("ExitsPositions", settings);
         boardBuilder.addExits(exitsPositions);
     }
 
     private void loadBasicPiecesData(final Element settings, final BoardBuilder boardBuilder) {
-        
-        final Map<Player, Set<Position>> basicPiecesPositions = new HashMap<>();
-        
-        final Set<Position> attackerBasicPiecesPositions = new HashSet<>();
-        final Element attackerPiecesPosElem = (Element)(settings.getElementsByTagName("AttackerBasicPiecesPositions").item(0));
-        int length = attackerPiecesPosElem.getElementsByTagName("Position").getLength();
-        for (int i = 0; i < length; i++) {
-            final Element posElem = (Element)(attackerPiecesPosElem.getElementsByTagName("Position").item(i));
-            attackerBasicPiecesPositions.add(new Position(
-                Integer.parseInt(posElem.getAttribute("row")),
-                Integer.parseInt(posElem.getAttribute("column"))
-            ));
-        }
-        basicPiecesPositions.put(Player.ATTACKER, attackerBasicPiecesPositions);
 
-        final Set<Position> defenderBasicPiecesPositions = new HashSet<>();
-        final Element defenderPiecesPosElem = (Element)(settings.getElementsByTagName("DefenderBasicPiecesPositions").item(0));
-        length = defenderPiecesPosElem.getElementsByTagName("Position").getLength();
-        for (int i = 0; i < length; i++) {
-            final Element posElem = (Element)(defenderPiecesPosElem.getElementsByTagName("Position").item(i));
-            defenderBasicPiecesPositions.add(new Position(
-                Integer.parseInt(posElem.getAttribute("row")),
-                Integer.parseInt(posElem.getAttribute("column"))
-            ));
-        }
+        final Map<Player, Set<Position>> basicPiecesPositions = new HashMap<>();
+
+        final Set<Position> attackerBasicPiecesPositions = getPositionsByTag("AttackerBasicPiecesPositions", settings);
+        basicPiecesPositions.put(Player.ATTACKER, attackerBasicPiecesPositions);
+        final Set<Position> defenderBasicPiecesPositions = getPositionsByTag("DefenderBasicPiecesPositions", settings);
         basicPiecesPositions.put(Player.DEFENDER, defenderBasicPiecesPositions);
-        
+
         boardBuilder.addBasicPieces(basicPiecesPositions);
     }
 
