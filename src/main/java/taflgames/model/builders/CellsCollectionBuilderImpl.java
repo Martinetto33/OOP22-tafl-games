@@ -19,6 +19,9 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
     private final Map<Position, Cell> cells;
     private int boardSize;
 
+    /**
+     * Creates a new builder for a collection of cells.
+     */
     public CellsCollectionBuilderImpl() {
         this.cells = new HashMap<>();
     }
