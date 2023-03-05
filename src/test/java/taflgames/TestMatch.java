@@ -12,10 +12,13 @@ import org.junit.jupiter.api.Test;
 import taflgames.common.Player;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
-import taflgames.model.BoardBuilder;
-import taflgames.model.BoardBuilderImpl;
+import taflgames.model.BoardImpl;
+import taflgames.model.CellsCollectionBuilder;
+import taflgames.model.CellsCollectionBuilderImpl;
 import taflgames.model.Match;
 import taflgames.model.MatchImpl;
+import taflgames.model.PiecesCollectionBuilder;
+import taflgames.model.PiecesCollectionBuilderImpl;
 
 /**
  * JUnit tests for {@link Match}.
@@ -30,10 +33,13 @@ class TestMatch {
     @BeforeEach
     void init() {
         final SettingsLoader loader = new SettingsLoaderImpl();
-        final BoardBuilder builder = new BoardBuilderImpl();
+        final CellsCollectionBuilder cellsCollBuilder = new CellsCollectionBuilderImpl();
+        final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
         try {
-            loader.loadClassicModeConfig(builder);
-            this.match = new MatchImpl(builder.build());
+            loader.loadClassicModeConfig(cellsCollBuilder, piecesCollBuilder);
+            this.match = new MatchImpl(
+                new BoardImpl(cellsCollBuilder.build(), piecesCollBuilder.build())
+            );
         } catch (final IOException e) {
             e.printStackTrace();
         }

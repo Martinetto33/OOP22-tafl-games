@@ -13,8 +13,10 @@ import org.junit.jupiter.api.Test;
 import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
-import taflgames.model.BoardBuilder;
-import taflgames.model.BoardBuilderImpl;
+import taflgames.model.CellsCollectionBuilder;
+import taflgames.model.CellsCollectionBuilderImpl;
+import taflgames.model.PiecesCollectionBuilder;
+import taflgames.model.PiecesCollectionBuilderImpl;
 import taflgames.model.cells.Cell;
 import taflgames.model.cells.Exit;
 import taflgames.model.cells.Slider;
@@ -29,16 +31,19 @@ import taflgames.model.pieces.Swapper;
 import taflgames.common.Player;
 
 /**
- * JUnit test for board setup using a {@link BoardBuilder}
- * that receives the configuration data from a {@link SettingsLoader}.
+ * JUnit test for the setup of the board (which consists of the setup of the cells
+ * and the setup of the pieces), according to the configuration settings loaded
+ * by the {@link SettingsLoader}.
  */
 class TestBoardSetup {
 
-    private BoardBuilder builder;
+    private CellsCollectionBuilder cellsCollBuilder;
+    private PiecesCollectionBuilder piecesCollBuilder;
 
     @BeforeEach
     void init() {
-        this.builder = new BoardBuilderImpl();
+        this.cellsCollBuilder = new CellsCollectionBuilderImpl();
+        this.piecesCollBuilder = new PiecesCollectionBuilderImpl();
     }
 
     /**
@@ -49,14 +54,14 @@ class TestBoardSetup {
         final SettingsLoader loader = new SettingsLoaderImpl();
         try {
             // Load classic mode game settings
-            loader.loadClassicModeConfig(this.builder);
+            loader.loadClassicModeConfig(this.cellsCollBuilder, this.piecesCollBuilder);
         } catch (final IOException e) {
             e.printStackTrace();
         }
         
         // Retrieve the collections of cells and pieces built according to the settings
-        final Map<Position, Cell> cells = this.builder.getCells();
-        final Map<Player, Map<Position, Piece>> pieces = this.builder.getPieces();
+        final Map<Position, Cell> cells = this.cellsCollBuilder.build();
+        final Map<Player, Map<Position, Piece>> pieces = this.piecesCollBuilder.build();
 
         // Check king and throne correct placement
         assertEquals(
@@ -138,14 +143,14 @@ class TestBoardSetup {
         final SettingsLoader loader = new SettingsLoaderImpl();
         try {
             // Load variant mode game settings
-            loader.loadVariantModeConfig(this.builder);
+            loader.loadVariantModeConfig(this.cellsCollBuilder, this.piecesCollBuilder);
         } catch (final IOException e) {
             e.printStackTrace();
         }
 
         // Retrieve the collections of cells and pieces built according to the settings
-        final Map<Position, Cell> cells = this.builder.getCells();
-        final Map<Player, Map<Position, Piece>> pieces = this.builder.getPieces();
+        final Map<Position, Cell> cells = this.cellsCollBuilder.build();
+        final Map<Player, Map<Position, Piece>> pieces = this.piecesCollBuilder.build();
 
         // Check king and throne correct placement
         assertEquals(

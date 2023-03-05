@@ -14,7 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.BoardBuilder;
+import taflgames.model.CellsCollectionBuilder;
+import taflgames.model.PiecesCollectionBuilder;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,26 +40,32 @@ public class SettingsLoaderImpl implements SettingsLoader {
     }
 
     @Override
-    public void loadClassicModeConfig(final BoardBuilder boardBuilder) throws IOException {
+    public void loadClassicModeConfig(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) throws IOException {
         final Element settings = getSettingsFromFile(CLASSIC_CONFIG_FILE);
-        this.loadBoardSize(settings, boardBuilder);
-        this.loadKingData(settings, boardBuilder);
-        this.loadExitsData(settings, boardBuilder);
-        this.loadBasicPiecesData(settings, boardBuilder);
+        this.loadBoardSize(settings, cellsCollBuilder);
+        this.loadKingAndThroneData(settings, cellsCollBuilder, piecesCollBuilder);
+        this.loadExitsData(settings, cellsCollBuilder);
+        this.loadBasicPiecesData(settings, piecesCollBuilder);
     }
 
     @Override
-    public void loadVariantModeConfig(final BoardBuilder boardBuilder) throws IOException {
+    public void loadVariantModeConfig(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) throws IOException {
         final Element settings = getSettingsFromFile(VARIANT_CONFIG_FILE);
-        this.loadBoardSize(settings, boardBuilder);
-        this.loadKingData(settings, boardBuilder);
-        this.loadExitsData(settings, boardBuilder);
-        this.loadSlidersData(settings, boardBuilder);
-        this.loadBasicPiecesData(settings, boardBuilder);
-        this.loadQueensData(settings, boardBuilder);
-        this.loadArchersData(settings, boardBuilder);
-        this.loadShieldsData(settings, boardBuilder);
-        this.loadSwappersData(settings, boardBuilder);
+        this.loadBoardSize(settings, cellsCollBuilder);
+        this.loadKingAndThroneData(settings, cellsCollBuilder, piecesCollBuilder);
+        this.loadExitsData(settings, cellsCollBuilder);
+        this.loadSlidersData(settings, cellsCollBuilder);
+        this.loadBasicPiecesData(settings, piecesCollBuilder);
+        this.loadQueensData(settings, piecesCollBuilder);
+        this.loadArchersData(settings, piecesCollBuilder);
+        this.loadShieldsData(settings, piecesCollBuilder);
+        this.loadSwappersData(settings, piecesCollBuilder);
     }
 
     private Element getSettingsFromFile(final String filename) throws IOException {
@@ -77,60 +84,65 @@ public class SettingsLoaderImpl implements SettingsLoader {
         }
     }
 
-    private void loadBoardSize(final Element settings, final BoardBuilder boardBuilder) {
+    private void loadBoardSize(final Element settings, final CellsCollectionBuilder cellsCollBuilder) {
         final int boardSize = Integer.parseInt(
             settings.getElementsByTagName("BoardSize").item(0).getTextContent()
         );
-        boardBuilder.addBoardSize(boardSize);
+        cellsCollBuilder.addBoardSize(boardSize);
     }
 
-    private void loadKingData(final Element settings, final BoardBuilder boardBuilder) {
+    private void loadKingAndThroneData(
+        final Element settings,
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) {
         final Element kingPosElem = (Element) settings.getElementsByTagName("KingPosition").item(0);
         final Element posElem = (Element) kingPosElem.getElementsByTagName("Position").item(0);
         final Position kingPos = new Position(
             Integer.parseInt(posElem.getAttribute("row")),
             Integer.parseInt(posElem.getAttribute("column"))
         );
-        boardBuilder.addThroneAndKing(kingPos);
+        piecesCollBuilder.addKing(kingPos);
+        cellsCollBuilder.addThrone(kingPos);
     }
 
-    private void loadExitsData(final Element settings, final BoardBuilder boardBuilder) {
+    private void loadExitsData(final Element settings, final CellsCollectionBuilder cellsCollBuilder) {
         final Set<Position> exitsPositions = getPositionsByTagName("ExitsPositions", settings);
-        boardBuilder.addExits(exitsPositions);
+        cellsCollBuilder.addExits(exitsPositions);
     }
 
-    private void loadSlidersData(final Element settings, final BoardBuilder boardBuilder) {
-        boardBuilder.addSliders(
+    private void loadSlidersData(final Element settings, final CellsCollectionBuilder cellsCollBuilder) {
+        cellsCollBuilder.addSliders(
             getPositionsByTagName("SlidersPositions", settings)
         );
     }
 
-    private void loadBasicPiecesData(final Element settings, final BoardBuilder boardBuilder) {
-        boardBuilder.addBasicPieces(
+    private void loadBasicPiecesData(final Element settings, final PiecesCollectionBuilder piecesCollBuilder) {
+        piecesCollBuilder.addBasicPieces(
             getPiecesPositionsForEachTeam("BasicPieces", settings)
         );
     }
 
-    private void loadQueensData(final Element settings, final BoardBuilder boardBuilder) {
-        boardBuilder.addQueens(
+    private void loadQueensData(final Element settings, final PiecesCollectionBuilder piecesCollBuilder) {
+        piecesCollBuilder.addQueens(
             getPiecesPositionsForEachTeam("Queens", settings)
         );
     }
 
-    private void loadArchersData(final Element settings, final BoardBuilder boardBuilder) {
-        boardBuilder.addArchers(
+    private void loadArchersData(final Element settings, final PiecesCollectionBuilder piecesCollBuilder) {
+        piecesCollBuilder.addArchers(
             getPiecesPositionsForEachTeam("Archers", settings)
         );
     }
 
-    private void loadShieldsData(final Element settings, final BoardBuilder boardBuilder) {
-        boardBuilder.addShields(
+    private void loadShieldsData(final Element settings, final PiecesCollectionBuilder piecesCollBuilder) {
+        piecesCollBuilder.addShields(
             getPiecesPositionsForEachTeam("Shields", settings)
         );
     }
 
-    private void loadSwappersData(final Element settings, final BoardBuilder boardBuilder) {
-        boardBuilder.addSwappers(
+    private void loadSwappersData(final Element settings, final PiecesCollectionBuilder piecesCollBuilder) {
+        piecesCollBuilder.addSwappers(
             getPiecesPositionsForEachTeam("Swappers", settings)
         );
     }

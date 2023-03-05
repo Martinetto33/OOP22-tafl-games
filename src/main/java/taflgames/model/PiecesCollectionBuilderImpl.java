@@ -6,11 +6,6 @@ import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.cells.BasicCell;
-import taflgames.model.cells.Cell;
-import taflgames.model.cells.Exit;
-import taflgames.model.cells.Slider;
-import taflgames.model.cells.Throne;
 import taflgames.model.pieces.Archer;
 import taflgames.model.pieces.BasicPiece;
 import taflgames.model.pieces.King;
@@ -19,17 +14,11 @@ import taflgames.model.pieces.Queen;
 import taflgames.model.pieces.Shield;
 import taflgames.model.pieces.Swapper;
 
-/**
- * This class implements a board builder.
- */
-public class BoardBuilderImpl implements BoardBuilder {
-
-    private final Map<Position, Cell> cells;
+public class PiecesCollectionBuilderImpl implements PiecesCollectionBuilder {
+    
     private final Map<Player, Map<Position, Piece>> pieces;
-    private int boardSize;
 
-    public BoardBuilderImpl() {
-        this.cells = new HashMap<>();
+    public PiecesCollectionBuilderImpl() {
         this.pieces = new HashMap<>();
         for (Player player : Player.values()) {
             this.pieces.put(player, new HashMap<>());
@@ -37,40 +26,8 @@ public class BoardBuilderImpl implements BoardBuilder {
     }
 
     @Override
-    public void addBoardSize(final int boardSize) {
-        this.boardSize = boardSize;
-    }
-
-    @Override
-    public void addThroneAndKing(final Position thronePos) {
-        this.cells.put(thronePos, new Throne());
-        this.pieces.get(Player.DEFENDER).put(thronePos, new King());
-    }
-
-    @Override
-    public void addExits(final Set<Position> positions) {
-        for (var pos : positions) {
-            this.cells.put(pos, new Exit());
-        }
-    }
-
-    @Override
-    public void addSliders(final Set<Position> positions) {
-        for (final var pos : positions) {
-            this.cells.put(pos, new Slider());
-        }
-    }
-
-    @Override
-    public void addBasicCells() {
-        for (int row = 0; row < this.boardSize; row++) {
-            for (int col = 0; col < this.boardSize; col++) {
-                final Position pos = new Position(row, col);
-                if (!this.cells.containsKey(pos)) {
-                    this.cells.put(pos, new BasicCell());
-                }
-            }
-        }
+    public void addKing(final Position position) {
+        this.pieces.get(Player.DEFENDER).put(position, new King());
     }
 
     @Override
@@ -119,17 +76,7 @@ public class BoardBuilderImpl implements BoardBuilder {
     }
 
     @Override
-    public Board build() {
-        return new BoardImpl(this.cells, this.pieces);
-    }
-
-    @Override
-    public Map<Position, Cell> getCells() {
-        return this.cells;
-    }
-
-    @Override
-    public Map<Player, Map<Position, Piece>> getPieces() {
+    public Map<Player, Map<Position, Piece>> build() {
         return this.pieces;
     }
 
