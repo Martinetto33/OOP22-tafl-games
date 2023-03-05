@@ -277,7 +277,7 @@ class TestBoardSetup {
     private <C> Set<Position> getPositions(final Map<Position, C> map, final Class<? extends C> targetClass) {
         return map.entrySet().stream()
                 // filter out the objects that are not instances of the target class
-                .filter(entry -> (entry.getValue().getClass() == targetClass))
+                .filter(entry -> entry.getValue().getClass() == targetClass)
                 .map(entry -> entry.getKey())   // get the positions of objects that are instances of the target class
                 .collect(Collectors.toSet());
     }
