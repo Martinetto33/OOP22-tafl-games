@@ -19,9 +19,11 @@ import taflgames.model.pieces.Queen;
 import taflgames.model.pieces.Shield;
 import taflgames.model.pieces.Swapper;
 
-
+/**
+ * This class implements a board builder.
+ */
 public class BoardBuilderImpl implements BoardBuilder {
-    
+
     private final Map<Position, Cell> cells;
     private final Map<Player, Map<Position, Piece>> pieces;
     private int boardSize;
@@ -130,5 +132,5 @@ public class BoardBuilderImpl implements BoardBuilder {
     public Map<Player, Map<Position, Piece>> getPieces() {
         return this.pieces;
     }
-    
+
 }
