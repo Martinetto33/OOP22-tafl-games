@@ -31,6 +31,7 @@ public class SettingsLoaderImpl implements SettingsLoader {
     public SettingsLoaderImpl() {
     }
     
+    @Override
     public void loadClassicModeConfig(final BoardBuilder boardBuilder) throws IOException {
         try {
             final Element settings = getSettingsFromFile(CLASSIC_CONFIG_FILE);
@@ -43,6 +44,7 @@ public class SettingsLoaderImpl implements SettingsLoader {
         }
     }
 
+    @Override
     public void loadVariantModeConfig(final BoardBuilder boardBuilder) throws IOException {
         try {
             final Element settings = getSettingsFromFile(VARIANT_CONFIG_FILE);
