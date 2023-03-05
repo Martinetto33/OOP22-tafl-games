@@ -13,12 +13,12 @@ import taflgames.common.Player;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
 import taflgames.model.BoardImpl;
-import taflgames.model.CellsCollectionBuilder;
-import taflgames.model.CellsCollectionBuilderImpl;
 import taflgames.model.Match;
 import taflgames.model.MatchImpl;
-import taflgames.model.PiecesCollectionBuilder;
-import taflgames.model.PiecesCollectionBuilderImpl;
+import taflgames.model.builders.CellsCollectionBuilder;
+import taflgames.model.builders.CellsCollectionBuilderImpl;
+import taflgames.model.builders.PiecesCollectionBuilder;
+import taflgames.model.builders.PiecesCollectionBuilderImpl;
 
 /**
  * JUnit tests for {@link Match}.

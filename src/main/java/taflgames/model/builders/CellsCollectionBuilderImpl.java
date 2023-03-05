@@ -1,4 +1,4 @@
-package taflgames.model;
+package taflgames.model.builders;
 
 import java.util.HashMap;
 import java.util.Map;

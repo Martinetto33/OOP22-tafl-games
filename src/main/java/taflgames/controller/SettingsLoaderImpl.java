@@ -14,8 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.CellsCollectionBuilder;
-import taflgames.model.PiecesCollectionBuilder;
+import taflgames.model.builders.CellsCollectionBuilder;
+import taflgames.model.builders.PiecesCollectionBuilder;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

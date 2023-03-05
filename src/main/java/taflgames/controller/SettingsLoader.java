@@ -2,8 +2,8 @@ package taflgames.controller;
 
 import java.io.IOException;
 
-import taflgames.model.CellsCollectionBuilder;
-import taflgames.model.PiecesCollectionBuilder;
+import taflgames.model.builders.CellsCollectionBuilder;
+import taflgames.model.builders.PiecesCollectionBuilder;
 
 /**
  * This interface allows to load the configuration settings for the setup of the board
