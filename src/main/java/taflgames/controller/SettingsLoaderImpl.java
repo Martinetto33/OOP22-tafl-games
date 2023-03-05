@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
  * This class loads the configuration settings for the setup of the board
  * from configuration files.
  */
-public class SettingsLoaderImpl implements SettingsLoader {
+public final class SettingsLoaderImpl implements SettingsLoader {
 
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "config" + SEP;
