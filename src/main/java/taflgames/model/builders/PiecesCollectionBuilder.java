@@ -7,11 +7,14 @@ import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.pieces.Piece;
 
+/**
+ * This interface allows to interact with a builder to create a collection of pieces.
+ */
 public interface PiecesCollectionBuilder {
-    
+
     /**
      * Adds the king piece to the pieces collection being built.
-     * @param positions the position where the king must be placed
+     * @param position the position where the king must be placed
      */
     void addKing(Position position);
 
@@ -49,5 +52,5 @@ public interface PiecesCollectionBuilder {
      * @return the collection of pieces that has been set up
      */
     Map<Player, Map<Position, Piece>> build();
-    
+
 }
