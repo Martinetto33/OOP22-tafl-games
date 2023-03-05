@@ -38,7 +38,7 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
 
     @Override
     public void addExits(final Set<Position> positions) {
-        for (var pos : positions) {
+        for (final var pos : positions) {
             this.cells.put(pos, new Exit());
         }
     }
