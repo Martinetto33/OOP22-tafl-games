@@ -26,7 +26,7 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
      */
     public PiecesCollectionBuilderImpl() {
         this.pieces = new HashMap<>();
-        for (Player player : Player.values()) {
+        for (final Player player : Player.values()) {
             this.pieces.put(player, new HashMap<>());
         }
     }
