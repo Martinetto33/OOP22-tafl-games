@@ -11,8 +11,11 @@ import taflgames.model.cells.Exit;
 import taflgames.model.cells.Slider;
 import taflgames.model.cells.Throne;
 
-public class CellsCollectionBuilderImpl implements CellsCollectionBuilder {
-    
+/**
+ * This class implements a builder to create a collection of cells.
+ */
+public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder {
+
     private final Map<Position, Cell> cells;
     private int boardSize;
 
