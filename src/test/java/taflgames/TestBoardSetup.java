@@ -271,7 +271,7 @@ class TestBoardSetup {
         );
 
         // CHECKSTYLE: MagicNumber ON
-        
+
     }
 
     private <C> Set<Position> getPositions(final Map<Position, C> map, final Class<? extends C> targetClass) {
