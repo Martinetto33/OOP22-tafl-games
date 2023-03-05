@@ -7,8 +7,7 @@ import taflgames.common.code.Position;
 import taflgames.model.cells.Cell;
 
 /**
- * This interface allows to create a collection of cells
- * for the setup of the board.
+ * This interface allows to interact with a builder to create a collection of cells.
  */
 public interface CellsCollectionBuilder {
 
