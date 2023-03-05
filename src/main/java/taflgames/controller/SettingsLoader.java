@@ -6,8 +6,20 @@ import taflgames.model.BoardBuilder;
 
 public interface SettingsLoader {
 
-    void loadClassicModeConfig(final BoardBuilder boardBuilder) throws IOException;
+    /**
+     * Loads the classic mode configuration for the setup of the board
+     * and modifies the {@link BoardBuilder} accordingly.
+     * @param boardBuilder the board builder
+     * @throws IOException if an error occurs while loading the configuration settings
+     */
+    void loadClassicModeConfig(BoardBuilder boardBuilder) throws IOException;
 
-    void loadVariantModeConfig(final BoardBuilder boardBuilder) throws IOException;
+    /**
+     * Loads the variant mode configuration for the setup of the board
+     * and modifies the {@link BoardBuilder} accordingly.
+     * @param boardBuilder the board builder
+     * @throws IOException if an error occurs while loading the configuration settings
+     */
+    void loadVariantModeConfig(BoardBuilder boardBuilder) throws IOException;
 
 }
