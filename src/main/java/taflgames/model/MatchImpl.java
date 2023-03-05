@@ -22,6 +22,7 @@ public final class MatchImpl implements Match {
 
     /**
      * Creates a new match.
+     * @param board the board used for the match
      */
     public MatchImpl(final Board board) {
         this.board = board;
