@@ -33,12 +33,6 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettings.xml";
     private static final String VARIANT_CONFIG_FILE = "VariantModeSettings.xml";
 
-    /**
-     * Creates a new settings loader.
-     */
-    public SettingsLoaderImpl() {
-    }
-
     @Override
     public void loadClassicModeConfig(
         final CellsCollectionBuilder cellsCollBuilder,
