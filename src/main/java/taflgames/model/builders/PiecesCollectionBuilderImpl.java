@@ -14,10 +14,16 @@ import taflgames.model.pieces.Queen;
 import taflgames.model.pieces.Shield;
 import taflgames.model.pieces.Swapper;
 
-public class PiecesCollectionBuilderImpl implements PiecesCollectionBuilder {
-    
+/**
+ * This class implements a builder to create a collection of pieces.
+ */
+public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilder {
+
     private final Map<Player, Map<Position, Piece>> pieces;
 
+    /**
+     * Creates a new builder for a collection of pieces.
+     */
     public PiecesCollectionBuilderImpl() {
         this.pieces = new HashMap<>();
         for (Player player : Player.values()) {
