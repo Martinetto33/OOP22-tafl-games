@@ -4,6 +4,10 @@ import java.io.IOException;
 
 import taflgames.model.BoardBuilder;
 
+/**
+ * This interface allows to load the configuration settings for the setup of the board
+ * for each game mode.
+ */
 public interface SettingsLoader {
 
     /**
