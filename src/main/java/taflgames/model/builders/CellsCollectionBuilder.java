@@ -6,8 +6,12 @@ import java.util.Set;
 import taflgames.common.code.Position;
 import taflgames.model.cells.Cell;
 
+/**
+ * This interface allows to create a collection of cells
+ * for the setup of the board.
+ */
 public interface CellsCollectionBuilder {
-    
+
     /**
      * Registers the size of the board.
      * @param boardSize the size of the board
@@ -25,7 +29,7 @@ public interface CellsCollectionBuilder {
      * @param positions the positions where the exits must be placed
      */
     void addExits(Set<Position> positions);
-    
+
     /**
      * Adds the slider cells to the cells collection being built.
      * @param positions the positions where the sliders must be placed
