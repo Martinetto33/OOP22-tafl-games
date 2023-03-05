@@ -58,10 +58,13 @@ class TestBoardSetup {
         } catch (final IOException e) {
             e.printStackTrace();
         }
-        
+
         // Retrieve the collections of cells and pieces built according to the settings
         final Map<Position, Cell> cells = this.cellsCollBuilder.build();
         final Map<Player, Map<Position, Piece>> pieces = this.piecesCollBuilder.build();
+
+        // CHECKSTYLE: MagicNumber OFF
+        // MagicNumber rule disabled because the numbers in the following code represent coordinates
 
         // Check king and throne correct placement
         assertEquals(
@@ -133,6 +136,8 @@ class TestBoardSetup {
                 new Position(7, 5)
             )
         );
+
+        // CHECKSTYLE: MagicNumber ON
     }
 
     /**
@@ -151,6 +156,9 @@ class TestBoardSetup {
         // Retrieve the collections of cells and pieces built according to the settings
         final Map<Position, Cell> cells = this.cellsCollBuilder.build();
         final Map<Player, Map<Position, Piece>> pieces = this.piecesCollBuilder.build();
+
+        // CHECKSTYLE: MagicNumber OFF
+        // MagicNumber rule disabled because the numbers in the following code represent coordinates
 
         // Check king and throne correct placement
         assertEquals(
@@ -261,6 +269,9 @@ class TestBoardSetup {
                 new Position(7, 5)
             )
         );
+
+        // CHECKSTYLE: MagicNumber ON
+        
     }
 
     private <C> Set<Position> getPositions(final Map<Position, C> map, final Class<? extends C> targetClass) {
