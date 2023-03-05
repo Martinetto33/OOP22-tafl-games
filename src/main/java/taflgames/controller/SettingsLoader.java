@@ -34,5 +34,5 @@ public interface SettingsLoader {
         CellsCollectionBuilder cellsCollBuilder,
         PiecesCollectionBuilder piecesCollBuilder
     ) throws IOException;
-    
+
 }
