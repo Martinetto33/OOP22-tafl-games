@@ -21,6 +21,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * This class loads the configuration settings for the setup of the board
+ * from configuration files.
+ */
 public class SettingsLoaderImpl implements SettingsLoader {
 
     private static final String SEP = System.getProperty("file.separator");
@@ -28,42 +32,37 @@ public class SettingsLoaderImpl implements SettingsLoader {
     private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettings.xml";
     private static final String VARIANT_CONFIG_FILE = "VariantModeSettings.xml";
 
+    /**
+     * Creates a new settings loader.
+     */
     public SettingsLoaderImpl() {
     }
-    
+
     @Override
     public void loadClassicModeConfig(final BoardBuilder boardBuilder) throws IOException {
-        try {
-            final Element settings = getSettingsFromFile(CLASSIC_CONFIG_FILE);
-            this.loadBoardSize(settings, boardBuilder);
-            this.loadKingData(settings, boardBuilder);
-            this.loadExitsData(settings, boardBuilder);
-            this.loadBasicPiecesData(settings, boardBuilder);
-        } catch (final IOException e) {
-            throw new IOException("Cannot read configuration file");
-        }
+        final Element settings = getSettingsFromFile(CLASSIC_CONFIG_FILE);
+        this.loadBoardSize(settings, boardBuilder);
+        this.loadKingData(settings, boardBuilder);
+        this.loadExitsData(settings, boardBuilder);
+        this.loadBasicPiecesData(settings, boardBuilder);
     }
 
     @Override
     public void loadVariantModeConfig(final BoardBuilder boardBuilder) throws IOException {
-        try {
-            final Element settings = getSettingsFromFile(VARIANT_CONFIG_FILE);
-            this.loadBoardSize(settings, boardBuilder);
-            this.loadKingData(settings, boardBuilder);
-            this.loadExitsData(settings, boardBuilder);
-            this.loadSlidersData(settings, boardBuilder);
-            this.loadBasicPiecesData(settings, boardBuilder);
-            this.loadQueensData(settings, boardBuilder);
-            this.loadArchersData(settings, boardBuilder);
-            this.loadShieldsData(settings, boardBuilder);
-            this.loadSwappersData(settings, boardBuilder);
-        } catch (final IOException e) {
-            throw new IOException("Cannot read configuration file");
-        }
+        final Element settings = getSettingsFromFile(VARIANT_CONFIG_FILE);
+        this.loadBoardSize(settings, boardBuilder);
+        this.loadKingData(settings, boardBuilder);
+        this.loadExitsData(settings, boardBuilder);
+        this.loadSlidersData(settings, boardBuilder);
+        this.loadBasicPiecesData(settings, boardBuilder);
+        this.loadQueensData(settings, boardBuilder);
+        this.loadArchersData(settings, boardBuilder);
+        this.loadShieldsData(settings, boardBuilder);
+        this.loadSwappersData(settings, boardBuilder);
     }
 
     private Element getSettingsFromFile(final String filename) throws IOException {
-        try (final InputStream configFile = Objects.requireNonNull(
+        try (InputStream configFile = Objects.requireNonNull(
             ClassLoader.getSystemResourceAsStream(PATH + filename)
         )) {
             final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -71,13 +70,13 @@ public class SettingsLoaderImpl implements SettingsLoader {
             final Document document = docBuilder.parse(configFile);
             document.getDocumentElement().normalize();
             final NodeList nodeList = document.getElementsByTagName("Settings");
-            final Element settings = (Element)(nodeList.item(0));
+            final Element settings = (Element) nodeList.item(0);
             return settings;
         } catch (final ParserConfigurationException | SAXException | IOException e) {
-            throw new IOException();
+            throw new IOException("Cannot read configuration file");
         }
     }
-    
+
     private void loadBoardSize(final Element settings, final BoardBuilder boardBuilder) {
         final int boardSize = Integer.parseInt(
             settings.getElementsByTagName("BoardSize").item(0).getTextContent()
@@ -86,8 +85,8 @@ public class SettingsLoaderImpl implements SettingsLoader {
     }
 
     private void loadKingData(final Element settings, final BoardBuilder boardBuilder) {
-        final Element kingPosElem = (Element)(settings.getElementsByTagName("KingPosition").item(0));
-        final Element posElem = (Element)(kingPosElem.getElementsByTagName("Position").item(0));
+        final Element kingPosElem = (Element) settings.getElementsByTagName("KingPosition").item(0);
+        final Element posElem = (Element) kingPosElem.getElementsByTagName("Position").item(0);
         final Position kingPos = new Position(
             Integer.parseInt(posElem.getAttribute("row")),
             Integer.parseInt(posElem.getAttribute("column"))
@@ -123,7 +122,7 @@ public class SettingsLoaderImpl implements SettingsLoader {
             getPiecesPositionsForEachTeam("Archers", settings)
         );
     }
-    
+
     private void loadShieldsData(final Element settings, final BoardBuilder boardBuilder) {
         boardBuilder.addShields(
             getPiecesPositionsForEachTeam("Shields", settings)
@@ -145,10 +144,10 @@ public class SettingsLoaderImpl implements SettingsLoader {
 
     private Set<Position> getPositionsByTagName(final String tagName, final Element settings) {
         final Set<Position> positions = new HashSet<>();
-        final Element positionsElement = (Element)(settings.getElementsByTagName(tagName).item(0));
+        final Element positionsElement = (Element) settings.getElementsByTagName(tagName).item(0);
         final int length = positionsElement.getElementsByTagName("Position").getLength();
         for (int i = 0; i < length; i++) {
-            final Element posElem = (Element)(positionsElement.getElementsByTagName("Position").item(i));
+            final Element posElem = (Element) positionsElement.getElementsByTagName("Position").item(i);
             positions.add(new Position(
                 Integer.parseInt(posElem.getAttribute("row")),
                 Integer.parseInt(posElem.getAttribute("column"))
