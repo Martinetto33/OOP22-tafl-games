@@ -1,6 +1,7 @@
 package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,6 +10,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
@@ -37,6 +41,8 @@ import taflgames.common.Player;
  */
 class TestBoardSetup {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestBoardSetup.class);
+
     private CellsCollectionBuilder cellsCollBuilder;
     private PiecesCollectionBuilder piecesCollBuilder;
 
@@ -55,8 +61,9 @@ class TestBoardSetup {
         try {
             // Load classic mode game settings
             loader.loadClassicModeConfig(this.cellsCollBuilder, this.piecesCollBuilder);
-        } catch (final IOException e) {
-            e.printStackTrace();
+        } catch (final IOException ex) {
+            LOGGER.error("Cannot read configuration file. {}", ex.getMessage());
+            fail();
         }
 
         // Retrieve the collections of cells and pieces built according to the settings
@@ -149,8 +156,9 @@ class TestBoardSetup {
         try {
             // Load variant mode game settings
             loader.loadVariantModeConfig(this.cellsCollBuilder, this.piecesCollBuilder);
-        } catch (final IOException e) {
-            e.printStackTrace();
+        } catch (final IOException ex) {
+            LOGGER.error("Cannot read configuration file. {}", ex.getMessage());
+            fail();
         }
 
         // Retrieve the collections of cells and pieces built according to the settings

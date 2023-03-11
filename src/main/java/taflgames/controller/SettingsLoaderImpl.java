@@ -74,7 +74,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
             final Element settings = (Element) nodeList.item(0);
             return settings;
         } catch (final ParserConfigurationException | SAXException | IOException e) {
-            throw new IOException("Cannot read configuration file");
+            throw new IOException("An error occurred while trying to parse the file.");
         }
     }
 
