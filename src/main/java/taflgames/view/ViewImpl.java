@@ -19,7 +19,7 @@ public final class ViewImpl implements View {
     private static final String FRAME_TITLE = "Tafl Games";
     private final JFrame frame;
     private final CardLayout frameLayout;
-    private final Set<String> addedPanels;
+    private final Set<String> addedScenes;
 
     /**
      * Sets up the view.
@@ -37,7 +37,7 @@ public final class ViewImpl implements View {
         frameLayout = new CardLayout();
         frame.setLayout(frameLayout);
 
-        addedPanels = new HashSet<>();
+        addedScenes = new HashSet<>();
         setScene(new HomeScene(this));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,9 +48,9 @@ public final class ViewImpl implements View {
     @Override
     public void setScene(final Scene scene) {
         final String sceneName = scene.getSceneName();
-        if (!addedPanels.contains(sceneName)) {
+        if (!addedScenes.contains(sceneName)) {
             frame.add(scene.getScene(), sceneName);
-            addedPanels.add(sceneName);
+            addedScenes.add(sceneName);
         }
         frameLayout.show(frame.getContentPane(), sceneName);
     }
