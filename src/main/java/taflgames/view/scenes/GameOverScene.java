@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import taflgames.view.View;
+import taflgames.view.fontManager.FontManager;
 
 /**
  * The screen that appears at the end of the game.
@@ -20,6 +21,7 @@ public class GameOverScene extends AbstractScene {
     private static final String MAIN_MENU = "Main menu";
     private static final String REGISTER_RESULT = "Register result";
     private static final int MAIN_FONT_SIZE = 60;
+    private static final int BUTTON_FONT_SIZE = 12;
     private final JButton mainMenuButton;
     private final JButton registerResultButton;
     /**
@@ -29,6 +31,7 @@ public class GameOverScene extends AbstractScene {
     public GameOverScene(final View view) {
 
         super(GameOverScene.GAME_OVER);
+        final FontManager runeFont = new FontManager();
 
         final JPanel scenePanel = super.getScene();
         scenePanel.setLayout(new BoxLayout(scenePanel, BoxLayout.Y_AXIS));
@@ -40,12 +43,15 @@ public class GameOverScene extends AbstractScene {
         /* Using a unified Font would make it easier to change the aspect of the GUI. AbstractScene
          * was modified in a way that provides a common Font which all components could use.
          */
-        gameOverLabel.setFont(new Font(AbstractScene.getFont(), Font.PLAIN, GameOverScene.MAIN_FONT_SIZE));
+        
+        gameOverLabel.setFont(runeFont.getModifiedFont(GameOverScene.MAIN_FONT_SIZE, Font.PLAIN));
         gameOverPanel.add(gameOverLabel);
 
         final JPanel buttonsPanel = new JPanel();
         this.mainMenuButton = new JButton(GameOverScene.MAIN_MENU);
+        this.mainMenuButton.setFont(runeFont.getModifiedFont(GameOverScene.BUTTON_FONT_SIZE, Font.PLAIN));
         this.registerResultButton = new JButton(GameOverScene.REGISTER_RESULT);
+        this.registerResultButton.setFont(runeFont.getModifiedFont(GameOverScene.BUTTON_FONT_SIZE, Font.PLAIN));
 
         /*Adding listeners */
         this.createMainMenuActionListener(view);
