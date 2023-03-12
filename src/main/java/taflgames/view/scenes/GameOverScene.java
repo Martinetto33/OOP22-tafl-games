@@ -49,7 +49,7 @@ public class GameOverScene extends AbstractScene {
 
         /*Adding listeners */
         this.createMainMenuActionListener(view);
-        this.createMainMenuActionListener(view);
+        this.createRegisterResultActionListener(view);
 
         buttonsPanel.add(this.mainMenuButton);
         buttonsPanel.add(this.registerResultButton);
