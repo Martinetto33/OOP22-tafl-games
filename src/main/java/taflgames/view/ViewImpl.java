@@ -39,8 +39,7 @@ public final class ViewImpl implements View {
         frame.setLayout(frameLayout);
 
         addedScenes = new HashSet<>();
-        //setScene(new HomeScene(this));
-        this.setScene(new GameOverScene(this));
+        setScene(new HomeScene(this));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);  // Let the OS decide about the positioning of the frame

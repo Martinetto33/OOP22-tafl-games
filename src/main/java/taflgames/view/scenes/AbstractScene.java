@@ -9,6 +9,7 @@ public abstract class AbstractScene implements Scene {
 
     private final String sceneName;
     private final JPanel scenePanel;
+    private static final String FONT_NAME = "Serif";
 
     /**
      * Initializes the scene state.
@@ -27,6 +28,10 @@ public abstract class AbstractScene implements Scene {
     @Override
     public final JPanel getScene() {
         return this.scenePanel;
+    }
+
+    public static String getFont() {
+        return AbstractScene.FONT_NAME;
     }
 
 }

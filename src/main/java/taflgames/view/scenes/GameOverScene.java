@@ -37,12 +37,19 @@ public class GameOverScene extends AbstractScene {
         gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
         final JLabel gameOverLabel = new JLabel(GameOverScene.GAME_OVER);
         gameOverLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        gameOverLabel.setFont(new Font("Serif", Font.PLAIN, GameOverScene.MAIN_FONT_SIZE));
+        /* Using a unified Font would make it easier to change the aspect of the GUI. AbstractScene
+         * was modified in a way that provides a common Font which all components could use.
+         */
+        gameOverLabel.setFont(new Font(AbstractScene.getFont(), Font.PLAIN, GameOverScene.MAIN_FONT_SIZE));
         gameOverPanel.add(gameOverLabel);
 
         final JPanel buttonsPanel = new JPanel();
         this.mainMenuButton = new JButton(GameOverScene.MAIN_MENU);
         this.registerResultButton = new JButton(GameOverScene.REGISTER_RESULT);
+
+        /*Adding listeners */
+        this.createMainMenuActionListener(view);
+        this.createMainMenuActionListener(view);
 
         buttonsPanel.add(this.mainMenuButton);
         buttonsPanel.add(this.registerResultButton);
@@ -51,7 +58,15 @@ public class GameOverScene extends AbstractScene {
         scenePanel.add(buttonsPanel, BorderLayout.CENTER);
     }
 
-    private void createMainMenuActionListener() {
+    private void createMainMenuActionListener(final View view) {
+        this.mainMenuButton.addActionListener(e -> view.setScene(new HomeScene(view)));
+    }
 
+    /*If we respect the plan made in the analysis phase, the result registration is optional
+     * and only occurs at the end of a match.
+     */
+    private void createRegisterResultActionListener(final View view) {
+        // TODO
+        //this.registerResultButton.addActionListener(e -> controller.registerResult());
     }
 }
