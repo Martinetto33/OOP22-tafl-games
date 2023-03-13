@@ -12,10 +12,10 @@ public class ImplFactoryMoveset implements FactoryMoveSet {
     @Override
     public Set<Vector> createBasicMoveSet() {
         Set<Vector> s = new HashSet<>(); 
-        s.add(new VectorImpl(1, 0));
-        s.add(new VectorImpl(0,-1));
-        s.add(new VectorImpl(-1, 0));
-        s.add(new VectorImpl(0, -1));
+        s.add(new VectorImpl(1, 0,true));
+        s.add(new VectorImpl(0,-1,true));
+        s.add(new VectorImpl(-1, 0,true));
+        s.add(new VectorImpl(0, -1,true));
         return s;
     }
 
@@ -24,10 +24,8 @@ public class ImplFactoryMoveset implements FactoryMoveSet {
         if(enemyPositions.equals(null)) {
              throw new IllegalArgumentException("enemyPositions is null");
         }
-        
-                                /**da controllare se dà problemi */
         Set<Vector> s = new HashSet<>(enemyPositions.stream()
-                                    .map(p -> new VectorImpl(new Position(0, 0), p))
+                                    .map(p -> new VectorImpl(new Position(0, 0), p, false))
                                     .toList());
         s.addAll(this.createBasicMoveSet());
         return s;
