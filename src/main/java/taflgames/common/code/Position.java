@@ -7,6 +7,7 @@ public class Position {
     private final int x;
     private final int y;
 
+
     /**
      * Creates a new Position.
      * @param x the x coordinate.
