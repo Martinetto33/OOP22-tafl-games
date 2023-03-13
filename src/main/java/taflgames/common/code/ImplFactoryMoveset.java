@@ -1,7 +1,9 @@
 package taflgames.common.code;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import taflgames.common.api.FactoryMoveSet;
 import taflgames.common.api.Vector;
@@ -20,13 +22,12 @@ public class ImplFactoryMoveset implements FactoryMoveSet {
     }
 
     @Override
-    public Set<Vector> createSwapperMoveSet(Set<Position> enemyPositions) throws IllegalArgumentException{
-        if(enemyPositions.equals(null)) {
-             throw new IllegalArgumentException("enemyPositions is null");
-        }
+    public Set<Vector> createSwapperMoveSet(Set<Position> enemyPositions) {
+        Objects.requireNonNull(enemyPositions);
         Set<Vector> s = new HashSet<>(enemyPositions.stream()
                                     .map(p -> new VectorImpl(new Position(0, 0), p, false))
-                                    .toList());
+                                    .collect(Collectors.toSet()));
+                            
         s.addAll(this.createBasicMoveSet());
         return s;
     }

@@ -12,7 +12,7 @@ public class ImplFactoryHitbox implements FactoryHitbox {
      */
     @Override
     public Set<Position> createBasicHitboxDistance(int distance) throws IllegalArgumentException{
-        if(distance == 0) {
+        if(distance < 0) {
             throw new IllegalArgumentException("distance was set as 0");
         }
         Set<Position> s = new HashSet<>();
