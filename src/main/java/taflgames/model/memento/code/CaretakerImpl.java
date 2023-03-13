@@ -1,5 +1,7 @@
 package taflgames.model.memento.code;
 
+import taflgames.model.memento.api.Caretaker;
+
 //import java.util.ArrayList;
 //import java.util.List;
 
@@ -14,7 +16,7 @@ package taflgames.model.memento.code;
  * This class will be implemented with a Stack, in order to allow methods 
  * "pop" and "push" on the history
  */
-public class Caretaker {
+public class CaretakerImpl implements Caretaker {
     //private MatchExample originator;
     //private List<MatchMemento> history;
 
