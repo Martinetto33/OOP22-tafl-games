@@ -14,21 +14,21 @@ public final class VectorImpl implements Vector {
     private static final int RIGHT_ANGLE = 90;
     private final Position startPos;
     private final Position endPos;
-    private final boolean isVersor;
+    private final boolean isUnitVector;
     /**
-     * Creates a new VectorImpl based on the Positions given. Sets the isVersor
+     * Creates a new VectorImpl based on the Positions given. Sets the isUnitVector
      * value based on the parameter given.
      * @param startPos the starting Position
      * @param endPos the ending Position
-     * @param isVersor states wether this VectorImpl is a versor
+     * @param isUnitVector states wether this VectorImpl is a unit vector.
      */
-    public VectorImpl(final Position startPos, final Position endPos, final boolean isVersor) {
+    public VectorImpl(final Position startPos, final Position endPos, final boolean isUnitVector) {
         this.startPos = startPos;
         this.endPos = endPos;
-        if (this.canBeVersor() && isVersor) {
-            this.isVersor = true;
+        if (this.canBeVersor() && isUnitVector) {
+            this.isUnitVector = true;
         } else {
-            this.isVersor = false;
+            this.isUnitVector = false;
         }
     }
 
@@ -49,25 +49,25 @@ public final class VectorImpl implements Vector {
     /**
      * Creates a new VectorImpl based on the deltas given. The starting
      * Position will be considered (0,0) and the ending Postion will have
-     * coordinates (deltaX, deltaY). This method doesn't create a versor.
+     * coordinates (deltaX, deltaY).
      * @param deltaX the horizontal variation
      * @param deltaY the vertical variation
-     * @param isVersor states wether this VectorImpl is a versor.
+     * @param isUnitVector states wether this VectorImpl is a unit vector.
      */
-    public VectorImpl(final int deltaX, final int deltaY, final boolean isVersor) {
+    public VectorImpl(final int deltaX, final int deltaY, final boolean isUnitVector) {
         this.startPos = new Position(0, 0);
         this.endPos = new Position(deltaX, deltaY);
-        if (this.canBeVersor() && isVersor) {
-            this.isVersor = true;
+        if (this.canBeVersor() && isUnitVector) {
+            this.isUnitVector = true;
         } else {
-            this.isVersor = false;
+            this.isUnitVector = false;
         }
     }
 
     /**
      * Creates a new VectorImpl based on the deltas given. The starting
      * Position will be considered (0,0) and the ending Postion will have
-     * coordinates (deltaX, deltaY). This method doesn't create a versor.
+     * coordinates (deltaX, deltaY). This method doesn't create a unit Vector.
      * @param deltaX the horizontal variation
      * @param deltaY the vertical variation
      */
@@ -96,8 +96,8 @@ public final class VectorImpl implements Vector {
      * {@inheritDoc}
      */
     @Override
-    public boolean isVersor() {
-        return this.isVersor;
+    public boolean isUnitVector() {
+        return this.isUnitVector;
     }
 
     /**

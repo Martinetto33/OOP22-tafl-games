@@ -13,6 +13,10 @@ import taflgames.common.code.Position;
  * <br>Each Vector is a pair of a starting and ending Position.
  * Most of the methods however use the deltaX and deltaY variations described
  * by the Vector, which are independent from these Positions.
+ * 
+ * <br>Vectors can have a special property, thus taking the name of a unit vector.
+ * A unit vector doesn't differ from a normal one in terms of methods, and it is
+ * only used for the recognition of some vectors.
  */
 @SuppressWarnings("PMD.ReplaceVectorWithList") /*suppressed as the design requires
 some specific methods and Lists wouldn't come in handy in this case */
@@ -34,7 +38,7 @@ public interface Vector {
      * method returns true.
      * @return true if this Vector is a versor, false otherwise.
      */
-    boolean isVersor();
+    boolean isUnitVector();
 
     /**
      * Allows multiplication by a scalar, which must be an int.
