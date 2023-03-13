@@ -1,6 +1,7 @@
 package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -8,6 +9,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import taflgames.common.Player;
 import taflgames.controller.SettingsLoader;
@@ -25,6 +29,8 @@ import taflgames.model.builders.PiecesCollectionBuilderImpl;
  */
 class TestMatch {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
+
     private Match match;
 
     /**
@@ -40,8 +46,9 @@ class TestMatch {
             this.match = new MatchImpl(
                 new BoardImpl(cellsCollBuilder.build(), piecesCollBuilder.build())
             );
-        } catch (final IOException e) {
-            e.printStackTrace();
+        } catch (final IOException ex) {
+            LOGGER.error("Cannot read configuration file. {}", ex.getMessage());
+            fail();
         }
     }
 
