@@ -3,6 +3,7 @@ package taflgames.test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +12,10 @@ import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
 
 //CHECKSTYLE: MagicNumber OFF
+/*Magic numbers checks disabled in order to allow quicker writing of the tests; the
+ * numbers used in the creation of Positions and Vectors are not intended to be 
+ * constants, but only results to verify computations by need.
+ */
 @SuppressWarnings("PMD.ReplaceVectorWithList") /*suppressed as the design requires
 some specific methods and Lists wouldn't come in handy in this case */
 class TestVector {
@@ -93,5 +98,16 @@ class TestVector {
         final Position e = v2.getEndPos();
         final Vector opposite = v2.rotate(180).get();
         assertEquals(opposite.applyToPosition(e), v2.getStartPos());
+    }
+
+    /**
+     * Tests the creation of unit vectors.
+     */
+    @Test
+    void testUnitVector() {
+        final Vector v = new VectorImpl(1, 1);
+        assertFalse(v.isUnitVector());
+        final Vector v1 = new VectorImpl(1, 0, true);
+        assertTrue(v1.isUnitVector());
     }
 }

@@ -9,19 +9,41 @@ import taflgames.common.api.Vector;
  */
 @SuppressWarnings("PMD.ReplaceVectorWithList") /*suppressed as the design requires
 some specific methods and Lists wouldn't come in handy in this case */
-public class VectorImpl implements Vector {
+public final class VectorImpl implements Vector {
     private static final int UNIT_ANGLE = 45;
     private static final int RIGHT_ANGLE = 90;
     private final Position startPos;
     private final Position endPos;
+    private final boolean isUnitVector;
     /**
-     * Creates a new VectorImpl based on the Positions given.
+     * Creates a new VectorImpl based on the Positions given. Sets the isUnitVector
+     * value based on the parameter given.
+     * @param startPos the starting Position
+     * @param endPos the ending Position
+     * @param isUnitVector states wether this VectorImpl is a unit vector.
+     */
+    public VectorImpl(final Position startPos, final Position endPos, final boolean isUnitVector) {
+        this.startPos = startPos;
+        this.endPos = endPos;
+        if (this.canBeVersor() && isUnitVector) {
+            this.isUnitVector = true;
+        } else {
+            this.isUnitVector = false;
+        }
+    }
+
+    /**
+     * Creates a new VectorImpl based on the Positions given. This
+     * method doesn't create a versor.
      * @param startPos the starting Position
      * @param endPos the ending Position
      */
     public VectorImpl(final Position startPos, final Position endPos) {
-        this.startPos = startPos;
-        this.endPos = endPos;
+        this(startPos, endPos, false);
+    }
+
+    private boolean canBeVersor() {
+        return Math.sqrt(Math.pow(this.deltaX(), 2) + Math.pow(this.deltaY(), 2)) == 1.0;
     }
 
     /**
@@ -30,10 +52,27 @@ public class VectorImpl implements Vector {
      * coordinates (deltaX, deltaY).
      * @param deltaX the horizontal variation
      * @param deltaY the vertical variation
+     * @param isUnitVector states wether this VectorImpl is a unit vector.
      */
-    public VectorImpl(final int deltaX, final int deltaY) {
+    public VectorImpl(final int deltaX, final int deltaY, final boolean isUnitVector) {
         this.startPos = new Position(0, 0);
         this.endPos = new Position(deltaX, deltaY);
+        if (this.canBeVersor() && isUnitVector) {
+            this.isUnitVector = true;
+        } else {
+            this.isUnitVector = false;
+        }
+    }
+
+    /**
+     * Creates a new VectorImpl based on the deltas given. The starting
+     * Position will be considered (0,0) and the ending Postion will have
+     * coordinates (deltaX, deltaY). This method doesn't create a unit Vector.
+     * @param deltaX the horizontal variation
+     * @param deltaY the vertical variation
+     */
+    public VectorImpl(final int deltaX, final int deltaY) {
+        this(deltaX, deltaY, false);
     }
 
     /*Getters and setters */
@@ -51,6 +90,14 @@ public class VectorImpl implements Vector {
     @Override
     public Position getEndPos() {
         return this.endPos;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isUnitVector() {
+        return this.isUnitVector;
     }
 
     /**
