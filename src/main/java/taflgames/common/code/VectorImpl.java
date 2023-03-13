@@ -14,14 +14,40 @@ public class VectorImpl implements Vector {
     private static final int RIGHT_ANGLE = 90;
     private final Position startPos;
     private final Position endPos;
+    private final boolean isVersor;
     /**
      * Creates a new VectorImpl based on the Positions given.
      * @param startPos the starting Position
      * @param endPos the ending Position
      */
-    public VectorImpl(final Position startPos, final Position endPos) {
+    public VectorImpl(final Position startPos, final Position endPos, final boolean isVersor) {
         this.startPos = startPos;
         this.endPos = endPos;
+        if (this.canBeVersor() && isVersor) {
+            this.isVersor = true;
+        }
+        else {
+            this.isVersor = false;
+        }
+    }
+
+    public VectorImpl(final Position startPos, final Position endPos) {
+        this(startPos, endPos, false);
+    }
+
+    private boolean canBeVersor() {
+        return Math.sqrt(Math.pow(this.deltaX(), 2) + Math.pow(this.deltaY(), 2)) == 1.0;
+    }
+
+    public VectorImpl(final int deltaX, final int deltaY, boolean isVersor) {
+        this.startPos = new Position(0, 0);
+        this.endPos = new Position(deltaX, deltaY);
+        if (this.canBeVersor() && isVersor) {
+            this.isVersor = true;
+        }
+        else {
+            this.isVersor = false;
+        }
     }
 
     /**
@@ -32,8 +58,7 @@ public class VectorImpl implements Vector {
      * @param deltaY the vertical variation
      */
     public VectorImpl(final int deltaX, final int deltaY) {
-        this.startPos = new Position(0, 0);
-        this.endPos = new Position(deltaX, deltaY);
+        this(deltaX, deltaY, false);
     }
 
     /*Getters and setters */
@@ -159,6 +184,11 @@ public class VectorImpl implements Vector {
             return false;
         }
         return true;
+    }
+
+    
+    public boolean isVersor() {
+        return this.isVersor;
     }
 
     /**
