@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+
+    <BoardSize>11</BoardSize>
+
+    <KingPosition>
+        <Position row="5" column="5"/>
+    </KingPosition>
+
+    <ExitsPositions>
+        <Position row="0" column="0"/>
+        <Position row="0" column="10"/>
+        <Position row="10" column="0"/>
+        <Position row="10" column="10"/>
+    </ExitsPositions>
+
+    <SlidersPositions>
+        <Position row="2" column="2"/>
+        <Position row="2" column="8"/>
+        <Position row="8" column="2"/>
+        <Position row="8" column="8"/>
+    </SlidersPositions>
+
+    <AttackerBasicPiecesPositions>
+        <Position row="0" column="3"/>
+        <Position row="0" column="4"/>
+        <Position row="0" column="6"/>
+        <Position row="0" column="7"/>
+        <Position row="3" column="0"/>
+        <Position row="4" column="0"/>
+        <Position row="6" column="0"/>
+        <Position row="7" column="0"/>
+        <Position row="5" column="1"/>
+        <Position row="5" column="9"/>
+        <Position row="3" column="10"/>
+        <Position row="4" column="10"/>
+        <Position row="6" column="10"/>
+        <Position row="7" column="10"/>
+        <Position row="10" column="3"/>
+        <Position row="10" column="4"/>
+        <Position row="10" column="6"/>
+        <Position row="10" column="7"/>
+    </AttackerBasicPiecesPositions>
+
+    <AttackerQueensPositions>
+        <Position row="0" column="5"/>
+    </AttackerQueensPositions>
+
+    <AttackerArchersPositions>
+        <Position row="5" column="0"/>
+        <Position row="5" column="10"/>
+    </AttackerArchersPositions>
+
+    <AttackerShieldsPositions>
+        <Position row="1" column="5"/>
+        <Position row="9" column="5"/>
+    </AttackerShieldsPositions>
+    
+    <AttackerSwappersPositions>
+        <Position row="10" column="5"/>
+    </AttackerSwappersPositions>
+
+    <DefenderBasicPiecesPositions>
+        <Position row="3" column="5"/>
+        <Position row="4" column="4"/>
+        <Position row="4" column="6"/>
+        <Position row="6" column="4"/>
+        <Position row="6" column="6"/>
+        <Position row="7" column="5"/>
+    </DefenderBasicPiecesPositions>
+
+    <DefenderQueensPositions>
+        <Position row="6" column="5"/>
+    </DefenderQueensPositions>
+    
+    <DefenderArchersPositions>
+        <Position row="5" column="4"/>
+        <Position row="5" column="6"/>
+    </DefenderArchersPositions>
+    
+    <DefenderShieldsPositions>
+        <Position row="5" column="3"/>
+        <Position row="5" column="7"/>
+    </DefenderShieldsPositions>
+    
+    <DefenderSwappersPositions>
+        <Position row="4" column="5"/>
+    </DefenderSwappersPositions>
+    
+</Settings>

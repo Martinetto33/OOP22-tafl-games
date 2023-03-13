@@ -37,6 +37,11 @@ dependencies {
     // when dependencies share the same version, grouping in a val helps to keep them in sync
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+
+    // Apache Commons Collections
+    val apacheCommonsCollectionsVersion = "4.4"
+    implementation("org.apache.commons:commons-collections4:$apacheCommonsCollectionsVersion")
+
 }
 
 application {
