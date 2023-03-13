@@ -30,6 +30,13 @@ public interface Vector {
     Position getEndPos();
 
     /**
+     * If this vector has a 1 modulus and was built as a versor, this
+     * method returns true.
+     * @return true if this Vector is a versor, false otherwise.
+     */
+    boolean isVersor();
+
+    /**
      * Allows multiplication by a scalar, which must be an int.
      * This will influence the values of deltaX and deltaY in the
      * same way it would in normal Maths. This method does NOT change

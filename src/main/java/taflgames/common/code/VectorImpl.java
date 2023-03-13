@@ -9,28 +9,35 @@ import taflgames.common.api.Vector;
  */
 @SuppressWarnings("PMD.ReplaceVectorWithList") /*suppressed as the design requires
 some specific methods and Lists wouldn't come in handy in this case */
-public class VectorImpl implements Vector {
+public final class VectorImpl implements Vector {
     private static final int UNIT_ANGLE = 45;
     private static final int RIGHT_ANGLE = 90;
     private final Position startPos;
     private final Position endPos;
     private final boolean isVersor;
     /**
-     * Creates a new VectorImpl based on the Positions given.
+     * Creates a new VectorImpl based on the Positions given. Sets the isVersor
+     * value based on the parameter given.
      * @param startPos the starting Position
      * @param endPos the ending Position
+     * @param isVersor states wether this VectorImpl is a versor
      */
     public VectorImpl(final Position startPos, final Position endPos, final boolean isVersor) {
         this.startPos = startPos;
         this.endPos = endPos;
         if (this.canBeVersor() && isVersor) {
             this.isVersor = true;
-        }
-        else {
+        } else {
             this.isVersor = false;
         }
     }
 
+    /**
+     * Creates a new VectorImpl based on the Positions given. This
+     * method doesn't create a versor.
+     * @param startPos the starting Position
+     * @param endPos the ending Position
+     */
     public VectorImpl(final Position startPos, final Position endPos) {
         this(startPos, endPos, false);
     }
@@ -39,13 +46,20 @@ public class VectorImpl implements Vector {
         return Math.sqrt(Math.pow(this.deltaX(), 2) + Math.pow(this.deltaY(), 2)) == 1.0;
     }
 
-    public VectorImpl(final int deltaX, final int deltaY, boolean isVersor) {
+    /**
+     * Creates a new VectorImpl based on the deltas given. The starting
+     * Position will be considered (0,0) and the ending Postion will have
+     * coordinates (deltaX, deltaY). This method doesn't create a versor.
+     * @param deltaX the horizontal variation
+     * @param deltaY the vertical variation
+     * @param isVersor states wether this VectorImpl is a versor.
+     */
+    public VectorImpl(final int deltaX, final int deltaY, final boolean isVersor) {
         this.startPos = new Position(0, 0);
         this.endPos = new Position(deltaX, deltaY);
         if (this.canBeVersor() && isVersor) {
             this.isVersor = true;
-        }
-        else {
+        } else {
             this.isVersor = false;
         }
     }
@@ -53,7 +67,7 @@ public class VectorImpl implements Vector {
     /**
      * Creates a new VectorImpl based on the deltas given. The starting
      * Position will be considered (0,0) and the ending Postion will have
-     * coordinates (deltaX, deltaY).
+     * coordinates (deltaX, deltaY). This method doesn't create a versor.
      * @param deltaX the horizontal variation
      * @param deltaY the vertical variation
      */
@@ -76,6 +90,14 @@ public class VectorImpl implements Vector {
     @Override
     public Position getEndPos() {
         return this.endPos;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isVersor() {
+        return this.isVersor;
     }
 
     /**
@@ -184,11 +206,6 @@ public class VectorImpl implements Vector {
             return false;
         }
         return true;
-    }
-
-    
-    public boolean isVersor() {
-        return this.isVersor;
     }
 
     /**
