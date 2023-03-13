@@ -6,18 +6,33 @@ import taflgames.common.code.Position;
 /**
  * this factory has the job to create
  * different kinds of hit-boxes that can be 
- * used by pieces and other entities
+ * used by pieces and other entities alike. A hitbox is 
+ * composed by multiple cells called "cell-hitbox": they
+ * rappresent cells on the board where enemy entities can be killed
  */
 public interface FactoryHitbox {
     /**
-     * creates the basic hit-box used by many 
-     * types of pieces and other entities:
+     * this method's very similar to {@link createBasicHitbox} in this factory; the only difference is that
+     * you can set the distance of a singular "cell-hitbox" from its entity. It should be used when the 
+     * distance is grater than 1
+     *          
+     *        
      * 
-     *          x
-     *        x 0 x
-     *          x
+     * @param distance distance of a singular "cell-hitbox" from its entity
+     * @return basic hit-box with distance 
+     */
+    Set<Position> createBasicHitboxDistance(int distance);
+
+    /**
+     * creates the basic hit-box shaped as a cross with only 
+     * one "cell-hitbox" in each 'arm' of the cross right 
+     * next to the entity:
+     *        
+     *        x
+     *      x 0 x 
+     *        x
      * 
-     * @return basic hit-box
+     * @return basic cross shaped hit-box
      */
     Set<Position> createBasicHitbox();
 
@@ -33,6 +48,6 @@ public interface FactoryHitbox {
      *           x
      * @return archer's hitbox
      */
-    Set<Position> createArcherHitbox();
+    Set<Position> createArcherHitbox(final int range);
 
 }

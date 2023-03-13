@@ -1,9 +1,13 @@
 package taflgames.model.pieces.api;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
+import taflgames.model.pieces.code.AbstractPiece.PieceMementoImpl;
 
 /**
  * This interface will model the behavior of a generic piece 
@@ -20,8 +24,9 @@ public interface Piece {
      * @return true if this piece 
      * can switch positions, false otherwise
      */
-    boolean canSwitch();
+    boolean canSwap();
 
+    void setPlayer(Player p, Optional<String> s);
 
     /**
      * this method returns the current position 
@@ -34,7 +39,7 @@ public interface Piece {
      * this method changes the position of the piece on the board
      * @param newPosition the position where the piece has to go
      */
-    void setCurrentPosition(Position newPosition);
+    void setCurrentPosition(final Position newPosition);
 
     /**
      * this method returns the move-set of this piece
@@ -75,7 +80,7 @@ public interface Piece {
      *  this method replaces the previous number of lives whith a new one
      * @param newNumOfLives
      */
-    void setCurrNumbOfLives(int newNumOfLives);
+    void setCurrNumbOfLives(final int newNumOfLives);
 
     /**
      * decreases the current number of lives by 1 only if it's
@@ -88,7 +93,7 @@ public interface Piece {
      * TO DO: per spiegare meglio riguarda gli appunti sulla mangiata di pedine
      * @return
      */
-    boolean wasKilled();
+    boolean wasKilled(List<Piece> enemies, Position lastEnemyMoved);
     /**
      * saves the current state of the piece
      * @return the inner class PieceMemento
@@ -96,9 +101,9 @@ public interface Piece {
     PieceMemento save();
     /**
      * restores the previous state of the piece
-     * @param pm the inner class PieceMemento
+     * @param pm the inner class PieceMementoImpl (non ho potuto fare pieceMemento perchè dà problemi)
      */
-    void restore(PieceMemento pm);
+    void restore(final PieceMementoImpl pm);
 
     /**
      * creates a string that rappresents the piece as a whole
@@ -110,6 +115,17 @@ public interface Piece {
     
     String sendSignalMove();
 
+    /**
+     * 
+     * @return the piece's player
+     */
+    Player getPlayer();
+
+    /**
+     * 
+     * @return the name of the player if it exist or an empty string otherwise
+     */
+    String getNameOfPlayer();
 
 
 }

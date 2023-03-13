@@ -1,5 +1,6 @@
 package taflgames.model.pieces.api;
 
+import java.util.List;
 import java.util.Set;
 
 import taflgames.common.api.Vector;
@@ -23,6 +24,7 @@ public interface BehaviourTypeOfPiece {
      * (the default position is (0,0))
      * @return hitbox of piece
      */
+
     Set<Position> generateHitbox();
     /**
      * this method creates the move-set of this piece, 
@@ -32,9 +34,19 @@ public interface BehaviourTypeOfPiece {
      */
     Set<Vector> generateMoveSet();
 
-    Set<Position> getMoveSet();
+    void generate();
 
-    Set<Vector> getHitbox();
+    void setTotNumbOfLives(int numbLives);
+
+    void setNameTypeOfPiece(String name);
+
+    void setMoveSet(Set<Vector> moveSet);
+
+    void setHitbox(Set<Position> hitbox);
+
+    Set<Vector> getMoveSet();
+
+    Set<Position> getHitbox();
 
     /**
      * returns the type of this piece
@@ -55,6 +67,6 @@ public interface BehaviourTypeOfPiece {
      * TO DO: riguarda gli appunti per  spiegare meglio
      * @return true if it was hit, false otherwise
      */
-    boolean wasHit();
+    boolean wasHit(List<Piece> enemies, Position lastEnemyMoved);
 
 }
