@@ -1,13 +1,15 @@
-package taflgames.model.pieces.code;
+package taflgames.common.code;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import taflgames.common.api.FactoryHitbox;
-import taflgames.common.code.Position;
 
 public class ImplFactoryHitbox implements FactoryHitbox {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Position> createBasicHitboxDistance(int distance) throws IllegalArgumentException{
         if(distance == 0) {
@@ -22,8 +24,16 @@ public class ImplFactoryHitbox implements FactoryHitbox {
         return s;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Set<Position> createArcherHitbox(final int range) {
+    public Set<Position> createArcherHitbox(final int range) throws IllegalArgumentException {
+        
+        if(range<=0){
+            throw new IllegalArgumentException("range <=0");
+        }
+        
         Set<Position> f = new HashSet<>();
         for(int i=1;i<=range;i++){
             f.addAll(this.createBasicHitboxDistance(i));

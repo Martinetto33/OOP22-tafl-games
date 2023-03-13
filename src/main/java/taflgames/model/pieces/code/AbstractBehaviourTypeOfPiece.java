@@ -6,6 +6,8 @@ import java.util.Set;
 import taflgames.common.api.FactoryHitbox;
 import taflgames.common.api.FactoryMoveSet;
 import taflgames.common.api.Vector;
+import taflgames.common.code.ImplFactoryHitbox;
+import taflgames.common.code.ImplFactoryMoveset;
 import taflgames.common.code.Position;
 import taflgames.model.pieces.api.BehaviourTypeOfPiece;
 import taflgames.model.pieces.api.Piece;

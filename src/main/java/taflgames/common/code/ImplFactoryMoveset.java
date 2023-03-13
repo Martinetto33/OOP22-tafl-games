@@ -1,12 +1,10 @@
-package taflgames.model.pieces.code;
+package taflgames.common.code;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import taflgames.common.api.FactoryMoveSet;
 import taflgames.common.api.Vector;
-import taflgames.common.code.Position;
-import taflgames.common.code.VectorImpl;
 
 public class ImplFactoryMoveset implements FactoryMoveSet {
 
