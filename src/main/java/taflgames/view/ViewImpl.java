@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
 import taflgames.view.scenes.HomeScene;
@@ -20,7 +19,6 @@ public final class ViewImpl implements View {
     private static final String FRAME_TITLE = "Tafl Games";
 
     private final JFrame frame;
-    // private final JDesktopPane desktopPane;
     private final CardLayout frameLayout;
     private final Set<String> addedScenes;
 
@@ -36,9 +34,6 @@ public final class ViewImpl implements View {
         final int screenWidth = (int) screen.getWidth();
         final int screenHeight = (int) screen.getHeight();
         frame.setSize((screenWidth * 2) / 3, (screenHeight * 2) / 3);
-
-        // desktopPane = new JDesktopPane();
-        // frame.setContentPane(desktopPane);
 
         // Set frame layout as CardLayout to implement switching between different scenes
         frameLayout = new CardLayout();
