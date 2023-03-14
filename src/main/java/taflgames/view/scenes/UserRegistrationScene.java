@@ -3,6 +3,8 @@ package taflgames.view.scenes;
 import java.util.Optional;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -31,6 +33,7 @@ public class UserRegistrationScene extends AbstractScene {
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
         southPanel.add(goBackButton);
+        southPanel.setBackground(new Color(255, 255, 255, 0));
 
         goBackButton.addActionListener((e) -> {
             view.setScene(new GameChoiceScene(view));

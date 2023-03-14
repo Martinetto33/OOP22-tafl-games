@@ -1,6 +1,7 @@
 package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -34,6 +35,7 @@ public class GameChoiceScene extends AbstractScene {
         final JPanel scene = super.getScene();
 
         final JPanel elementsPanel = new JPanel(new BorderLayout());
+        elementsPanel.setBackground(new Color(255, 255, 255, 0));
 
         final JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
@@ -48,6 +50,7 @@ public class GameChoiceScene extends AbstractScene {
         playButtonsPanel.add(playClassicButton);
         final JButton playVariantButton = new JButton(PLAY_VARIANT_MODE);
         playVariantButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        playButtonsPanel.setBackground(new Color(255, 255, 255, 0));
         playButtonsPanel.add(playVariantButton);
 
         playClassicButton.addActionListener((e) -> {
@@ -69,6 +72,7 @@ public class GameChoiceScene extends AbstractScene {
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
         southPanel.add(goBackButton);
+        southPanel.setBackground(new Color(255, 255, 255, 0));
 
         goBackButton.addActionListener((e) -> {
             view.setScene(new HomeScene(view));

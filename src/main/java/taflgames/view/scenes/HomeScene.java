@@ -39,13 +39,15 @@ public class HomeScene extends AbstractScene {
         final FontManager fontManager = new FontManager();
 
         final JPanel elementsPanel = new JPanel(new BorderLayout());
+        elementsPanel.setBackground(new Color(255, 255, 255, 0));
 
         final JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         final JLabel titleLabel = new JLabel(GAME_TITLE);
         titleLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         titleLabel.setFont(fontManager.getModifiedFont(TITLE_SIZE, Font.PLAIN));
-        titlePanel.setBackground(Color.WHITE);
+        titleLabel.setForeground(Color.WHITE);
+        titlePanel.setBackground(new Color(255, 255, 255, 0));
         titlePanel.add(titleLabel);
 
         final JPanel buttonsPanel = new JPanel();
@@ -55,6 +57,7 @@ public class HomeScene extends AbstractScene {
         buttonsPanel.add(playButton);
         final JButton exitButton = new JButton(EXIT);
         exitButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        buttonsPanel.setBackground(new Color(255, 255, 255, 0));
         buttonsPanel.add(exitButton);
 
         playButton.addActionListener((e) -> {
