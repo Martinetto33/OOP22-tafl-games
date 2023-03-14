@@ -2,6 +2,7 @@ package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import taflgames.common.code.Pair;
+import taflgames.model.leaderboard.api.Leaderboard;
+import taflgames.model.leaderboard.code.LeaderBoardImpl;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,6 +30,7 @@ public class TestLeaderboard {
 
     private static final int MAP_SIZE = 5;
     private Map<String, Pair<Integer, Integer>> results = new HashMap<>();
+    private Leaderboard leaderboard;
 
     /**
      * Initialises the Map. This fake test should start before any other one.
@@ -39,8 +43,19 @@ public class TestLeaderboard {
         this.results.put("Andrea Piermattei", new Pair<>(4, 2));
         this.results.put("Margherita Raponi", new Pair<>(10, 0));
         this.results.put("Personaggio fittizio", new Pair<>(0, 0));
-        assertEquals(5, this.results.size());
+        assertEquals(TestLeaderboard.MAP_SIZE, this.results.size());
+        this.leaderboard = new LeaderBoardImpl();
     }
 
-    
+    /**
+     * Tests the addition of new results
+     */
+    @Test
+    void testAddResult() {
+        /*Voglio fare un metodo che dagli stream crea tanti MatchResult quante sono le vittorie
+         * e le sconfitte indicate nelle Pairs della mappa results.
+         */
+        this.results.entrySet().stream();
+    }
+
 }
