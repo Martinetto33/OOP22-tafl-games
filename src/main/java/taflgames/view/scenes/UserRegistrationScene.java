@@ -1,5 +1,7 @@
 package taflgames.view.scenes;
 
+import java.util.Optional;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -20,7 +22,7 @@ public class UserRegistrationScene extends AbstractScene {
      */
     public UserRegistrationScene(final View view) {
 
-        super(USER_REGISTRATION);
+        super(USER_REGISTRATION, Optional.of("home-background.jpg"));
 
         final JPanel scenePanel = super.getScene();
         scenePanel.setLayout(new BoxLayout(scenePanel, BoxLayout.Y_AXIS));

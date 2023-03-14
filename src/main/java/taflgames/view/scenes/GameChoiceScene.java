@@ -1,6 +1,7 @@
 package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
+import java.util.Optional;
 
 import javax.swing.JPanel;
 
@@ -28,7 +29,7 @@ public class GameChoiceScene extends AbstractScene {
      */
     public GameChoiceScene(final View view) {
 
-        super(GAME_CHOICE);
+        super(GAME_CHOICE, Optional.of("home-background.jpg"));
 
         final JPanel scenePanel = super.getScene();
         scenePanel.setLayout(new BoxLayout(scenePanel, BoxLayout.Y_AXIS));

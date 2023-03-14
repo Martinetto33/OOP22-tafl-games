@@ -6,9 +6,9 @@ import java.awt.Toolkit;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
-import taflgames.view.scenes.GameOverScene;
 import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.Scene;
 
@@ -18,7 +18,9 @@ import taflgames.view.scenes.Scene;
 public final class ViewImpl implements View {
 
     private static final String FRAME_TITLE = "Tafl Games";
+
     private final JFrame frame;
+    // private final JDesktopPane desktopPane;
     private final CardLayout frameLayout;
     private final Set<String> addedScenes;
 
@@ -28,19 +30,22 @@ public final class ViewImpl implements View {
     public ViewImpl() {
 
         frame = new JFrame(FRAME_TITLE);
+
         // Set the frame size
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         final int screenWidth = (int) screen.getWidth();
         final int screenHeight = (int) screen.getHeight();
         frame.setSize((screenWidth * 2) / 3, (screenHeight * 2) / 3);
 
+        // desktopPane = new JDesktopPane();
+        // frame.setContentPane(desktopPane);
+
         // Set frame layout as CardLayout to implement switching between different scenes
         frameLayout = new CardLayout();
         frame.setLayout(frameLayout);
 
         addedScenes = new HashSet<>();
-        //setScene(new HomeScene(this));
-        this.setScene(new GameOverScene(this));
+        setScene(new HomeScene(this));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);  // Let the OS decide about the positioning of the frame
@@ -51,7 +56,7 @@ public final class ViewImpl implements View {
     public void setScene(final Scene scene) {
         final String sceneName = scene.getSceneName();
         if (!addedScenes.contains(sceneName)) {
-            frame.add(scene.getScene(), sceneName);
+            frame.getContentPane().add(scene.getScene(), sceneName);
             addedScenes.add(sceneName);
         }
         frameLayout.show(frame.getContentPane(), sceneName);

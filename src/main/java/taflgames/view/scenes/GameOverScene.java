@@ -2,6 +2,7 @@ package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.util.Optional;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -30,7 +31,7 @@ public class GameOverScene extends AbstractScene {
      */
     public GameOverScene(final View view) {
 
-        super(GameOverScene.GAME_OVER);
+        super(GameOverScene.GAME_OVER, Optional.of("home-background.jpg"));
         final FontManager runeFont = new FontManager();
 
         final JPanel scenePanel = super.getScene();
