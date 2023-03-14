@@ -14,7 +14,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
     final private int basicNumbOfLives=1;
     final private int shieldNumbOfLives=2;
     Set<Position> temp = new HashSet<>();
-
+    
     /**
      * This method (used by many types of pieces) tells whether this piece 
      * is about to get hit. In order to get hit it must be surrounded by at least two enemy pieces,
@@ -181,11 +181,17 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
 
         @Override
         public Set<Vector> generateMoveSet() {
+            /*DEVI FARE QUI LA MODIFICA DI TEMP */
+            temp.add(new Position(0, 2));
+            temp.add(new Position(2, 1));
             return this.factoryMoveSet.createSwapperMoveSet(temp);
         }
 
         @Override
         public void generate() {
+            Set<Position> temp2 = new HashSet<>();
+            temp2.add(new Position(2, 1));
+            temp2.add(new Position(0, 2));
             this.setHitbox(this.generateHitbox());
             this.setMoveSet(this.generateMoveSet());
             this.setNameTypeOfPiece("SWAPPER");
