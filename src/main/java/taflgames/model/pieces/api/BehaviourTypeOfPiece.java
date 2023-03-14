@@ -1,6 +1,5 @@
 package taflgames.model.pieces.api;
 
-import java.util.List;
 import java.util.Set;
 
 import taflgames.common.api.Vector;
@@ -64,9 +63,8 @@ public interface BehaviourTypeOfPiece {
      * this method is used to check if there are the conditions
      * for the piece to get hit. These conditions may change depending
      * on the type of piece, thus they have to be determined by the implementations
-     * TO DO: riguarda gli appunti per  spiegare meglio
      * @return true if it was hit, false otherwise
      */
-    boolean wasHit(List<Piece> enemies, Position lastEnemyMoved);
+    boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved);
 
 }

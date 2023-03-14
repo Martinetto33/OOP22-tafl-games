@@ -1,6 +1,7 @@
 package taflgames.common.code;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import taflgames.common.api.FactoryHitbox;
@@ -12,15 +13,15 @@ public class ImplFactoryHitbox implements FactoryHitbox {
      */
     @Override
     public Set<Position> createBasicHitboxDistance(int distance) throws IllegalArgumentException{
-        if(distance < 0) {
+        final Integer t = Objects.requireNonNull(distance);
+        if(t.intValue() < 0) {
             throw new IllegalArgumentException("distance was set as 0");
         }
         Set<Position> s = new HashSet<>();
-        s.add(new Position(distance,0));
-        s.add(new Position(0,distance));
-        s.add(new Position(-distance,0));
-        s.add(new Position(0,-distance));
-
+        s.add(new Position(t.intValue(),0));
+        s.add(new Position(0,t.intValue()));
+        s.add(new Position(-t.intValue(),0));
+        s.add(new Position(0,-t.intValue()));
         return s;
     }
 
@@ -29,13 +30,13 @@ public class ImplFactoryHitbox implements FactoryHitbox {
      */
     @Override
     public Set<Position> createArcherHitbox(final int range) throws IllegalArgumentException {
-        
-        if(range<=0){
+        final Integer t = Objects.requireNonNull(range);
+        if(t.intValue()<=0){
             throw new IllegalArgumentException("range <=0");
         }
         
         Set<Position> f = new HashSet<>();
-        for(int i=1;i<=range;i++){
+        for(int i=1;i<=t.intValue();i++){
             f.addAll(this.createBasicHitboxDistance(i));
         }
         return f;

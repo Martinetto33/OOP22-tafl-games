@@ -1,7 +1,7 @@
 package taflgames.model.pieces.code;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import taflgames.common.api.Vector;
@@ -14,8 +14,38 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
     final private int basicNumbOfLives=1;
     final private int shieldNumbOfLives=2;
     Set<Position> temp = new HashSet<>();
+
+    /**
+     * This method (used by many types of pieces) tells whether this piece 
+     * is about to get hit. In order to get hit it must be surrounded by at least two enemy pieces,
+     * which are rappresented by the parameter {@link enemies}. Among these {@link enemies} there must be 
+     * two pieces with the same coordinates on the board either on the x-axis or on the y-axis 
+     *  
+     * 
+     * @param enemies rappresents the set of enemy pieces that are threatening to
+     * hit this piece
+     * @param lastEnemyMoved position of the enemy piece that moved last
+     * @return whether the conditions for a "hit" were satisfied or not
+     */
+    public boolean basicWasHit(Set<Piece> enemies, Position lastEnemyMoved){
+
+        final var e = Objects.requireNonNull(enemies);
+        final var l = Objects.requireNonNull(lastEnemyMoved);
+
+        if(enemies.size() < 2) {
+            return false;
+        }
+        for (Piece p : e) {
+            if(p.getCurrentPosition().getX()==l.getX() ^ p.getCurrentPosition().getY()==l.getY()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public BehaviourTypeOfPiece createQueenBehaviour() {
+        
         /*DA RICONTROLLARE */
         return new AbstractBehaviourTypeOfPiece() {
 
@@ -30,16 +60,8 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             }
 
             @Override
-            public boolean wasHit(List<Piece> enemies, Position lastEnemyMoved) {
-                if(enemies.size()<2) {
-                    return false;
-                }
-                for (Piece p : enemies) {
-                    if(p.getCurrentPosition().getX()==lastEnemyMoved.getX() ^ p.getCurrentPosition().getY()==lastEnemyMoved.getY()){
-                        return true;
-                    }
-                }
-                return false;
+            public boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) {
+                return basicWasHit(enemies, lastEnemyMoved);
             }
 
             @Override
@@ -60,7 +82,6 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             
             @Override
             public Set<Position> generateHitbox() {
-                // TODO Auto-generated method stub
                 final int maxRange = 3;
                 return this.factoryHitbox.createArcherHitbox(maxRange);
             }
@@ -71,24 +92,16 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             }
 
             @Override
-            public boolean wasHit(List<Piece> enemies, Position lastEnemyMoved) {
-                if(enemies.size()<2) {
-                    return false;
-                }
-                for (Piece p : enemies) {
-                    if(p.getCurrentPosition().getX()==lastEnemyMoved.getX() ^ p.getCurrentPosition().getY()==lastEnemyMoved.getY()){
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
             public void generate() {
                 this.setHitbox(this.generateHitbox());
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("ARCHER");
                 this.setTotNumbOfLives(basicNumbOfLives);
+            }
+
+            @Override
+            public boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) {
+                return basicWasHit(enemies, lastEnemyMoved);
             }
             
         };
@@ -100,7 +113,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
 
             @Override
             public Set<Position> generateHitbox() {
-                return this.factoryHitbox.createBasicHitbox();
+                return this.factoryHitbox.createBasicHitboxDistance(0);
             }
 
             @Override
@@ -109,19 +122,18 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             }
 
             @Override
-            public boolean wasHit(List<Piece> enemies, Position lastEnemyMoved) {
-                if(enemies.size()<4) {
-                    return false;
-                }
-                return false;
-            }
-
-            @Override
             public void generate() {
                 this.setHitbox(this.generateHitbox());
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("KING");
                 this.setTotNumbOfLives(basicNumbOfLives);
+            }
+
+            @Override
+            public boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) {
+                final var e = Objects.requireNonNull(enemies);
+                final var l = Objects.requireNonNull(lastEnemyMoved);
+                return e.size() >= 4;
             }
 
         };
@@ -141,18 +153,6 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             return this.factoryMoveSet.createBasicMoveSet();
         }
 
-        @Override
-        public boolean wasHit(List<Piece> enemies, Position lastEnemyMoved) {
-            if(enemies.size()<2) {
-                return false;
-            }
-            for (Piece p : enemies) {
-                if(p.getCurrentPosition().getX()==lastEnemyMoved.getX() ^ p.getCurrentPosition().getY()==lastEnemyMoved.getY()){
-                    return true;
-                }
-            }
-            return false;
-        }
 
         @Override
         public void generate() {
@@ -160,6 +160,11 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             this.setMoveSet(this.generateMoveSet());
             this.setNameTypeOfPiece("SHIELD");
             this.setTotNumbOfLives(shieldNumbOfLives);
+        }
+
+        @Override
+        public boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) {
+            return basicWasHit(enemies, lastEnemyMoved);
         }
         
        };
@@ -180,24 +185,16 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
         }
 
         @Override
-        public boolean wasHit(List<Piece> enemies, Position lastEnemyMoved) {
-            if(enemies.size()<2) {
-                return false;
-            }
-            for (Piece p : enemies) {
-                if(p.getCurrentPosition().getX()==lastEnemyMoved.getX() ^ p.getCurrentPosition().getY()==lastEnemyMoved.getY()){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
         public void generate() {
             this.setHitbox(this.generateHitbox());
             this.setMoveSet(this.generateMoveSet());
             this.setNameTypeOfPiece("SWAPPER");
             this.setTotNumbOfLives(basicNumbOfLives);
+        }
+
+        @Override
+        public boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) {
+            return basicWasHit(enemies, lastEnemyMoved);
         }
         
        };
@@ -217,18 +214,6 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
                 return this.factoryMoveSet.createBasicMoveSet();
             }
 
-            @Override
-            public boolean wasHit(List<Piece> enemies, Position lastEnemyMoved) {
-                if(enemies.size()<2) {
-                    return false;
-                }
-                for (Piece p : enemies) {
-                    if(p.getCurrentPosition().getX()==lastEnemyMoved.getX() ^ p.getCurrentPosition().getY()==lastEnemyMoved.getY()){
-                        return true;
-                    }
-                }
-                return false;
-            }
 
             @Override
             public void generate() {
@@ -236,6 +221,11 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("BASIC_PIECE");
                 this.setTotNumbOfLives(basicNumbOfLives);
+            }
+
+            @Override
+            public boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) {
+                return basicWasHit(enemies, lastEnemyMoved);
             }
             
         };

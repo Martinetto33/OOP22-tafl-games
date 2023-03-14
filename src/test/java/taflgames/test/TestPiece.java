@@ -12,4 +12,5 @@ import taflgames.common.code.VectorImpl;
 
 public class TestPiece {
     
+    
 }

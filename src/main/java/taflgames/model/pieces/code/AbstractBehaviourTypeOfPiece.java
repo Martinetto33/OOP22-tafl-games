@@ -1,6 +1,6 @@
 package taflgames.model.pieces.code;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import taflgames.common.api.FactoryHitbox;
@@ -11,13 +11,15 @@ import taflgames.common.code.ImplFactoryMoveset;
 import taflgames.common.code.Position;
 import taflgames.model.pieces.api.BehaviourTypeOfPiece;
 import taflgames.model.pieces.api.Piece;
-
+/**
+ * 
+ */
 public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPiece{
 
-    protected String typeName;
-    protected int totalNumbOfLives;
-    protected Set<Vector> moveSet;
-    protected Set<Position> hitbox;
+    private String typeName;
+    private int totalNumbOfLives;
+    private Set<Vector> moveSet = new HashSet<>();
+    private Set<Position> hitbox = new HashSet<>();
 
     public final FactoryHitbox factoryHitbox= new ImplFactoryHitbox();
     public final FactoryMoveSet factoryMoveSet= new ImplFactoryMoveset();
@@ -43,16 +45,16 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
 
     @Override
     public Set<Vector> getMoveSet() {
-        if(this.moveSet.equals(null)) {
-            this.moveSet = generateMoveSet();
+        if(this.moveSet.isEmpty()) {
+            setMoveSet(this.generateMoveSet());
         }
         return this.moveSet;
     }
 
     @Override
     public Set<Position> getHitbox() {
-       if(this.hitbox.equals(null)) {
-        this.hitbox=generateHitbox();
+       if(this.hitbox.isEmpty()) {
+        setHitbox(this.generateHitbox());
        }
        return this.hitbox;
     }
@@ -68,7 +70,7 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
     }
 
     @Override
-    public abstract boolean wasHit(List<Piece> enemies, Position lastEnemyMoved);
+    public abstract boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved);
 
     @Override
     public void setTotNumbOfLives(int numbLives) {
@@ -128,4 +130,13 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
 
     
     
+
+
+
+
+
+
+
+
+
 }

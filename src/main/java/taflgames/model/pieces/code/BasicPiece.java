@@ -9,9 +9,9 @@ public class BasicPiece extends AbstractPiece{
 
     public BasicPiece(Position startingPosition, Player p, Optional<String> name) {
         this.setCurrentPosition(startingPosition);
-        this.myTeam = new ImplTeam(p, name);
-        this.myType = this.factory.createBasicPieceBehaviour();
-        this.myType.generate();
+        this.setMyPlayer(p);
+        this.setMyType(this.factory.createBasicPieceBehaviour());
+        this.getMyType().generate();
     }
     
 }

@@ -9,6 +9,9 @@ import taflgames.common.Player;
  * this interface is used by the implementations of Piece
  * to determine the piece's team and its information
  * 
+ * 
+ * 
+ * DA ELIMINARE
  */
 public interface Team {
     /**

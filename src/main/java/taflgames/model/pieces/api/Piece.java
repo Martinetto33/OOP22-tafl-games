@@ -1,7 +1,5 @@
 package taflgames.model.pieces.api;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import taflgames.common.Player;
@@ -25,8 +23,6 @@ public interface Piece {
      * can switch positions, false otherwise
      */
     boolean canSwap();
-
-    void setPlayer(Player p, Optional<String> s);
 
     /**
      * this method returns the current position 
@@ -93,7 +89,7 @@ public interface Piece {
      * TO DO: per spiegare meglio riguarda gli appunti sulla mangiata di pedine
      * @return
      */
-    boolean wasKilled(List<Piece> enemies, Position lastEnemyMoved);
+    boolean wasKilled(Set<Piece> enemies, Position lastEnemyMoved);
     /**
      * saves the current state of the piece
      * @return the inner class PieceMemento
@@ -121,11 +117,6 @@ public interface Piece {
      */
     Player getPlayer();
 
-    /**
-     * 
-     * @return the name of the player if it exist or an empty string otherwise
-     */
-    String getNameOfPlayer();
 
 
 }

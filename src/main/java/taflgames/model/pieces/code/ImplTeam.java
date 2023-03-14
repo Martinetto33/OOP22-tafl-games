@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import taflgames.common.Player;
 import taflgames.model.pieces.api.Team;
-
+/**
+ * DA ELIMINARE ALLA FINE
+*/
 public class ImplTeam implements Team{
 
     private Optional<String> namePlayer;

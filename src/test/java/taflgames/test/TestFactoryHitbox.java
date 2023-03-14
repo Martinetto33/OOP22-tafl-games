@@ -16,13 +16,23 @@ public class TestFactoryHitbox {
     @Test
     void testCreateBasicHitboxDistance() {
         final FactoryHitbox f= new ImplFactoryHitbox();
-        final int d = 1;
+        final int d = 2;
         Set<Position> out= new HashSet<>();
         out.add(new Position(d, 0));
         out.add(new Position(0, d));
         out.add(new Position(-d, 0));
         out.add(new Position(0, -d));
         assertEquals(out,f.createBasicHitboxDistance(d));
+
+        final int d2 = 0;
+        Set<Position> out2= new HashSet<>();
+        out2.add(new Position(d2, 0));
+        out2.add(new Position(0, d2));
+        out2.add(new Position(-d2, 0));
+        out2.add(new Position(0, -d2));
+        assertEquals(out2,f.createBasicHitboxDistance(d2));
+
+        assertThrows(IllegalArgumentException.class, ()->f.createBasicHitboxDistance(-9));
 
         assertNotEquals(f.createBasicHitboxDistance(d), null);
 
@@ -52,9 +62,6 @@ public class TestFactoryHitbox {
         assertNotEquals(f.createBasicHitbox(), null);
 
         assertNotEquals(f.createBasicHitbox(), new HashSet<>());
-
-        
-        
     }
 
     @Test

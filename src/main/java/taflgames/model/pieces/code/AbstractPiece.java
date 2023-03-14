@@ -1,9 +1,9 @@
 package taflgames.model.pieces.code;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
@@ -13,23 +13,31 @@ import taflgames.model.pieces.api.BehaviourTypeOfPiece;
 import taflgames.model.pieces.api.FactoryBehaviourTypeOfPiece;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.api.PieceMemento;
-import taflgames.model.pieces.api.Team;
 
 
 public abstract class AbstractPiece implements Piece{
-    protected Position currentPosition;
-    protected int currentNumbOfLives;
-    protected BehaviourTypeOfPiece myType;
-    protected Team myTeam;
+    private Position currentPosition;
+    private int currentNumbOfLives;
+    private BehaviourTypeOfPiece myType;
+    private Player myPlayer;
     /**la factory sarà usata dal costruttore delle implementazioni per creare la type*/
     final protected FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
 
     public FactoryBehaviourTypeOfPiece getFactory() {
         return this.factory;
     }
-    @Override
-    public void setPlayer(Player p, Optional<String> s) {
+
+    
+    public BehaviourTypeOfPiece getMyType() {
+        return myType;
     }
+
+    
+    public void setMyType(BehaviourTypeOfPiece myType) {
+        Objects.requireNonNull(myType);
+        this.myType = myType;
+    }
+
 
     /**
      * TO DO: mettere la documentazione di Alìn
@@ -86,16 +94,28 @@ public abstract class AbstractPiece implements Piece{
      */
     @Override
     public void setCurrentPosition(final Position newPosition) {
+        Objects.requireNonNull(newPosition);
         this.currentPosition = newPosition;
     }
     /**
      * {@inheritDoc}
      */
     @Override
-    public Set<Vector> whereToMove() { /**da rifare con la modifica di Alìn (so che non va bene)*/
-        return new HashSet<>(this.myType.getMoveSet().stream()
-                                        .map(v->new VectorImpl(this.currentPosition,v.getEndPos()))
-                                        .toList());
+    public Set<Vector> whereToMove() {
+        /*I consider only the non-unit-vectors and I must adapt only the starting position*/
+        Set<Vector> a = new HashSet<>(this.myType.getMoveSet().stream()
+                                        .filter(v->!v.isUnitVector())
+                                        .map(v->new VectorImpl(this.currentPosition,v.getEndPos(),false))
+                                        .collect(Collectors.toSet()));
+        /*now I consider the unit-vectors so I have to adapt both starting and ending positions */
+        a.addAll(this.myType.getMoveSet().stream()
+                                            .filter(v->v.isUnitVector())
+                                            .map(v->new VectorImpl(this.currentPosition, 
+                                            new Position(this.currentPosition.getX() + v.getEndPos().getX(), 
+                                                        this.currentPosition.getY() + v.getEndPos().getY()), 
+                                                        true))
+                                            .collect(Collectors.toSet()));   
+        return a;                 
     }
     /**
      * {@inheritDoc}
@@ -104,8 +124,9 @@ public abstract class AbstractPiece implements Piece{
     public Set<Position> whereToHit() {
        
         return new HashSet<>(this.myType.getHitbox().stream()
-                                .map(p->new Position(p.getX()+this.currentPosition.getX(),p.getY()+this.currentPosition.getY()))
-                                .toList());
+                                .map(p->new Position(p.getX()+this.currentPosition.getX(),
+                                                    p.getY()+this.currentPosition.getY()))
+                                .collect(Collectors.toSet()));
 
     }
     /**
@@ -126,7 +147,11 @@ public abstract class AbstractPiece implements Piece{
      * {@inheritDoc}
      */
     @Override
-    public void setCurrNumbOfLives(final int newNumOfLives) {
+    public void setCurrNumbOfLives(final int newNumOfLives) throws IllegalArgumentException{
+        Objects.requireNonNull(newNumOfLives);
+        if(newNumOfLives < 0) {
+            throw new IllegalArgumentException("newNumOfLives is less than 0"); 
+        }
         this.currentNumbOfLives = newNumOfLives;
     }
     /**
@@ -150,6 +175,7 @@ public abstract class AbstractPiece implements Piece{
      */
     @Override
     public void restore(final PieceMementoImpl pm) {
+        Objects.requireNonNull(pm);
         this.currentNumbOfLives = pm.getBackupCurrNumbOfLives();
         this.currentPosition = pm.getBackupPosition();
     }
@@ -167,15 +193,16 @@ public abstract class AbstractPiece implements Piece{
      */
     @Override
     public Player getPlayer() {
-       return this.myTeam.getPlayerTeam();
+       return this.myPlayer;
     }
+
+    public void setMyPlayer(Player myPlayer) {
+        this.myPlayer = myPlayer;
+    }
+
     /**
      * {@inheritDoc}
      */
-    @Override
-    public String getNameOfPlayer() {
-        return (!this.myTeam.getNameOfUserPlayer().isPresent()) ? "" : this.myTeam.getNameOfUserPlayer().get();
-    }
 
     @Override
     public String toString() {
@@ -188,14 +215,20 @@ public abstract class AbstractPiece implements Piece{
                                     .append(this.myType.getTotalNumbOfLives())
                                     .append(" lives ")
                                     .append(this.getPlayer())
-                                    .append(" name:")
-                                    .append(this.getNameOfPlayer())
                                     .append(" hitbox: ")
                                     .append(this.myType.getHitbox())
                                     .append(" ")
                                     .append("moveset: ")
                                     .append(this.myType.getMoveSet())
                                     .toString();
+    }
+   
+    @Override
+    public boolean wasKilled(Set<Piece> enemies, Position lastEnemyMoved) {
+        if(this.myType.wasHit(enemies,lastEnemyMoved)) {
+            this.decrementCurrNumbOfLives();
+        }
+        return !this.isAlive();
     }
     @Override
     public int hashCode() {
@@ -204,7 +237,7 @@ public abstract class AbstractPiece implements Piece{
         result = prime * result + ((currentPosition == null) ? 0 : currentPosition.hashCode());
         result = prime * result + currentNumbOfLives;
         result = prime * result + ((myType == null) ? 0 : myType.hashCode());
-        result = prime * result + ((myTeam == null) ? 0 : myTeam.hashCode());
+        result = prime * result + ((myPlayer == null) ? 0 : myPlayer.hashCode());
         return result;
     }
     @Override
@@ -228,22 +261,9 @@ public abstract class AbstractPiece implements Piece{
                 return false;
         } else if (!myType.equals(other.myType))
             return false;
-        if (myTeam == null) {
-            if (other.myTeam != null)
-                return false;
-        } else if (!myTeam.equals(other.myTeam))
+        if (myPlayer != other.myPlayer)
             return false;
         return true;
-    }
-    @Override
-    public boolean wasKilled(List<Piece> enemies, Position lastEnemyMoved) {
-        if(this.myType.wasHit(enemies,lastEnemyMoved)) {
-            this.decrementCurrNumbOfLives();
-            return this.isAlive();
-        }
-
-        return false;
-        
     }
 
     

@@ -23,11 +23,14 @@ public class ImplFactoryMoveset implements FactoryMoveSet {
 
     @Override
     public Set<Vector> createSwapperMoveSet(Set<Position> enemyPositions) {
-        Objects.requireNonNull(enemyPositions);
-        Set<Vector> s = new HashSet<>(enemyPositions.stream()
+        final var t = Objects.requireNonNull(enemyPositions);
+        /**
+         * creation of vectors pointing to enemy positions
+         */
+        Set<Vector> s = new HashSet<>(t.stream()
                                     .map(p -> new VectorImpl(new Position(0, 0), p, false))
                                     .collect(Collectors.toSet()));
-                            
+            
         s.addAll(this.createBasicMoveSet());
         return s;
     }
