@@ -1,7 +1,5 @@
 package taflgames.view.scenes;
 
-import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import java.awt.Graphics;
@@ -33,7 +31,8 @@ public abstract class AbstractScene implements Scene {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 if (bgFileName.isPresent()) {
-                    final Image image = Toolkit.getDefaultToolkit().getImage(ROOT + "images" + SEP + bgFileName.get());
+                    final URL imgURL = ClassLoader.getSystemResource(ROOT + "images" + SEP + bgFileName.get());
+                    final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
                     g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
                 }
             }
