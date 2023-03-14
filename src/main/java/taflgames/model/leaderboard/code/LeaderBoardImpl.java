@@ -45,6 +45,7 @@ public class LeaderBoardImpl implements Leaderboard {
                                                     : Optional.empty();
     }
 
+    /*Draws are not recorded and do not affect the player's result */
     private Pair<Integer, Integer> evaluate(Pair<Integer, Integer> score, MatchResult result) {
         switch (result) {
             case VICTORY: return new Pair<>(score.getX() + 1, score.getY());
