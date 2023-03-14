@@ -2,7 +2,7 @@ package taflgames.view.scenes;
 
 import java.util.Optional;
 
-import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -22,10 +22,11 @@ public class UserRegistrationScene extends AbstractScene {
      */
     public UserRegistrationScene(final View view) {
 
-        super(USER_REGISTRATION, Optional.of("home-background.jpg"));
+        super(USER_REGISTRATION, Optional.of("home-background.jpeg"));
 
-        final JPanel scenePanel = super.getScene();
-        scenePanel.setLayout(new BoxLayout(scenePanel, BoxLayout.Y_AXIS));
+        final JPanel scene = super.getScene();
+
+        final JPanel elementsPanel = new JPanel(new BorderLayout());
 
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
@@ -35,7 +36,9 @@ public class UserRegistrationScene extends AbstractScene {
             view.setScene(new GameChoiceScene(view));
         });
 
-        scenePanel.add(southPanel);
+        elementsPanel.add(southPanel);
+
+        scene.add(elementsPanel);
     }
 
 }

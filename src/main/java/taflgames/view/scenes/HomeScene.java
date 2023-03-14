@@ -1,8 +1,8 @@
 package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
-import java.net.URL;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -11,10 +11,8 @@ import taflgames.view.View;
 import taflgames.view.fontManager.FontManager;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 
 /**
@@ -34,10 +32,9 @@ public class HomeScene extends AbstractScene {
      */
     public HomeScene(final View view) {
 
-        super(HOME, Optional.of("home-background.jpg"));
+        super(HOME, Optional.of("home-background.jpeg"));
 
         final JPanel scene = super.getScene();
-        scene.setLayout(new BoxLayout(scene, BoxLayout.Y_AXIS));
 
         final FontManager fontManager = new FontManager();
 
@@ -48,6 +45,7 @@ public class HomeScene extends AbstractScene {
         final JLabel titleLabel = new JLabel(GAME_TITLE);
         titleLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         titleLabel.setFont(fontManager.getModifiedFont(TITLE_SIZE, Font.PLAIN));
+        titlePanel.setBackground(Color.WHITE);
         titlePanel.add(titleLabel);
 
         final JPanel buttonsPanel = new JPanel();

@@ -29,10 +29,11 @@ public class GameChoiceScene extends AbstractScene {
      */
     public GameChoiceScene(final View view) {
 
-        super(GAME_CHOICE, Optional.of("home-background.jpg"));
+        super(GAME_CHOICE, Optional.of("home-background.jpeg"));
 
-        final JPanel scenePanel = super.getScene();
-        scenePanel.setLayout(new BoxLayout(scenePanel, BoxLayout.Y_AXIS));
+        final JPanel scene = super.getScene();
+
+        final JPanel elementsPanel = new JPanel(new BorderLayout());
 
         final JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
@@ -77,9 +78,11 @@ public class GameChoiceScene extends AbstractScene {
          * TO DO: add game rules
          */
 
-        scenePanel.add(headerPanel, BorderLayout.NORTH);
-        scenePanel.add(playButtonsPanel, BorderLayout.CENTER);
-        scenePanel.add(southPanel, BorderLayout.SOUTH);
+        elementsPanel.add(headerPanel, BorderLayout.NORTH);
+        elementsPanel.add(playButtonsPanel, BorderLayout.CENTER);
+        elementsPanel.add(southPanel, BorderLayout.SOUTH);
+        
+        scene.add(elementsPanel);
     }
 
 }

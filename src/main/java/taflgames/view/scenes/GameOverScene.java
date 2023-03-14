@@ -31,11 +31,12 @@ public class GameOverScene extends AbstractScene {
      */
     public GameOverScene(final View view) {
 
-        super(GameOverScene.GAME_OVER, Optional.of("home-background.jpg"));
+        super(GameOverScene.GAME_OVER, Optional.of("home-background.jpeg"));
         final FontManager runeFont = new FontManager();
 
-        final JPanel scenePanel = super.getScene();
-        scenePanel.setLayout(new BoxLayout(scenePanel, BoxLayout.Y_AXIS));
+        final JPanel scene = super.getScene();
+
+        final JPanel elementsPanel = new JPanel(new BorderLayout());
 
         final JPanel gameOverPanel = new JPanel();
         gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
@@ -61,8 +62,10 @@ public class GameOverScene extends AbstractScene {
         buttonsPanel.add(this.mainMenuButton);
         buttonsPanel.add(this.registerResultButton);
 
-        scenePanel.add(gameOverPanel, BorderLayout.NORTH);
-        scenePanel.add(buttonsPanel, BorderLayout.CENTER);
+        elementsPanel.add(gameOverPanel, BorderLayout.NORTH);
+        elementsPanel.add(buttonsPanel, BorderLayout.CENTER);
+
+        scene.add(elementsPanel);
     }
 
     private void createMainMenuActionListener(final View view) {
