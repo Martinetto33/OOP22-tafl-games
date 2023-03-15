@@ -1,8 +1,8 @@
 package taflgames.model.board.code;
 
+import java.util.List;
 import java.util.Set;
-import javax.swing.text.Position;
-import org.w3c.dom.events.Event;
+import taflgames.common.code.Position;
 import taflgames.common.api.Vector;
 
 
@@ -16,6 +16,6 @@ public interface Piece {
     Set<Position> getHitbox();
     boolean wasKilled(Set<Position> menacingPieces, Position lastMovedPiecePos);
     Set<Vector> getEffectTriggerRange();
-    Event getSignalOnMove();
+    List<String> getSignalOnMove();
 }
 

@@ -3,21 +3,19 @@ package taflgames.model.board.code;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Cell;
-
 
 public class BoardImpl implements Board{
 
     private Map<Position, Cell> cells;
     private Map<Player, Map<Position, Piece>> pieces;
     private final int size;
-    
+    private Position currentPos;
 
-    public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells,final int size) {
+    public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
         this.pieces = pieces;
         this.cells = cells;
         this.size = size;
@@ -26,19 +24,28 @@ public class BoardImpl implements Board{
     @Override
     public boolean isStartingPointValid(Position start, Player player) {
 
-        if(!pieces.entrySet().stream().filter(x -> x.getKey().equals(player)).filter(y -> y.getValue().keySet().contains(start)).collect(Collectors.toList()).isEmpty()) {
+        if(!pieces.entrySet().stream()
+            .filter(x -> x.getKey().equals(player))
+            .filter(y -> y.getValue().keySet().contains(start))
+            .collect(Collectors.toList()).isEmpty()) {
+            currentPos = start;
             return true;
         } else {
             return false;
         }
-        
     }
 
     @Override
     public boolean isDestinationValid(Position start, Position dest, Player player) {
-        Set<Position> possibleDests = new HashSet<>();
+        //Set<Position> possibleDests = new HashSet<>();
         Piece piece = pieces.get(player).get(start);
-        
+
+        //Per le pedine che non sono uno swapper si controlla che la posizione di destinazione non sia già occupata
+        if(!piece.canSwap()){
+            if(!cells.get(dest).isFree()) {
+                return false;
+            }
+        }
 
         // Si ottengono i vettori che rappresentano i possibili spostamenti della pedina
         Set<Vector> vectors = piece.getMovementVectors();
@@ -54,12 +61,9 @@ public class BoardImpl implements Board{
         * Se se ne trova uno, si deve verificare che tutte le celle nel percorso che porta la pedina da start a dest siano libere.
         * Se lo sono, allora la mossa è valida, altrimenti non lo è e si deve continuare la ricerca.
         */
-        if(!pieces.entrySet().stream().filter(x -> x.getValue().keySet().contains(dest)).collect(Collectors.toList()).isEmpty()) {
-            return false;
-        }
-
+        
         for (Vector vector : vectors) {
-            for(int numberOfBox = 0; numberOfBox < this.size; numberOfBox++) {
+            for(int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
                 if(vector.multiplyByScalar(numberOfBox).applyToPosition(start).equals(dest)) {
                     if(isPathFree(start, dest)) {
                         return true;
@@ -67,7 +71,6 @@ public class BoardImpl implements Board{
                 }
             }  
         }
-        
 
 
         /* SUPPONIAMO di non averne trovato nessuno. Allora si procede a verificare se è comunque uno spostamento valido secondo
@@ -108,14 +111,25 @@ public class BoardImpl implements Board{
         pieces.entrySet().stream().forEach(x -> {
             if(x.getValue().containsKey(oldPos)) {
                 pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
+                signalOnMove(newPos, x.getValue().get(newPos));
             }
         });
+        cells.get(oldPos).setFree(true);
+        cells.get(newPos).setFree(false);
     }
 
     @Override
     public Position getFurthestReachablePos(Vector direction) {
-        
-        return null;
+        Position furthestReachable = null;
+        for(int numberOfBox = 0; numberOfBox < this.size; numberOfBox++) {
+            Position reachablePos = direction.multiplyByScalar(numberOfBox).applyToPosition(currentPos);
+            if(!cells.get(reachablePos).isFree()) {
+                break;
+            } else {
+                furthestReachable = reachablePos;
+            }
+        }  
+        return furthestReachable;
     }
 
     @Override
@@ -123,43 +137,43 @@ public class BoardImpl implements Board{
     }
 
     private void signalOnMove(Position source, Piece movedPiece) {
-
+        // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
+        Set<Position> triggeredPos = movedPiece.getHitbox().stream()
+                .map(x -> new Position(x.getX() +source.getX(), x.getY() + source.getY()))
+                .collect(Collectors.toSet());
+        // Controllo se nelle posizioni ottenute ci sono entità; in caso, vengono triggerate
+        for (Position pos : triggeredPos) {
+            Cell cell = cells.get(pos);
+            cell.notify(source, movedPiece, movedPiece.getSignalOnMove());
+        }
     }
 
     private boolean isPathFree(Position start, Position dest) {
         if(start.getX() == dest.getX()) {  
             if(start.getY() < dest.getY()) {
                 for(int i=start.getY(); i<dest.getY(); i++) {
-                    for (Map<Position, Piece> elem : pieces.values()) {
-                        if(elem.keySet().contains(new Position(start.getX(), i))) {
-                            return false;
-                        }
+                    if(!cells.get(dest).isFree()) {
+                        return false;
                     }
                 }
             } else {
                 for(int i=start.getY(); i<dest.getY(); i--) {
-                    for (Map<Position, Piece> elem : pieces.values()) {
-                        if(elem.keySet().contains(new Position(start.getX(), i))) {
-                            return false;
-                        }
+                    if(!cells.get(dest).isFree()) {
+                        return false;
                     }
                 }
             }
         } else {
             if(start.getX() < dest.getX()) {
                 for(int i=start.getX() + 1; i<dest.getX(); i++) {
-                    for (Map<Position, Piece> elem : pieces.values()) {
-                        if(elem.keySet().contains(new Position(i, start.getY()))) {
-                            return false;
-                        }
+                    if(!cells.get(dest).isFree()) {
+                        return false;
                     }
                 }
             } else {
                 for(int i=start.getY() - 1; i<dest.getY(); i--) {
-                    for (Map<Position, Piece> elem : pieces.values()) {
-                        if(elem.keySet().contains(new Position(i, start.getY()))) {
-                            return false;
-                        }
+                    if(!cells.get(dest).isFree()) {
+                        return false;
                     }
                 }
             }

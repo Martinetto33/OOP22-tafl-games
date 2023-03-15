@@ -2,11 +2,18 @@ package taflgames.model.cell.api;
 import java.util.List;
 
 import taflgames.common.code.Position;
+import taflgames.model.board.code.Piece;
 
 public interface Cell {
     
-    public void notify(Position source, Position sender, List<String> events);
+    public void notify(Position source, Piece sender, List<String> events);
 
-    public boolean canAccept();
+    public boolean canAccept(Piece piece);
+
+    public void setFree(boolean isFree);
+
+    public String getType();
+
+    public boolean isFree();
 
 }
