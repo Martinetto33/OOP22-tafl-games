@@ -13,7 +13,7 @@ public interface LeaderboardSaver {
 
     /**
      * Reads and constructs a {@link taflgames.model.leaderboard.api.Leaderboard} from a file.
-     * @return
+     * @return the leaderboard retrieved from the file
      */
     Leaderboard retrieveFromSave();
 

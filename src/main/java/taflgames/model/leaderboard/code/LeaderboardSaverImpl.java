@@ -21,8 +21,10 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "leaderboardSave" + SEP;
     private static final String LEADERBOARD_SAVE_FILE_NAME = "leaderboard.save";
+    
     /**
-     * {@inheritDoc}
+     * Saves a {@link taflgames.model.leaderboard.api.Leaderboard} to a YAML file
+     * @param leaderboard the leaderboard to be saved
      */
     @Override
     public void saveLeaderboard(Leaderboard leaderboard) {
@@ -36,7 +38,8 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
     }
 
     /**
-     * {@inheritDoc}
+     * Reads a {@link taflgames.model.leaderboard.api.Leaderboard} from a YAML file
+     * @return the retrieved leaderboard
      */
     @Override
     public Leaderboard retrieveFromSave() {
