@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+    <BoardSize>11</BoardSize>
+    <KingPosition>
+        <Position row="5" column="5"/>
+    </KingPosition>
+    <ExitsPositions>
+        <Position row="0" column="0"/>
+        <Position row="0" column="10"/>
+        <Position row="10" column="0"/>
+        <Position row="10" column="10"/>
+    </ExitsPositions>
+    <AttackerBasicPiecesPositions>
+        <Position row="0" column="3"/>
+        <Position row="0" column="4"/>
+        <Position row="0" column="5"/>
+        <Position row="0" column="6"/>
+        <Position row="0" column="7"/>
+        <Position row="1" column="5"/>
+        <Position row="3" column="0"/>
+        <Position row="4" column="0"/>
+        <Position row="5" column="0"/>
+        <Position row="6" column="0"/>
+        <Position row="7" column="0"/>
+        <Position row="5" column="1"/>
+        <Position row="5" column="9"/>
+        <Position row="3" column="10"/>
+        <Position row="4" column="10"/>
+        <Position row="5" column="10"/>
+        <Position row="6" column="10"/>
+        <Position row="7" column="10"/>
+        <Position row="9" column="5"/>
+        <Position row="10" column="3"/>
+        <Position row="10" column="4"/>
+        <Position row="10" column="5"/>
+        <Position row="10" column="6"/>
+        <Position row="10" column="7"/>
+    </AttackerBasicPiecesPositions>
+    <DefenderBasicPiecesPositions>
+        <Position row="3" column="5"/>
+        <Position row="4" column="4"/>
+        <Position row="4" column="5"/>
+        <Position row="4" column="6"/>
+        <Position row="5" column="3"/>
+        <Position row="5" column="4"/>
+        <Position row="5" column="6"/>
+        <Position row="5" column="7"/>
+        <Position row="6" column="4"/>
+        <Position row="6" column="5"/>
+        <Position row="6" column="6"/>
+        <Position row="7" column="5"/>
+    </DefenderBasicPiecesPositions>
+</Settings>
