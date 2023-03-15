@@ -12,7 +12,6 @@ import taflgames.common.code.Pair;
  * results will be saved.
  */
 public interface Leaderboard {
-    
     /**
      * Adds a new result at the end of a Match.
      * @param playerName the name of one of the two players

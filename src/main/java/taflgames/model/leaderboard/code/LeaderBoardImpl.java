@@ -9,10 +9,16 @@ import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.model.leaderboard.api.Leaderboard;
 
+/**
+ * This class models a Leaderboard for Hnefatafl games.
+ */
 public class LeaderBoardImpl implements Leaderboard {
 
     private Map<String, Pair<Integer, Integer>> results;
 
+    /**
+     * Builds a new Leaderboard.
+     */
     public LeaderBoardImpl() {
         this.results = new HashMap<>();
     }
@@ -21,7 +27,7 @@ public class LeaderBoardImpl implements Leaderboard {
      * {@inheritDoc}
      */
     @Override
-    public void addResult(String playerName, MatchResult result) {
+    public void addResult(final String playerName, final MatchResult result) {
         this.results.put(playerName, this.results.containsKey(playerName) ? this.evaluate(this.results.get(playerName), result) 
                                                                           : this.evaluate(new Pair<>(0, 0), result));
     }
@@ -40,13 +46,13 @@ public class LeaderBoardImpl implements Leaderboard {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Pair<Integer, Integer>> getScoreFromPlayer(String playerName) {
+    public Optional<Pair<Integer, Integer>> getScoreFromPlayer(final String playerName) {
         return this.results.containsKey(playerName) ? Optional.of(this.results.get(playerName))
                                                     : Optional.empty();
     }
 
     /*Draws are not recorded and do not affect the player's result */
-    private Pair<Integer, Integer> evaluate(Pair<Integer, Integer> score, MatchResult result) {
+    private Pair<Integer, Integer> evaluate(final Pair<Integer, Integer> score, final MatchResult result) {
         switch (result) {
             case VICTORY: return new Pair<>(score.getX() + 1, score.getY());
             case DEFEAT: return new Pair<>(score.getX(), score.getY() + 1);

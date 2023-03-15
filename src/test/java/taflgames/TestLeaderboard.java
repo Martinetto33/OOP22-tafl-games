@@ -19,14 +19,14 @@ import taflgames.common.code.MatchResult;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+//CHECKSTYLE: MagicNumber OFF
+/*Magic numbers checks disabled in order to allow quicker writing of the tests; the
+* numbers used in the creation of Positions and results are not intended to be 
+* constants, but only results to verify computations by need.
+*/
 /**
  * Tests the implementation of the leaderboard.
  * TODO: expand with saves on files and reads from files
- */
-//CHECKSTYLE: MagicNumber OFF
-/*Magic numbers checks disabled in order to allow quicker writing of the tests; the
- * numbers used in the creation of Positions and results are not intended to be 
- * constants, but only results to verify computations by need.
  */
 public class TestLeaderboard {
 
@@ -55,8 +55,8 @@ public class TestLeaderboard {
              * clause because otherwise the IntStreams would not be able to generate any
              * element in the range (0, 0).
              */
-            if(TestLeaderboard.expectedResults.get(playerName).getX() == 0 &&
-               TestLeaderboard.expectedResults.get(playerName).getY() == 0) {
+            if (TestLeaderboard.expectedResults.get(playerName).getX() == 0 
+                && TestLeaderboard.expectedResults.get(playerName).getY() == 0) {
                     leaderboard.addResult(playerName, MatchResult.DRAW);
                     continue;
                }
