@@ -3,15 +3,12 @@ package taflgames;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import taflgames.common.code.Pair;
@@ -19,7 +16,6 @@ import taflgames.model.leaderboard.api.Leaderboard;
 import taflgames.model.leaderboard.code.LeaderBoardImpl;
 import taflgames.common.code.MatchResult;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -52,7 +48,6 @@ public class TestLeaderboard {
         TestLeaderboard.leaderboard = new LeaderBoardImpl();
 
         for (final var playerName : TestLeaderboard.expectedResults.keySet()) {
-            System.out.println(playerName);
             List<MatchResult> a = new ArrayList<>();
             /*In case the player has 0 victories and 0 losses, and they have never
              * been registered before, it is assumed that their first match or streak
@@ -77,9 +72,6 @@ public class TestLeaderboard {
             a.stream()
                     .forEach(e -> TestLeaderboard.leaderboard.addResult(playerName, e));
         }
-        System.out.println(TestLeaderboard.expectedResults.keySet());
-        System.out.println(TestLeaderboard.leaderboard.getLeaderboard().keySet());
-        System.out.println(TestLeaderboard.leaderboard.getLeaderboard());
         assertTrue(TestLeaderboard.leaderboard.getLeaderboard().keySet().containsAll(TestLeaderboard.expectedResults.keySet()));
         assertTrue(TestLeaderboard.leaderboard.getLeaderboard().values().containsAll(TestLeaderboard.expectedResults.values()));
     }
@@ -94,6 +86,9 @@ public class TestLeaderboard {
         leaderboard.addResult("Odin", MatchResult.DEFEAT);
         leaderboard.addResult("Odin", MatchResult.DRAW);
         assertEquals(new Pair<>(1, 1), leaderboard.getScoreFromPlayer("Odin").get());
+        assertTrue(TestLeaderboard.leaderboard.getScoreFromPlayer("Thor").isEmpty());
+        leaderboard.addResult("Thor", MatchResult.DRAW);
+        assertFalse(TestLeaderboard.leaderboard.getScoreFromPlayer("Thor").isEmpty());
     }
 
 }
