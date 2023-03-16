@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 
 import taflgames.controller.Controller;
 import taflgames.controller.ControllerImpl;
+import taflgames.view.scenecontrollers.HomeControllerImpl;
 import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.Scene;
 
@@ -46,7 +47,7 @@ public final class ViewImpl implements View {
         frame.setLayout(frameLayout);
 
         addedScenes = new HashSet<>();
-        setScene(new HomeScene(this));
+        setScene(new HomeScene(new HomeControllerImpl(this, this.controller)));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);  // Let the OS decide about the positioning of the frame
@@ -66,11 +67,6 @@ public final class ViewImpl implements View {
     @Override
     public void close() {
         System.exit(0);
-    }
-
-    @Override
-    public Controller getController() {
-        return this.controller;
     }
 
 }
