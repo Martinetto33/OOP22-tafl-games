@@ -54,18 +54,12 @@ public class GameChoiceScene extends AbstractScene {
         playButtonsPanel.add(playVariantButton);
 
         playClassicButton.addActionListener((e) -> {
-            /*
-             * TO DO: the view must interact with the controller
-             * to initialize a classic mode match
-             */
+            view.getController().createClassicModeMatch();
             view.setScene(new UserRegistrationScene(view));
         });
 
         playVariantButton.addActionListener((e) -> {
-            /*
-             * TO DO: the view must interact with the controller
-             * to initialize a variant mode match
-             */
+            view.getController().createVariantModeMatch();
             view.setScene(new UserRegistrationScene(view));
         });
 
