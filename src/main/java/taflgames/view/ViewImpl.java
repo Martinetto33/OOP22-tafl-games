@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
+import taflgames.controller.Controller;
+import taflgames.controller.ControllerImpl;
 import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.Scene;
 
@@ -18,6 +20,8 @@ public final class ViewImpl implements View {
 
     private static final String FRAME_TITLE = "Tafl Games";
 
+    private final Controller controller;
+
     private final JFrame frame;
     private final CardLayout frameLayout;
     private final Set<String> addedScenes;
@@ -26,6 +30,8 @@ public final class ViewImpl implements View {
      * Sets up the view.
      */
     public ViewImpl() {
+
+        this.controller = new ControllerImpl(this);
 
         frame = new JFrame(FRAME_TITLE);
 
@@ -60,6 +66,11 @@ public final class ViewImpl implements View {
     @Override
     public void close() {
         System.exit(0);
+    }
+
+    @Override
+    public Controller getController() {
+        return this.controller;
     }
 
 }
