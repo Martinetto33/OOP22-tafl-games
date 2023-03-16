@@ -71,5 +71,5 @@ public final class ControllerImpl implements Controller {
             LOGGER.error("Error: cannot initialize a new match. ", ex.getMessage());
         }
     }
-   
+
 }
