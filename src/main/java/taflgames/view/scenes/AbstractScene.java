@@ -28,7 +28,7 @@ public abstract class AbstractScene implements Scene {
         this.sceneName = sceneName;
         this.scene = new JPanel() {
             @Override
-            public void paintComponent(Graphics g) {
+            public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
                 if (bgFileName.isPresent()) {
                     final URL imgURL = ClassLoader.getSystemResource(ROOT + "images" + SEP + bgFileName.get());
@@ -49,6 +49,9 @@ public abstract class AbstractScene implements Scene {
         return this.scene;
     }
 
+    /**
+     * @return the default font used for text of the scene
+     */
     public static String getFont() {
         return AbstractScene.FONT_NAME;
     }
