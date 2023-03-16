@@ -7,8 +7,8 @@ import java.util.Optional;
 
 import javax.swing.JPanel;
 
-import taflgames.view.View;
 import taflgames.view.fontManager.FontManager;
+import taflgames.view.scenecontrollers.HomeController;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -26,13 +26,17 @@ public class HomeScene extends AbstractScene {
     private static final String PLAY = "Play";
     private static final String EXIT = "Exit";
 
+    private final HomeController controller;
+
     /**
      * Creates the home scene.
-     * @param view the view that displays the scene
+     * @param controller the scene controller
      */
-    public HomeScene(final View view) {
+    public HomeScene(final HomeController controller) {
 
         super(HOME, Optional.of("home-background.jpeg"));
+
+        this.controller = controller;
 
         final JPanel scene = super.getScene();
 
@@ -61,10 +65,10 @@ public class HomeScene extends AbstractScene {
         buttonsPanel.add(exitButton);
 
         playButton.addActionListener((e) -> {
-            view.setScene(new GameChoiceScene(view));
+            this.controller.goToNextScene();
         });
 
-        exitButton.addActionListener((e) -> view.close());
+        exitButton.addActionListener((e) -> this.controller.close());
 
         elementsPanel.add(titlePanel, BorderLayout.NORTH);
         elementsPanel.add(buttonsPanel, BorderLayout.CENTER);

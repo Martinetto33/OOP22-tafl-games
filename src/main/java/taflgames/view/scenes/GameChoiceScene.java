@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import javax.swing.JPanel;
 
-import taflgames.view.View;
+import taflgames.view.scenecontrollers.GameChoiceController;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,13 +24,17 @@ public class GameChoiceScene extends AbstractScene {
     private static final String PLAY_VARIANT_MODE = "Play Variant Mode";
     private static final String GO_BACK = "Go Back";
 
+    private final GameChoiceController controller;
+
     /**
      * Creates the game choice scene.
-     * @param view the view that displays the scene
+     * @param controller the scene controller
      */
-    public GameChoiceScene(final View view) {
+    public GameChoiceScene(final GameChoiceController controller) {
 
         super(GAME_CHOICE, Optional.of("home-background.jpeg"));
+
+        this.controller = controller;
 
         final JPanel scene = super.getScene();
 
@@ -54,13 +58,13 @@ public class GameChoiceScene extends AbstractScene {
         playButtonsPanel.add(playVariantButton);
 
         playClassicButton.addActionListener((e) -> {
-            view.getController().createClassicModeMatch();
-            view.setScene(new UserRegistrationScene(view));
+            this.controller.createClassicModeMatch();
+            this.controller.goToNextScene();
         });
 
         playVariantButton.addActionListener((e) -> {
-            view.getController().createVariantModeMatch();
-            view.setScene(new UserRegistrationScene(view));
+            this.controller.createVariantModeMatch();
+            this.controller.goToNextScene();
         });
 
         final JPanel southPanel = new JPanel();
@@ -69,7 +73,7 @@ public class GameChoiceScene extends AbstractScene {
         southPanel.setBackground(new Color(255, 255, 255, 0));
 
         goBackButton.addActionListener((e) -> {
-            view.setScene(new HomeScene(view));
+            this.controller.goToPreviousScene();
         });
 
         /*
@@ -79,7 +83,7 @@ public class GameChoiceScene extends AbstractScene {
         elementsPanel.add(headerPanel, BorderLayout.NORTH);
         elementsPanel.add(playButtonsPanel, BorderLayout.CENTER);
         elementsPanel.add(southPanel, BorderLayout.SOUTH);
-        
+
         scene.add(elementsPanel);
     }
 

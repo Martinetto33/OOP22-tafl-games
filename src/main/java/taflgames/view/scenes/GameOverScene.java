@@ -10,8 +10,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import taflgames.view.View;
 import taflgames.view.fontManager.FontManager;
+import taflgames.view.scenecontrollers.GameOverController;
 
 /**
  * The screen that appears at the end of the game.
@@ -25,13 +25,19 @@ public class GameOverScene extends AbstractScene {
     private static final int BUTTON_FONT_SIZE = 12;
     private final JButton mainMenuButton;
     private final JButton registerResultButton;
+
+    private GameOverController controller;
+
     /**
      * Builds a new GameOverScene.
-     * @param view the view that displays the scene
+     * @param controller the scene controller
      */
-    public GameOverScene(final View view) {
+    public GameOverScene(final GameOverController controller) {
 
         super(GameOverScene.GAME_OVER, Optional.of("home-background.jpeg"));
+
+        this.controller = controller;
+
         final FontManager runeFont = new FontManager();
 
         final JPanel scene = super.getScene();
@@ -45,7 +51,7 @@ public class GameOverScene extends AbstractScene {
         /* Using a unified Font would make it easier to change the aspect of the GUI. AbstractScene
          * was modified in a way that provides a common Font which all components could use.
          */
-        
+
         gameOverLabel.setFont(runeFont.getModifiedFont(GameOverScene.MAIN_FONT_SIZE, Font.PLAIN));
         gameOverPanel.add(gameOverLabel);
 
@@ -56,8 +62,8 @@ public class GameOverScene extends AbstractScene {
         this.registerResultButton.setFont(runeFont.getModifiedFont(GameOverScene.BUTTON_FONT_SIZE, Font.PLAIN));
 
         /*Adding listeners */
-        this.createMainMenuActionListener(view);
-        this.createRegisterResultActionListener(view);
+        this.createMainMenuActionListener(this.controller);
+        this.createRegisterResultActionListener(this.controller);
 
         buttonsPanel.add(this.mainMenuButton);
         buttonsPanel.add(this.registerResultButton);
@@ -68,14 +74,14 @@ public class GameOverScene extends AbstractScene {
         scene.add(elementsPanel);
     }
 
-    private void createMainMenuActionListener(final View view) {
-        this.mainMenuButton.addActionListener(e -> view.setScene(new HomeScene(view)));
+    private void createMainMenuActionListener(final GameOverController controller) {
+        this.mainMenuButton.addActionListener(e -> controller.goToNextScene());
     }
 
     /*If we respect the plan made in the analysis phase, the result registration is optional
      * and only occurs at the end of a match.
      */
-    private void createRegisterResultActionListener(final View view) {
+    private void createRegisterResultActionListener(final GameOverController controller) {
         // TODO
         //this.registerResultButton.addActionListener(e -> controller.registerResult());
     }
