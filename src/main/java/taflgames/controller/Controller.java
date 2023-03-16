@@ -4,7 +4,7 @@ package taflgames.controller;
  * This interface describes the controller of the application.
  */
 public interface Controller {
-    
+
     /**
      * Initializes a new classic mode match.
      */
