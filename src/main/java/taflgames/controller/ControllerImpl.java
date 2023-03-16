@@ -42,6 +42,7 @@ public final class ControllerImpl implements Controller {
             this.match = new MatchImpl(
                 new BoardImpl(cellsCollBuilder.build(), piecesCollBuilder.build())
             );
+            LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
              * TO DO: the view has to know that an error occurred in order to display an error message
@@ -61,6 +62,7 @@ public final class ControllerImpl implements Controller {
             this.match = new MatchImpl(
                 new BoardImpl(cellsCollBuilder.build(), piecesCollBuilder.build())
             );
+            LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
              * TO DO: the view has to know that an error occurred in order to display an error message
