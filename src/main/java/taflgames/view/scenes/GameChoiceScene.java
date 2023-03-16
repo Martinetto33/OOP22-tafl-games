@@ -39,7 +39,7 @@ public class GameChoiceScene extends AbstractScene {
         final JPanel scene = super.getScene();
 
         final JPanel elementsPanel = new JPanel(new BorderLayout());
-        elementsPanel.setBackground(new Color(255, 255, 255, 0));
+        elementsPanel.setBackground(new Color(0, 0, 0, 0));
 
         final JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
@@ -54,7 +54,7 @@ public class GameChoiceScene extends AbstractScene {
         playButtonsPanel.add(playClassicButton);
         final JButton playVariantButton = new JButton(PLAY_VARIANT_MODE);
         playVariantButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        playButtonsPanel.setBackground(new Color(255, 255, 255, 0));
+        playButtonsPanel.setBackground(new Color(0, 0, 0, 0));
         playButtonsPanel.add(playVariantButton);
 
         playClassicButton.addActionListener((e) -> {
@@ -70,7 +70,7 @@ public class GameChoiceScene extends AbstractScene {
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
         southPanel.add(goBackButton);
-        southPanel.setBackground(new Color(255, 255, 255, 0));
+        southPanel.setBackground(new Color(0, 0, 0, 0));
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();

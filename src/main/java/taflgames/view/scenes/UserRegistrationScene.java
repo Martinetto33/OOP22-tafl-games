@@ -37,7 +37,7 @@ public class UserRegistrationScene extends AbstractScene {
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
         southPanel.add(goBackButton);
-        southPanel.setBackground(new Color(255, 255, 255, 0));
+        southPanel.setBackground(new Color(0, 0, 0, 0));
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();
