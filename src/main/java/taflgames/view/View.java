@@ -1,6 +1,5 @@
 package taflgames.view;
 
-import taflgames.controller.Controller;
 import taflgames.view.scenes.Scene;
 
 /**
@@ -18,10 +17,5 @@ public interface View {
      * Closes the application.
      */
     void close();
-
-    /**
-     * @return the controller of the application
-     */
-    Controller getController();
 
 }
