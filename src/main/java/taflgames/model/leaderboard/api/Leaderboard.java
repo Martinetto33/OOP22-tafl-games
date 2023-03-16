@@ -34,4 +34,14 @@ public interface Leaderboard {
      * or an empty Optional if the player hasn't registered any results yet.
      */
     Optional<Pair<Integer, Integer>> getScoreFromPlayer(String playerName);
+
+    /**
+     * Clears all the results stored in the leaderboard.
+     */
+    void clearLeaderboard();
+
+    /**
+     * Saves the results of this session to a file.
+     */
+    void saveToFile();
 }

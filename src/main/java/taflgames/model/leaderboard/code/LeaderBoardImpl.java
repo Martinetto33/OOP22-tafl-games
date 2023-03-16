@@ -1,13 +1,14 @@
 package taflgames.model.leaderboard.code;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.model.leaderboard.api.Leaderboard;
+import taflgames.model.leaderboard.api.LeaderboardSaver;
 
 /**
  * This class models a Leaderboard for Hnefatafl games.
@@ -15,12 +16,15 @@ import taflgames.model.leaderboard.api.Leaderboard;
 public class LeaderBoardImpl implements Leaderboard {
 
     private Map<String, Pair<Integer, Integer>> results;
+    private final LeaderboardSaver saver;
 
     /**
      * Builds a new Leaderboard.
      */
     public LeaderBoardImpl() {
-        this.results = new HashMap<>();
+        this.saver = new LeaderboardSaverImpl();
+        final Leaderboard l = Objects.requireNonNull(this.saver.retrieveFromSave());
+        this.results = l.getLeaderboard();
     }
 
     /**
@@ -59,5 +63,21 @@ public class LeaderBoardImpl implements Leaderboard {
             case DRAW: return score;
             default: return score;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearLeaderboard() {
+        this.results.clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void saveToFile() {
+        this.saver.saveLeaderboard(this);
     }
 }
