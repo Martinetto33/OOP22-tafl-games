@@ -44,4 +44,11 @@ public interface Leaderboard {
      * Saves the results of this session to a file.
      */
     void saveToFile();
+
+    /**
+     * Returns a String representation of the player's score, if present.
+     * @param playerName the player to search the scores of.
+     * @return a String representation of the scores of this player.
+     */
+    String getPlayerResultAsString(String playerName);
 }

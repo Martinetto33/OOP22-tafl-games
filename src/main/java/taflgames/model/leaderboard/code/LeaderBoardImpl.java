@@ -104,5 +104,24 @@ public class LeaderBoardImpl implements Leaderboard {
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> new Pair<>(entry.getValue().get(0),
                                                                                  entry.getValue().get(1))));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getPlayerResultAsString(String playerName) {
+        if (!this.results.containsKey(playerName)) {
+            return new StringBuilder()
+                .append(playerName)
+                .append(": no scores found")
+                .toString();
+        }
+        return new StringBuilder()
+            .append(playerName)
+            .append("- WINS: ")
+            .append(this.results.get(playerName).getX())
+            .append(", LOSSES: ")
+            .append(this.results.get(playerName).getY())
+            .toString();
+    }
 }
 

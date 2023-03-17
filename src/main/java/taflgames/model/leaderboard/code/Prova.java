@@ -12,8 +12,6 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import taflgames.common.code.MatchResult;
-import taflgames.common.code.Pair;
-import taflgames.model.Match;
 import taflgames.model.leaderboard.api.Leaderboard;
 
 public class Prova {
@@ -24,7 +22,7 @@ public class Prova {
     private static final String LEADERBOARD_SAVE_FILE_NAME = "leaderboard.yaml" + SEP;
     
     public static void main(String... args) {
-        var l = new LeadBoAnotherAttempt();
+        var l = new LeaderboardSaverImpl();
         Prova.expectedResults.put("Alin Bordeianu", MatchResult.VICTORY);
         Prova.expectedResults.put("Elena Boschetti", MatchResult.VICTORY);
         Prova.expectedResults.put("Andrea Piermattei", MatchResult.VICTORY);
@@ -33,7 +31,8 @@ public class Prova {
         Leaderboard lead = new LeaderBoardImpl();
         Prova.expectedResults.entrySet().forEach(entry -> lead.addResult(entry.getKey(), entry.getValue()));
         l.saveLeaderboard(lead);
-        System.out.println(l.retrieveFromSave().getLeaderboard());
+        Leaderboard lead2 = l.retrieveFromSave();
+        System.out.println(lead2.getLeaderboard().keySet().stream().map(e -> lead2.getPlayerResultAsString(e)).toList());
     }
     public <T> void saveLeaderboard(T element) {
         /* There's no reason for keeping old leaderboards,
