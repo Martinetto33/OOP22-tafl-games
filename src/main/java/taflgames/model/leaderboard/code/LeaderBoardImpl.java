@@ -1,7 +1,8 @@
 package taflgames.model.leaderboard.code;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,14 +18,14 @@ public class LeaderBoardImpl implements Leaderboard {
 
     private Map<String, Pair<Integer, Integer>> results;
     private final LeaderboardSaver saver;
+    private static final int EXPECTED_LIST_DIMENSION = 2;
 
     /**
      * Builds a new Leaderboard.
      */
     public LeaderBoardImpl() {
         this.saver = new LeaderboardSaverImpl();
-        final Leaderboard l = Objects.requireNonNull(this.saver.retrieveFromSave());
-        this.results = l.getLeaderboard();
+        this.results = new HashMap<>();
     }
 
     /**
@@ -80,4 +81,28 @@ public class LeaderBoardImpl implements Leaderboard {
     public void saveToFile() {
         this.saver.saveLeaderboard(this);
     }
+
+    /**
+     * Adds all the entries from a map of String-Pair<Integer, Integer> into
+     * the results.
+     * @param map the map from which to take the entries
+     */
+    public void fromMap(Map<String, Pair<Integer, Integer>> map) {
+        this.results.putAll(map);
+    }
+
+    /**
+     * Adds all the entries from a map of String-List<Integer> into
+     * the results.
+     * @param map the map from which to take the entries
+     */
+    public void fromMapWithListValues(Map<String, List<Integer>> map) {
+        if (map.values().stream().noneMatch(list -> list.size() == LeaderBoardImpl.EXPECTED_LIST_DIMENSION)) {
+            throw new IllegalArgumentException("Not all entries of the read map have a score for both wins and losses");
+        }
+        this.results = map.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> new Pair<>(entry.getValue().get(0),
+                                                                                 entry.getValue().get(1))));
+    }
 }
+

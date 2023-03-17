@@ -14,8 +14,8 @@ import taflgames.common.code.Pair;
 public interface Leaderboard {
     /**
      * Adds a new result at the end of a Match.
-     * @param playerName the name of one of the two players
-     * @param result the result obtained by the specified player
+     * @param playerName the name of one of the two players.
+     * @param result the result obtained by the specified player.
      */
     void addResult(String playerName, MatchResult result);
 
@@ -29,7 +29,7 @@ public interface Leaderboard {
 
     /**
      * Gets the results associated with the specified player name, if there are any.
-     * @param playerName the name of the player whose results are to be searched
+     * @param playerName the name of the player whose results are to be searched.
      * @return an Optional containing the result represented by a Pair of wins and losses,
      * or an empty Optional if the player hasn't registered any results yet.
      */
