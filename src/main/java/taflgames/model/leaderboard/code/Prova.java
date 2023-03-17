@@ -14,6 +14,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import taflgames.common.code.MatchResult;
 import taflgames.model.leaderboard.api.Leaderboard;
 
+//TODO: move this code into the test class
 public class Prova {
     private static Map<String, MatchResult> expectedResults = new LinkedHashMap<>();
     private static final String SEP = System.getProperty("file.separator");
@@ -30,9 +31,12 @@ public class Prova {
         Prova.expectedResults.put("Personaggio fittizio", MatchResult.VICTORY);
         Leaderboard lead = new LeaderBoardImpl();
         Prova.expectedResults.entrySet().forEach(entry -> lead.addResult(entry.getKey(), entry.getValue()));
-        l.saveLeaderboard(lead);
+        //l.saveLeaderboard(lead);
         Leaderboard lead2 = l.retrieveFromSave();
         System.out.println(lead2.getLeaderboard().keySet().stream().map(e -> lead2.getPlayerResultAsString(e)).toList());
+        l.saveLeaderboard(lead);
+        Leaderboard lead3 = l.retrieveFromSave();
+        System.out.println(lead3.getLeaderboard().keySet().stream().map(e -> lead3.getPlayerResultAsString(e)).toList());
     }
     public <T> void saveLeaderboard(T element) {
         /* There's no reason for keeping old leaderboards,

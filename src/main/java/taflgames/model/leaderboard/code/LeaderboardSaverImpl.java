@@ -14,16 +14,24 @@ import taflgames.common.code.Pair;
 import taflgames.model.leaderboard.api.Leaderboard;
 import taflgames.model.leaderboard.api.LeaderboardSaver;
 
+/**
+ * This is the reification of a {@link taflgames.model.leaderboard.api.LeaderboardSaver}.
+ * It provides one method for saving a leaderboard to a file and one to retrieve a
+ * leaderboard from a file, if it exists.
+ */
 public class LeaderboardSaverImpl implements LeaderboardSaver {
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = System.getProperty("user.dir") + SEP + "tafl-games" + SEP + "src"
     + SEP + "main" + SEP + "resources" + SEP + "taflgames" + SEP + "leaderboardSave" + SEP;
     private static final String LEADERBOARD_SAVE_FILE_NAME = "leaderboard.yaml" + SEP;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void saveLeaderboard(Leaderboard leaderboard) {
-        Map<String, Pair<Integer, Integer>> internalMap = leaderboard.getLeaderboard();
-        Map<String, List<Integer>> otherMap = new LinkedHashMap<>();
+    public void saveLeaderboard(final Leaderboard leaderboard) {
+        final Map<String, Pair<Integer, Integer>> internalMap = leaderboard.getLeaderboard();
+        final Map<String, List<Integer>> otherMap = new LinkedHashMap<>();
         internalMap.entrySet().stream()
                 .map(entry -> new Pair<String, List<Integer>>(entry.getKey(), 
                     List.of(entry.getValue().getX(), entry.getValue().getY())))
@@ -37,18 +45,20 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Leaderboard retrieveFromSave() {
         try (InputStream inputStream = new FileInputStream(PATH + LEADERBOARD_SAVE_FILE_NAME)) {
-            Yaml yaml = new Yaml();
-            LeaderBoardImpl leaderboard = new LeaderBoardImpl();
+            final Yaml yaml = new Yaml();
+            final LeaderBoardImpl leaderboard = new LeaderBoardImpl();
             leaderboard.fromMapWithListValues(yaml.load(inputStream));
             return leaderboard;
         } catch (IOException e) {
             System.out.println("Error while trying to read from the save file for the leaderboard.");
             e.printStackTrace();
+            return new LeaderBoardImpl();
         }
-        return null;
     }
-    
 }

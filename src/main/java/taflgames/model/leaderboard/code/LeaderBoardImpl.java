@@ -87,7 +87,7 @@ public class LeaderBoardImpl implements Leaderboard {
      * the results.
      * @param map the map from which to take the entries
      */
-    public void fromMap(Map<String, Pair<Integer, Integer>> map) {
+    public void fromMap(final Map<String, Pair<Integer, Integer>> map) {
         this.results.putAll(map);
     }
 
@@ -96,7 +96,7 @@ public class LeaderBoardImpl implements Leaderboard {
      * the results.
      * @param map the map from which to take the entries
      */
-    public void fromMapWithListValues(Map<String, List<Integer>> map) {
+    public void fromMapWithListValues(final Map<String, List<Integer>> map) {
         if (map.values().stream().noneMatch(list -> list.size() == LeaderBoardImpl.EXPECTED_LIST_DIMENSION)) {
             throw new IllegalArgumentException("Not all entries of the read map have a score for both wins and losses");
         }
@@ -108,7 +108,7 @@ public class LeaderBoardImpl implements Leaderboard {
     /**
      * {@inheritDoc}
      */
-    public String getPlayerResultAsString(String playerName) {
+    public String getPlayerResultAsString(final String playerName) {
         if (!this.results.containsKey(playerName)) {
             return new StringBuilder()
                 .append(playerName)
