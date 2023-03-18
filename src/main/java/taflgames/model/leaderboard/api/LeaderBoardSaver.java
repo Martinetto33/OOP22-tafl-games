@@ -18,4 +18,9 @@ public interface LeaderboardSaver {
      */
     Leaderboard retrieveFromSave();
 
+    void setPath(String path);
+
+    String getTestPath();
+
+    String getDefaultPath();
 }

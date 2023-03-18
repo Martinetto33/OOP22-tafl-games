@@ -21,9 +21,12 @@ import taflgames.model.leaderboard.api.LeaderboardSaver;
  */
 public class LeaderboardSaverImpl implements LeaderboardSaver {
     private static final String SEP = System.getProperty("file.separator");
-    private static final String PATH = System.getProperty("user.dir") + SEP + "tafl-games" + SEP + "src"
+    private static final String DEFAULT_PATH = System.getProperty("user.dir") + SEP + "tafl-games" + SEP + "src"
     + SEP + "main" + SEP + "resources" + SEP + "taflgames" + SEP + "leaderboardSave" + SEP;
     private static final String LEADERBOARD_SAVE_FILE_NAME = "leaderboard.yaml" + SEP;
+    private static final String TEST_PATH = System.getProperty("user.dir") + SEP + "src"
+    + SEP + "main" + SEP + "resources" + SEP + "taflgames" + SEP + "leaderboardSave" + SEP;
+    private String chosenPath = LeaderboardSaverImpl.DEFAULT_PATH;
 
     /**
      * {@inheritDoc}
@@ -36,7 +39,7 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
                 .map(entry -> new Pair<String, List<Integer>>(entry.getKey(), 
                     List.of(entry.getValue().getX(), entry.getValue().getY())))
                 .forEach(pair -> otherMap.put(pair.getX(), pair.getY()));
-        try (FileWriter writer = new FileWriter(PATH + LEADERBOARD_SAVE_FILE_NAME, false)) {
+        try (FileWriter writer = new FileWriter(this.chosenPath + LEADERBOARD_SAVE_FILE_NAME, false)) {
             final Yaml yaml = new Yaml();
             yaml.dump(otherMap, writer);
         } catch (IOException e) {
@@ -50,7 +53,7 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
      */
     @Override
     public Leaderboard retrieveFromSave() {
-        try (InputStream inputStream = new FileInputStream(PATH + LEADERBOARD_SAVE_FILE_NAME)) {
+        try (InputStream inputStream = new FileInputStream(this.chosenPath + LEADERBOARD_SAVE_FILE_NAME)) {
             final Yaml yaml = new Yaml();
             final LeaderBoardImpl leaderboard = new LeaderBoardImpl();
             leaderboard.fromMapWithListValues(yaml.load(inputStream));
@@ -61,4 +64,23 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
             return new LeaderBoardImpl();
         }
     }
+
+    public void setPath(String path) {
+        if (!path.equals(LeaderboardSaverImpl.DEFAULT_PATH) && !path.equals(LeaderboardSaverImpl.TEST_PATH)) {
+            return;
+        }
+        this.chosenPath = path;
+    }
+
+    public String getDefaultPath() {
+        return DEFAULT_PATH;
+    }
+    public String getTestPath() {
+        return TEST_PATH;
+    }
+
+    public String getChosenPath() {
+        return chosenPath;
+    }
+    
 }

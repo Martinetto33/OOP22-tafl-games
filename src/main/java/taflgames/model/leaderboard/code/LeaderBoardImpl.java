@@ -1,6 +1,7 @@
 package taflgames.model.leaderboard.code;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,9 +43,21 @@ public class LeaderBoardImpl implements Leaderboard {
      */
     @Override
     public Map<String, Pair<Integer, Integer>> getLeaderboard() {
-        return this.results.entrySet().stream()
-                .sorted((entry1, entry2) -> entry2.getValue().getX() - entry1.getValue().getX())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, Pair<Integer, Integer>> result = new LinkedHashMap<>();
+        this.results.entrySet().stream()
+            .sorted((entry1, entry2) -> {
+                final Integer firstEntryWins = entry1.getValue().getX();
+                final Integer secondEntryWins = entry2.getValue().getX();
+                if (firstEntryWins != secondEntryWins) {
+                    return secondEntryWins - firstEntryWins;
+                }
+                /*If the win scores are the same, the entries are sorted according to the
+                 * number of losses in descending order.
+                 */
+                return entry1.getValue().getY() - entry2.getValue().getY();
+            })
+            .forEachOrdered(entry -> result.put(entry.getKey(), entry.getValue()));
+        return result;
     }
 
     /**
@@ -78,7 +91,8 @@ public class LeaderBoardImpl implements Leaderboard {
      * {@inheritDoc}
      */
     @Override
-    public void saveToFile() {
+    public void saveToFile(String path) {
+        this.saver.setPath(path);
         this.saver.saveLeaderboard(this);
     }
 
@@ -93,10 +107,16 @@ public class LeaderBoardImpl implements Leaderboard {
 
     /**
      * Adds all the entries from a map of String-List<Integer> into
-     * the results.
+     * the results. Throws an {@link java.lang.IllegalArgumentException} if not all
+     * the lists corresponding to the players' names have exactly 2 elements (one
+     * for the wins and one for the losses)
      * @param map the map from which to take the entries
      */
     public void fromMapWithListValues(final Map<String, List<Integer>> map) {
+        if (map.isEmpty()) {
+            this.results = new HashMap<>();
+            return;
+        }
         if (map.values().stream().noneMatch(list -> list.size() == LeaderBoardImpl.EXPECTED_LIST_DIMENSION)) {
             throw new IllegalArgumentException("Not all entries of the read map have a score for both wins and losses");
         }
