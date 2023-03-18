@@ -1,10 +1,10 @@
 package taflgames.view.scenecontrollers;
 
 /**
- * This interface extends a generic {@link SceneController}
- * to add specific functions for the game over scene.
+ * This interface extends a generic {@link BasicSceneController}
+ * to add specific functions for a {@link taflgames.view.scenes.GameOverScene}.
  */
-public interface GameOverController extends SceneController {
+public interface GameOverController extends BasicSceneController {
     /*
      * TO DO
      */
