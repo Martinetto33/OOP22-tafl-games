@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public abstract class AbstractScene implements Scene {
 
     private final String sceneName;
     private final JPanel scene;
-    private static final String FONT_NAME = "Serif";
+    private static final String FONT_NAME = "";
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP;
 
@@ -50,10 +51,10 @@ public abstract class AbstractScene implements Scene {
     }
 
     /**
-     * @return the default font used for text of the scene
+     * @return the default font used for the text of the scene
      */
-    public static String getFont() {
-        return AbstractScene.FONT_NAME;
+    public static Font getDefaultFont() {
+        return new Font(FONT_NAME, Font.BOLD, 15);
     }
 
 }
