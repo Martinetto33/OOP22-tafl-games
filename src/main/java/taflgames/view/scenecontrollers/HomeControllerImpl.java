@@ -37,4 +37,14 @@ public final class HomeControllerImpl implements HomeController {
         this.view.close();
     }
 
+    @Override
+    public int getViewHeight() {
+        return this.view.getHeight();
+    }
+
+    @Override
+    public int getViewWidth() {
+        return this.view.getWidth();
+    }
+
 }

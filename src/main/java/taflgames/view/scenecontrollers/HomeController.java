@@ -11,4 +11,8 @@ public interface HomeController extends SceneController {
      */
     void close();
 
+    int getViewHeight();
+
+    int getViewWidth();
+
 }
