@@ -7,10 +7,7 @@ import taflgames.view.scenes.GameChoiceScene;
 /**
  * This class implements user registration scene controller.
  */
-public final class UserRegistrationControllerImpl implements UserRegistrationController {
-
-    private final View view;
-    private final Controller controller;
+public final class UserRegistrationControllerImpl extends AbstractBasicSceneController implements UserRegistrationController {
 
     /**
      * Creates a new user registration scene controller.
@@ -18,8 +15,7 @@ public final class UserRegistrationControllerImpl implements UserRegistrationCon
      * @param controller the main controller of the application
      */
     public UserRegistrationControllerImpl(final View view, final Controller controller) {
-        this.view = view;
-        this.controller = controller;
+        super(view, controller);
     }
 
     @Override
@@ -31,7 +27,9 @@ public final class UserRegistrationControllerImpl implements UserRegistrationCon
 
     @Override
     public void goToPreviousScene() {
-        this.view.setScene(new GameChoiceScene(new GameChoiceControllerImpl(this.view, this.controller)));
+        this.getView().setScene(new GameChoiceScene(
+            new GameChoiceControllerImpl(this.getView(), this.getController())
+        ));
     }
 
 }

@@ -6,12 +6,9 @@ import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.UserRegistrationScene;
 
 /**
- * This class implements game choice scene controller.
+ * This class implements a scene controller for a {@link taflgames.view.scenes.GameChoiceScene}.
  */
-public final class GameChoiceControllerImpl implements GameChoiceController {
-
-    private final View view;
-    private final Controller controller;
+public final class GameChoiceControllerImpl extends AbstractBasicSceneController implements GameChoiceController {
 
     /**
      * Creates a new game choice scene controller.
@@ -19,28 +16,31 @@ public final class GameChoiceControllerImpl implements GameChoiceController {
      * @param controller the main controller of the application
      */
     public GameChoiceControllerImpl(final View view, final Controller controller) {
-        this.view = view;
-        this.controller = controller;
+        super(view, controller);
     }
 
     @Override
     public void goToNextScene() {
-        this.view.setScene(new UserRegistrationScene(new UserRegistrationControllerImpl(this.view, this.controller)));
+        this.getView().setScene(new UserRegistrationScene(
+            new UserRegistrationControllerImpl(this.getView(), this.getController())
+        ));
     }
 
     @Override
     public void goToPreviousScene() {
-        this.view.setScene(new HomeScene(new HomeControllerImpl(this.view, this.controller)));
+        this.getView().setScene(new HomeScene(
+            new HomeControllerImpl(this.getView(), this.getController())
+        ));
     }
 
     @Override
     public void createClassicModeMatch() {
-        this.controller.createClassicModeMatch();
+        this.getController().createClassicModeMatch();
     }
 
     @Override
     public void createVariantModeMatch() {
-        this.controller.createVariantModeMatch();
+        this.getController().createVariantModeMatch();
     }
 
 }
