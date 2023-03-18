@@ -1,18 +1,14 @@
 package taflgames.view.scenecontrollers;
 
 /**
- * This interface extends a generic {@link SceneController}
- * to add specific functions for the home scene.
+ * This interface extends a generic {@link BasicSceneController}
+ * to add specific functions for a {@link taflgames.view.scenes.HomeScene}
  */
-public interface HomeController extends SceneController {
+public interface HomeController extends BasicSceneController {
 
     /**
      * Closes the application.
      */
     void close();
-
-    int getViewHeight();
-
-    int getViewWidth();
 
 }
