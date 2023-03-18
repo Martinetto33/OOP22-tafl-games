@@ -3,6 +3,7 @@ package taflgames.test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
@@ -97,5 +98,16 @@ class TestVector {
         final Position e = v2.getEndPos();
         final Vector opposite = v2.rotate(180).get();
         assertEquals(opposite.applyToPosition(e), v2.getStartPos());
+    }
+
+    /**
+     * Tests the creation of unit vectors.
+     */
+    @Test
+    void testUnitVector() {
+        final Vector v = new VectorImpl(1, 1);
+        assertFalse(v.isUnitVector());
+        final Vector v1 = new VectorImpl(1, 0, true);
+        assertTrue(v1.isUnitVector());
     }
 }
