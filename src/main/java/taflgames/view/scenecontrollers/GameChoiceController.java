@@ -1,10 +1,10 @@
 package taflgames.view.scenecontrollers;
 
 /**
- * This interface extends a generic {@link SceneController}
- * to add specific functions for the game choice scene.
+ * This interface extends a generic {@link BasicSceneController}
+ * to add specific functions for a {@link taflgames.view.scenes.GameChoiceScene}.
  */
-public interface GameChoiceController extends SceneController {
+public interface GameChoiceController extends BasicSceneController {
 
     /**
      * Prompts the creation of a classic mode match.
