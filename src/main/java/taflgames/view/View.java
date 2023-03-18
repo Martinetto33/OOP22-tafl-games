@@ -14,6 +14,16 @@ public interface View {
     void setScene(Scene scene);
 
     /**
+     * @return the height of the view
+     */
+    int getHeight();
+
+    /**
+     * @return the width of the view
+     */
+    int getWidth();
+
+    /**
      * Closes the application.
      */
     void close();

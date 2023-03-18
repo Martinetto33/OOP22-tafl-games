@@ -65,6 +65,16 @@ public final class ViewImpl implements View {
     }
 
     @Override
+    public int getHeight() {
+        return frame.getHeight();
+    }
+
+    @Override
+    public int getWidth() {
+        return frame.getWidth();
+    }
+
+    @Override
     public void close() {
         System.exit(0);
     }
