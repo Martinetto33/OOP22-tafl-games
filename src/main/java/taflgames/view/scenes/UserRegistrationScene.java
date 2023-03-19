@@ -11,7 +11,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
+import javax.swing.JTextArea;
 import taflgames.view.fontManager.FontManager;
 import taflgames.view.scenecontrollers.UserRegistrationController;
 
@@ -24,9 +24,10 @@ public class UserRegistrationScene extends AbstractScene {
     private static final String GO_BACK = "Go Back";
     private static final String SUBMIT = "Submit";
     private static final int SPACE = 10;
+    private static final int TEXT_AREA_SIZE_VERTICAL = 140;
+    private static final int TEXT_AREA_SIZE_HORIZONTAL = 100;
 
     private final UserRegistrationController controller;
-    
 
     /**
      * Creates the user registration scene.
@@ -61,9 +62,44 @@ public class UserRegistrationScene extends AbstractScene {
             this.controller.goToPreviousScene();
         });
 
+        southPanel.setBackground(SceneConstants.TRANSPARENT);
+        elementsPanel.setBackground(SceneConstants.TRANSPARENT);
+
         elementsPanel.add(southPanel);
 
+        this.constructInputLabels(elementsPanel);
+
         scene.add(elementsPanel);
+
     }
 
+    private JButton attachSubmitListener(final JButton submitButton) {
+        submitButton.addActionListener(null);
+        return submitButton;
+    }
+
+    /* Builds the area in which the user can insert player names. */
+    private void constructInputLabels(final JPanel scene) {
+        final JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
+        inputPanel.setBackground(SceneConstants.TRANSPARENT);
+        final JTextArea player1NameArea = new JTextArea();
+        final JTextArea player2NameArea = new JTextArea();
+
+        /* TODO: set text areas to be bigger and have a character limit */
+        player1NameArea.setSize(new Dimension(UserRegistrationScene.TEXT_AREA_SIZE_VERTICAL, 
+        UserRegistrationScene.TEXT_AREA_SIZE_HORIZONTAL));
+        player1NameArea.setColumns(50);
+        player2NameArea.setSize(new Dimension(UserRegistrationScene.TEXT_AREA_SIZE_VERTICAL, 
+        UserRegistrationScene.TEXT_AREA_SIZE_HORIZONTAL));
+        player2NameArea.setColumns(50);
+        player2NameArea.setLineWrap(false);
+
+        inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
+        inputPanel.add(player1NameArea);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
+        inputPanel.add(player2NameArea);
+
+        scene.add(inputPanel, BorderLayout.SOUTH);
+    }
 }
