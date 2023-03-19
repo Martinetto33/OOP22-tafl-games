@@ -2,6 +2,8 @@ package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 */
 /**
  * Tests the implementation of the leaderboard.
- * TODO: expand with saves on files and reads from files
  */
 public class TestLeaderboard {
 
@@ -119,7 +120,7 @@ public class TestLeaderboard {
         Leaderboard sixElementsLeaderboard = saver.retrieveFromSave();
         assertTrue(sixElementsLeaderboard.getLeaderboard().size() == TestLeaderboard.MAP_SIZE);
         sixElementsLeaderboard.addResult("Fenrir", MatchResult.DEFEAT);
-        sixElementsLeaderboard.saveToFile(saver.getTestPath());
+        sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
         assertTrue(sixElementsLeaderboard.getLeaderboard().containsKey("Fenrir"));
         /* The clear method empties the results map, so an empty map will be saved to file.
@@ -129,7 +130,7 @@ public class TestLeaderboard {
          */
         sixElementsLeaderboard.clearLeaderboard();
         assertTrue(TestLeaderboard.expectedResults.size() == TestLeaderboard.MAP_SIZE);
-        sixElementsLeaderboard.saveToFile(saver.getTestPath());
+        sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
         assertTrue(sixElementsLeaderboard.getLeaderboard().size() == 0);
     }
@@ -137,9 +138,18 @@ public class TestLeaderboard {
     /**
      * Tests the behaviour of the application if no save file is found and "retrieveFromSave()"
      * is actually called.
+     * @throws IOException
      */
     @Test
-    void testIfNoSaveFileExists() {
-        //TODO
+    void testIfNoSaveFileExists() throws IOException {
+        final LeaderboardSaver l = new LeaderboardSaverImpl();
+        File file = new File(l.getTestPath());
+        if (file.exists() && file.isFile()) {
+            if (!file.delete()) {
+                throw new IOException("The file at " + l.getTestPath() + " could not be deleted.");
+            }
+        }
+        final Leaderboard lead = l.retrieveFromSave();
+        assertTrue(lead.getLeaderboard().isEmpty());
     }
 }

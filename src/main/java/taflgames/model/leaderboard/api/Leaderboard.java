@@ -10,6 +10,12 @@ import taflgames.common.code.Pair;
  * The Leaderboard will store all the results of the matches. At the end of
  * each match, the players will be asked to insert their names, and their
  * results will be saved.
+ * <br><br>In order to retrieve data from existing leaderboards correctly, no
+ * implementation of this interface should be instantiated directly, but rather
+ * through a {@link taflgames.model.leaderboard.api.LeaderboardSaver#retrieveFromSave()}
+ * method. New results can be easily added with {@link #addResult(String, MatchResult)},
+ * and a LeaderboardSaver or a Leaderboard 'saveToFile' method can be called interchangeably
+ * with the same result.
  */
 public interface Leaderboard {
     /**
@@ -44,7 +50,7 @@ public interface Leaderboard {
      * Saves the results of this session to a file.
      * @param path the path to the save file.
      */
-    void saveToFile(String path);
+    void saveToFile(String path, LeaderboardSaver saver);
 
     /**
      * Returns a String representation of the player's score, if present.

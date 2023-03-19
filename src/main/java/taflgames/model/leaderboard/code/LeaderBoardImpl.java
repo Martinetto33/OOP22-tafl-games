@@ -18,14 +18,12 @@ import taflgames.model.leaderboard.api.LeaderboardSaver;
 public class LeaderBoardImpl implements Leaderboard {
 
     private Map<String, Pair<Integer, Integer>> results;
-    private final LeaderboardSaver saver;
     private static final int EXPECTED_LIST_DIMENSION = 2;
 
     /**
      * Builds a new Leaderboard.
      */
     public LeaderBoardImpl() {
-        this.saver = new LeaderboardSaverImpl();
         this.results = new HashMap<>();
     }
 
@@ -69,7 +67,7 @@ public class LeaderBoardImpl implements Leaderboard {
                                                     : Optional.empty();
     }
 
-    /*Draws are not recorded and do not affect the player's result */
+    /*Draws are recorded but do not affect the player's result */
     private Pair<Integer, Integer> evaluate(final Pair<Integer, Integer> score, final MatchResult result) {
         switch (result) {
             case VICTORY: return new Pair<>(score.getX() + 1, score.getY());
@@ -91,9 +89,9 @@ public class LeaderBoardImpl implements Leaderboard {
      * {@inheritDoc}
      */
     @Override
-    public void saveToFile(String path) {
-        this.saver.setPath(path);
-        this.saver.saveLeaderboard(this);
+    public void saveToFile(String path, LeaderboardSaver saver) {
+        saver.setPath(path);
+        saver.saveLeaderboard(this);
     }
 
     /**
@@ -117,7 +115,7 @@ public class LeaderBoardImpl implements Leaderboard {
             this.results = new HashMap<>();
             return;
         }
-        if (map.values().stream().noneMatch(list -> list.size() == LeaderBoardImpl.EXPECTED_LIST_DIMENSION)) {
+        if (map.values().stream().anyMatch(list -> list.size() != LeaderBoardImpl.EXPECTED_LIST_DIMENSION)) {
             throw new IllegalArgumentException("Not all entries of the read map have a score for both wins and losses");
         }
         this.results = map.entrySet().stream()
@@ -137,7 +135,7 @@ public class LeaderBoardImpl implements Leaderboard {
         }
         return new StringBuilder()
             .append(playerName)
-            .append("- WINS: ")
+            .append(" - WINS: ")
             .append(this.results.get(playerName).getX())
             .append(", LOSSES: ")
             .append(this.results.get(playerName).getY())
