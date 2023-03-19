@@ -10,7 +10,10 @@ import javax.swing.JFrame;
 
 import taflgames.controller.Controller;
 import taflgames.controller.ControllerImpl;
+import taflgames.view.scenecontrollers.GameChoiceControllerImpl;
+import taflgames.view.scenecontrollers.GameOverControllerImpl;
 import taflgames.view.scenecontrollers.HomeControllerImpl;
+import taflgames.view.scenes.GameOverScene;
 import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.Scene;
 
@@ -47,7 +50,8 @@ public final class ViewImpl implements View {
         frame.setLayout(frameLayout);
 
         addedScenes = new HashSet<>();
-        setScene(new HomeScene(new HomeControllerImpl(this, this.controller)));
+        //setScene(new HomeScene(new HomeControllerImpl(this, this.controller))); //TODO: delete this comment
+        setScene(new GameOverScene(new GameOverControllerImpl(this, this.controller)));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);  // Let the OS decide about the positioning of the frame
