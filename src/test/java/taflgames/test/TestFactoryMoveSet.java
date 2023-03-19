@@ -28,7 +28,7 @@ public class TestFactoryMoveSet {
         s2.add(new VectorImpl(1, 0,true));
         s2.add(new VectorImpl(0,-1,true));
         s2.add(new VectorImpl(-1, 0,true));
-        s2.add(new VectorImpl(0, -1,true));
+        s2.add(new VectorImpl(0, 1,true));
         assertEquals(f.createBasicMoveSet(),s2);
 
     }

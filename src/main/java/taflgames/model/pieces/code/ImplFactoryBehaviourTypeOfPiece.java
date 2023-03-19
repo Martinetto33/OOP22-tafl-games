@@ -3,6 +3,7 @@ package taflgames.model.pieces.code;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
@@ -27,12 +28,39 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
      * @param lastEnemyMoved position of the enemy piece that moved last
      * @return whether the conditions for a "hit" were satisfied or not
      */
-    public boolean basicWasHit(Set<Piece> enemies, Position lastEnemyMoved){
+    private boolean areArgumentsValid(final Set<Piece> enemies, final Position lastEnemyMoved) {
+        
+
+        final Set<Piece> test = new HashSet<>(enemies.stream()
+                .filter(t -> t.getCurrentPosition().equals(lastEnemyMoved))
+                .collect(Collectors.toSet()));
+        if(test.size()!=1) {
+            return false;
+        }
+        return true;
+    }
+
+    /*this may be used in the future if necessary */
+    private boolean areMixedPieces(final Piece me,final Set<Piece> enemies, final Position lastEnemyMoved) {
+        
+        final Set<Piece> test = new HashSet<>(enemies.stream()
+                .filter(t -> t.getPlayer().equals(me.getPlayer()))
+                .collect(Collectors.toSet()));
+        if(test.size()!=enemies.size()) {
+            return true;
+        }
+        return false;
+    }
+    public boolean basicWasHit(Set<Piece> enemies, Position lastEnemyMoved) throws IllegalArgumentException{
 
         final var e = Objects.requireNonNull(enemies);
         final var l = Objects.requireNonNull(lastEnemyMoved);
 
-        if(enemies.size() < 2) {
+        if(!areArgumentsValid(enemies, lastEnemyMoved)) {
+            throw new IllegalArgumentException("last enemy moved not present in enemies");
+        }
+       
+        if(enemies.size() < 2){
             return false;
         }
         for (Piece p : e) {
@@ -132,7 +160,13 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             @Override
             public boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) {
                 final var e = Objects.requireNonNull(enemies);
-                final var l = Objects.requireNonNull(lastEnemyMoved);
+                Objects.requireNonNull(lastEnemyMoved);
+                final Set<Piece> test = new HashSet<>(e.stream()
+                                            .filter(t -> t.getCurrentPosition().equals(lastEnemyMoved))
+                                            .collect(Collectors.toSet()));
+                if(test.size()!=1) {
+                    throw new IllegalArgumentException("lastEnemyMoved is not present in enemies");
+                }
                 return e.size() >= 4;
             }
 
@@ -189,9 +223,6 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
 
         @Override
         public void generate() {
-            Set<Position> temp2 = new HashSet<>();
-            temp2.add(new Position(2, 1));
-            temp2.add(new Position(0, 2));
             this.setHitbox(this.generateHitbox());
             this.setMoveSet(this.generateMoveSet());
             this.setNameTypeOfPiece("SWAPPER");

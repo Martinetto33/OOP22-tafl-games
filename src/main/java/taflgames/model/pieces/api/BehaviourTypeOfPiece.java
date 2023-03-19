@@ -65,6 +65,6 @@ public interface BehaviourTypeOfPiece {
      * on the type of piece, thus they have to be determined by the implementations
      * @return true if it was hit, false otherwise
      */
-    boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved);
+    boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) throws IllegalArgumentException;
 
 }

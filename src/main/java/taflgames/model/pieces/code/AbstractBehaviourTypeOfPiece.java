@@ -70,7 +70,7 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
     }
 
     @Override
-    public abstract boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved);
+    public abstract boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) throws IllegalArgumentException;
 
     @Override
     public void setTotNumbOfLives(int numbLives) {

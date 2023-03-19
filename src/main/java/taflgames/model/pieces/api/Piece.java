@@ -76,7 +76,7 @@ public interface Piece {
      *  this method replaces the previous number of lives whith a new one
      * @param newNumOfLives
      */
-    void setCurrNumbOfLives(final int newNumOfLives);
+    void setCurrNumbOfLivesLimited(final int newNumOfLives);
 
     /**
      * decreases the current number of lives by 1 only if it's
@@ -117,6 +117,7 @@ public interface Piece {
      */
     Player getPlayer();
 
+    public BehaviourTypeOfPiece getMyType();
 
 
 }

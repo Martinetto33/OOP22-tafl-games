@@ -17,7 +17,7 @@ public class ImplFactoryMoveset implements FactoryMoveSet {
         s.add(new VectorImpl(1, 0,true));
         s.add(new VectorImpl(0,-1,true));
         s.add(new VectorImpl(-1, 0,true));
-        s.add(new VectorImpl(0, -1,true));
+        s.add(new VectorImpl(0, 1,true));
         return s;
     }
 

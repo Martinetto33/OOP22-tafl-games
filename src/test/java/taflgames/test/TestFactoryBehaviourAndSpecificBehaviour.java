@@ -5,7 +5,9 @@ package taflgames.test;
  */
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
@@ -13,12 +15,15 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import taflgames.common.Player;
 import taflgames.common.api.FactoryHitbox;
 import taflgames.common.api.FactoryMoveSet;
 import taflgames.common.code.ImplFactoryHitbox;
 import taflgames.common.code.ImplFactoryMoveset;
 import taflgames.common.code.Position;
 import taflgames.model.pieces.api.FactoryBehaviourTypeOfPiece;
+import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.BasicPiece;
 import taflgames.model.pieces.code.ImplFactoryBehaviourTypeOfPiece;
 
 public class TestFactoryBehaviourAndSpecificBehaviour {
@@ -36,12 +41,26 @@ public class TestFactoryBehaviourAndSpecificBehaviour {
                         new ImplFactoryBehaviourTypeOfPiece();
 
         Position lastMoved = new Position(5, 6);
-        /**
-         * da finire quando controllo 
-         * il corretto funzionamento
-         *  di creazione di abstract piece
-         */
+        Set<Piece> k = new HashSet<>();
+        k.add(new BasicPiece(new Position(9, 6), Player.ATTACKER));
+        k.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
+        k.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
+        assertTrue(special.basicWasHit(k, lastMoved));
 
+        Set<Piece> k2 = new HashSet<>();
+        k2.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
+        k2.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
+        assertFalse(special.basicWasHit(k2, lastMoved));
+
+        Set<Piece> k3 = new HashSet<>();
+        k3.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
+        k3.add(new BasicPiece(new Position(10, 6), Player.ATTACKER));
+        assertThrows(IllegalArgumentException.class, 
+                                            ()-> special.basicWasHit(k3, lastMoved));
+
+        Set<Piece> k4 = new HashSet<>();
+        k4.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
+        assertFalse(special.basicWasHit(k4, lastMoved));
     }
 
     @Test
@@ -136,6 +155,21 @@ public class TestFactoryBehaviourAndSpecificBehaviour {
         toTest.generate();
         assertEquals("KING", toTest.getTypeOfPiece());
         assertEquals(1, toTest.getTotalNumbOfLives());
+
+        Position lastMoved = new Position(5, 6);
+        Set<Piece> k = new HashSet<>();
+        k.add(new BasicPiece(new Position(9, 6), Player.ATTACKER));
+        k.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
+        k.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
+        k.add(new BasicPiece(new Position(7, 7), Player.ATTACKER));
+        assertTrue(toTest.wasHit(k, lastMoved));
+
+        Set<Piece> k2 = new HashSet<>();
+        k2.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
+        k2.add(new BasicPiece(new Position(10, 6), Player.ATTACKER));
+        k2.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
+        assertFalse(toTest.wasHit(k2, lastMoved));
+
 
     }
 

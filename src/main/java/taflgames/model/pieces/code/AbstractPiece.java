@@ -105,15 +105,17 @@ public abstract class AbstractPiece implements Piece{
         /*I consider only the non-unit-vectors and I must adapt only the starting position*/
         Set<Vector> a = new HashSet<>(this.myType.getMoveSet().stream()
                                         .filter(v->!v.isUnitVector())
-                                        .map(v->new VectorImpl(this.currentPosition,v.getEndPos(),false))
+                                        .map(v->new VectorImpl(this.currentPosition, 
+                                                                v.getEndPos(), 
+                                                                false))
                                         .collect(Collectors.toSet()));
         /*now I consider the unit-vectors so I have to adapt both starting and ending positions */
         a.addAll(this.myType.getMoveSet().stream()
                                             .filter(v->v.isUnitVector())
                                             .map(v->new VectorImpl(this.currentPosition, 
-                                            new Position(this.currentPosition.getX() + v.getEndPos().getX(), 
-                                                        this.currentPosition.getY() + v.getEndPos().getY()), 
-                                                        true))
+                                                                    new Position(this.currentPosition.getX() + v.getEndPos().getX(), 
+                                                                        this.currentPosition.getY() + v.getEndPos().getY()), 
+                                                    true))
                                             .collect(Collectors.toSet()));   
         return a;                 
     }
@@ -147,12 +149,17 @@ public abstract class AbstractPiece implements Piece{
      * {@inheritDoc}
      */
     @Override
-    public void setCurrNumbOfLives(final int newNumOfLives) throws IllegalArgumentException{
+    public void setCurrNumbOfLivesLimited(final int newNumOfLives) throws IllegalArgumentException{
         Objects.requireNonNull(newNumOfLives);
         if(newNumOfLives < 0) {
             throw new IllegalArgumentException("newNumOfLives is less than 0"); 
         }
-        this.currentNumbOfLives = newNumOfLives;
+        if(newNumOfLives > this.myType.getTotalNumbOfLives()) {
+            this.currentNumbOfLives = this.myType.getTotalNumbOfLives();
+        }
+        else {
+            this.currentNumbOfLives = newNumOfLives;
+        }
     }
     /**
      * {@inheritDoc}
