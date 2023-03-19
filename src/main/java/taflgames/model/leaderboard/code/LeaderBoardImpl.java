@@ -41,12 +41,12 @@ public class LeaderBoardImpl implements Leaderboard {
      */
     @Override
     public Map<String, Pair<Integer, Integer>> getLeaderboard() {
-        Map<String, Pair<Integer, Integer>> result = new LinkedHashMap<>();
+        final Map<String, Pair<Integer, Integer>> result = new LinkedHashMap<>();
         this.results.entrySet().stream()
             .sorted((entry1, entry2) -> {
                 final Integer firstEntryWins = entry1.getValue().getX();
                 final Integer secondEntryWins = entry2.getValue().getX();
-                if (firstEntryWins != secondEntryWins) {
+                if (!firstEntryWins.equals(secondEntryWins)) {
                     return secondEntryWins - firstEntryWins;
                 }
                 /*If the win scores are the same, the entries are sorted according to the
@@ -126,6 +126,7 @@ public class LeaderBoardImpl implements Leaderboard {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPlayerResultAsString(final String playerName) {
         if (!this.results.containsKey(playerName)) {
             return new StringBuilder()

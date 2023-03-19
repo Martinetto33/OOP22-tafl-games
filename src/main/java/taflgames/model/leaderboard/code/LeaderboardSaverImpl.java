@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import taflgames.common.code.Pair;
 import taflgames.model.leaderboard.api.Leaderboard;
@@ -27,6 +29,7 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
     private static final String TEST_PATH = System.getProperty("user.dir") + SEP + "src"
     + SEP + "main" + SEP + "resources" + SEP + "taflgames" + SEP + "leaderboardSave" + SEP;
     private String chosenPath = LeaderboardSaverImpl.DEFAULT_PATH;
+    private static final Logger LOGGER = LoggerFactory.getLogger(LeaderboardSaverImpl.class);
 
     /**
      * {@inheritDoc}
@@ -43,8 +46,8 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
             final Yaml yaml = new Yaml();
             yaml.dump(otherMap, writer);
         } catch (IOException e) {
-            System.out.println("Error while trying to access the save file for the leaderboard.");
-            e.printStackTrace();
+            LOGGER.info("Error while trying to access the save file for the leaderboard.");
+            LOGGER.error("Exception occurred!", e);
         }
     }
 
@@ -59,8 +62,8 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
             leaderboard.fromMapWithListValues(yaml.load(inputStream));
             return leaderboard;
         } catch (IOException e) {
-            System.out.println("Error while trying to read from the save file for the leaderboard.");
-            e.printStackTrace();
+            LOGGER.info("Error while trying to read from the save file for the leaderboard.");
+            LOGGER.error("Exception occurred!", e);
             return new LeaderBoardImpl();
         }
     }
@@ -68,8 +71,9 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPath(final String path) {
-        if (!path.equals(LeaderboardSaverImpl.DEFAULT_PATH) && !path.equals(LeaderboardSaverImpl.TEST_PATH)) {
+        if (!LeaderboardSaverImpl.DEFAULT_PATH.equals(path) && !LeaderboardSaverImpl.TEST_PATH.equals(path)) {
             return;
         }
         this.chosenPath = path;
@@ -78,6 +82,7 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDefaultPath() {
         return DEFAULT_PATH;
     }
@@ -85,6 +90,7 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTestPath() {
         return TEST_PATH;
     }
