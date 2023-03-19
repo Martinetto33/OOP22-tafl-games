@@ -7,6 +7,11 @@ package taflgames.view.scenecontrollers;
 public interface GameChoiceController extends BasicSceneController {
 
     /**
+     * Switches to the scene that shows the rules of the game modes.
+     */
+    void goToRulesScene();
+
+    /**
      * Prompts the creation of a classic mode match.
      */
     void createClassicModeMatch();

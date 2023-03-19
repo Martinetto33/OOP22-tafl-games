@@ -3,6 +3,7 @@ package taflgames.view.scenecontrollers;
 import taflgames.controller.Controller;
 import taflgames.view.View;
 import taflgames.view.scenes.HomeScene;
+import taflgames.view.scenes.RulesScene;
 import taflgames.view.scenes.UserRegistrationScene;
 
 /**
@@ -30,6 +31,13 @@ public final class GameChoiceControllerImpl extends AbstractBasicSceneController
     public void goToPreviousScene() {
         this.getView().setScene(new HomeScene(
             new HomeControllerImpl(this.getView(), this.getController())
+        ));
+    }
+
+    @Override
+    public void goToRulesScene() {
+        this.getView().setScene(new RulesScene(
+            new RulesDisplayControllerImpl(this.getView(), this.getController())
         ));
     }
 
