@@ -1,4 +1,4 @@
-package taflgames.test;
+package taflgames;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;

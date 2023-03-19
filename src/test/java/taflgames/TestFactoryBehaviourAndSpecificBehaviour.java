@@ -1,4 +1,4 @@
-package taflgames.test;
+package taflgames;
 
 /**
  * per finirla defo controllare i test del costruttore 

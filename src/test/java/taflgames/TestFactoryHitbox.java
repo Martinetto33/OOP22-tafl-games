@@ -1,4 +1,4 @@
-package taflgames.test;
+package taflgames;
 
 import java.util.HashSet;
 import java.util.Set;
