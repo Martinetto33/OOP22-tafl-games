@@ -34,24 +34,24 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class TestLeaderboard {
 
     private static final int MAP_SIZE = 6;
-    private static final Map<String, Pair<Integer, Integer>> expectedResults = new HashMap<>();
-    private static Leaderboard sampleLeaderboard;  
+    private static final Map<String, Pair<Integer, Integer>> EXPECTED_RESULTS = new HashMap<>();
+    private static Leaderboard sampleLeaderboard;
 
     /**
      * Initialises the Map. This fake test should start before any other one.
      */
     @BeforeAll
     static void initialise() {
-        TestLeaderboard.expectedResults.put("Alin Bordeianu", new Pair<>(0, 10));
-        TestLeaderboard.expectedResults.put("Elena Boschetti", new Pair<>(3, 3));
-        TestLeaderboard.expectedResults.put("Andrea Piermattei", new Pair<>(4, 2));
-        TestLeaderboard.expectedResults.put("Margherita Raponi", new Pair<>(10, 0));
-        TestLeaderboard.expectedResults.put("Personaggio fittizio", new Pair<>(0, 0));
-        TestLeaderboard.expectedResults.put("Qualcuno di molto scarso", new Pair<>(0, 11));
-        assertEquals(TestLeaderboard.MAP_SIZE, TestLeaderboard.expectedResults.size());
+        TestLeaderboard.EXPECTED_RESULTS.put("Alin Bordeianu", new Pair<>(0, 10));
+        TestLeaderboard.EXPECTED_RESULTS.put("Elena Boschetti", new Pair<>(3, 3));
+        TestLeaderboard.EXPECTED_RESULTS.put("Andrea Piermattei", new Pair<>(4, 2));
+        TestLeaderboard.EXPECTED_RESULTS.put("Margherita Raponi", new Pair<>(10, 0));
+        TestLeaderboard.EXPECTED_RESULTS.put("Personaggio fittizio", new Pair<>(0, 0));
+        TestLeaderboard.EXPECTED_RESULTS.put("Qualcuno di molto scarso", new Pair<>(0, 11));
+        assertEquals(TestLeaderboard.MAP_SIZE, TestLeaderboard.EXPECTED_RESULTS.size());
         TestLeaderboard.sampleLeaderboard = new LeaderBoardImpl();
 
-        for (final var playerName : TestLeaderboard.expectedResults.keySet()) {
+        for (final var playerName : TestLeaderboard.EXPECTED_RESULTS.keySet()) {
             List<MatchResult> a = new ArrayList<>();
             /*In case the player has 0 victories and 0 losses, and they have never
              * been registered before, it is assumed that their first match or streak
@@ -59,15 +59,15 @@ public class TestLeaderboard {
              * clause because otherwise the IntStreams would not be able to generate any
              * element in the range (0, 0).
              */
-            if (TestLeaderboard.expectedResults.get(playerName).getX() == 0 
-                && TestLeaderboard.expectedResults.get(playerName).getY() == 0) {
+            if (TestLeaderboard.EXPECTED_RESULTS.get(playerName).getX() == 0 
+                && TestLeaderboard.EXPECTED_RESULTS.get(playerName).getY() == 0) {
                     sampleLeaderboard.addResult(playerName, MatchResult.DRAW);
                     continue;
                }
-            a.addAll(List.of(IntStream.range(0, TestLeaderboard.expectedResults.get(playerName).getX())
+            a.addAll(List.of(IntStream.range(0, TestLeaderboard.EXPECTED_RESULTS.get(playerName).getX())
                               .mapToObj(elem -> MatchResult.VICTORY)
                               .toList(),
-                             IntStream.range(0, TestLeaderboard.expectedResults.get(playerName).getY())
+                             IntStream.range(0, TestLeaderboard.EXPECTED_RESULTS.get(playerName).getY())
                               .mapToObj(elem -> MatchResult.DEFEAT)
                               .toList())
                          .stream()
@@ -76,8 +76,8 @@ public class TestLeaderboard {
             a.stream()
                     .forEach(e -> sampleLeaderboard.addResult(playerName, e));
         }
-        assertTrue(sampleLeaderboard.getLeaderboard().keySet().containsAll(TestLeaderboard.expectedResults.keySet()));
-        assertTrue(sampleLeaderboard.getLeaderboard().values().containsAll(TestLeaderboard.expectedResults.values()));
+        assertTrue(sampleLeaderboard.getLeaderboard().keySet().containsAll(TestLeaderboard.EXPECTED_RESULTS.keySet()));
+        assertTrue(sampleLeaderboard.getLeaderboard().values().containsAll(TestLeaderboard.EXPECTED_RESULTS.values()));
     }
 
     /**
@@ -129,7 +129,7 @@ public class TestLeaderboard {
          * an exception if the format doesn't match the requirements.
          */
         sixElementsLeaderboard.clearLeaderboard();
-        assertTrue(TestLeaderboard.expectedResults.size() == TestLeaderboard.MAP_SIZE);
+        assertTrue(TestLeaderboard.EXPECTED_RESULTS.size() == TestLeaderboard.MAP_SIZE);
         sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
         assertTrue(sixElementsLeaderboard.getLeaderboard().size() == 0);
