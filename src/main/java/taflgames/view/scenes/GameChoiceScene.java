@@ -29,6 +29,8 @@ public class GameChoiceScene extends AbstractScene {
     private static final String SEE_RULES = "See Rules";
     private static final double MAIN_BTN_HEIGHT_PROP = 0.075;
     private static final double MAIN_BTN_WIDTH_PROP = 0.33;
+    private static final double MINOR_BTN_HEIGHT_PROP = 0.05;
+    private static final double MINOR_BTN_WIDTH_PROP = 0.15;
 
     private final GameChoiceController controller;
 
@@ -44,33 +46,25 @@ public class GameChoiceScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
 
-        final GridBagConstraints outerGBC = new GridBagConstraints();
+        final GridBagConstraints gbc = new GridBagConstraints();
 
         final JPanel elementsPanel = new JPanel(new GridBagLayout());
         elementsPanel.setBackground(TRANSPARENT);
 
         final JPanel headerPanel = new JPanel(new GridBagLayout());
         final JLabel headerLabel = new JLabel(HEADER);
-        outerGBC.gridwidth = GridBagConstraints.REMAINDER;
-        outerGBC.anchor = GridBagConstraints.NORTH;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.NORTH;
         headerLabel.setFont(AbstractScene.getDefaultFont());
         headerLabel.setForeground(Color.WHITE);
         headerPanel.setBackground(TRANSPARENT);
         headerPanel.add(headerLabel);
-        elementsPanel.add(headerPanel, outerGBC);
+        elementsPanel.add(headerPanel, gbc);
 
-        final JPanel playButtonsPanel = new JPanel(new GridBagLayout());
-        outerGBC.anchor = GridBagConstraints.CENTER;
-        outerGBC.fill = GridBagConstraints.HORIZONTAL;
-        outerGBC.insets = new Insets(10, 0, 10, 0);
-        playButtonsPanel.setBackground(TRANSPARENT);
-
-        final GridBagConstraints innerGBC = new GridBagConstraints();
-        innerGBC.gridwidth = GridBagConstraints.REMAINDER;
-        innerGBC.insets = new Insets(0, 0, 0, 0);
-
-        final JPanel playClassicPanel = new JPanel(new GridBagLayout());
-        playClassicPanel.setBackground(TRANSPARENT);
+        final JPanel buttonsPanel = new JPanel(new GridBagLayout());
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        buttonsPanel.setBackground(TRANSPARENT);
 
         final JButton playClassicButton = new JButton(PLAY_CLASSIC_MODE);
         playClassicButton.setFont(AbstractScene.getDefaultFont());
@@ -78,16 +72,7 @@ public class GameChoiceScene extends AbstractScene {
             (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP),
             (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP)
         ));
-        playClassicPanel.add(playClassicButton, innerGBC);
-
-        final JButton classicRulesButton = new JButton(SEE_RULES);
-        classicRulesButton.setFont(AbstractScene.getDefaultFont());
-        playClassicPanel.add(classicRulesButton, innerGBC);
-
-        playButtonsPanel.add(playClassicPanel, outerGBC);
-
-        final JPanel playVariantPanel = new JPanel(new GridBagLayout());
-        playVariantPanel.setBackground(TRANSPARENT);
+        buttonsPanel.add(playClassicButton, gbc);
 
         final JButton playVariantButton = new JButton(PLAY_VARIANT_MODE);
         playVariantButton.setFont(AbstractScene.getDefaultFont());
@@ -95,13 +80,15 @@ public class GameChoiceScene extends AbstractScene {
             (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP),
             (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP)
         ));
-        playVariantPanel.add(playVariantButton, innerGBC);
+        buttonsPanel.add(playVariantButton, gbc);
 
-        final JButton variantRulesButton = new JButton(SEE_RULES);
-        variantRulesButton.setFont(AbstractScene.getDefaultFont());
-        playVariantPanel.add(variantRulesButton, innerGBC);
-
-        playButtonsPanel.add(playVariantPanel, outerGBC);
+        final JButton seeRulesButton = new JButton(SEE_RULES);
+        seeRulesButton.setFont(AbstractScene.getDefaultFont());
+        seeRulesButton.setPreferredSize(new Dimension(
+            (int) (this.controller.getViewWidth() * MINOR_BTN_WIDTH_PROP),
+            (int) (this.controller.getViewHeight() * MINOR_BTN_HEIGHT_PROP)
+        ));
+        buttonsPanel.add(seeRulesButton, gbc);
 
         playClassicButton.addActionListener((e) -> {
             this.controller.createClassicModeMatch();
@@ -113,19 +100,11 @@ public class GameChoiceScene extends AbstractScene {
             this.controller.goToNextScene();
         });
 
-        classicRulesButton.addActionListener((e) -> {
-            /*
-             * TO DO
-             */
+        seeRulesButton.addActionListener((e) -> {
+            this.controller.goToRulesScene();
         });
 
-        variantRulesButton.addActionListener((e) -> {
-            /*
-             * TO DO
-             */
-        });
-
-        elementsPanel.add(playButtonsPanel, outerGBC);
+        elementsPanel.add(buttonsPanel, gbc);
 
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
@@ -136,7 +115,7 @@ public class GameChoiceScene extends AbstractScene {
             this.controller.goToPreviousScene();
         });
 
-        elementsPanel.add(southPanel, outerGBC);
+        elementsPanel.add(southPanel, gbc);
 
         scene.add(elementsPanel);
     }
