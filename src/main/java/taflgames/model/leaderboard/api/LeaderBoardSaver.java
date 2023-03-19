@@ -35,7 +35,16 @@ public interface LeaderboardSaver {
      */
     void setPath(String path);
 
+    /**
+     * Returns the path to file that should be used in testing instances.
+     * @return the test path.
+     */
     String getTestPath();
 
+    /**
+     * Returns the default path to which the application will attempt to
+     * manage the save files.
+     * @return the default path.
+     */
     String getDefaultPath();
 }

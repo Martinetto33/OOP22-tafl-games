@@ -65,22 +65,28 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
         }
     }
 
-    public void setPath(String path) {
+    /**
+     * {@inheritDoc}
+     */
+    public void setPath(final String path) {
         if (!path.equals(LeaderboardSaverImpl.DEFAULT_PATH) && !path.equals(LeaderboardSaverImpl.TEST_PATH)) {
             return;
         }
         this.chosenPath = path;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getDefaultPath() {
         return DEFAULT_PATH;
     }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getTestPath() {
         return TEST_PATH;
     }
 
-    public String getChosenPath() {
-        return chosenPath;
-    }
-    
 }

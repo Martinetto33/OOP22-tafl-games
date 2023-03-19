@@ -89,7 +89,7 @@ public class LeaderBoardImpl implements Leaderboard {
      * {@inheritDoc}
      */
     @Override
-    public void saveToFile(String path, LeaderboardSaver saver) {
+    public void saveToFile(final String path, final LeaderboardSaver saver) {
         saver.setPath(path);
         saver.saveLeaderboard(this);
     }
