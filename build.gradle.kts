@@ -42,6 +42,9 @@ dependencies {
     val apacheCommonsCollectionsVersion = "4.4"
     implementation("org.apache.commons:commons-collections4:$apacheCommonsCollectionsVersion")
 
+    // Snakeyaml
+    implementation("org.yaml:snakeyaml:2.0")
+    
 }
 
 application {
