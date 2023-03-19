@@ -1,4 +1,4 @@
-package taflgames.test;
+package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -109,5 +109,24 @@ class TestVector {
         assertFalse(v.isUnitVector());
         final Vector v1 = new VectorImpl(1, 0, true);
         assertTrue(v1.isUnitVector());
+    }
+
+    /**
+     * Tests the addition of Vectors.
+     */
+    @Test
+    void testAdd() {
+        final Vector v1 = new VectorImpl(new Position(3, 5), new Position(2, 1));
+        final Vector v2 = new VectorImpl(new Position(2, 1), new Position(3, 5));
+        assertEquals(new VectorImpl(0, 0), v1.addVector(v2));
+        /* The addition of the vectors occurs by summing the deltas; the result
+         * is always a Vector starting from (0, 0) and ending to (sum of deltaX, sum of deltaY)
+         * The deltaX of v1 is 2 - 3 = -1
+         * The deltaY of v1 is 1 - 5 = -4
+         * So to get the Vector (0, 0) -> (5, 5) a Vector with delta (+6, + 9)
+         * should be added.
+         */
+        assertEquals(new VectorImpl(new Position(0, 0), new Position(5, 5)),
+        v1.addVector(new VectorImpl(6, 9)));
     }
 }
