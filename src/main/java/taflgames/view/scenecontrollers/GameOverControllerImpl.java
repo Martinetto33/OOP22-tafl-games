@@ -20,11 +20,16 @@ public final class GameOverControllerImpl extends AbstractBasicSceneController i
             new HomeControllerImpl(this.getView(), this.getController())));
     }
 
+    /**
+     * No previous scene to Game Over to go back to
+     */
     @Override
-    public void goToPreviousScene() {
-        // no previous scene to Game Over to go back to
-    }
-    
+    public void goToPreviousScene() {}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void goToRegistrationScene() {
         this.getView().setScene(new UserRegistrationScene(
             new UserRegistrationControllerImpl(this.getView(), this.getController())
