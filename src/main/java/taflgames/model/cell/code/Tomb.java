@@ -25,6 +25,9 @@ public class Tomb extends AbstractCell{
         if (events.contains("QUEEN_MOVE")) {
             resumePiece(sender.getPlayer());  // viene resuscitata una pedina del giocatore mangiata sulla casella corrente (se esiste)
         }
+        if(events.contains("DEAD_PIECE")) {
+            addDeadPieces(sender.getPlayer(), sender);
+        }
     }
 
     @Override
@@ -40,7 +43,7 @@ public class Tomb extends AbstractCell{
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
         if (!deadPieces.get(player).isEmpty()) {
             Piece pieceToResume = deadPieces.get(player).poll();	// prende la prima pedina in coda
-            //pieceToResume.setAlive(true);	// ora è viva
+            pieceToResume.reanimate();	// ora è viva
         }
     }
 
