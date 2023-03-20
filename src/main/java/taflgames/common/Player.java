@@ -11,5 +11,5 @@ public enum Player {
     /**
      * The player that owns the defending team.
      */
-    DEFENDER
+    DEFENDER;
 }
