@@ -13,7 +13,7 @@ public class King extends AbstractPiece {
     public King(final Position startingPosition) {
         this.setCurrentPosition(startingPosition);
         this.setMyPlayer(Player.DEFENDER);
-        this.setMyType(this.factory.createKingBehaviour());
+        this.setMyType(this.getFactory().createKingBehaviour());
         this.getMyType().generate();
         this.setCurrNumbOfLivesLimited(this.getMyType().getTotalNumbOfLives());
     }

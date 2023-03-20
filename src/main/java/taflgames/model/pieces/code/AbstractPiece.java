@@ -23,7 +23,7 @@ public abstract class AbstractPiece implements Piece {
     private BehaviourTypeOfPiece myType;
     private Player myPlayer;
     /**la factory sarà usata dal costruttore delle implementazioni per creare la type.*/
-    protected final FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
+    private final FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
     /**
      * {@inheritDoc}.
      */

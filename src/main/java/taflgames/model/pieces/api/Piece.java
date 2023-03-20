@@ -121,7 +121,7 @@ public interface Piece {
      */
     BehaviourTypeOfPiece getMyType();
     /**
-     * reanimates this piece
+     * reanimates this piece.
      */
     void reanimate();
 }

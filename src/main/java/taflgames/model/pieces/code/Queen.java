@@ -15,7 +15,7 @@ public class Queen extends AbstractPiece {
     public Queen(final Position startingPosition, final Player p) {
         this.setCurrentPosition(startingPosition);
         this.setMyPlayer(p);
-        this.setMyType(this.factory.createQueenBehaviour());
+        this.setMyType(this.getFactory().createQueenBehaviour());
         this.getMyType().generate();
         this.setCurrNumbOfLivesLimited(this.getMyType().getTotalNumbOfLives());
     }

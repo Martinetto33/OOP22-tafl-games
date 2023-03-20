@@ -97,15 +97,11 @@ public interface BehaviourTypeOfPiece {
      */
     boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) throws IllegalArgumentException;
     /**
-     * 
-     * @return this piece's factoryHitbox  
-     */
+    * @return this piece's factoryHitbox
+    */
     FactoryHitbox getFacHitbox();
     /**
-     * 
-     * @return this piece's factoryMoveSet
-     */
+    * @return this piece's factoryMoveSet
+    */
     FactoryMoveSet getFacMoveSet();
-
-    
 }
