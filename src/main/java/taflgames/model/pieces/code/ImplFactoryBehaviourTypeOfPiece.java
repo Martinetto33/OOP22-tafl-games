@@ -53,17 +53,18 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
     /**
      * {@inheritDoc}.
      */
-    public boolean basicWasHit(final Set<Piece> enemies, final Position lastEnemyMoved) throws IllegalArgumentException {
-        final var e = Objects.requireNonNull(enemies);
-        final var l = Objects.requireNonNull(lastEnemyMoved);
+    public boolean basicWasHit(final Set<Piece> enemies, final Position lastEnemyMoved) {
+        Objects.requireNonNull(enemies);
+        Objects.requireNonNull(lastEnemyMoved);
         if (!areArgumentsValid(enemies, lastEnemyMoved)) {
             throw new IllegalArgumentException("last enemy moved not present in enemies");
         }
         if (enemies.size() < 2) {
             return false;
         }
-        for (Piece p : e) {
-            if (p.getCurrentPosition().getX() == l.getX() ^ p.getCurrentPosition().getY() == l.getY()) {
+        for (final Piece p : enemies) {
+            if (p.getCurrentPosition().getX() == lastEnemyMoved.getX() 
+            ^ p.getCurrentPosition().getY() == lastEnemyMoved.getY()) {
                 return true;
             }
         }

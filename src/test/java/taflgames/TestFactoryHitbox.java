@@ -18,12 +18,12 @@ import taflgames.common.code.Position;
 /**
  * testing factoryHitbox.
  */
-public class TestFactoryHitbox {
+class TestFactoryHitbox {
     @Test
     void testCreateBasicHitboxDistance() {
         final FactoryHitbox f = new ImplFactoryHitbox();
         final int d = 2;
-        Set<Position> out = new HashSet<>();
+        final Set<Position> out = new HashSet<>();
         out.add(new Position(d, 0));
         out.add(new Position(0, d));
         out.add(new Position(-d, 0));
@@ -31,7 +31,7 @@ public class TestFactoryHitbox {
         assertEquals(out, f.createBasicHitboxDistance(d));
 
         final int d2 = 0;
-        Set<Position> out2 = new HashSet<>();
+        final Set<Position> out2 = new HashSet<>();
         out2.add(new Position(d2, 0));
         out2.add(new Position(0, d2));
         out2.add(new Position(-d2, 0));
@@ -44,15 +44,15 @@ public class TestFactoryHitbox {
     @Test
     void testCreateBasicHitbox() {
         final FactoryHitbox f = new ImplFactoryHitbox();
-        int d = 1;
-        Set<Position> out = new HashSet<>();
+        final int d = 1;
+        final Set<Position> out = new HashSet<>();
         out.add(new Position(d, 0));
         out.add(new Position(0, d));
         out.add(new Position(-d, 0));
         out.add(new Position(0, -d));
         assertEquals(out, f.createBasicHitbox());
-        int d2 = 2;
-        Set<Position> out2 = new HashSet<>();
+        final int d2 = 2;
+        final Set<Position> out2 = new HashSet<>();
         out2.add(new Position(d2, 0));
         out2.add(new Position(0, d2));
         out2.add(new Position(-d2, 0));
@@ -64,7 +64,7 @@ public class TestFactoryHitbox {
     @Test
     void testCreateArcherHitbox() {
         final FactoryHitbox f = new ImplFactoryHitbox();
-        Set<Position> out = new HashSet<>();
+        final Set<Position> out = new HashSet<>();
         int d2 = 1;
         out.add(new Position(d2, 0));
         out.add(new Position(0, d2));
@@ -80,7 +80,7 @@ public class TestFactoryHitbox {
         out.add(new Position(0, d2));
         out.add(new Position(-d2, 0));
         out.add(new Position(0, -d2));
-        int range = 3;
+        final int range = 3;
         assertEquals(out, f.createArcherHitbox(range));
         assertNotEquals(f.createArcherHitbox(range), null);
         assertNotEquals(f.createArcherHitbox(range), new HashSet<>());

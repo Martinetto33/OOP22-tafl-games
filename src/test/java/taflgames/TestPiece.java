@@ -25,7 +25,7 @@ import taflgames.model.pieces.code.Swapper;
 /**
  * testing piece.
  */
-public class TestPiece {
+class TestPiece {
     /*private final FactoryHitbox facHit = new ImplFactoryHitbox();
     private final FactoryMoveSet facMov = new ImplFactoryMoveset();
     private final FactoryBehaviourTypeOfPiece facBe = 
@@ -35,7 +35,7 @@ public class TestPiece {
         final var p = new Position(4, 6);
         final var t = Player.ATTACKER;
         final Piece np = new Archer(p, t);
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(new Position(5, 6));
         hit.add(new Position(4, 7));
         hit.add(new Position(3, 6));
@@ -57,7 +57,7 @@ public class TestPiece {
         final var p = new Position(4, 6);
         final var t = Player.ATTACKER;
         final Piece np = new BasicPiece(p, t);
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(new Position(5, 6));
         hit.add(new Position(4, 7));
         hit.add(new Position(3, 6));
@@ -71,7 +71,7 @@ public class TestPiece {
         final var p = new Position(4, 6);
         final var t = Player.ATTACKER;
         final Piece np = new BasicPiece(p, t);
-        Set<Vector> mov = new HashSet<>();
+        final Set<Vector> mov = new HashSet<>();
         mov.add(new VectorImpl(p, new Position(5, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));
@@ -90,7 +90,7 @@ public class TestPiece {
         assertEquals(p, np.getCurrentPosition());
         assertEquals(t, np.getPlayer());
         assertEquals(numbLives, np.getCurrNumbOfLives());
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(new Position(5, 6));
         hit.add(new Position(4, 7));
         hit.add(new Position(3, 6));
@@ -98,7 +98,7 @@ public class TestPiece {
         assertNotEquals(np.whereToHit(), null);
         assertNotEquals(np.whereToHit(), new HashSet<>());
         assertEquals(hit, np.whereToHit());
-        Set<Vector> mov = new HashSet<>();
+        final Set<Vector> mov = new HashSet<>();
         mov.add(new VectorImpl(p, new Position(5, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));
@@ -127,7 +127,7 @@ public class TestPiece {
         assertEquals(p, np.getCurrentPosition());
         assertEquals(t, np.getPlayer());
         assertEquals(numbLives, np.getCurrNumbOfLives());
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(new Position(5, 6));
         hit.add(new Position(4, 7));
         hit.add(new Position(3, 6));
@@ -135,7 +135,7 @@ public class TestPiece {
         assertNotEquals(np.whereToHit(), null);
         assertNotEquals(np.whereToHit(), new HashSet<>());
         assertEquals(hit, np.whereToHit());
-        Set<Vector> mov = new HashSet<>();
+        final Set<Vector> mov = new HashSet<>();
         mov.add(new VectorImpl(p, new Position(5, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));
@@ -164,7 +164,7 @@ public class TestPiece {
         assertEquals(p, np.getCurrentPosition());
         assertEquals(t, np.getPlayer());
         assertEquals(numbLives, np.getCurrNumbOfLives());
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(new Position(5, 6));
         hit.add(new Position(4, 7));
         hit.add(new Position(3, 6));
@@ -172,7 +172,7 @@ public class TestPiece {
         assertNotEquals(np.whereToHit(), null);
         assertNotEquals(np.whereToHit(), new HashSet<>());
         assertEquals(hit, np.whereToHit());
-        Set<Vector> mov = new HashSet<>();
+        final Set<Vector> mov = new HashSet<>();
         mov.add(new VectorImpl(p, new Position(5, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));
@@ -201,7 +201,7 @@ public class TestPiece {
         assertEquals(p, np.getCurrentPosition());
         assertEquals(t, np.getPlayer());
         assertEquals(numbLives, np.getCurrNumbOfLives());
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(new Position(5, 6));
         hit.add(new Position(4, 7));
         hit.add(new Position(3, 6));
@@ -217,7 +217,7 @@ public class TestPiece {
         assertNotEquals(np.whereToHit(), null);
         assertNotEquals(np.whereToHit(), new HashSet<>());
         assertEquals(hit, np.whereToHit());
-        Set<Vector> mov = new HashSet<>();
+        final Set<Vector> mov = new HashSet<>();
         mov.add(new VectorImpl(p, new Position(5, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));
@@ -247,10 +247,10 @@ public class TestPiece {
         assertEquals(p, np.getCurrentPosition());
         assertEquals(t, np.getPlayer());
         assertEquals(numbLives, np.getCurrNumbOfLives());
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(p);
         assertEquals(hit, np.whereToHit());
-        Set<Vector> mov = new HashSet<>();
+        final Set<Vector> mov = new HashSet<>();
         mov.add(new VectorImpl(p, new Position(5, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));
@@ -281,7 +281,7 @@ public class TestPiece {
         assertEquals(t, np.getPlayer());
         assertEquals(numbLives, np.getCurrNumbOfLives());
         assertTrue(() -> np.canSwap());
-        Set<Position> hit = new HashSet<>();
+        final Set<Position> hit = new HashSet<>();
         hit.add(new Position(5, 6));
         hit.add(new Position(4, 7));
         hit.add(new Position(3, 6));
@@ -289,7 +289,7 @@ public class TestPiece {
         assertNotEquals(np.whereToHit(), null);
         assertNotEquals(np.whereToHit(), new HashSet<>());
         assertEquals(hit, np.whereToHit());
-        Set<Vector> mov = new HashSet<>();
+        final Set<Vector> mov = new HashSet<>();
         mov.add(new VectorImpl(p, new Position(5, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));

@@ -30,30 +30,30 @@ import taflgames.model.pieces.code.ImplFactoryBehaviourTypeOfPiece;
  /**
   * testing factory and implementation of behaviour.
   */
-public class TestFactoryBehaviourAndSpecificBehaviour {
-    private FactoryBehaviourTypeOfPiece n = new ImplFactoryBehaviourTypeOfPiece();
-    private FactoryHitbox h = new ImplFactoryHitbox();
-    private FactoryMoveSet m = new ImplFactoryMoveset();
+class TestFactoryBehaviourAndSpecificBehaviour {
+    private final FactoryBehaviourTypeOfPiece n = new ImplFactoryBehaviourTypeOfPiece();
+    private final FactoryHitbox h = new ImplFactoryHitbox();
+    private final FactoryMoveSet m = new ImplFactoryMoveset();
     @Test
     void testBasicWasHit() {
-        ImplFactoryBehaviourTypeOfPiece special = 
+        final ImplFactoryBehaviourTypeOfPiece special = 
                         new ImplFactoryBehaviourTypeOfPiece();
-        Position lastMoved = new Position(5, 6);
-        Set<Piece> k = new HashSet<>();
+        final Position lastMoved = new Position(5, 6);
+        final Set<Piece> k = new HashSet<>();
         k.add(new BasicPiece(new Position(9, 6), Player.ATTACKER));
         k.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
         k.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
         assertTrue(special.basicWasHit(k, lastMoved));
-        Set<Piece> k2 = new HashSet<>();
+        final Set<Piece> k2 = new HashSet<>();
         k2.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
         k2.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
         assertFalse(special.basicWasHit(k2, lastMoved));
-        Set<Piece> k3 = new HashSet<>();
+        final Set<Piece> k3 = new HashSet<>();
         k3.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
         k3.add(new BasicPiece(new Position(10, 6), Player.ATTACKER));
         assertThrows(IllegalArgumentException.class, 
                                             () -> special.basicWasHit(k3, lastMoved));
-        Set<Piece> k4 = new HashSet<>();
+        final Set<Piece> k4 = new HashSet<>();
         k4.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
         assertFalse(special.basicWasHit(k4, lastMoved));
     }
@@ -119,14 +119,14 @@ public class TestFactoryBehaviourAndSpecificBehaviour {
         toTest.generate();
         assertEquals("KING", toTest.getTypeOfPiece());
         assertEquals(1, toTest.getTotalNumbOfLives());
-        Position lastMoved = new Position(5, 6);
-        Set<Piece> k = new HashSet<>();
+        final Position lastMoved = new Position(5, 6);
+        final Set<Piece> k = new HashSet<>();
         k.add(new BasicPiece(new Position(9, 6), Player.ATTACKER));
         k.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
         k.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));
         k.add(new BasicPiece(new Position(7, 7), Player.ATTACKER));
         assertTrue(toTest.wasHit(k, lastMoved));
-        Set<Piece> k2 = new HashSet<>();
+        final Set<Piece> k2 = new HashSet<>();
         k2.add(new BasicPiece(new Position(50, 8), Player.ATTACKER));
         k2.add(new BasicPiece(new Position(10, 6), Player.ATTACKER));
         k2.add(new BasicPiece(new Position(5, 6), Player.ATTACKER));

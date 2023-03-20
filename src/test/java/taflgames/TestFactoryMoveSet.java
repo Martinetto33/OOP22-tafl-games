@@ -20,16 +20,14 @@ import taflgames.common.code.VectorImpl;
 /**
  * testing factoryMoveSet.
  */
-public class TestFactoryMoveSet {
+class TestFactoryMoveSet {
     @Test
     void testCreateBasicMoveSet() {
-        FactoryMoveSet f = new ImplFactoryMoveset();
-        Set<Vector> s = new HashSet<>();
+        final FactoryMoveSet f = new ImplFactoryMoveset();
+        final Set<Vector> s = new HashSet<>();
         assertNotEquals(f.createBasicMoveSet(), s);
-
         assertNotEquals(f.createBasicMoveSet(), null);
-
-        Set<Vector> s2 = new HashSet<>(); 
+        final Set<Vector> s2 = new HashSet<>(); 
         s2.add(new VectorImpl(1, 0, true));
         s2.add(new VectorImpl(0, -1, true));
         s2.add(new VectorImpl(-1, 0, true));
@@ -38,13 +36,13 @@ public class TestFactoryMoveSet {
     }
     @Test
     void testCreateSwapper() {
-        FactoryMoveSet f = new ImplFactoryMoveset();
-        Set<Position> enemyPositions = new HashSet<>();
+        final FactoryMoveSet f = new ImplFactoryMoveset();
+        final Set<Position> enemyPositions = new HashSet<>();
         enemyPositions.add(new Position(5, 0));
         enemyPositions.add(new Position(0, 0));
         enemyPositions.add(new Position(-31, 0));
         enemyPositions.add(new Position(0, -4));
-        Set<Vector> s = new HashSet<>(enemyPositions.stream()
+        final Set<Vector> s = new HashSet<>(enemyPositions.stream()
                                     .map(p -> new VectorImpl(new Position(0, 0), p, false))
                                     .toList());
         s.addAll(f.createBasicMoveSet());

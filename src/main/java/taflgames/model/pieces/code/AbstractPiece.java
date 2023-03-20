@@ -49,8 +49,8 @@ public abstract class AbstractPiece implements Piece {
      */
     public class PieceMementoImpl implements PieceMemento {
 
-        final private Position backupPosition;
-        final private int backupCurrentNumbOfLives;
+        private final Position backupPosition;
+        private final int backupCurrentNumbOfLives;
         /**
          * creates an object of PieceMementoImpl.
          */
