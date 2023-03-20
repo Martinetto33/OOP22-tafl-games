@@ -1,17 +1,11 @@
 package taflgames.model.pieces.code;
-
-import java.util.Optional;
-
-import taflgames.common.Player;
-import taflgames.model.pieces.api.Team;
 /**
- * DA ELIMINARE ALLA FINE
+ * TO DO: DELETE.
 */
-public class ImplTeam implements Team{
+public class ImplTeam {
 
-    private Optional<String> namePlayer;
+    /*private Optional<String> namePlayer;
     private Player player;
-
     public ImplTeam(Player p, Optional<String> name) {
         this.player=p;
         if(name.isPresent()) {
@@ -21,17 +15,14 @@ public class ImplTeam implements Team{
             this.namePlayer = Optional.empty();
         }
     }
-
     @Override
     public Optional<String> getNameOfUserPlayer() {
         return this.namePlayer;
     }
-
     @Override
     public Player getPlayerTeam() {
         return this.player;
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -40,7 +31,6 @@ public class ImplTeam implements Team{
         result = prime * result + ((player == null) ? 0 : player.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -59,12 +49,9 @@ public class ImplTeam implements Team{
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "ImplTeam [namePlayer=" + namePlayer + ", player=" + player + "]";
     }
-
-    
-    
+    .*/
 }

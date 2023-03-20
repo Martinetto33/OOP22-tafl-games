@@ -6,21 +6,16 @@ import taflgames.common.Player;
 
 
 /**
- * this interface is used by the implementations of Piece
- * to determine the piece's team and its information
- * 
- * 
- * 
- * DA ELIMINARE
+ *TO DO: REMOVE FROM PROJECT.
  */
 public interface Team {
     /**
-     * returns the name of the pieces' player if it was entered
+     * returns the name of the pieces' player if it was entered.
      * @return name of player or null
      */
     Optional<String> getNameOfUserPlayer();
     /**
-     * returns the pieces' team, which cuold be either ATTACKER
+     * returns the pieces' team, which cuold be either ATTACKER.
      * or DEFENDER
      * @return ATTACKER or DEFENDER
      */

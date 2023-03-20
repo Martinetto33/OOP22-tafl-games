@@ -14,45 +14,52 @@ import taflgames.model.pieces.api.FactoryBehaviourTypeOfPiece;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.api.PieceMemento;
 
-
-public abstract class AbstractPiece implements Piece{
+/**
+* {@inheritDoc}.
+*/
+public abstract class AbstractPiece implements Piece {
     private Position currentPosition;
     private int currentNumbOfLives;
     private BehaviourTypeOfPiece myType;
     private Player myPlayer;
-    /**la factory sarà usata dal costruttore delle implementazioni per creare la type*/
-    final protected FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
-
+    /**la factory sarà usata dal costruttore delle implementazioni per creare la type.*/
+    protected final FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
+    /**
+     * {@inheritDoc}.
+     */
     public FactoryBehaviourTypeOfPiece getFactory() {
         return this.factory;
     }
-
-    
+    /**
+     * {@inheritDoc}.
+     */
     public BehaviourTypeOfPiece getMyType() {
         return myType;
     }
-
-    
-    public void setMyType(BehaviourTypeOfPiece myType) {
+    /**
+     * {@inheritDoc}.
+     */
+    public void setMyType(final BehaviourTypeOfPiece myType) {
         Objects.requireNonNull(myType);
         this.myType = myType;
     }
-
-
     /**
-     * TO DO: mettere la documentazione di Alìn
-     * per il resto ok (controlla poi gli errori)
+     * {@inheritDoc}.
      */
-    public class PieceMementoImpl implements PieceMemento{
+    public class PieceMementoImpl implements PieceMemento {
 
         private Position backupPosition;
         private int backupCurrentNumbOfLives;
-
-        public PieceMementoImpl(){
-            this.backupCurrentNumbOfLives=AbstractPiece.this.currentNumbOfLives;
-            this.backupPosition=AbstractPiece.this.currentPosition;
+        /**
+         * creates an object of PieceMementoImpl.
+         */
+        public PieceMementoImpl() {
+            this.backupCurrentNumbOfLives = AbstractPiece.this.currentNumbOfLives;
+            this.backupPosition = AbstractPiece.this.currentPosition;
         }
-
+        /**
+        * {@inheritDoc}.
+        */
         @Override
         public void restore() {
             /**
@@ -62,19 +69,25 @@ public abstract class AbstractPiece implements Piece{
              */
             AbstractPiece.this.restore(this);
         }
-
+        /**
+        * {@inheritDoc}
+        */
         public int getBackupCurrNumbOfLives() {
             return this.backupCurrentNumbOfLives;
         }
+        /**
+        * {@inheritDoc}
+        */
         public Position getBackupPosition() {
             return this.backupPosition;
         }
+        /**
+        * {@inheritDoc}
+        */
         public boolean backupIsAlive() {
             return this.backupCurrentNumbOfLives > 0;
         }
-
     }
-
     /**
      * {@inheritDoc}
      */
@@ -104,32 +117,26 @@ public abstract class AbstractPiece implements Piece{
     public Set<Vector> whereToMove() {
         /*I consider only the non-unit-vectors and I must adapt only the starting position*/
         Set<Vector> a = new HashSet<>(this.myType.getMoveSet().stream()
-                                        .filter(v->!v.isUnitVector())
-                                        .map(v->new VectorImpl(this.currentPosition, 
-                                                                v.getEndPos(), 
-                                                                false))
+                                        .filter(v -> !v.isUnitVector())
+                                        .map(v -> new VectorImpl(this.currentPosition, v.getEndPos(), false))
                                         .collect(Collectors.toSet()));
-        /*now I consider the unit-vectors so I have to adapt both starting and ending positions */
+        /*now I consider the unit-vectors so I have to adapt both starting and ending positions.*/
         a.addAll(this.myType.getMoveSet().stream()
-                                            .filter(v->v.isUnitVector())
-                                            .map(v->new VectorImpl(this.currentPosition, 
-                                                                    new Position(this.currentPosition.getX() + v.getEndPos().getX(), 
-                                                                        this.currentPosition.getY() + v.getEndPos().getY()), 
-                                                    true))
-                                            .collect(Collectors.toSet()));   
-        return a;                 
+        .filter(v -> v.isUnitVector())
+        .map(v -> new VectorImpl(this.currentPosition, 
+            new Position(this.currentPosition.getX() + v.getEndPos().getX(), this.currentPosition.getY() + v.getEndPos().getY()), 
+            true))
+            .collect(Collectors.toSet()));
+        return a;
     }
     /**
      * {@inheritDoc}
      */
     @Override
     public Set<Position> whereToHit() {
-       
         return new HashSet<>(this.myType.getHitbox().stream()
-                                .map(p->new Position(p.getX()+this.currentPosition.getX(),
-                                                    p.getY()+this.currentPosition.getY()))
-                                .collect(Collectors.toSet()));
-
+        .map(p -> new Position(p.getX() + this.currentPosition.getX(), p.getY() + this.currentPosition.getY()))
+        .collect(Collectors.toSet()));
     }
     /**
      * {@inheritDoc}
@@ -149,15 +156,13 @@ public abstract class AbstractPiece implements Piece{
      * {@inheritDoc}
      */
     @Override
-    public void setCurrNumbOfLivesLimited(final int newNumOfLives) throws IllegalArgumentException{
+    public void setCurrNumbOfLivesLimited(final int newNumOfLives) throws IllegalArgumentException {
         Objects.requireNonNull(newNumOfLives);
-        if(newNumOfLives < 0) {
+        if (newNumOfLives < 0) {
             throw new IllegalArgumentException("newNumOfLives is less than 0"); 
-        }
-        if(newNumOfLives > this.myType.getTotalNumbOfLives()) {
+        } else if (newNumOfLives > this.myType.getTotalNumbOfLives()) {
             this.currentNumbOfLives = this.myType.getTotalNumbOfLives();
-        }
-        else {
+        } else {
             this.currentNumbOfLives = newNumOfLives;
         }
     }
@@ -166,8 +171,8 @@ public abstract class AbstractPiece implements Piece{
      */
     @Override
     public void decrementCurrNumbOfLives() {
-       if(this.currentNumbOfLives > 0) {
-        this.currentNumbOfLives=this.currentNumbOfLives-1;
+       if (this.currentNumbOfLives > 0) {
+        this.currentNumbOfLives = this.currentNumbOfLives - 1;
        }
     }
     /**
@@ -202,15 +207,15 @@ public abstract class AbstractPiece implements Piece{
     public Player getPlayer() {
        return this.myPlayer;
     }
-
-    public void setMyPlayer(Player myPlayer) {
-        this.myPlayer = myPlayer;
-    }
-
     /**
      * {@inheritDoc}
      */
-
+    public void setMyPlayer(final Player myPlayer) {
+        this.myPlayer = myPlayer;
+    }
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new StringBuilder().append(this.myType.getTypeOfPiece())
@@ -229,14 +234,19 @@ public abstract class AbstractPiece implements Piece{
                                     .append(this.myType.getMoveSet())
                                     .toString();
     }
-   
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean wasKilled(Set<Piece> enemies, Position lastEnemyMoved) {
-        if(this.myType.wasHit(enemies,lastEnemyMoved)) {
+    public boolean wasKilled(final Set<Piece> enemies, final Position lastEnemyMoved) {
+        if (this.myType.wasHit(enemies, lastEnemyMoved)) {
             this.decrementCurrNumbOfLives();
         }
         return !this.isAlive();
     }
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -247,32 +257,48 @@ public abstract class AbstractPiece implements Piece{
         result = prime * result + ((myPlayer == null) ? 0 : myPlayer.hashCode());
         return result;
     }
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         AbstractPiece other = (AbstractPiece) obj;
         if (currentPosition == null) {
-            if (other.currentPosition != null)
+            if (other.currentPosition != null) {
                 return false;
-        } else if (!currentPosition.equals(other.currentPosition))
+            }
+        } else if (!currentPosition.equals(other.currentPosition)) {
             return false;
-        if (currentNumbOfLives != other.currentNumbOfLives)
+        }
+        if (currentNumbOfLives != other.currentNumbOfLives) {
             return false;
+        }
         if (myType == null) {
-            if (other.myType != null)
+            if (other.myType != null) {
                 return false;
-        } else if (!myType.equals(other.myType))
+            }
+        } else if (!myType.equals(other.myType)) {
             return false;
-        if (myPlayer != other.myPlayer)
+        }
+        if (myPlayer != other.myPlayer) {
             return false;
+        }
         return true;
     }
-
-    
-    
+     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reanimate() {
+        this.setCurrNumbOfLivesLimited(this.myType.getTotalNumbOfLives());
+    }
 }
