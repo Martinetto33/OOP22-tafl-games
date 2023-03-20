@@ -1,10 +1,15 @@
 package taflgames.view.scenes;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+
 import java.util.Optional;
 
 import taflgames.view.scenecontrollers.RulesDisplayController;
@@ -29,11 +34,22 @@ public class RulesScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         
-        final JPanel elementsPanel = new JPanel();
+        final JPanel elementsPanel = new JPanel(new BorderLayout());
         elementsPanel.setBackground(TRANSPARENT);
 
         final JEditorPane editor = new JEditorPane();
-        elementsPanel.add(editor);
+        final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
+        editor.setEditorKit(new HTMLEditorKit());
+        try {
+            editor.read(
+                this.controller.getRulesFileStream(), 
+                (HTMLDocument) htmlEditorKit.createDefaultDocument()
+            );
+        } catch (final IOException ex) {
+            editor.setText(ex.getMessage());
+        }
+        editor.setEditable(false);
+        elementsPanel.add(editor, BorderLayout.CENTER);
 
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
@@ -44,7 +60,7 @@ public class RulesScene extends AbstractScene {
             this.controller.goToPreviousScene();
         });
 
-        elementsPanel.add(southPanel);
+        elementsPanel.add(southPanel, BorderLayout.SOUTH);
 
         scene.add(elementsPanel);
         
