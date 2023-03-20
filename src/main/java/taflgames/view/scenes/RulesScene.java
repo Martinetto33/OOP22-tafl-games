@@ -24,7 +24,7 @@ public class RulesScene extends AbstractScene {
     private static final String BG_FILENAME = "home-background.jpeg";
     private static final String GO_BACK = "Go Back";
 
-    private RulesDisplayController controller;
+    private final RulesDisplayController controller;
 
     public RulesScene(final RulesDisplayController controller) {
 
