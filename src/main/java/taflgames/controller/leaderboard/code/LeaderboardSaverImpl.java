@@ -1,4 +1,4 @@
-package taflgames.model.leaderboard.code;
+package taflgames.controller.leaderboard.code;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import taflgames.common.code.Pair;
-import taflgames.model.leaderboard.api.Leaderboard;
-import taflgames.model.leaderboard.api.LeaderboardSaver;
+import taflgames.controller.leaderboard.api.Leaderboard;
+import taflgames.controller.leaderboard.api.LeaderboardSaver;
 
 /**
  * This is the reification of a {@link taflgames.model.leaderboard.api.LeaderboardSaver}.
