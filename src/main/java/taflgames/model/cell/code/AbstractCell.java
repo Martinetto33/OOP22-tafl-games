@@ -1,9 +1,5 @@
 package taflgames.model.cell.code;
 
-import java.util.List;
-
-import taflgames.common.code.Position;
-import taflgames.model.board.code.Piece;
 import taflgames.model.cell.api.Cell;
 
 public abstract class AbstractCell implements Cell{

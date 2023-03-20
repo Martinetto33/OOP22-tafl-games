@@ -3,7 +3,7 @@ package taflgames.model.board.api;
 
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
-import taflgames.model.board.code.Player;
+import taflgames.common.Player;
 
 public interface Board {
 
@@ -13,7 +13,7 @@ public interface Board {
 
     public void updatePiecePos(Position oldPos, Position newPos);
 
-    public Position getFurthestReachablePos(Vector direction);
+    public Position getFurthestReachablePos(Position startPos, Vector direction);
 
     public void moveByVector(Vector direction);
 

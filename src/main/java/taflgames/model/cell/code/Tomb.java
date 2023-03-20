@@ -8,7 +8,8 @@ import java.util.Queue;
 
 import taflgames.common.code.Position;
 import taflgames.model.board.code.Piece;
-import taflgames.model.board.code.Player;
+import taflgames.common.Player;
+
 
 public class Tomb extends AbstractCell{
 

@@ -3,26 +3,34 @@ package taflgames.model.board.code;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Cell;
+import taflgames.model.cell.api.Resettable;
+import taflgames.model.cell.api.TimedEntity;
 
-public class BoardImpl implements Board{
+public class BoardImpl implements Board, TimedEntity{
 
     private Map<Position, Cell> cells;
     private Map<Player, Map<Position, Piece>> pieces;
     private final int size;
     private Position currentPos;
+    private boolean isSwapper;
+    private final Set<Resettable> resettableEntities = new HashSet<>();
 
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
         this.pieces = pieces;
         this.cells = cells;
         this.size = size;
+        //come si fa il costruttore di resettable?
+        resettableEntities.add(null);
     }
 
     @Override
     public boolean isStartingPointValid(Position start, Player player) {
+        isSwapper = false;
 
         if(!pieces.entrySet().stream()
             .filter(x -> x.getKey().equals(player))
@@ -42,7 +50,7 @@ public class BoardImpl implements Board{
 
         //Per le pedine che non sono uno swapper si controlla che la posizione di destinazione non sia già occupata
         if(!piece.canSwap()){
-            if(!cells.get(dest).isFree()) {
+            if(!cells.get(dest).isFree() || !cells.get(dest).canAccept(piece)) {
                 return false;
             }
         }
@@ -79,28 +87,26 @@ public class BoardImpl implements Board{
         * qualsiasi pedina di un metodo canSwap(), che chiaramente ritorna true nel caso sia uno Swapper e false altrimenti.
         */
         if (piece.canSwap()) {
+            isSwapper = true;
         // Si verifica se la posizione dest è una delle posizioni occupate da una pedina avversaria.
         // Se lo è, allora la mossa è valida, altrimenti no.
-            if(isPathFree(start, dest)) {
-                Map<Position, Piece> element = new HashMap<>();
-                Optional<Piece> destPiece = null;
+            Map<Position, Piece> element = new HashMap<>();
+            Optional<Piece> destPiece = null;
 
-                // trovo la tipologia di pedina dopodichè controllo che non sia un re poichè lo swapper non può scambiare posizione con un re
-                for (Map.Entry<Player, Map<Position, Piece>> item : pieces.entrySet()) {
-                    Map<Position, Piece> valueMap = item.getValue();
-                    destPiece = valueMap.entrySet().stream().filter(x -> x.getKey().equals(dest)).map(x -> x.getValue()).findAny();
-                    //TODO RE
-                    /* if(destPiece.isPresent() && destPiece.get().equals(vectors)) {
-                        return false;
-                    } */
+            // trovo la tipologia di pedina dopodichè controllo che non sia un re poichè lo swapper non può scambiare posizione con un re
+            for (Map.Entry<Player, Map<Position, Piece>> item : pieces.entrySet()) {
+                Map<Position, Piece> valueMap = item.getValue();
+                destPiece = valueMap.entrySet().stream().filter(x -> x.getKey().equals(dest)).map(x -> x.getValue()).findAny();
+                //TODO RE
+                /* if(destPiece.isPresent() && destPiece.get().equals(vectors)) {
                     return false;
-                }
-                
-                element.put(dest, destPiece.get());
-                if(!pieces.entrySet().stream().filter(x -> x.getValue().equals(element)).map(x -> x.getKey().equals(player)).findAny().get()) {
-                    updatePiecePos(start, dest);
-                    return true;
-                }
+                } */
+                return false;
+            }
+            
+            element.put(dest, destPiece.get());
+            if(!pieces.entrySet().stream().filter(x -> x.getValue().equals(element)).map(x -> x.getKey().equals(player)).findAny().get()) {
+                return true;
             }
         }
         return false;
@@ -108,21 +114,37 @@ public class BoardImpl implements Board{
 
     @Override
     public void updatePiecePos(Position oldPos, Position newPos) {
-        pieces.entrySet().stream().forEach(x -> {
-            if(x.getValue().containsKey(oldPos)) {
-                pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
-                signalOnMove(newPos, x.getValue().get(newPos));
-            }
-        });
-        cells.get(oldPos).setFree(true);
-        cells.get(newPos).setFree(false);
+        if(!isSwapper) {
+            pieces.entrySet().stream().forEach(x -> {
+                if(x.getValue().containsKey(oldPos)) {
+                    pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
+                    signalOnMove(newPos, x.getValue().get(newPos));
+                }
+            });
+            cells.get(oldPos).setFree(true);
+            cells.get(newPos).setFree(false);
+        } else {
+            Player palyerInTurn = pieces.entrySet().stream().filter(x -> x.getValue().containsKey(oldPos)).map(x -> x.getKey()).findAny().get();
+            pieces.entrySet().stream().forEach(x -> {
+                if(x.getValue().containsKey(oldPos)) {
+                    pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
+                    signalOnMove(newPos, x.getValue().get(newPos));
+                }
+            });
+            pieces.entrySet().stream().forEach(x -> {
+                if(x.getValue().containsKey(newPos) && !x.getKey().equals(palyerInTurn)) {
+                    pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
+                }
+            });
+
+        }
     }
 
     @Override
-    public Position getFurthestReachablePos(Vector direction) {
+    public Position getFurthestReachablePos(Position startPos, Vector direction) {
         Position furthestReachable = null;
         for(int numberOfBox = 0; numberOfBox < this.size; numberOfBox++) {
-            Position reachablePos = direction.multiplyByScalar(numberOfBox).applyToPosition(currentPos);
+            Position reachablePos = direction.multiplyByScalar(numberOfBox).applyToPosition(startPos);
             if(!cells.get(reachablePos).isFree()) {
                 break;
             } else {
@@ -179,6 +201,11 @@ public class BoardImpl implements Board{
             }
         }
         return true;
+    }
+
+    @Override
+    public void notifyTurnHasEnded(int turn) {
+        this.resettableEntities.forEach(e -> e.reset());
     }
 }
 
