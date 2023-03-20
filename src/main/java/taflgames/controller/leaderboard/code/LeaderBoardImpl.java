@@ -1,4 +1,4 @@
-package taflgames.model.leaderboard.code;
+package taflgames.controller.leaderboard.code;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
-import taflgames.model.leaderboard.api.Leaderboard;
-import taflgames.model.leaderboard.api.LeaderboardSaver;
+import taflgames.controller.leaderboard.api.Leaderboard;
+import taflgames.controller.leaderboard.api.LeaderboardSaver;
 
 /**
  * This class models a Leaderboard for Hnefatafl games.
