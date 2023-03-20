@@ -2,9 +2,9 @@ package taflgames.view.scenecontrollers;
 
 import taflgames.common.code.MatchResult;
 import taflgames.controller.Controller;
-import taflgames.model.leaderboard.api.Leaderboard;
-import taflgames.model.leaderboard.api.LeaderboardSaver;
-import taflgames.model.leaderboard.code.LeaderboardSaverImpl;
+import taflgames.controller.leaderboard.api.Leaderboard;
+import taflgames.controller.leaderboard.api.LeaderboardSaver;
+import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
 import taflgames.view.View;
 import taflgames.view.scenes.GameOverScene;
 import taflgames.view.scenes.HomeScene;
