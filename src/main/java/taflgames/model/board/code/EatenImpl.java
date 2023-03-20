@@ -10,6 +10,7 @@ import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Cell;
+import taflgames.model.pieces.api.Piece;
 
 public class EatenImpl {
 
@@ -30,26 +31,26 @@ public class EatenImpl {
         return hitbox;
     }
     
-    public List<Position> getThreatenedPos(Set<Position> hitbox, Map<Player, Map<Position, Piece>> pieces, Piece piece) {
-        List<Position> enemies = new ArrayList<>();
+    public List<Piece> getThreatenedPos(Set<Position> hitbox, Map<Player, Map<Position, Piece>> pieces, Piece piece) {
+        List<Piece> enemies = new ArrayList<>();
         for (Position position : hitbox) {
-            if(pieces.entrySet().stream().filter(x -> x.getKey() != piece.getTeam()).map(x -> x.getValue().keySet().contains(position)).findAny().get()) {
-                enemies.add(position);
+            if(pieces.entrySet().stream().filter(x -> x.getKey() != piece.getPlayer()).map(x -> x.getValue().keySet().contains(position)).findAny().get()) {
+                //enemies.add();
             }
         }
         return enemies;
     }
 
-    public Map<Position, List<Position>> checkAllies(List<Position> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer) {
-        Map<Position, List<Position>> finalmap = new HashMap<>();
+    public Map<Piece, List<Position>> checkAllies(List<Position> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer) {
+        Map<Piece, List<Position>> finalmap = new HashMap<>();
         Map<Position, Piece> allies = pieces.get(currPlayer);
         for (Position position : enemies) {
             allies.entrySet().stream().forEach(x -> {
-                if(x.getValue().getHitbox().contains(position)) {
+                if(x.getValue().whereToHit().contains(position)) {
                     if(!finalmap.keySet().contains(position)) {
                         List<Position> alliesPosition = new ArrayList<>();
                         alliesPosition.add(x.getKey());
-                        finalmap.put(position, alliesPosition);
+                        //finalmap.put(position, alliesPosition);
                     }
                     finalmap.get(position).add(x.getKey());
                 }

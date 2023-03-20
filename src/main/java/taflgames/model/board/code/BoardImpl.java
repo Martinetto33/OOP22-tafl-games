@@ -10,6 +10,7 @@ import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
+import taflgames.model.pieces.api.Piece;
 
 public class BoardImpl implements Board, TimedEntity{
 
@@ -56,7 +57,7 @@ public class BoardImpl implements Board, TimedEntity{
         }
 
         // Si ottengono i vettori che rappresentano i possibili spostamenti della pedina
-        Set<Vector> vectors = piece.getMovementVectors();
+        Set<Vector> vectors = piece.whereToMove();
         /* Nel caso delle pedine normali, i vettori restituiti saranno (-1,0), (0,1), (1,0), (0,-1).
         *
         * NOTA1: uno spostamento equivale a sommare la posizione di partenza a un vettore v che indica lo spostamento: start + v = dest
@@ -160,13 +161,13 @@ public class BoardImpl implements Board, TimedEntity{
 
     private void signalOnMove(Position source, Piece movedPiece) {
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
-        Set<Position> triggeredPos = movedPiece.getHitbox().stream()
+        Set<Position> triggeredPos = movedPiece.whereToHit().stream()
                 .map(x -> new Position(x.getX() +source.getX(), x.getY() + source.getY()))
                 .collect(Collectors.toSet());
         // Controllo se nelle posizioni ottenute ci sono entità; in caso, vengono triggerate
         for (Position pos : triggeredPos) {
             Cell cell = cells.get(pos);
-            cell.notify(source, movedPiece, movedPiece.getSignalOnMove());
+            cell.notify(source, movedPiece, List.of(movedPiece.sendSignalMove()));
         }
     }
 

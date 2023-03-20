@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Queue;
 
 import taflgames.common.code.Position;
-import taflgames.model.board.code.Piece;
+import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
 
@@ -23,7 +23,7 @@ public class Tomb extends AbstractCell{
     public void notify(Position source, Piece sender, List<String> events) {
         // Per ora considero event come una stringa
         if (events.contains("QUEEN_MOVE")) {
-            resumePiece(sender.getTeam());  // viene resuscitata una pedina del giocatore mangiata sulla casella corrente (se esiste)
+            resumePiece(sender.getPlayer());  // viene resuscitata una pedina del giocatore mangiata sulla casella corrente (se esiste)
         }
     }
 
@@ -40,7 +40,7 @@ public class Tomb extends AbstractCell{
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
         if (!deadPieces.get(player).isEmpty()) {
             Piece pieceToResume = deadPieces.get(player).poll();	// prende la prima pedina in coda
-            pieceToResume.setAlive(true);	// ora è viva
+            //pieceToResume.setAlive(true);	// ora è viva
         }
     }
 

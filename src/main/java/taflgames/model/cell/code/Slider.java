@@ -3,7 +3,7 @@ package taflgames.model.cell.code;
 import java.util.*;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
-import taflgames.model.board.code.Piece;
+import taflgames.model.pieces.api.Piece;
 import taflgames.model.cell.api.Mediator;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
