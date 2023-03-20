@@ -95,7 +95,7 @@ public interface BehaviourTypeOfPiece {
      * @param lastEnemyMoved
      * @return true if it was hit, false otherwise.
      */
-    boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) throws IllegalArgumentException;
+    boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved);
     /**
     * @return this piece's factoryHitbox
     */
