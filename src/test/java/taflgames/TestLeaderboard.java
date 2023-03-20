@@ -14,10 +14,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import taflgames.common.code.Pair;
-import taflgames.model.leaderboard.api.Leaderboard;
-import taflgames.model.leaderboard.api.LeaderboardSaver;
-import taflgames.model.leaderboard.code.LeaderBoardImpl;
-import taflgames.model.leaderboard.code.LeaderboardSaverImpl;
+import taflgames.controller.leaderboard.api.Leaderboard;
+import taflgames.controller.leaderboard.code.LeaderBoardImpl;
+import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
+import taflgames.controller.leaderboard.api.LeaderboardSaver;
 import taflgames.common.code.MatchResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

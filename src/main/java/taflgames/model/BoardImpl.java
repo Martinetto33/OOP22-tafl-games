@@ -6,7 +6,7 @@ import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.cells.Cell;
-import taflgames.model.pieces.Piece;
+import taflgames.model.pieces.api.Piece;
 
 /**
  * This class implements a {@link Board}.

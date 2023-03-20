@@ -1,4 +1,4 @@
-package taflgames.model.leaderboard.api;
+package taflgames.controller.leaderboard.api;
 
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import taflgames.common.code.Pair;
  * results will be saved.
  * <br><br>In order to retrieve data from existing leaderboards correctly, no
  * implementation of this interface should be instantiated directly, but rather
- * through a {@link taflgames.model.leaderboard.api.LeaderboardSaver#retrieveFromSave()}
+ * through a {@link taflgames.controller.leaderboard.api.LeaderboardSaver#retrieveFromSave()}
  * method. New results can be easily added with {@link #addResult(String, MatchResult)},
  * and a LeaderboardSaver or a Leaderboard 'saveToFile' method can be called interchangeably
  * with the same result.
