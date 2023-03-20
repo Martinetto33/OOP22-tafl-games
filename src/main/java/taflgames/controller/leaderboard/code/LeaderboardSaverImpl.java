@@ -62,8 +62,8 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
             leaderboard.fromMapWithListValues(yaml.load(inputStream));
             return leaderboard;
         } catch (IOException e) {
+            /* This is exception is normal if the application is opened for the first time. */
             LOGGER.info("Error while trying to read from the save file for the leaderboard.");
-            LOGGER.error("Exception occurred!", e);
             return new LeaderBoardImpl();
         }
     }
