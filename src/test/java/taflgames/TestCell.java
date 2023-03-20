@@ -3,7 +3,11 @@ package taflgames;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import taflgames.model.board.code.Piece;
+import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.AbstractPiece;
+import taflgames.model.pieces.code.BasicPiece;
+import taflgames.common.Player;
+import taflgames.common.code.Position;
 import taflgames.model.cell.code.AbstractCell;
 import taflgames.model.cell.code.ClassicCell;
 import taflgames.model.cell.code.Exit;
@@ -19,24 +23,26 @@ import java.util.*;
 
 public class TestCell {
 
-    private AbstractCell classic;
-    private AbstractCell exit;
-    private AbstractCell slider;
-    private AbstractCell throne;
-    private AbstractCell tomb;
+    private static AbstractCell classic;
+    private static AbstractCell exit;
+    private static AbstractCell slider;
+    private static AbstractCell throne;
+    private static AbstractCell tomb;
 
     @BeforeAll
-    public void init() {
-		this.classic = new ClassicCell();
-        this.exit = new Exit();
-        this.slider = new Slider();
-        this.throne = new Throne();
-        this.tomb = new Tomb();
+    static void init() {
+		classic = new ClassicCell();
+        exit = new Exit();
+        slider = new Slider(new Position(1, 1));
+        throne = new Throne();
+        tomb = new Tomb();
 	}
     
     @Test
     void testCanAccept() {
-        //assertFalse(classic.canAccept(piece));
+        Piece piece = new BasicPiece(new Position(0, 0), Player.ATTACKER);
+        /*expected false because when initialized the cell is set to not free */
+        assertFalse(classic.canAccept(piece));
     } 
 
     

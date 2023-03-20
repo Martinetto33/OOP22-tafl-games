@@ -6,16 +6,17 @@ import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.pieces.Piece;
+import taflgames.model.cell.api.Cell;
+import taflgames.model.pieces.api.Piece;
 
 public interface Eaten {
 
-    public void trimHitbox(Set<Position> hitbox);
+    Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells);
 
-    public List<Position> getThreatenedPos(Set<Position> hitbox, Map<Player, Map<Position, Piece>> pieces, Piece piece);
+    List<Piece> getThreatenedPos(Set<Position> hitbox, Map<Player, Map<Position, Piece>> pieces, Piece piece);
 
-    public Map<Position, List<Position>> checkAllies(List<Position> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer);
+    Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer);
 
-    public void notifyAllThreatened( Map<Position, List<Position>> enemiesAndAllies, Piece lastMovedPiece, Map<Player, Map<Position, Piece>> pieces);
+    void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, Map<Position, Cell> cells );
     
 }

@@ -7,6 +7,7 @@ import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
+import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
@@ -18,26 +19,24 @@ public class BoardImpl implements Board, TimedEntity{
     private Map<Player, Map<Position, Piece>> pieces;
     private final int size;
     private Position currentPos;
-    private boolean isSwapper;
-    private final Set<Resettable> resettableEntities = new HashSet<>();
+    private Set<Resettable> resettableEntities = null;
+    private final Eaten eatingManager;
+    private Set<TimedEntity> timedEntities = null;
 
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
         this.pieces = pieces;
         this.cells = cells;
         this.size = size;
-        //come si fa il costruttore di resettable?
-        resettableEntities.add(null);
+        this.eatingManager = new EatenImpl();
     }
 
     @Override
     public boolean isStartingPointValid(Position start, Player player) {
-        isSwapper = false;
-
         if(!pieces.entrySet().stream()
             .filter(x -> x.getKey().equals(player))
             .filter(y -> y.getValue().keySet().contains(start))
             .collect(Collectors.toList()).isEmpty()) {
-            currentPos = start;
+            this.currentPos = start;
             return true;
         } else {
             return false;
@@ -88,7 +87,6 @@ public class BoardImpl implements Board, TimedEntity{
         * qualsiasi pedina di un metodo canSwap(), che chiaramente ritorna true nel caso sia uno Swapper e false altrimenti.
         */
         if (piece.canSwap()) {
-            isSwapper = true;
         // Si verifica se la posizione dest è una delle posizioni occupate da una pedina avversaria.
         // Se lo è, allora la mossa è valida, altrimenti no.
             Map<Position, Piece> element = new HashMap<>();
@@ -115,7 +113,12 @@ public class BoardImpl implements Board, TimedEntity{
 
     @Override
     public void updatePiecePos(Position oldPos, Position newPos) {
-        if(!isSwapper) {
+        Piece p = pieces.entrySet().stream()
+            .filter(x -> x.getValue().containsKey(oldPos))
+            .map(x -> x.getValue().get(oldPos))
+            .findAny()
+            .get();
+        if(p.canSwap()) {
             pieces.entrySet().stream().forEach(x -> {
                 if(x.getValue().containsKey(oldPos)) {
                     pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
@@ -137,8 +140,8 @@ public class BoardImpl implements Board, TimedEntity{
                     pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
                 }
             });
-
         }
+        this.currentPos = newPos;
     }
 
     @Override
@@ -206,9 +209,40 @@ public class BoardImpl implements Board, TimedEntity{
 
     @Override
     public void notifyTurnHasEnded(int turn) {
-        this.resettableEntities.forEach(e -> e.reset());
+        if (this.resettableEntities != null) {
+            this.resettableEntities.forEach(e -> e.reset());
+        } 
+        if (this.timedEntities != null) {
+            this.timedEntities.forEach(elem -> elem.notifyTurnHasEnded(turn));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void eat(){
+        Piece currPiece = pieces.entrySet().stream().filter(entry -> entry.getValue().containsKey(currentPos)).map(entry -> entry.getValue().get(currentPos)).findAny().get();
+        Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece.whereToHit(), cells);
+        List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
+        Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece.getPlayer());
+        eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addResettableEntities(final Set<Resettable> resettableEntities) {
+        this.resettableEntities = resettableEntities;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addTimedEntities(final Set<TimedEntity> timedEntities) {
+        this.timedEntities = timedEntities;
     }
 }
-
-
     

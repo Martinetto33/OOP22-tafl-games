@@ -5,7 +5,7 @@ import taflgames.model.cell.api.Cell;
 public abstract class AbstractCell implements Cell{
 
     private boolean cellStatus;
-
+    
     public AbstractCell() {
         this.cellStatus = false;
     }

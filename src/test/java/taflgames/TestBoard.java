@@ -8,7 +8,8 @@ import java.util.*;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
-import taflgames.model.board.code.Piece;
+import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.BasicPiece;
 import taflgames.common.Player;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.ClassicCell;
@@ -24,7 +25,9 @@ public class TestBoard {
 	static void init() {
         Player p1 = Player.ATTACKER;
         Player p2 = Player.DEFENDER;
-        pieces.put(p1, null);
+        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
+        pieces.put(p1, piecesPlayer1);
         pieces.put(p2, null);
         for(int i=0; i<4; i++) {
             for(int j=0; j<4; j++) {
@@ -36,7 +39,7 @@ public class TestBoard {
     
     @Test
     void testIsStartingPointValid(){
-
+        
         
     }
 }

@@ -1,29 +1,19 @@
 package taflgames.model.board.code;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.board.api.Board;
+import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
-public class EatenImpl {
+public class EatenImpl implements Eaten{
 
     private static final String DEAD_PIECE = "DEAD_PIECE"; //per segnalare morte pedina alle tombe
-
-    private final Board board;
-
-    public EatenImpl(Board board) {
-        this.board = board;
-    }
 
     public Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells) {
         for (Position position : hitbox) {
@@ -96,6 +86,4 @@ public class EatenImpl {
             cells.get(deadPiece.getCurrentPosition()).notify(deadPiece.getCurrentPosition(), deadPiece, List.of(EatenImpl.DEAD_PIECE));
         }
     }
-    //verificare se le modifiche fatte qui si vedono
-    // una volta morto come faccio a dire alla cella che è libera?
 }
