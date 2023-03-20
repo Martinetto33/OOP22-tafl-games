@@ -48,8 +48,8 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.PAGE_AXIS));
         final JButton goBackButton = new JButton(UserRegistrationScene.GO_BACK);
         final JButton submitButton = new JButton(UserRegistrationScene.SUBMIT);
-        submitButton.setFont(fontManager.getModifiedFont(SceneConstants.BUTTON_FONT_SIZE, Font.PLAIN));
-        goBackButton.setFont(fontManager.getModifiedFont(SceneConstants.BUTTON_FONT_SIZE, Font.PLAIN));
+        submitButton.setFont(fontManager.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        goBackButton.setFont(fontManager.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
         goBackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -62,8 +62,8 @@ public class UserRegistrationScene extends AbstractScene {
             this.controller.goToPreviousScene();
         });
 
-        southPanel.setBackground(SceneConstants.TRANSPARENT);
-        elementsPanel.setBackground(SceneConstants.TRANSPARENT);
+        southPanel.setBackground(Scene.TRANSPARENT);
+        elementsPanel.setBackground(Scene.TRANSPARENT);
 
         elementsPanel.add(southPanel);
 
@@ -82,7 +82,7 @@ public class UserRegistrationScene extends AbstractScene {
     private void constructInputLabels(final JPanel scene) {
         final JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
-        inputPanel.setBackground(SceneConstants.TRANSPARENT);
+        inputPanel.setBackground(Scene.TRANSPARENT);
         final JTextArea player1NameArea = new JTextArea();
         final JTextArea player2NameArea = new JTextArea();
 

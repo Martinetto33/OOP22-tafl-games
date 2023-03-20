@@ -48,15 +48,15 @@ public class GameOverScene extends AbstractScene {
          * was modified in a way that provides a common Font which all components could use.
          */
 
-        gameOverLabel.setFont(SceneConstants.FONT_MANAGER.getModifiedFont(GameOverScene.MAIN_FONT_SIZE, Font.PLAIN));
-        gameOverLabel.setForeground(SceneConstants.LABEL_FOREGROUND_COLOR);
+        gameOverLabel.setFont(Scene.FONT_MANAGER.getModifiedFont(GameOverScene.MAIN_FONT_SIZE, Font.PLAIN));
+        gameOverLabel.setForeground(Scene.LABEL_FOREGROUND_COLOR);
         gameOverPanel.add(gameOverLabel);
 
         final JPanel buttonsPanel = new JPanel();
         this.mainMenuButton = new JButton(GameOverScene.MAIN_MENU);
-        this.mainMenuButton.setFont(SceneConstants.FONT_MANAGER.getModifiedFont(SceneConstants.BUTTON_FONT_SIZE, Font.PLAIN));
+        this.mainMenuButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
         this.registerResultButton = new JButton(GameOverScene.REGISTER_RESULT);
-        this.registerResultButton.setFont(SceneConstants.FONT_MANAGER.getModifiedFont(SceneConstants.BUTTON_FONT_SIZE, Font.PLAIN));
+        this.registerResultButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
 
         /*Adding listeners */
         this.createMainMenuActionListener(this.controller);
@@ -66,9 +66,9 @@ public class GameOverScene extends AbstractScene {
         buttonsPanel.add(this.registerResultButton);
 
         /*In order to have a transparent panel, all panels have to have the same background colour */
-        buttonsPanel.setBackground(SceneConstants.TRANSPARENT);
-        gameOverPanel.setBackground(SceneConstants.TRANSPARENT);
-        elementsPanel.setBackground(SceneConstants.TRANSPARENT);
+        buttonsPanel.setBackground(Scene.TRANSPARENT);
+        gameOverPanel.setBackground(Scene.TRANSPARENT);
+        elementsPanel.setBackground(Scene.TRANSPARENT);
 
         elementsPanel.add(gameOverPanel, BorderLayout.NORTH);
         elementsPanel.add(buttonsPanel, BorderLayout.CENTER);
