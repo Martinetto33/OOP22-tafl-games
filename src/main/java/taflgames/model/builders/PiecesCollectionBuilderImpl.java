@@ -6,13 +6,13 @@ import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.pieces.Archer;
-import taflgames.model.pieces.BasicPiece;
-import taflgames.model.pieces.King;
-import taflgames.model.pieces.Piece;
-import taflgames.model.pieces.Queen;
-import taflgames.model.pieces.Shield;
-import taflgames.model.pieces.Swapper;
+import taflgames.model.pieces.code.Archer;
+import taflgames.model.pieces.code.BasicPiece;
+import taflgames.model.pieces.code.King;
+import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.Queen;
+import taflgames.model.pieces.code.Shield;
+import taflgames.model.pieces.code.Swapper;
 
 /**
  * This class implements a builder to create a collection of pieces.
@@ -33,14 +33,14 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
 
     @Override
     public void addKing(final Position position) {
-        this.pieces.get(Player.DEFENDER).put(position, new King());
+        this.pieces.get(Player.DEFENDER).put(position, new King(position));
     }
 
     @Override
     public void addQueens(final Map<Player, Set<Position>> positions) {
         positions.forEach((player, posSet) -> {
             for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Queen());
+                this.pieces.get(player).put(pos, new Queen(pos, player));
             }
         });
     }
@@ -49,7 +49,7 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
     public void addArchers(final Map<Player, Set<Position>> positions) {
         positions.forEach((player, posSet) -> {
             for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Archer());
+                this.pieces.get(player).put(pos, new Archer(pos, player));
             }
         });
     }
@@ -58,7 +58,7 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
     public void addShields(final Map<Player, Set<Position>> positions) {
         positions.forEach((player, posSet) -> {
             for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Shield());
+                this.pieces.get(player).put(pos, new Shield(pos, player));
             }
         });
     }
@@ -67,7 +67,7 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
     public void addSwappers(final Map<Player, Set<Position>> positions) {
         positions.forEach((player, posSet) -> {
             for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Swapper());
+                this.pieces.get(player).put(pos, new Swapper(pos, player));
             }
         });
     }
@@ -76,7 +76,7 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
     public void addBasicPieces(final Map<Player, Set<Position>> positions) {
         positions.forEach((player, posSet) -> {
             for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new BasicPiece());
+                this.pieces.get(player).put(pos, new BasicPiece(pos, player));
             }
         });
     }
