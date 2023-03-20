@@ -15,9 +15,9 @@ import taflgames.model.pieces.api.Piece;
 * {@inheritDoc}.
 */
 public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPiece {
-    private final int basicNumbOfLives = 1;
-    private final int shieldNumbOfLives = 2;
-    private Set<Position> temp = new HashSet<>();
+    private static final int BASICNUMBOFLIVES = 1;
+    private static final int SHIELDNUMBOFLIVES = 2;
+    private final Set<Position> temp = new HashSet<>();
     /**
      * This method (used by many types of pieces) tells whether this piece 
      * is about to get hit. In order to get hit it must be surrounded by at least two enemy pieces,
@@ -32,10 +32,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
         final Set<Piece> test = new HashSet<>(enemies.stream()
                 .filter(t -> t.getCurrentPosition().equals(lastEnemyMoved))
                 .collect(Collectors.toSet()));
-        if (test.size() != 1) {
-            return false;
-        }
-        return true;
+        return test.size() == 1;
     }
     /**
      * is may or may not be used.
@@ -44,7 +41,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
      * @param lastEnemyMoved
      * @return true if valid, false otherwise
      */
-    private boolean areMixedPieces(final Piece me, final Set<Piece> enemies, final Position lastEnemyMoved) {
+    /*private boolean areMixedPieces(final Piece me, final Set<Piece> enemies, final Position lastEnemyMoved) {
         final Set<Piece> test = new HashSet<>(enemies.stream()
                 .filter(t -> t.getPlayer().equals(me.getPlayer()))
                 .collect(Collectors.toSet()));
@@ -52,21 +49,22 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             return true;
         }
         return false;
-    }
+    }*/
     /**
      * {@inheritDoc}.
      */
-    public boolean basicWasHit(final Set<Piece> enemies, final Position lastEnemyMoved) throws IllegalArgumentException {
-        final var e = Objects.requireNonNull(enemies);
-        final var l = Objects.requireNonNull(lastEnemyMoved);
+    public boolean basicWasHit(final Set<Piece> enemies, final Position lastEnemyMoved) {
+        Objects.requireNonNull(enemies);
+        Objects.requireNonNull(lastEnemyMoved);
         if (!areArgumentsValid(enemies, lastEnemyMoved)) {
             throw new IllegalArgumentException("last enemy moved not present in enemies");
         }
         if (enemies.size() < 2) {
             return false;
         }
-        for (Piece p : e) {
-            if (p.getCurrentPosition().getX() == l.getX() ^ p.getCurrentPosition().getY() == l.getY()) {
+        for (final Piece p : enemies) {
+            if (p.getCurrentPosition().getX() == lastEnemyMoved.getX() 
+            ^ p.getCurrentPosition().getY() == lastEnemyMoved.getY()) {
                 return true;
             }
         }
@@ -107,7 +105,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
                 this.setHitbox(this.generateHitbox());
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("QUEEN");
-                this.setTotNumbOfLives(basicNumbOfLives);
+                this.setTotNumbOfLives(BASICNUMBOFLIVES);
             }
         };
     }
@@ -140,7 +138,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
                 this.setHitbox(this.generateHitbox());
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("ARCHER");
-                this.setTotNumbOfLives(basicNumbOfLives);
+                this.setTotNumbOfLives(BASICNUMBOFLIVES);
             }
             /**
             * {@inheritDoc}.
@@ -179,7 +177,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
                 this.setHitbox(this.generateHitbox());
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("KING");
-                this.setTotNumbOfLives(basicNumbOfLives);
+                this.setTotNumbOfLives(BASICNUMBOFLIVES);
             }
             /**
             * {@inheritDoc}.
@@ -226,7 +224,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
                 this.setHitbox(this.generateHitbox());
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("SHIELD");
-                this.setTotNumbOfLives(shieldNumbOfLives);
+                this.setTotNumbOfLives(SHIELDNUMBOFLIVES);
             }
             /**
             * {@inheritDoc}.
@@ -268,7 +266,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             this.setHitbox(this.generateHitbox());
             this.setMoveSet(this.generateMoveSet());
             this.setNameTypeOfPiece("SWAPPER");
-            this.setTotNumbOfLives(basicNumbOfLives);
+            this.setTotNumbOfLives(BASICNUMBOFLIVES);
         }
         /**
         * {@inheritDoc}.
@@ -307,7 +305,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
                 this.setHitbox(this.generateHitbox());
                 this.setMoveSet(this.generateMoveSet());
                 this.setNameTypeOfPiece("BASIC_PIECE");
-                this.setTotNumbOfLives(basicNumbOfLives);
+                this.setTotNumbOfLives(BASICNUMBOFLIVES);
             }
             /**
             * {@inheritDoc}.

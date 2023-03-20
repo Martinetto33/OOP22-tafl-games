@@ -25,13 +25,13 @@ import taflgames.model.cells.Cell;
 import taflgames.model.cells.Exit;
 import taflgames.model.cells.Slider;
 import taflgames.model.cells.Throne;
-import taflgames.model.pieces.Archer;
-import taflgames.model.pieces.BasicPiece;
-import taflgames.model.pieces.King;
-import taflgames.model.pieces.Piece;
-import taflgames.model.pieces.Queen;
-import taflgames.model.pieces.Shield;
-import taflgames.model.pieces.Swapper;
+import taflgames.model.pieces.code.Archer;
+import taflgames.model.pieces.code.BasicPiece;
+import taflgames.model.pieces.code.King;
+import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.Queen;
+import taflgames.model.pieces.code.Shield;
+import taflgames.model.pieces.code.Swapper;
 import taflgames.common.Player;
 
 /**
