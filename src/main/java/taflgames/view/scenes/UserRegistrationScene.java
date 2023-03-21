@@ -34,6 +34,8 @@ public class UserRegistrationScene extends AbstractScene {
     private static final int WIDTH_RATIO = 6;
     
     private final UserRegistrationController controller;
+    private final JTextField player1NameArea;
+    private final JTextField player2NameArea;
     private int verticalTextAreaSize;
     private int horizontalTextAreaSize;
 
@@ -49,6 +51,8 @@ public class UserRegistrationScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         final JPanel elementsPanel = new JPanel(new BorderLayout());
+        this.player1NameArea = new JTextField(CHARACTER_LIMIT);
+        this.player2NameArea = new JTextField(CHARACTER_LIMIT);
         
         this.setDimensions(this.controller.getViewWidth() / HEIGHT_RATIO,
             this.controller.getViewHeight() / WIDTH_RATIO);
@@ -68,6 +72,7 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.setVisible(true);
 
         goBackButton.addActionListener((e) -> {
+            this.clearTextAreas();
             this.controller.goToPreviousScene();
         });
 
@@ -92,8 +97,6 @@ public class UserRegistrationScene extends AbstractScene {
         final JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
         inputPanel.setBackground(Scene.TRANSPARENT);
-        final JTextField player1NameArea = new JTextField(CHARACTER_LIMIT);
-        final JTextField player2NameArea = new JTextField(CHARACTER_LIMIT);
 
         this.prepareTextArea(player1NameArea);
         this.prepareTextArea(player2NameArea);
@@ -117,5 +120,10 @@ public class UserRegistrationScene extends AbstractScene {
     public void setDimensions(int x, int y) {
         this.horizontalTextAreaSize = x;
         this.verticalTextAreaSize = y;
+    }
+
+    private void clearTextAreas() {
+        this.player1NameArea.setText("");
+        this.player2NameArea.setText("");
     }
 }
