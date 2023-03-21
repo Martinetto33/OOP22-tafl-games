@@ -5,7 +5,7 @@ import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.pieces.Piece;
+import taflgames.model.pieces.api.Piece;
 
 /**
  * This interface allows to interact with a builder to create a collection of pieces.
