@@ -11,7 +11,10 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import taflgames.view.limiter.Limiter;
 import taflgames.view.scenecontrollers.UserRegistrationController;
 
 /**
@@ -23,15 +26,16 @@ public class UserRegistrationScene extends AbstractScene {
     private static final String GO_BACK = "Go Back";
     private static final String SUBMIT = "Submit";
     private static final int SPACE = 10;
+    private static final int CHARACTER_LIMIT = 50;
     /* To make the text areas resizable but smaller than the frame, a constant
      * ratio is needed.
      */
     private static final int HEIGHT_RATIO = 10;
     private static final int WIDTH_RATIO = 6;
     
+    private final UserRegistrationController controller;
     private int verticalTextAreaSize;
     private int horizontalTextAreaSize;
-    private final UserRegistrationController controller;
 
     /**
      * Creates the user registration scene.
@@ -88,8 +92,8 @@ public class UserRegistrationScene extends AbstractScene {
         final JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
         inputPanel.setBackground(Scene.TRANSPARENT);
-        final JTextArea player1NameArea = new JTextArea();
-        final JTextArea player2NameArea = new JTextArea();
+        final JTextField player1NameArea = new JTextField(CHARACTER_LIMIT);
+        final JTextField player2NameArea = new JTextField(CHARACTER_LIMIT);
 
         this.prepareTextArea(player1NameArea);
         this.prepareTextArea(player2NameArea);
@@ -102,12 +106,12 @@ public class UserRegistrationScene extends AbstractScene {
         scene.add(inputPanel, BorderLayout.SOUTH);
     }
 
-    private void prepareTextArea(JTextArea text) {
+    private void prepareTextArea(JTextField text) {
         text.setColumns(50);
-        text.setLineWrap(true);
-        text.setWrapStyleWord(true);
         text.setPreferredSize(new Dimension(this.horizontalTextAreaSize, this.verticalTextAreaSize));
         text.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        text.setHorizontalAlignment(SwingConstants.CENTER);
+        text.setDocument(new Limiter(CHARACTER_LIMIT));
     }
 
     public void setDimensions(int x, int y) {
