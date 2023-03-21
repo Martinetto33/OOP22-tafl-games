@@ -12,7 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import taflgames.view.fontManager.FontManager;
 import taflgames.view.scenecontrollers.UserRegistrationController;
 
 /**
@@ -24,9 +23,14 @@ public class UserRegistrationScene extends AbstractScene {
     private static final String GO_BACK = "Go Back";
     private static final String SUBMIT = "Submit";
     private static final int SPACE = 10;
-    private static final int TEXT_AREA_SIZE_VERTICAL = 140;
-    private static final int TEXT_AREA_SIZE_HORIZONTAL = 100;
-
+    /* To make the text areas resizable but smaller than the frame, a constant
+     * ratio is needed.
+     */
+    private static final int HEIGHT_RATIO = 10;
+    private static final int WIDTH_RATIO = 6;
+    
+    private int verticalTextAreaSize;
+    private int horizontalTextAreaSize;
     private final UserRegistrationController controller;
 
     /**
@@ -39,17 +43,18 @@ public class UserRegistrationScene extends AbstractScene {
 
         this.controller = controller;
 
-        final FontManager fontManager = new FontManager();
-
         final JPanel scene = super.getScene();
         final JPanel elementsPanel = new JPanel(new BorderLayout());
+        
+        this.setDimensions(this.controller.getViewWidth() / HEIGHT_RATIO,
+            this.controller.getViewHeight() / WIDTH_RATIO);
 
         final JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.PAGE_AXIS));
         final JButton goBackButton = new JButton(UserRegistrationScene.GO_BACK);
         final JButton submitButton = new JButton(UserRegistrationScene.SUBMIT);
-        submitButton.setFont(fontManager.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
-        goBackButton.setFont(fontManager.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        submitButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        goBackButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
         goBackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -86,14 +91,8 @@ public class UserRegistrationScene extends AbstractScene {
         final JTextArea player1NameArea = new JTextArea();
         final JTextArea player2NameArea = new JTextArea();
 
-        /* TODO: set text areas to be bigger and have a character limit */
-        player1NameArea.setSize(new Dimension(UserRegistrationScene.TEXT_AREA_SIZE_VERTICAL, 
-        UserRegistrationScene.TEXT_AREA_SIZE_HORIZONTAL));
-        player1NameArea.setColumns(50);
-        player2NameArea.setSize(new Dimension(UserRegistrationScene.TEXT_AREA_SIZE_VERTICAL, 
-        UserRegistrationScene.TEXT_AREA_SIZE_HORIZONTAL));
-        player2NameArea.setColumns(50);
-        player2NameArea.setLineWrap(false);
+        this.prepareTextArea(player1NameArea);
+        this.prepareTextArea(player2NameArea);
 
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         inputPanel.add(player1NameArea);
@@ -101,5 +100,18 @@ public class UserRegistrationScene extends AbstractScene {
         inputPanel.add(player2NameArea);
 
         scene.add(inputPanel, BorderLayout.SOUTH);
+    }
+
+    private void prepareTextArea(JTextArea text) {
+        text.setColumns(50);
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
+        text.setPreferredSize(new Dimension(this.horizontalTextAreaSize, this.verticalTextAreaSize));
+        text.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+    }
+
+    public void setDimensions(int x, int y) {
+        this.horizontalTextAreaSize = x;
+        this.verticalTextAreaSize = y;
     }
 }
