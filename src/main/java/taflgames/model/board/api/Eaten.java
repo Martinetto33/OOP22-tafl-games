@@ -11,7 +11,7 @@ import taflgames.model.pieces.api.Piece;
 
 public interface Eaten {
 
-    Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells);
+    Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells, final int size);
 
     List<Piece> getThreatenedPos(Set<Position> hitbox, Map<Player, Map<Position, Piece>> pieces, Piece piece);
 

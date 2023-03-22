@@ -15,9 +15,15 @@ public class EatenImpl implements Eaten{
 
     private static final String DEAD_PIECE = "DEAD_PIECE"; //per segnalare morte pedina alle tombe
 
-    public Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells) {
+    public Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells, final int size) {
         for (Position position : hitbox) {
             if(cells.get(position).getType().equals("Exit") || cells.get(position).getType().equals("Throne")) {
+                hitbox.remove(position);
+            }
+            if(position.getX() < 0 || position.getY() < 0 ) {
+                hitbox.remove(position);
+            }
+            if(position.getX() >= size || position.getY() >= size ) {
                 hitbox.remove(position);
             }
         }

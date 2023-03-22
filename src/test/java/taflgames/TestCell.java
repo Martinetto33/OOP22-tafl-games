@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.code.AbstractPiece;
 import taflgames.model.pieces.code.BasicPiece;
+import taflgames.model.pieces.code.King;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.cell.code.AbstractCell;
@@ -43,6 +44,11 @@ public class TestCell {
         Piece piece = new BasicPiece(new Position(0, 0), Player.ATTACKER);
         /*expected false because when initialized the cell is set to not free */
         assertFalse(classic.canAccept(piece));
+        classic.setFree(true);
+        assertTrue(classic.canAccept(piece));
+        Piece king = new King(new Position(2, 2));
+        throne.setFree(true);
+        assertTrue(throne.canAccept(king));
     } 
 
     
@@ -50,6 +56,8 @@ public class TestCell {
     void testsetFree() {
         classic.setFree(true);
         assertTrue(classic.isFree());
+        classic.setFree(false);
+        assertFalse(classic.isFree());
         
     }
 
@@ -65,6 +73,11 @@ public class TestCell {
     @Test
     void testisFree() {
         assertFalse(classic.isFree());
+    }
+
+    @Test
+    void testNotify() {
+        
     }
     
     
