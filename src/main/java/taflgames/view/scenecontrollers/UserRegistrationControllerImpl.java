@@ -1,5 +1,11 @@
 package taflgames.view.scenecontrollers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.controller.Controller;
 import taflgames.controller.leaderboard.api.Leaderboard;
@@ -18,6 +24,7 @@ import taflgames.view.scenes.HomeScene;
 public final class UserRegistrationControllerImpl extends AbstractBasicSceneController implements UserRegistrationController {
     private final LeaderboardSaver saver;
     private final Leaderboard leaderboard;
+    private Map<Player, MatchResult> result = null;
 
     /**
      * Creates a new user registration scene controller.
@@ -52,15 +59,37 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
     }
 
     /**
-     * Registers the match results into a {@link taflgames.model.leaderboard.api.Leaderboard}.
+     * This method should be called by an external controller in order to register
+     * the results of a completed match. No binding between username and player role
+     * exists, since the users are free to chose if they want or not to register their
+     * scores. This is why these results are only associated with the roles specified
+     * in the {@link taflgames.common.Player} class.
+     * @param attackerResult the result of the attacker player
+     * @param defenderResult the result of the defender player
+     */
+    public void getResultsAtTheEndOfMatch(MatchResult attackerResult, MatchResult defenderResult) {
+        if (this.result == null || !this.result.isEmpty()) {
+            this.result = new HashMap<>();
+        }
+        this.result.put(Player.ATTACKER, attackerResult);
+        this.result.put(Player.DEFENDER, defenderResult);
+    }
+    /**
+     * Registers the match results into a {@link taflgames.model.leaderboard.api.Leaderboard},
+     * once the players' names are received from a view element.
      * @param player1 the name of the first player.
      * @param player2 the name of the second player.
      * @param player1Result the result obtained by the first player.
      * @param player2Result the result obtained by the second player.
      */
-    public void registerMatchResult(String player1, String player2, MatchResult player1Result, MatchResult player2Result) {
-        this.leaderboard.addResult(player1, player1Result);
-        this.leaderboard.addResult(player2, player2Result);
+    public void registerMatchResult(String attackerPlayer, String defenderPlayer) {
+        Objects.requireNonNull(this.result);
+        if (this.result.size() != Player.values().length 
+                   || !this.result.keySet().containsAll(List.of(Player.ATTACKER, Player.DEFENDER))) {
+            throw new IllegalStateException("Cannot find result for both attacker and defender!");
+        }
+        this.leaderboard.addResult(attackerPlayer, this.result.get(Player.ATTACKER));
+        this.leaderboard.addResult(defenderPlayer, this.result.get(Player.DEFENDER));
         this.saver.saveLeaderboard(this.leaderboard);
     }
 }
