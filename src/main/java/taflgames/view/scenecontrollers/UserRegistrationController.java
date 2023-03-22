@@ -17,7 +17,7 @@ public interface UserRegistrationController extends BasicSceneController {
      * @param attackerResult the result of the attacker player
      * @param defenderResult the result of the defender player
      */
-    void getResultsAtTheEndOfMatch(MatchResult attackerResult, MatchResult defenderResult);
+    void setEndMatchResults(MatchResult attackerResult, MatchResult defenderResult);
 
     /**
      * Registers the match results into a {@link taflgames.model.leaderboard.api.Leaderboard},

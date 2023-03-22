@@ -62,7 +62,7 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
      * {@inheritDoc}
      */
     @Override
-    public void getResultsAtTheEndOfMatch(MatchResult attackerResult, MatchResult defenderResult) {
+    public void setEndMatchResults(MatchResult attackerResult, MatchResult defenderResult) {
         if (this.result == null || !this.result.isEmpty()) {
             this.result = new HashMap<>();
         }

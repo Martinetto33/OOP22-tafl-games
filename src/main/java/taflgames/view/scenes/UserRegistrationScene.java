@@ -1,11 +1,13 @@
 package taflgames.view.scenes;
 
 import java.util.Optional;
-
+import java.util.Random;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -14,6 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import taflgames.common.Player;
+import taflgames.common.code.MatchResult;
+import taflgames.model.Match;
 import taflgames.view.limiter.Limiter;
 import taflgames.view.scenecontrollers.UserRegistrationController;
 
@@ -34,12 +39,12 @@ public class UserRegistrationScene extends AbstractScene {
     private static final int WIDTH_RATIO = 6;
     
     private final UserRegistrationController controller;
-    private final JTextField player1NameArea;
-    private final JTextField player2NameArea;
+    private final JTextField attackerNameTextField;
+    private final JTextField defenderNameTextField;
     private int verticalTextAreaSize;
     private int horizontalTextAreaSize;
 
-    /**
+    /*
      * Creates the user registration scene.
      * @param controller the scene controller
      */
@@ -51,8 +56,8 @@ public class UserRegistrationScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         final JPanel elementsPanel = new JPanel(new BorderLayout());
-        this.player1NameArea = new JTextField(CHARACTER_LIMIT);
-        this.player2NameArea = new JTextField(CHARACTER_LIMIT);
+        this.attackerNameTextField = new JTextField(CHARACTER_LIMIT);
+        this.defenderNameTextField = new JTextField(CHARACTER_LIMIT);
         
         this.setDimensions(this.controller.getViewWidth() / HEIGHT_RATIO,
             this.controller.getViewHeight() / WIDTH_RATIO);
@@ -69,12 +74,16 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.add(submitButton);
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         southPanel.add(goBackButton);
+        southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
+        this.testDoNotUse(southPanel);
         southPanel.setVisible(true);
 
         goBackButton.addActionListener((e) -> {
             this.clearTextAreas();
             this.controller.goToPreviousScene();
         });
+
+        this.attachSubmitListener(submitButton);
 
         southPanel.setBackground(Scene.TRANSPARENT);
         elementsPanel.setBackground(Scene.TRANSPARENT);
@@ -87,9 +96,35 @@ public class UserRegistrationScene extends AbstractScene {
 
     }
 
-    private JButton attachSubmitListener(final JButton submitButton) {
-        submitButton.addActionListener(null);
-        return submitButton;
+    /*
+     * Attaches a listener to the Submit button; the listener will
+     * check if there are valid usernames to send to the controller.
+     * @param submitButton the button to attach the listener to
+     */
+    private void attachSubmitListener(final JButton submitButton) {
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                if (areUsernamesValid()) {
+                    controller.registerMatchResult(attackerNameTextField.getText(),
+                    defenderNameTextField.getText());
+                    //TODO: fix problems in the access to file
+                }
+            }
+        });
+    }
+
+    /*
+     * Checks if the usernames are valid, i.e. they are not
+     * empty strings.
+     * @returns true if the usernames are valid, false otherwise.
+     */
+    private boolean areUsernamesValid() {
+        if (this.attackerNameTextField.getText().length() <= 0
+            || this.defenderNameTextField.getText().length() <= 0) {
+                return false;
+            }
+        return true;
     }
 
     /* Builds the area in which the user can insert player names. */
@@ -98,13 +133,13 @@ public class UserRegistrationScene extends AbstractScene {
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
         inputPanel.setBackground(Scene.TRANSPARENT);
 
-        this.prepareTextArea(player1NameArea);
-        this.prepareTextArea(player2NameArea);
+        this.prepareTextArea(attackerNameTextField);
+        this.prepareTextArea(defenderNameTextField);
 
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
-        inputPanel.add(player1NameArea);
+        inputPanel.add(attackerNameTextField);
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
-        inputPanel.add(player2NameArea);
+        inputPanel.add(defenderNameTextField);
 
         scene.add(inputPanel, BorderLayout.SOUTH);
     }
@@ -117,13 +152,46 @@ public class UserRegistrationScene extends AbstractScene {
         text.setDocument(new Limiter(CHARACTER_LIMIT));
     }
 
+    /*
+     * Resizes the text areas
+     * @param x horizontal size
+     * @param y vertical size
+     */
     public void setDimensions(int x, int y) {
         this.horizontalTextAreaSize = x;
         this.verticalTextAreaSize = y;
     }
 
+    /*
+     * Clears the fields.
+     */
     private void clearTextAreas() {
-        this.player1NameArea.setText("");
-        this.player2NameArea.setText("");
+        this.attackerNameTextField.setText("");
+        this.defenderNameTextField.setText("");
+    }
+
+    /* This method only simulates the end of the match and communicates the results
+     * to the controller; this entire method and the JButton related to it MUST BE REMOVED
+     * before considering this class complete.
+     * TODO: see above
+     */
+    private void testDoNotUse(final JPanel panel) {
+        final JButton jb = new JButton("Add fake result");
+        jb.addActionListener(new ActionListener() {
+            private Random rand = new Random();
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                MatchResult attackerResult;
+                MatchResult defenderResult;
+                MatchResult[] possibleResults = MatchResult.values();
+                attackerResult = possibleResults[rand.nextInt(3)];
+                defenderResult = possibleResults[rand.nextInt(3)];
+                controller.setEndMatchResults(attackerResult, defenderResult);
+            }
+            
+        });
+        jb.setAlignmentX(SwingConstants.CENTER);
+        jb.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        panel.add(jb);
     }
 }
