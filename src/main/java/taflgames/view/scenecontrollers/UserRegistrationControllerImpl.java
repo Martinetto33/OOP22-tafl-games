@@ -59,14 +59,9 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
     }
 
     /**
-     * This method should be called by an external controller in order to register
-     * the results of a completed match. No binding between username and player role
-     * exists, since the users are free to chose if they want or not to register their
-     * scores. This is why these results are only associated with the roles specified
-     * in the {@link taflgames.common.Player} class.
-     * @param attackerResult the result of the attacker player
-     * @param defenderResult the result of the defender player
+     * {@inheritDoc}
      */
+    @Override
     public void getResultsAtTheEndOfMatch(MatchResult attackerResult, MatchResult defenderResult) {
         if (this.result == null || !this.result.isEmpty()) {
             this.result = new HashMap<>();
@@ -74,14 +69,11 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         this.result.put(Player.ATTACKER, attackerResult);
         this.result.put(Player.DEFENDER, defenderResult);
     }
+    
     /**
-     * Registers the match results into a {@link taflgames.model.leaderboard.api.Leaderboard},
-     * once the players' names are received from a view element.
-     * @param player1 the name of the first player.
-     * @param player2 the name of the second player.
-     * @param player1Result the result obtained by the first player.
-     * @param player2Result the result obtained by the second player.
+     * {@inheritDoc}
      */
+    @Override
     public void registerMatchResult(String attackerPlayer, String defenderPlayer) {
         Objects.requireNonNull(this.result);
         if (this.result.size() != Player.values().length 
