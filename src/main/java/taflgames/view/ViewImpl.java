@@ -20,6 +20,10 @@ import taflgames.view.scenes.Scene;
 public final class ViewImpl implements View {
 
     private static final String FRAME_TITLE = "Tafl Games";
+    private static final double DEFAULT_FRAME_WIDTH_PROP = 0.67;
+    private static final double DEFAULT_FRAME_HEIGHT_PROP = 0.67;
+    private static final double MIN_FRAME_WIDTH_PROP = 0.50;
+    private static final double MIN_FRAME_HEIGHT_PROP = 0.50;
 
     private final Controller controller;
 
@@ -40,7 +44,14 @@ public final class ViewImpl implements View {
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         final int screenWidth = (int) screen.getWidth();
         final int screenHeight = (int) screen.getHeight();
-        frame.setSize((screenWidth * 2) / 3, (screenHeight * 2) / 3);
+        frame.setSize(
+            (int) (screenWidth * DEFAULT_FRAME_WIDTH_PROP), 
+            (int) (screenHeight * DEFAULT_FRAME_HEIGHT_PROP)
+        );
+        frame.setMinimumSize(new Dimension(
+            (int) (screenWidth * MIN_FRAME_WIDTH_PROP),
+            (int) (screenHeight * MIN_FRAME_HEIGHT_PROP)
+        ));
 
         // Set frame layout as CardLayout to implement switching between different scenes
         frameLayout = new CardLayout();
