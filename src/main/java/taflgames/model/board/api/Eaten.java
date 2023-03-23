@@ -11,12 +11,12 @@ import taflgames.model.pieces.api.Piece;
 
 public interface Eaten {
 
-    Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells, final int size);
+    Set<Position> trimHitbox(Piece currentPiece,Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells, final int size);
 
     List<Piece> getThreatenedPos(Set<Position> hitbox, Map<Player, Map<Position, Piece>> pieces, Piece piece);
 
     Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer);
 
-    void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, Map<Position, Cell> cells );
+    void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, Map<Position, Cell> cells, Map<Player, Map<Position, Piece>> pieces );
     
 }

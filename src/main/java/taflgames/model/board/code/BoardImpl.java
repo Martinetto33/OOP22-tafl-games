@@ -164,7 +164,7 @@ public class BoardImpl implements Board, TimedEntity{
 
     private void signalOnMove(Position source, Piece movedPiece) {
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
-        Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece.whereToHit(), cells, size).stream()
+        Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
                 .map(x -> new Position(x.getX() +source.getX(), x.getY() + source.getY()))
                 .collect(Collectors.toSet());
         // Controllo se nelle posizioni ottenute ci sono entità; in caso, vengono triggerate
@@ -222,11 +222,11 @@ public class BoardImpl implements Board, TimedEntity{
      */
     @Override
     public void eat(){
-        Piece currPiece = pieces.entrySet().stream().filter(entry -> entry.getValue().containsKey(currentPos)).map(entry -> entry.getValue().get(currentPos)).findAny().get();
-        Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece.whereToHit(), cells, size);
+        Piece currPiece = getPiece(currentPos);
+        Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece, pieces, cells, size);
         List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
         Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece.getPlayer());
-        eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells);
+        eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
     }
 
     /**

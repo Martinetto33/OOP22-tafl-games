@@ -2,9 +2,12 @@ package taflgames.model.board.code;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Eaten;
@@ -15,18 +18,43 @@ public class EatenImpl implements Eaten{
 
     private static final String DEAD_PIECE = "DEAD_PIECE"; //per segnalare morte pedina alle tombe
 
-    public Set<Position> trimHitbox(Set<Position> hitbox, Map<Position, Cell> cells, final int size) {
-        for (Position position : hitbox) {
-            if(cells.get(position).getType().equals("Exit") || cells.get(position).getType().equals("Throne")) {
-                hitbox.remove(position);
-            }
+    public Set<Position> trimHitbox(Piece currentPiece,Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells, final int size) {
+        Set<Position> hitbox = currentPiece.whereToHit();
+        Iterator<Position> hitboxIterator = hitbox.iterator();
+        while(hitboxIterator.hasNext()) {
+            Position position = hitboxIterator.next();
             if(position.getX() < 0 || position.getY() < 0 ) {
-                hitbox.remove(position);
+                hitboxIterator.remove();
             }
-            if(position.getX() >= size || position.getY() >= size ) {
-                hitbox.remove(position);
+            else if(position.getX() >= size || position.getY() >= size ) {
+                hitboxIterator.remove();
+            } 
+        }
+        Set<Position> samePlayerPieces = hitbox.stream()
+                                            .filter(x -> pieces.get(currentPiece.getPlayer()).keySet().contains(x))
+                                            .collect(Collectors.toSet());
+
+        if(!samePlayerPieces.isEmpty()) {
+            if(!currentPiece.getMyType().getTypeOfPiece().equals("ARCHER")) {
+                samePlayerPieces.forEach(x -> hitbox.remove(x));
+            } else {
+                samePlayerPieces.forEach(x -> {
+                    Set<Position> elemToDelete = new HashSet<>();
+                    if(currentPiece.getCurrentPosition().getY() < x.getY()) {
+                        hitbox.stream().filter(elem -> elem.getY() >= x.getY()).forEach(elem -> elemToDelete.add(elem));
+    
+                    } else if(currentPiece.getCurrentPosition().getY() > x.getY()) {
+                        hitbox.stream().filter(elem -> elem.getY() <= x.getY()).forEach(elem -> elemToDelete.add(elem));
+                    } else if(currentPiece.getCurrentPosition().getX() < x.getX()) {
+                        hitbox.stream().filter(elem -> elem.getX() >= x.getX()).forEach(elem -> elemToDelete.add(elem));
+                    } else {
+                        hitbox.stream().filter(elem -> elem.getX() <= x.getX()).forEach(elem -> elemToDelete.add(elem));
+                    }
+                    hitbox.removeAll(elemToDelete);
+                });
             }
         }
+        
         return hitbox;
     }
     
@@ -59,7 +87,7 @@ public class EatenImpl implements Eaten{
      */
     public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer) {
         Map<Piece, Set<Piece>> finalmap = new HashMap<>();
-        /* The following map represents the allies of the piece attempting to eat*/ 
+        /* The following map represents the allies of the piece attempting to eat the enemy*/ 
         Map<Position, Piece> allies = pieces.get(currPlayer);
         for (Piece enemy : enemies) {
             allies.entrySet().stream().forEach(x -> {
@@ -78,17 +106,18 @@ public class EatenImpl implements Eaten{
     }
 
     public void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, 
-                                        Map<Position, Cell> cells ) {
+                                        Map<Position, Cell> cells, Map<Player, Map<Position, Piece>> pieces) {
         List<Piece> deadPieces = enemiesAndAllies.entrySet().stream()
             .filter(entry -> entry.getKey().wasKilled(entry.getValue(), lastMovedPiece.getCurrentPosition()))
             .map(entry -> entry.getKey())
             .toList();
-        this.notifyCellsThatPiecesDied(deadPieces, cells);
+        this.notifyCellsThatPiecesDied(deadPieces, cells, pieces);
     }
 
-    private void notifyCellsThatPiecesDied(List<Piece> killedPieces, Map<Position, Cell> cells) {
+    private void notifyCellsThatPiecesDied(List<Piece> killedPieces, Map<Position, Cell> cells, Map<Player, Map<Position, Piece>> pieces) {
         for (final Piece deadPiece : killedPieces) {
             cells.get(deadPiece.getCurrentPosition()).setFree(true);
+            pieces.get(deadPiece.getPlayer()).remove(deadPiece.getCurrentPosition());
             cells.get(deadPiece.getCurrentPosition()).notify(deadPiece.getCurrentPosition(), deadPiece, List.of(EatenImpl.DEAD_PIECE));
         }
     }
