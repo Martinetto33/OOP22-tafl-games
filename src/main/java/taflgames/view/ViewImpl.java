@@ -20,10 +20,8 @@ import taflgames.view.scenes.Scene;
 public final class ViewImpl implements View {
 
     private static final String FRAME_TITLE = "Tafl Games";
-    private static final double DEFAULT_FRAME_WIDTH_PROP = 0.67;
-    private static final double DEFAULT_FRAME_HEIGHT_PROP = 0.67;
-    private static final double MIN_FRAME_WIDTH_PROP = 0.50;
-    private static final double MIN_FRAME_HEIGHT_PROP = 0.50;
+    private static final double MIN_FRAME_WIDTH_PROP = 0.60;
+    private static final double MIN_FRAME_HEIGHT_PROP = 0.60;
 
     private final Controller controller;
 
@@ -44,10 +42,6 @@ public final class ViewImpl implements View {
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         final int screenWidth = (int) screen.getWidth();
         final int screenHeight = (int) screen.getHeight();
-        frame.setSize(
-            (int) (screenWidth * DEFAULT_FRAME_WIDTH_PROP), 
-            (int) (screenHeight * DEFAULT_FRAME_HEIGHT_PROP)
-        );
         frame.setMinimumSize(new Dimension(
             (int) (screenWidth * MIN_FRAME_WIDTH_PROP),
             (int) (screenHeight * MIN_FRAME_HEIGHT_PROP)
@@ -60,6 +54,7 @@ public final class ViewImpl implements View {
         addedScenes = new HashSet<>();
         setScene(new HomeScene(new HomeControllerImpl(this, this.controller)));
 
+        frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);  // Let the OS decide about the positioning of the frame
         frame.setVisible(true);
