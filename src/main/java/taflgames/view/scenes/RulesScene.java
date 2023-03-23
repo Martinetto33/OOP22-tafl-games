@@ -25,6 +25,7 @@ public class RulesScene extends AbstractScene {
     private static final String RULES = "Rules";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final String BG_FILENAME = "home-background.jpeg";
+    private static final String BASE_LOCATION = "taflgames/rules/";
     private static final String GO_BACK = "Go Back";
     private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
 
@@ -42,14 +43,16 @@ public class RulesScene extends AbstractScene {
 
         final JEditorPane editor = new JEditorPane();
         final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
+        final HTMLDocument htmlDocument = (HTMLDocument) htmlEditorKit.createDefaultDocument();
+        htmlDocument.setBase(ClassLoader.getSystemResource(BASE_LOCATION));
         editor.setEditorKit(htmlEditorKit);
         try {
             editor.read(
                 this.controller.getRulesFileStream(), 
-                (HTMLDocument) htmlEditorKit.createDefaultDocument()
+                htmlDocument
             );
         } catch (final IOException ex) {
-            editor.setText(ex.getMessage());
+            editor.setText("Error: could not load rules document.");
         }
         editor.setEditable(false);
         final JScrollPane scrollPane = new JScrollPane(editor);
