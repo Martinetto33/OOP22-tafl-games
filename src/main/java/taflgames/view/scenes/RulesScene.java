@@ -21,7 +21,7 @@ import taflgames.view.scenecontrollers.RulesDisplayController;
  * Implementation of the scene that shows the rules of the game modes.
  */
 public class RulesScene extends AbstractScene {
-    
+
     private static final String RULES = "Rules";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final String BG_FILENAME = "home-background.jpeg";
@@ -31,6 +31,10 @@ public class RulesScene extends AbstractScene {
 
     private final RulesDisplayController controller;
 
+    /**
+     * Creates the rules scene.
+     * @param controller the scene controller
+     */
     public RulesScene(final RulesDisplayController controller) {
 
         super(RULES, Optional.of(BG_FILENAME));
