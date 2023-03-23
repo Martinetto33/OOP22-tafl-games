@@ -10,26 +10,33 @@ import taflgames.view.View;
  * all scene controllers.
  */
 public abstract class AbstractBasicSceneController implements BasicSceneController {
-    
+
     private final View view;
     private final Controller controller;
 
+    /**
+     * Initializes the state of a generic scene controller.
+     * @param view the view of the application
+     * @param controller the controller of the application
+     */
     protected AbstractBasicSceneController(final View view, final Controller controller) {
         this.view = view;
         this.controller = controller;
     }
 
+    @Override
     public abstract void goToNextScene();
 
+    @Override
     public abstract void goToPreviousScene();
 
     @Override
-    public int getViewHeight() {
+    public final int getViewHeight() {
         return this.view.getHeight();
     }
 
     @Override
-    public int getViewWidth() {
+    public final int getViewWidth() {
         return this.view.getWidth();
     }
 
