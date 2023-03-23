@@ -1,13 +1,15 @@
 package taflgames.view.scenes;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Optional;
 
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import taflgames.view.scenecontrollers.GameChoiceController;
 
@@ -23,14 +25,16 @@ public class GameChoiceScene extends AbstractScene {
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final String BG_FILENAME = "home-background.jpeg";
     private static final String HEADER = "Choose the game mode";
+    private static final float HEADER_FONT_SIZE = 30.0f;
     private static final String PLAY_CLASSIC_MODE = "Play Classic Mode";
     private static final String PLAY_VARIANT_MODE = "Play Variant Mode";
     private static final String GO_BACK = "Go Back";
     private static final String SEE_RULES = "See Rules";
     private static final double MAIN_BTN_HEIGHT_PROP = 0.075;
     private static final double MAIN_BTN_WIDTH_PROP = 0.33;
-    private static final double MINOR_BTN_HEIGHT_PROP = 0.05;
-    private static final double MINOR_BTN_WIDTH_PROP = 0.15;
+    private static final double MINOR_BTN_HEIGHT_PROP = 0.025;
+    private static final double MINOR_BTN_WIDTH_PROP = 0.10;
+    private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
 
     private final GameChoiceController controller;
 
@@ -45,49 +49,39 @@ public class GameChoiceScene extends AbstractScene {
         this.controller = controller;
 
         final JPanel scene = super.getScene();
+        scene.setLayout(new BorderLayout());
+        scene.setBorder(new EmptyBorder(DEFAULT_INSETS));
 
         final GridBagConstraints gbc = new GridBagConstraints();
 
-        final JPanel elementsPanel = new JPanel(new GridBagLayout());
-        elementsPanel.setBackground(TRANSPARENT);
-
-        final JPanel headerPanel = new JPanel(new GridBagLayout());
+        final JPanel headerPanel = new JPanel();
         final JLabel headerLabel = new JLabel(HEADER);
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.NORTH;
-        headerLabel.setFont(AbstractScene.getDefaultFont());
+        final Font headerFont = AbstractScene.getDefaultFont().deriveFont(HEADER_FONT_SIZE);
+        headerLabel.setFont(headerFont);
         headerLabel.setForeground(Color.WHITE);
         headerPanel.setBackground(TRANSPARENT);
         headerPanel.add(headerLabel);
-        elementsPanel.add(headerPanel, gbc);
+        scene.add(headerPanel, BorderLayout.NORTH);
 
         final JPanel buttonsPanel = new JPanel(new GridBagLayout());
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 0, 10, 0);
         buttonsPanel.setBackground(TRANSPARENT);
 
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = DEFAULT_INSETS;
+        gbc.ipadx = (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP);
+        gbc.ipady = (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP);
         final JButton playClassicButton = new JButton(PLAY_CLASSIC_MODE);
         playClassicButton.setFont(AbstractScene.getDefaultFont());
-        playClassicButton.setPreferredSize(new Dimension(
-            (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP),
-            (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP)
-        ));
         buttonsPanel.add(playClassicButton, gbc);
-
         final JButton playVariantButton = new JButton(PLAY_VARIANT_MODE);
         playVariantButton.setFont(AbstractScene.getDefaultFont());
-        playVariantButton.setPreferredSize(new Dimension(
-            (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP),
-            (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP)
-        ));
         buttonsPanel.add(playVariantButton, gbc);
 
         final JButton seeRulesButton = new JButton(SEE_RULES);
         seeRulesButton.setFont(AbstractScene.getDefaultFont());
-        seeRulesButton.setPreferredSize(new Dimension(
-            (int) (this.controller.getViewWidth() * MINOR_BTN_WIDTH_PROP),
-            (int) (this.controller.getViewHeight() * MINOR_BTN_HEIGHT_PROP)
-        ));
+        gbc.ipadx = (int) (this.controller.getViewWidth() * MINOR_BTN_WIDTH_PROP);
+        gbc.ipady = (int) (this.controller.getViewHeight() * MINOR_BTN_HEIGHT_PROP);
         buttonsPanel.add(seeRulesButton, gbc);
 
         playClassicButton.addActionListener((e) -> {
@@ -104,7 +98,7 @@ public class GameChoiceScene extends AbstractScene {
             this.controller.goToRulesScene();
         });
 
-        elementsPanel.add(buttonsPanel, gbc);
+        scene.add(buttonsPanel, BorderLayout.CENTER);
 
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
@@ -115,9 +109,7 @@ public class GameChoiceScene extends AbstractScene {
             this.controller.goToPreviousScene();
         });
 
-        elementsPanel.add(southPanel, gbc);
-
-        scene.add(elementsPanel);
+        scene.add(southPanel, BorderLayout.SOUTH);
     }
 
 }
