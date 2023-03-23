@@ -20,6 +20,8 @@ import taflgames.view.scenes.Scene;
 public final class ViewImpl implements View {
 
     private static final String FRAME_TITLE = "Tafl Games";
+    private static final double DEFAULT_FRAME_WIDTH_PROP = 0.67;
+    private static final double DEFAULT_FRAME_HEIGHT_PROP = 0.67;
     private static final double MIN_FRAME_WIDTH_PROP = 0.60;
     private static final double MIN_FRAME_HEIGHT_PROP = 0.60;
 
@@ -28,6 +30,7 @@ public final class ViewImpl implements View {
     private final JFrame frame;
     private final CardLayout frameLayout;
     private final Set<String> addedScenes;
+    private final Dimension defaultFrameSize;
 
     /**
      * Sets up the view.
@@ -42,6 +45,11 @@ public final class ViewImpl implements View {
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         final int screenWidth = (int) screen.getWidth();
         final int screenHeight = (int) screen.getHeight();
+        frame.setSize(new Dimension(
+            (int) (screenWidth * DEFAULT_FRAME_WIDTH_PROP),
+            (int) (screenHeight * DEFAULT_FRAME_HEIGHT_PROP)
+        ));
+        defaultFrameSize = frame.getSize();
         frame.setMinimumSize(new Dimension(
             (int) (screenWidth * MIN_FRAME_WIDTH_PROP),
             (int) (screenHeight * MIN_FRAME_HEIGHT_PROP)
@@ -72,12 +80,12 @@ public final class ViewImpl implements View {
 
     @Override
     public int getHeight() {
-        return frame.getHeight();
+        return (int) defaultFrameSize.getHeight();
     }
 
     @Override
     public int getWidth() {
-        return frame.getWidth();
+        return (int) defaultFrameSize.getWidth();
     }
 
     @Override
