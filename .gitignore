@@ -17,4 +17,4 @@ bin/
 .vscode
 
 # Ignore yaml file for saves
-.leaderboard.yaml
+*leaderboard.yaml
