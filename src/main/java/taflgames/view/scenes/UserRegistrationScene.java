@@ -6,8 +6,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,6 +29,10 @@ import taflgames.view.scenecontrollers.UserRegistrationController;
  */
 public class UserRegistrationScene extends AbstractScene {
 
+    private static final String SEP = System.getProperty("file.separator");
+    private static final String ROOT = "taflgames" + SEP;
+    private static final String IMAGE_NAME = "wooden-plank.jpg";
+
     private static final String USER_REGISTRATION = "User Registration";
     private static final String GO_BACK = "Go Back";
     private static final String SUBMIT = "Submit";
@@ -36,6 +44,9 @@ public class UserRegistrationScene extends AbstractScene {
      */
     private static final int HEIGHT_RATIO = 10;
     private static final int WIDTH_RATIO = 6;
+
+    private static final int LABEL_WIDTH = 100;
+    private static final int LABEL_HEIGHT = 60;
     
     private final UserRegistrationController controller;
     private final JTextField attackerNameTextField;
@@ -138,11 +149,11 @@ public class UserRegistrationScene extends AbstractScene {
         this.prepareTextArea(this.defenderNameTextField);
 
         
-        this.createLabel(inputPanel, "Insert attacker nickname: ");
+        this.createLabel(inputPanel, "Insert attacker's nickname: ");
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         inputPanel.add(attackerNameTextField);
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
-        this.createLabel(inputPanel, "Insert defender nickname: ");
+        this.createLabel(inputPanel, "Insert defender's nickname: ");
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         inputPanel.add(defenderNameTextField);
 
@@ -204,10 +215,27 @@ public class UserRegistrationScene extends AbstractScene {
         final JLabel label = new JLabel();
         label.setText(labelContent);
         label.setFont(Scene.FONT_MANAGER.getModifiedFont(UserRegistrationScene.CHARACTER_SIZE_FOR_LABELS, Font.ITALIC));
-        label.setBackground(Color.BLACK);
         label.setForeground(Color.WHITE);
-        label.setOpaque(true);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(label);
+        this.paintPanel(panel, UserRegistrationScene.LABEL_WIDTH, UserRegistrationScene.LABEL_HEIGHT, label);
+    }
+
+    private void paintPanel(JPanel mainPanel, int width, int height, JLabel label) {
+        final JPanel paintedPanel = new JPanel() {
+            @Override
+            public void paintComponent(final Graphics g) {
+                super.paintComponent(g);
+                final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + IMAGE_NAME);
+                final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
+                customResize(image, width, height);
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        paintedPanel.add(label);
+        mainPanel.add(paintedPanel);
+    }
+
+    private void customResize(Image image, int width, int height) {
+        image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     }
 }
