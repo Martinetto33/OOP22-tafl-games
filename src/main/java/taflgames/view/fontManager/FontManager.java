@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import taflgames.view.scenes.Scene;
+
 /**
  * This class can use a custom font located in the resources packages.
  * Any .ttf file can be potentially used. A rune-like font was chosen to fit
@@ -58,6 +60,15 @@ public class FontManager {
      */
     public Font getModifiedFont(float size, int type) {
         Font result = this.font.deriveFont(type, size);
+        return result;
+    }
+
+    /**
+     * A {@link java.awt.Font} adapted for the buttons.
+     * @return the button Font
+     */
+    public Font getButtonFont() {
+        final Font result = this.font.deriveFont(Font.PLAIN, Scene.BUTTON_FONT_SIZE);
         return result;
     }
 }

@@ -1,8 +1,8 @@
 package taflgames.view.scenes;
 
 import java.util.Optional;
-import java.util.Random;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,13 +12,11 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import taflgames.common.Player;
-import taflgames.common.code.MatchResult;
-import taflgames.model.Match;
 import taflgames.view.limiter.Limiter;
 import taflgames.view.scenecontrollers.UserRegistrationController;
 
@@ -32,6 +30,7 @@ public class UserRegistrationScene extends AbstractScene {
     private static final String SUBMIT = "Submit";
     private static final int SPACE = 10;
     private static final int CHARACTER_LIMIT = 50;
+    private static final int CHARACTER_SIZE_FOR_LABELS = 20;
     /* To make the text areas resizable but smaller than the frame, a constant
      * ratio is needed.
      */
@@ -66,8 +65,8 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.PAGE_AXIS));
         final JButton goBackButton = new JButton(UserRegistrationScene.GO_BACK);
         final JButton submitButton = new JButton(UserRegistrationScene.SUBMIT);
-        submitButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
-        goBackButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        submitButton.setFont(Scene.FONT_MANAGER.getButtonFont());
+        goBackButton.setFont(Scene.FONT_MANAGER.getButtonFont());
         goBackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -75,7 +74,7 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         southPanel.add(goBackButton);
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
-        this.testDoNotUse(southPanel);
+        //this.testDoNotUse(southPanel); //TODO: delete;
         southPanel.setVisible(true);
 
         goBackButton.addActionListener((e) -> {
@@ -108,7 +107,9 @@ public class UserRegistrationScene extends AbstractScene {
                 if (areUsernamesValid()) {
                     controller.registerMatchResult(attackerNameTextField.getText(),
                     defenderNameTextField.getText());
-                    //TODO: fix problems in the access to file
+                    controller.goToNextScene();
+                } else {
+                    //JDialog con messaggio d'errore. TODO
                 }
             }
         });
@@ -133,11 +134,15 @@ public class UserRegistrationScene extends AbstractScene {
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
         inputPanel.setBackground(Scene.TRANSPARENT);
 
-        this.prepareTextArea(attackerNameTextField);
-        this.prepareTextArea(defenderNameTextField);
+        this.prepareTextArea(this.attackerNameTextField);
+        this.prepareTextArea(this.defenderNameTextField);
 
+        
+        this.createLabel(inputPanel, "Insert attacker nickname: ");
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         inputPanel.add(attackerNameTextField);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
+        this.createLabel(inputPanel, "Insert defender nickname: ");
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         inputPanel.add(defenderNameTextField);
 
@@ -147,7 +152,7 @@ public class UserRegistrationScene extends AbstractScene {
     private void prepareTextArea(JTextField text) {
         text.setColumns(50);
         text.setPreferredSize(new Dimension(this.horizontalTextAreaSize, this.verticalTextAreaSize));
-        text.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        text.setFont(Scene.FONT_MANAGER.getButtonFont());
         text.setHorizontalAlignment(SwingConstants.CENTER);
         text.setDocument(new Limiter(CHARACTER_LIMIT));
     }
@@ -175,7 +180,7 @@ public class UserRegistrationScene extends AbstractScene {
      * before considering this class complete.
      * TODO: see above
      */
-    private void testDoNotUse(final JPanel panel) {
+    /* private void testDoNotUse(final JPanel panel) {
         final JButton jb = new JButton("Add fake result");
         jb.addActionListener(new ActionListener() {
             private Random rand = new Random();
@@ -191,7 +196,18 @@ public class UserRegistrationScene extends AbstractScene {
             
         });
         jb.setAlignmentX(SwingConstants.CENTER);
-        jb.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        jb.setFont(Scene.FONT_MANAGER.getButtonFont());
         panel.add(jb);
+    } */
+
+    private void createLabel(JPanel panel, String labelContent) {
+        final JLabel label = new JLabel();
+        label.setText(labelContent);
+        label.setFont(Scene.FONT_MANAGER.getModifiedFont(UserRegistrationScene.CHARACTER_SIZE_FOR_LABELS, Font.ITALIC));
+        label.setBackground(Color.BLACK);
+        label.setForeground(Color.WHITE);
+        label.setOpaque(true);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(label);
     }
 }
