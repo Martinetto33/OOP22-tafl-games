@@ -77,7 +77,7 @@ public class HomeScene extends AbstractScene {
         });
 
         exitButton.addActionListener((e) -> this.controller.close());
-        
+
         scene.add(titlePanel, BorderLayout.NORTH);
         scene.add(buttonsPanel, BorderLayout.CENTER);
     }
