@@ -203,7 +203,7 @@ public class TestEaten {
 		thirdBoard = new BoardImpl(pieces, cells, 5);
 
         Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
-        List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 0), p1));
+        List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 1), p1));
         Map<Piece, Set<Piece>> finalmap = new HashMap<>();
         Set<Piece> allies = new HashSet<>();
         allies.add(new Archer(new Position(4, 1), p1));
@@ -214,7 +214,16 @@ public class TestEaten {
         allies.add(new BasicPiece(new Position(1, 1), p1));
         finalmap.put(new BasicPiece(new Position(1, 2), p2), allies);
 
-        assertEquals(finalmap, eat.checkAllies(enemies, pieces, p1));
+        assertEquals(finalmap, eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 1), p1)));
+
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 2), p2), pieces, cells, 5);
+        enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 2), p2));
+        allies = new HashSet<>();
+        allies.add(new BasicPiece(new Position(1, 2), p2));
+        finalmap = new HashMap<>();
+        finalmap.put(new BasicPiece(new Position(1, 1), p1), allies);
+
+        assertEquals(finalmap, eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 2), p2)));
         
     }
 
@@ -255,7 +264,7 @@ public class TestEaten {
 
         Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
         List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 0), p1));
-        Map<Piece, Set<Piece>> finalmap =  eat.checkAllies(enemies, pieces, p1);
+        Map<Piece, Set<Piece>> finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 1), p1));
         eat.notifyAllThreatened(finalmap, new BasicPiece(new Position(1, 1), p1), cells, pieces);
         assertTrue(cells.get(new Position(2,1)).isFree());
         assertTrue(cells.get(new Position(1,2)).isFree());

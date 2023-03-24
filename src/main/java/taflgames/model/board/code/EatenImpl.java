@@ -85,10 +85,15 @@ public class EatenImpl implements Eaten{
      * @param currPlayer
      * @return
      */
-    public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer) {
+    public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Piece lastMovedPiece) {
         Map<Piece, Set<Piece>> finalmap = new HashMap<>();
-        /* The following map represents the allies of the piece attempting to eat the enemy*/ 
-        Map<Position, Piece> allies = pieces.get(currPlayer);
+        /* The following map represents the allies of the piece attempting to eat the enemy
+            that are on the same row and the same column as the piece*/ 
+        Map<Position, Piece> allies = new HashMap<>();
+        pieces.get(lastMovedPiece.getPlayer()).entrySet().stream()
+                                        .filter(ally -> ally.getKey().getX() == lastMovedPiece.getCurrentPosition().getX()
+                                            || ally.getKey().getY() == lastMovedPiece.getCurrentPosition().getY())
+                                        .forEach(ally -> allies.put(ally.getKey(), ally.getValue()));
         for (Piece enemy : enemies) {
             allies.entrySet().stream().forEach(x -> {
                 if(x.getValue().whereToHit().contains(enemy.getCurrentPosition())) {

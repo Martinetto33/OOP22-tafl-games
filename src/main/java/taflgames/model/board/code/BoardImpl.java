@@ -232,7 +232,7 @@ public class BoardImpl implements Board, TimedEntity{
         Piece currPiece = getPiece(currentPos);
         Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece, pieces, cells, size);
         List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
-        Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece.getPlayer());
+        Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
         eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
     }
 
@@ -252,18 +252,40 @@ public class BoardImpl implements Board, TimedEntity{
         this.timedEntities = timedEntities;
     }
 
-    public boolean isDraw() {
+    public boolean isDraw(final Player playerInTurn) {
+        /*finding king position */
         Piece king = pieces.get(Player.DEFENDER).entrySet().stream()
                         .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
                         .map(x -> x.getValue())
                         .findAny()
                         .get();
-        if(king.getCurrentPosition().getX() == 0 
-            || king.getCurrentPosition().getY() == 0
-            || king.getCurrentPosition().getX() == this.size-1 
-            || king.getCurrentPosition().getY() == this.size-1) {
-        }
-        return false;
+        /*If the king is on the boarder, the position adjacent to it are controlled to see if the king is trapped */
+        
+
+        if (!pieces.get(playerInTurn).entrySet().stream()
+            .filter(pos -> pos.getValue().getMyType().getTypeOfPiece().equals("SWAPPER"))
+            .collect(Collectors.toList())
+            .isEmpty()) {
+                            return false;
+        } else if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
+            || king.getCurrentPosition().getX() < this.size || king.getCurrentPosition().getX() > this.size) {
+
+                if (getAdjacentPositions(king.getCurrentPosition()).stream()
+                    .filter(pos -> !cells.get(pos).isFree())
+                    .filter(pos -> pieces.get(Player.ATTACKER).keySet().contains(pos))
+                    .collect(Collectors.toSet())
+                    .size() == 3) {
+                                return true;
+                }
+        } else if (!pieces.get(playerInTurn).entrySet().stream()
+                    .filter(pos -> !getAdjacentPositions(pos.getKey()).stream()
+                            .filter(adjPos -> cells.get(adjPos).canAccept(pos.getValue()))
+                            .collect(Collectors.toSet()).isEmpty())
+                    .collect(Collectors.toSet()).isEmpty()) {
+                        return false;
+        } 
+            
+        return true;
     }
 
     private Piece getPiece(Position pos) {
@@ -274,5 +296,17 @@ public class BoardImpl implements Board, TimedEntity{
             .get();
         return p;
     }
+
+    private Set<Position> getAdjacentPositions(final Position currPos) {
+        Set<Position> setOfPosition = new HashSet<>();
+        setOfPosition.add(new Position(currPos.getX()+1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX()-1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY()+1));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY()-1));
+        return setOfPosition.stream()
+                                .filter(pos -> pos.getX() >= 0 && pos.getY() <= 0 && pos.getX() < this.size && pos.getY() <this.size)
+                                .collect(Collectors.toSet());
+    }
+     
 }
     
