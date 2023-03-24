@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
@@ -19,6 +20,7 @@ import taflgames.model.builders.PiecesCollectionBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * This class loads the configuration settings for the setup of the board
@@ -28,7 +30,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
 
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "config" + SEP;
-    private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettings.xml";
+    private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettisngs.xml";
     private static final String VARIANT_CONFIG_FILE = "VariantModeSettings.xml";
 
     @Override
@@ -71,7 +73,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
             final NodeList nodeList = document.getElementsByTagName("Settings");
             final Element settings = (Element) nodeList.item(0);
             return settings;
-        } catch (final Exception e) {
+        } catch (final IOException | ParserConfigurationException | SAXException e) {
             throw new IOException("An error occurred while trying to get or parse the configuration file.");
         }
     }
