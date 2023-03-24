@@ -56,10 +56,10 @@ public class BoardImpl implements Board, TimedEntity{
             }
         } else if(cells.get(dest).getType().equals("Throne") 
                 || cells.get(dest).getType().equals("Exit")
+                || (cells.get(start).getType().equals("Slider") && !cells.get(dest).isFree())
                 || (!cells.get(dest).isFree() && getPiece(dest).getPlayer().equals(player))) {
                 return false;
         }
-    
 
         // Si ottengono i vettori che rappresentano i possibili spostamenti della pedina
         Set<Vector> vectors = piece.whereToMove();
@@ -150,12 +150,14 @@ public class BoardImpl implements Board, TimedEntity{
             if(reachablePos.getX() == this.size || reachablePos.getY() == this.size
                 || reachablePos.getX() < 0 || reachablePos.getY() < 0 
                 || !cells.get(reachablePos).canAccept(getPiece(startPos))) {
-                    if(getPiece(startPos).canSwap() 
-                        && (cells.get(reachablePos).getType().equals("Throne") 
-                                || cells.get(reachablePos).getType().equals("Exit"))
-                        && !cells.get(reachablePos).isFree()
-                        && getPiece(reachablePos).getPlayer().equals(getPiece(startPos).getPlayer())) {
-                        furthestReachable = reachablePos;
+                    if(getPiece(startPos).canSwap()){
+                        if( !cells.get(reachablePos).isFree()
+                            && (!cells.get(reachablePos).getType().equals("Throne") 
+                                    || !cells.get(reachablePos).getType().equals("Exit"))
+                            && cells.get(startPos).getType().equals("Sider")
+                            && getPiece(reachablePos).getPlayer().equals(getPiece(startPos).getPlayer())) {
+                            furthestReachable = reachablePos;
+                        }
                     }
                 break;
             } else {
@@ -165,7 +167,7 @@ public class BoardImpl implements Board, TimedEntity{
         return furthestReachable;
     }
 
-    public void signalOnMove(Position source, Piece movedPiece) {
+    private void signalOnMove(Position source, Piece movedPiece) {
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
         Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
                 .collect(Collectors.toSet());
@@ -248,6 +250,20 @@ public class BoardImpl implements Board, TimedEntity{
     @Override
     public void addTimedEntities(final Set<TimedEntity> timedEntities) {
         this.timedEntities = timedEntities;
+    }
+
+    public boolean isDraw() {
+        Piece king = pieces.get(Player.DEFENDER).entrySet().stream()
+                        .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
+                        .map(x -> x.getValue())
+                        .findAny()
+                        .get();
+        if(king.getCurrentPosition().getX() == 0 
+            || king.getCurrentPosition().getY() == 0
+            || king.getCurrentPosition().getX() == this.size-1 
+            || king.getCurrentPosition().getY() == this.size-1) {
+        }
+        return false;
     }
 
     private Piece getPiece(Position pos) {

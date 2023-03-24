@@ -8,7 +8,7 @@ import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.cell.api.Cell;
-import taflgames.model.cell.api.Mediator;
+import taflgames.model.cell.api.SliderMediator;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
 
@@ -16,7 +16,7 @@ public class Slider extends AbstractCell implements TimedEntity, Resettable {
 
     private Vector orientation = new VectorImpl(0, 1); //un versore che indica la direzione in cui questo slider punta
 	private boolean triggered = false; //dice se è già stata attivata in questo turno
-	private Mediator mediator;
+	private SliderMediator mediator;
 	private final Position sliderPos;
 	private int lastActivityTurn;
 	private boolean active;

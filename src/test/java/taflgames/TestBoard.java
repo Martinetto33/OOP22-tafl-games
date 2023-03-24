@@ -20,6 +20,7 @@ import taflgames.model.pieces.code.Swapper;
 import taflgames.common.Player;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.ClassicCell;
+import taflgames.model.cell.code.Slider;
 import taflgames.model.cell.code.Throne;
 
 public class TestBoard {
@@ -111,10 +112,32 @@ public class TestBoard {
 
     @Test
     void testUpdatePiecePos() {
+        Board board3;
+        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        Map<Position, Cell> cells = new HashMap<>();
+        Player p1 = Player.ATTACKER;
+        Player p2 = Player.DEFENDER;
+
+        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
+        piecesPlayer2.put(new Position(3, 3), new BasicPiece(new Position(3, 3), p2));
+        pieces.put(p1, piecesPlayer1);
+        pieces.put(p2, piecesPlayer2);
+        for(int i=0; i<5; i++) {
+            for(int j=0; j<5; j++) {
+                cells.put(new Position(i,j), new ClassicCell());
+                cells.get(new Position(i,j)).setFree(true);
+            }
+        } 
+        cells.get(new Position(0,0)).setFree(false);
+        cells.get(new Position(3,3)).setFree(false);
+		board3 = new BoardImpl(pieces, cells, 5);
+
         cells.get(new Position(0, 0)).setFree(false);
         cells.get(new Position(1, 1)).setFree(true);
         //test the position update of a normal piece
-        board.updatePiecePos(new Position(0, 0), new Position(1, 1));
+        board3.updatePiecePos(new Position(0, 0), new Position(1, 1));
         assertTrue(cells.get(new Position(0, 0)).isFree());
         assertFalse(cells.get(new Position(1, 1)).isFree());
         assertTrue(pieces.get(p1).keySet().contains(new Position(1, 1)));
@@ -122,12 +145,11 @@ public class TestBoard {
 
         
         //test the position update of a swapper
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
         piecesPlayer1.put(new Position(0, 3), new Swapper(new Position(0, 3), p1));
         pieces.put(p1, piecesPlayer1);
         cells.get(new Position(0, 3)).setFree(false);
         cells.get(new Position(3, 3)).setFree(false);
-        board.updatePiecePos(new Position(0, 3), new Position(3, 3));
+        board3.updatePiecePos(new Position(0, 3), new Position(3, 3));
         assertTrue(pieces.get(p1).keySet().contains(new Position(3, 3)));
         assertTrue(pieces.get(p2).keySet().contains(new Position(0, 3)));
         assertFalse(pieces.get(p2).keySet().contains(new Position(3, 3)));
@@ -151,7 +173,9 @@ public class TestBoard {
         for(int i=0; i<5; i++) {
             for(int j=0; j<5; j++) {
                 if(i == 3 && j == 0) {
-                    cells.put(new Position(i,j), new Throne());
+                    cells.put(new Position(3,0), new Throne());
+                } else if(i==0 && j==3) {
+                    cells.put(new Position(0,3), new Slider(new Position(0,3)));
                 } else {
                     cells.put(new Position(i,j), new ClassicCell());
                 }
@@ -167,7 +191,15 @@ public class TestBoard {
         assertEquals(new Position(3, 0), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(0, -1))); 
         assertEquals(new Position(4, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(1, 0)));
         assertEquals(new Position(0, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(-1, 0)));  
-        assertEquals(new Position(2, 0), board1.getFurthestReachablePos(new Position(0, 0), new VectorImpl(1, 0))); 
+        assertEquals(new Position(2, 0), board1.getFurthestReachablePos(new Position(0, 0), new VectorImpl(1, 0)));
+
+        /*BasicPiece on a slider and a piece of the other player on the direction 
+        in which we are trying to find the furthest position reacheable*/
+        piecesPlayer1.put(new Position(0, 3), new Swapper(new Position(0, 3), p1));
+        pieces.put(p1, piecesPlayer1);
+        cells.get(new Position(0,3)).setFree(false);
+        assertEquals(new Position(2, 3), board1.getFurthestReachablePos(new Position(0, 3), new VectorImpl(1, 0)));
+         
     }
     
 }

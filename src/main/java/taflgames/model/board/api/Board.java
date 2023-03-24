@@ -5,7 +5,6 @@ import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
-import taflgames.model.pieces.api.Piece;
 
 import java.util.Set;
 import taflgames.common.Player;
@@ -19,8 +18,6 @@ public interface Board {
     void updatePiecePos(Position oldPos, Position newPos);
 
     Position getFurthestReachablePos(Position startPos, Vector direction);
-
-    public void signalOnMove(Position source, Piece movedPiece);
 
     /**
      * This method must be called by Match after method {@link #updatePiecePos}
