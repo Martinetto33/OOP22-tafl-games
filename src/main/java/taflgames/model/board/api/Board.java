@@ -19,6 +19,8 @@ public interface Board {
 
     Position getFurthestReachablePos(Position startPos, Vector direction);
 
+    boolean isDraw(final Player playerInTurn);
+
     /**
      * This method must be called by Match after method {@link #updatePiecePos}
      */

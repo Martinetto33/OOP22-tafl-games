@@ -268,7 +268,7 @@ public class BoardImpl implements Board, TimedEntity{
             .isEmpty()) {
                             return false;
         } else if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
-            || king.getCurrentPosition().getX() == this.size-1 || king.getCurrentPosition().getX() == this.size-1) {
+                || king.getCurrentPosition().getX() == this.size-1 || king.getCurrentPosition().getX() == this.size-1) {
 
                 if (getAdjacentPositions(king.getCurrentPosition()).stream()
                     .filter(pos -> !cells.get(pos).isFree())
@@ -277,13 +277,26 @@ public class BoardImpl implements Board, TimedEntity{
                     .size() == 3) {
                                 return true;
                 }
-        } else if (!pieces.get(playerInTurn).entrySet().stream()
-                    .filter(pos -> !getAdjacentPositions(pos.getKey()).stream()
-                            .filter(adjPos -> cells.get(adjPos).canAccept(pos.getValue()))
-                            .collect(Collectors.toSet()).isEmpty())
-                    .collect(Collectors.toSet()).isEmpty()) {
-                        return false;
-        } 
+        } else if(pieces.get(playerInTurn).values().stream()
+                .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
+                    .filter(adjPos -> cells.get(adjPos).canAccept(piece))
+                    .collect(Collectors.toSet()).isEmpty())
+                .findAny().isPresent()) {
+                                return false;
+                }
+                
+             /* System.out.println(pieces.get(playerInTurn).values().stream()
+                    .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
+                        .filter(adjPos -> cells.get(adjPos).canAccept(piece))
+                        .collect(Collectors.toSet()).isEmpty())
+                    .findAny().get()); 
+                    
+                    for (Piece piece : pieces.get(playerInTurn).values()) {
+                System.out.println(getAdjacentPositions(piece.getCurrentPosition()));
+                if(getAdjacentPositions(piece.getCurrentPosition()).stream()
+                    .filter(adjPos -> cells.get(adjPos).canAccept(piece))
+                    .findAny()
+                    .isPresent()) {*/
             
         return true;
     }
@@ -304,7 +317,7 @@ public class BoardImpl implements Board, TimedEntity{
         setOfPosition.add(new Position(currPos.getX(), currPos.getY()+1));
         setOfPosition.add(new Position(currPos.getX(), currPos.getY()-1));
         return setOfPosition.stream()
-                                .filter(pos -> pos.getX() >= 0 && pos.getY() <= 0 && pos.getX() < this.size && pos.getY() <this.size)
+                                .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() <this.size)
                                 .collect(Collectors.toSet());
     }
      
