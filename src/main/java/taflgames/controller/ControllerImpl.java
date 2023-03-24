@@ -33,7 +33,7 @@ public final class ControllerImpl implements Controller {
     }
 
     @Override
-    public void createClassicModeMatch() {
+    public void createClassicModeMatch() throws IOException {
         final SettingsLoader loader = new SettingsLoaderImpl();
         final CellsCollectionBuilder cellsCollBuilder = new CellsCollectionBuilderImpl();
         final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
@@ -45,15 +45,17 @@ public final class ControllerImpl implements Controller {
             LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
-             * TO DO: the view has to know that an error occurred in order to display an error message
+             * The view has to know that an error occurred, in order to display an error message
              * and prevent the match from starting without being initialized.
              */
-            LOGGER.error("Error: cannot initialize a new match. ", ex.getMessage());
+            final String errorMsg = "Error: cannot initialize a new match. " + ex.getMessage();
+            LOGGER.error(errorMsg);
+            throw new IOException(errorMsg);
         }
     }
 
     @Override
-    public void createVariantModeMatch() {
+    public void createVariantModeMatch() throws IOException {
         final SettingsLoader loader = new SettingsLoaderImpl();
         final CellsCollectionBuilder cellsCollBuilder = new CellsCollectionBuilderImpl();
         final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
@@ -65,10 +67,12 @@ public final class ControllerImpl implements Controller {
             LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
-             * TO DO: the view has to know that an error occurred in order to display an error message
+             * The view has to know that an error occurred, in order to display an error message
              * and prevent the match from starting without being initialized.
              */
-            LOGGER.error("Error: cannot initialize a new match. ", ex.getMessage());
+            final String errorMsg = "Error: cannot initialize a new match. " + ex.getMessage();
+            LOGGER.error(errorMsg);
+            throw new IOException(errorMsg);
         }
     }
 
