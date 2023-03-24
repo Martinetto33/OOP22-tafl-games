@@ -10,7 +10,6 @@ import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
@@ -20,7 +19,6 @@ import taflgames.model.builders.PiecesCollectionBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * This class loads the configuration settings for the setup of the board
@@ -73,8 +71,8 @@ public final class SettingsLoaderImpl implements SettingsLoader {
             final NodeList nodeList = document.getElementsByTagName("Settings");
             final Element settings = (Element) nodeList.item(0);
             return settings;
-        } catch (final ParserConfigurationException | SAXException | IOException e) {
-            throw new IOException("An error occurred while trying to parse the file.");
+        } catch (final Exception e) {
+            throw new IOException("An error occurred while trying to get or parse the configuration file.");
         }
     }
 
