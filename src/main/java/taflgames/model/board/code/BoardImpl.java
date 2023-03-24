@@ -268,7 +268,7 @@ public class BoardImpl implements Board, TimedEntity{
             .isEmpty()) {
                             return false;
         } else if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
-            || king.getCurrentPosition().getX() < this.size || king.getCurrentPosition().getX() > this.size) {
+            || king.getCurrentPosition().getX() == this.size-1 || king.getCurrentPosition().getX() == this.size-1) {
 
                 if (getAdjacentPositions(king.getCurrentPosition()).stream()
                     .filter(pos -> !cells.get(pos).isFree())
