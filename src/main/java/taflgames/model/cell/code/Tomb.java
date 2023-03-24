@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Queue;
 
 import taflgames.common.code.Position;
+import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
@@ -20,10 +21,11 @@ public class Tomb extends AbstractCell{
     }
 
     @Override
-    public void notify(Position source, Piece sender, List<String> events) {
+    public void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
+                            Map<Position, Cell> cells) {
         // Per ora considero event come una stringa
         if (events.contains("QUEEN_MOVE")) {
-            resumePiece(sender.getPlayer());  // viene resuscitata una pedina del giocatore mangiata sulla casella corrente (se esiste)
+            resumePiece(sender.getPlayer(), pieces, cells);  // viene resuscitata una pedina del giocatore mangiata sulla casella corrente (se esiste)
         }
         if(events.contains("DEAD_PIECE")) {
             addDeadPieces(sender.getPlayer(), sender);
@@ -39,11 +41,17 @@ public class Tomb extends AbstractCell{
         }
     }
     
-    private void resumePiece(final Player player) {
+    private void resumePiece(final Player player, Map<Player, Map<Position, Piece>> pieces,
+                                Map<Position, Cell> cells) {
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
         if (!deadPieces.get(player).isEmpty()) {
             Piece pieceToResume = deadPieces.get(player).poll();	// prende la prima pedina in coda
             pieceToResume.reanimate();	// ora è viva
+            cells.get(pieceToResume.getCurrentPosition()).setFree(false);
+            Map<Position, Piece> resumedPiece = new HashMap<>();
+            resumedPiece.put(pieceToResume.getCurrentPosition(), pieceToResume);
+            pieces.put(player, resumedPiece);
+            
         }
     }
 

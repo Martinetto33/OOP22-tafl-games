@@ -45,12 +45,13 @@ public class TestBoard {
             }
         } 
         cells.get(new Position(0,0)).setFree(false);
-        cells.get(new Position(0,3)).setFree(false);
+        cells.get(new Position(3,3)).setFree(false);
 		board = new BoardImpl(pieces, cells, 5);
 	}
     
     @Test
     void testIsStartingPointValid() {
+        assertTrue(board.isStartingPointValid(new Position(3, 3), p2));
         assertTrue(board.isStartingPointValid(new Position(0, 0), p1)); 
         assertFalse(board.isStartingPointValid(new Position(3, 3), p1));
         assertFalse(board.isStartingPointValid(new Position(2, 2), p1));
@@ -168,6 +169,5 @@ public class TestBoard {
         assertEquals(new Position(0, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(-1, 0)));  
         assertEquals(new Position(2, 0), board1.getFurthestReachablePos(new Position(0, 0), new VectorImpl(1, 0))); 
     }
-
     
 }

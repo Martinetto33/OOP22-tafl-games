@@ -120,7 +120,7 @@ public class BoardImpl implements Board, TimedEntity{
             pieces.entrySet().stream().forEach(x -> {
                 if(x.getValue().containsKey(oldPos)) {
                     pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
-                    //signalOnMove(newPos, p);
+                    signalOnMove(newPos, p);
                 }
             });
             cells.get(oldPos).setFree(true);
@@ -137,7 +137,7 @@ public class BoardImpl implements Board, TimedEntity{
                     pieces.replace(x.getKey(), Collections.singletonMap(oldPos, x.getValue().get(newPos)));
                 }
             });
-            //signalOnMove(newPos, p);
+            signalOnMove(newPos, p);
         }
         this.currentPos = newPos;
     }
@@ -150,6 +150,13 @@ public class BoardImpl implements Board, TimedEntity{
             if(reachablePos.getX() == this.size || reachablePos.getY() == this.size
                 || reachablePos.getX() < 0 || reachablePos.getY() < 0 
                 || !cells.get(reachablePos).canAccept(getPiece(startPos))) {
+                    if(getPiece(startPos).canSwap() 
+                        && (cells.get(reachablePos).getType().equals("Throne") 
+                                || cells.get(reachablePos).getType().equals("Exit"))
+                        && !cells.get(reachablePos).isFree()
+                        && getPiece(reachablePos).getPlayer().equals(getPiece(startPos).getPlayer())) {
+                        furthestReachable = reachablePos;
+                    }
                 break;
             } else {
                 furthestReachable = reachablePos;
@@ -158,19 +165,17 @@ public class BoardImpl implements Board, TimedEntity{
         return furthestReachable;
     }
 
-    @Override
-    public void moveByVector(Vector direction) {
-    }
-
-    private void signalOnMove(Position source, Piece movedPiece) {
+    public void signalOnMove(Position source, Piece movedPiece) {
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
         Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
-                .map(x -> new Position(x.getX() +source.getX(), x.getY() + source.getY()))
                 .collect(Collectors.toSet());
+                //.map(x -> new Position(x.getX() + source.getX(), x.getY() + source.getY()))
         // Controllo se nelle posizioni ottenute ci sono entità; in caso, vengono triggerate
-        for (Position pos : triggeredPos) {
-            Cell cell = cells.get(pos);
-            cell.notify(source, movedPiece, List.of(movedPiece.sendSignalMove()));
+        if(!triggeredPos.isEmpty()) {
+            for (Position pos : triggeredPos) {
+                Cell cell = cells.get(pos);
+                cell.notify(source, movedPiece, List.of(movedPiece.sendSignalMove()), pieces, cells);
+            }
         }
     }
 

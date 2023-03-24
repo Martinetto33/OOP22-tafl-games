@@ -1,10 +1,13 @@
 package taflgames.model.cell.code;
 
 import java.util.*;
+
+import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
 import taflgames.model.pieces.api.Piece;
+import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.Mediator;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
@@ -34,7 +37,9 @@ public class Slider extends AbstractCell implements TimedEntity, Resettable {
         }
     }
     
-    public void notify(Position source, Piece movedPiece, List<String> events) {
+    @Override
+    public void notify(Position source, Piece movedPiece, List<String> events, Map<Player, Map<Position, Piece>> pieces, 
+                        Map<Position, Cell> cells) {
         if (this.sliderPos.equals(source)) {
             /* Non mi importa che tipo di pezzo sia arrivato, lo slider lo fa scivolare */
             if (!this.triggered && this.active) {
@@ -65,5 +70,7 @@ public class Slider extends AbstractCell implements TimedEntity, Resettable {
     public String getType() {
         return "Slider";
     }
+
+    
 
 }

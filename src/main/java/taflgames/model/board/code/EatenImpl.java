@@ -18,7 +18,7 @@ public class EatenImpl implements Eaten{
 
     private static final String DEAD_PIECE = "DEAD_PIECE"; //per segnalare morte pedina alle tombe
 
-    public Set<Position> trimHitbox(Piece currentPiece,Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells, final int size) {
+    public Set<Position> trimHitbox(Piece currentPiece, Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells, final int size) {
         Set<Position> hitbox = currentPiece.whereToHit();
         Iterator<Position> hitboxIterator = hitbox.iterator();
         while(hitboxIterator.hasNext()) {
@@ -118,7 +118,7 @@ public class EatenImpl implements Eaten{
         for (final Piece deadPiece : killedPieces) {
             cells.get(deadPiece.getCurrentPosition()).setFree(true);
             pieces.get(deadPiece.getPlayer()).remove(deadPiece.getCurrentPosition());
-            cells.get(deadPiece.getCurrentPosition()).notify(deadPiece.getCurrentPosition(), deadPiece, List.of(EatenImpl.DEAD_PIECE));
+            cells.get(deadPiece.getCurrentPosition()).notify(deadPiece.getCurrentPosition(), deadPiece, List.of(EatenImpl.DEAD_PIECE), pieces, cells);
         }
     }
 }
