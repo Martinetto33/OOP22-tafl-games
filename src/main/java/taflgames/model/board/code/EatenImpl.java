@@ -35,6 +35,10 @@ public class EatenImpl implements Eaten{
                                             .collect(Collectors.toSet());
 
         if(!samePlayerPieces.isEmpty()) {
+            /* ??????? Da rivedere, questo metodo non taglia la hitbox a partire dal
+             * centro della pedina. Bisogna proseguire passo passo. Al momento la hitbox non
+             * viene fermata da ostacoli.
+             */
             if(!currentPiece.getMyType().getTypeOfPiece().equals("ARCHER")) {
                 samePlayerPieces.forEach(x -> hitbox.remove(x));
             } else {
@@ -80,29 +84,35 @@ public class EatenImpl implements Eaten{
      * This method will create a map that associates each menaced enemy to all the allies
      * that are threatening it at the moment, so as to call "wasKilled" method on each
      * of them.
-     * @param enemies
+     * @param enemiesList
      * @param pieces
      * @param currPlayer
      * @return
+     * TODO: insert hitboxes of Exits and Thrones
      */
-    public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Player currPlayer) {
-        Map<Piece, Set<Piece>> finalmap = new HashMap<>();
+    public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemiesList, Map<Player, Map<Position, Piece>> pieces, Player currPlayer) {
+        Map<Piece, Set<Piece>> mapOfEnemiesAndTheirKillers = new HashMap<>();
         /* The following map represents the allies of the piece attempting to eat the enemy*/ 
         Map<Position, Piece> allies = pieces.get(currPlayer);
-        for (Piece enemy : enemies) {
+
+        /*TODO: the problem we are facing is that thrones and exits are Cells, but the enemies are
+         * only considered to be Pieces.
+         */
+
+        for (Piece enemy : enemiesList) {
             allies.entrySet().stream().forEach(x -> {
                 if(x.getValue().whereToHit().contains(enemy.getCurrentPosition())) {
-                    if(!finalmap.containsKey(enemy)) {
-                        Set<Piece> alliesPosition = new HashSet<>();
-                        alliesPosition.add(x.getValue());
-                        finalmap.put(enemy, alliesPosition);
+                    if(!mapOfEnemiesAndTheirKillers.containsKey(enemy)) {
+                        Set<Piece> alliesPositions = new HashSet<>();
+                        alliesPositions.add(x.getValue());
+                        mapOfEnemiesAndTheirKillers.put(enemy, alliesPositions);
                     } else {
-                        finalmap.get(enemy).add(x.getValue());
+                        mapOfEnemiesAndTheirKillers.get(enemy).add(x.getValue());
                     }
                 }
             });
         }
-        return finalmap;
+        return mapOfEnemiesAndTheirKillers;
     }
 
     public void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, 
@@ -111,7 +121,9 @@ public class EatenImpl implements Eaten{
             .filter(entry -> entry.getKey().wasKilled(entry.getValue(), lastMovedPiece.getCurrentPosition()))
             .map(entry -> entry.getKey())
             .toList();
-        this.notifyCellsThatPiecesDied(deadPieces, cells, pieces);
+        if (!deadPieces.isEmpty()) {
+            this.notifyCellsThatPiecesDied(deadPieces, cells, pieces);
+        }
     }
 
     private void notifyCellsThatPiecesDied(List<Piece> killedPieces, Map<Position, Cell> cells, Map<Player, Map<Position, Piece>> pieces) {
