@@ -89,7 +89,7 @@ public interface Piece {
      * saves the current state of the piece.
      * @return the inner class PieceMemento
      */
-    PieceMemento save();
+    taflgames.model.memento.api.PieceMemento save();
     /**
      * restores the previous state of the piece.
      * @param pm the inner class PieceMementoImpl (non ho potuto fare pieceMemento perchè dà problemi)

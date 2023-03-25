@@ -15,6 +15,7 @@ import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.memento.api.PieceMemento;
 import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.AbstractPiece;
 
 public class BoardImpl implements Board, TimedEntity{
 
@@ -340,10 +341,12 @@ public class BoardImpl implements Board, TimedEntity{
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
         
-        public BoardMementoImpl(
-            final List<PieceMemento> piecesMemento,
-            final List<CellMemento> cellsMemento
-        ) {
+        /**
+         * Creates a BoardMemento from which the board will be able to restore its previous state.
+         * @param piecesMemento a List of the saved states of the pieces.
+         * @param cellsMemento a List of the saved states of the cells.
+         */
+        public BoardMementoImpl(final List<PieceMemento> piecesMemento, final List<CellMemento> cellsMemento) {
             this.innerCells = BoardImpl.this.cells;
             this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER);
             this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER);
@@ -370,25 +373,64 @@ public class BoardImpl implements Board, TimedEntity{
         public List<CellMemento> getCellsMemento() {
             return this.cellsMemento;
         }
+
+        /**
+         * Returns the saved state of the cells.
+         * @return a Map of Positions and Cells.
+         */
         public Map<Position, Cell> getInnerCells() {
             return this.innerCells;
         }
+
+        /**
+         * Returns the saved state of the attacker's pieces.
+         * @return a Map of Positions and Pieces.
+         */
         public Map<Position, Piece> getInnerAttackerPieces() {
             return this.innerAttackerPieces;
         }
+
+        /**
+         * Returns the saved state of the defender's pieces.
+         * @return a Map of Positions and Pieces.
+         */
         public Map<Position, Piece> getInnerDefenderPieces() {
             return this.innerDefenderPieces;
         }
+
+        /**
+         * Returns the las saved current position.
+         * @return the Position.
+         */
         public Position getInnerCurrentPos() {
             return this.innerCurrentPos;
         }
+
+        /**
+         * Returns the saved state of the resettable entities.
+         * @return a Set of Resettable entites.
+         */
         public Set<Resettable> getInnerResettableEntities() {
             return this.innerResettableEntities;
         }
+
+        /**
+         * Returns the saved state of the timed entities.
+         * @return a Set of TimedEntities.
+         */
         public Set<TimedEntity> getInnerTimedEntities() {
             return this.innerTimedEntities;
         }
 
+    }
+
+    public BoardMemento save() {
+        return this.new BoardMementoImpl(
+            this.pieces.entrySet().stream()
+            .flatMap(entry -> entry.getValue().entrySet().stream())
+            .map(piece -> (AbstractPiece) piece)
+            .map(piece -> piece.save())
+            .toList(), null);
     }
 }
     
