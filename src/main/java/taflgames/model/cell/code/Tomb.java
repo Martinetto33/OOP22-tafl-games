@@ -1,6 +1,5 @@
 package taflgames.model.cell.code;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,7 +77,8 @@ public class Tomb extends AbstractCell{
     }
 
     public void restore(TombMementoImpl tm) {
-        this.deadPieces.putAll(tm.getInnerDeadPieces());
+        this.deadPieces = tm.getInnerDeadPieces();
+        super.restore(tm);
     }
 
     public class TombMementoImpl implements CellMemento {
@@ -94,8 +94,7 @@ public class Tomb extends AbstractCell{
 
         @Override
         public void restore() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'restore'");
+            Tomb.this.restore(this);
         }
 
         @Override
