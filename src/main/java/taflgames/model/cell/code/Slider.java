@@ -11,6 +11,7 @@ import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.SliderMediator;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
+import taflgames.model.memento.api.CellMemento;
 
 public class Slider extends AbstractCell implements TimedEntity, Resettable {
 
@@ -70,7 +71,78 @@ public class Slider extends AbstractCell implements TimedEntity, Resettable {
     public String getType() {
         return "Slider";
     }
-
     
+    /**
+     * Returns a memento describing the current state of this Slider.
+     * @return the SliderMemento.
+     */
+    public SliderMementoImpl save() {
+        return this.new SliderMementoImpl();
+    }
+
+    /**
+     * Restores the state of this slider to the one given by the SliderMemento.
+     * @param sm the {@link taflgames.model.cell.code.Slider.SliderMementoImpl}
+     * from which to restore this slider's status.
+     */
+    public void restore(SliderMementoImpl sm) {
+        this.orientation = sm.getOrientation();
+        this.active = sm.isActive();
+        this.lastActivityTurn = sm.getLastActivityTurn();
+        this.triggered = sm.isTriggered();
+        /* Here is a call to the Abstract Cell, that restores itself
+         * by calling the "getCellStatus()" method on this memento.
+         */
+        super.restore(sm);
+    }
+
+    /**
+     * This class represents the saved state of a Slider.
+     */
+    public class SliderMementoImpl implements CellMemento {
+        private final Vector orientation;
+        private final boolean triggered;
+        private final int lastActivityTurn;
+        private final boolean active;
+        private final boolean isFree;
+
+        /**
+         * Builds a Slider Memento from en existing Slider object.
+         */
+        public SliderMementoImpl() {
+            this.orientation = Slider.this.orientation;
+            this.triggered = Slider.this.triggered;
+            this.lastActivityTurn = Slider.this.lastActivityTurn;
+            this.active = Slider.this.active;
+            this.isFree = Slider.this.isFree();
+        }
+
+        @Override
+        public void restore() {
+            Slider.this.restore(this);
+        }
+
+        @Override
+        public boolean getCellStatus() {
+            return this.isFree;
+        }
+
+        public Vector getOrientation() {
+            return this.orientation;
+        }
+
+        public boolean isTriggered() {
+            return this.triggered;
+        }
+
+        public int getLastActivityTurn() {
+            return this.lastActivityTurn;
+        }
+
+        public boolean isActive() {
+            return this.active;
+        }
+
+    }
 
 }

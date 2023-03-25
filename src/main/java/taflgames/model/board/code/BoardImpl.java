@@ -427,7 +427,7 @@ public class BoardImpl implements Board, TimedEntity{
     public BoardMemento save() {
         return this.new BoardMementoImpl(
             this.pieces.entrySet().stream()
-            .flatMap(entry -> entry.getValue().entrySet().stream())
+            .flatMap(entry -> entry.getValue().values().stream())
             .map(piece -> (AbstractPiece) piece)
             .map(piece -> piece.save())
             .toList(), null);
