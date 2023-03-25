@@ -12,7 +12,7 @@ import taflgames.common.code.VectorImpl;
 import taflgames.model.pieces.api.BehaviourTypeOfPiece;
 import taflgames.model.pieces.api.FactoryBehaviourTypeOfPiece;
 import taflgames.model.pieces.api.Piece;
-import taflgames.model.pieces.api.PieceMemento;
+import taflgames.model.memento.api.PieceMemento;
 
 /**
 * {@inheritDoc}.
