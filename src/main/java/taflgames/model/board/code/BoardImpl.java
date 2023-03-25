@@ -11,6 +11,9 @@ import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
+import taflgames.model.memento.api.BoardMemento;
+import taflgames.model.memento.api.CellMemento;
+import taflgames.model.memento.api.PieceMemento;
 import taflgames.model.pieces.api.Piece;
 
 public class BoardImpl implements Board, TimedEntity{
@@ -57,7 +60,7 @@ public class BoardImpl implements Board, TimedEntity{
         } else if(cells.get(dest).getType().equals("Throne") 
                 || cells.get(dest).getType().equals("Exit")
                 || (cells.get(start).getType().equals("Slider") && !cells.get(dest).isFree())
-                || (!cells.get(dest).isFree() && getPiece(dest).getPlayer().equals(player))) {
+                || (!cells.get(dest).isFree() && getPieceAtPosition(dest).getPlayer().equals(player))) {
                 return false;
         }
 
@@ -99,7 +102,7 @@ public class BoardImpl implements Board, TimedEntity{
             // Se lo è, allora la mossa è valida, altrimenti no.
 
             // trovo la tipologia di pedina nella casella di destinazione dopodichè controllo che non sia un re poichè lo swapper non può scambiare posizione con un re
-            Piece destPiece = getPiece(dest);
+            Piece destPiece = getPieceAtPosition(dest);
             if(destPiece != null && destPiece.getMyType().getTypeOfPiece().equals("KING")) {
                 return false;
             } else {
@@ -149,13 +152,13 @@ public class BoardImpl implements Board, TimedEntity{
             Position reachablePos = direction.multiplyByScalar(numberOfBox).applyToPosition(startPos);
             if(reachablePos.getX() == this.size || reachablePos.getY() == this.size
                 || reachablePos.getX() < 0 || reachablePos.getY() < 0 
-                || !cells.get(reachablePos).canAccept(getPiece(startPos))) {
-                    if(getPiece(startPos).canSwap()){
+                || !cells.get(reachablePos).canAccept(getPieceAtPosition(startPos))) {
+                    if(getPieceAtPosition(startPos).canSwap()){
                         if( !cells.get(reachablePos).isFree()
                             && (!cells.get(reachablePos).getType().equals("Throne") 
                                     || !cells.get(reachablePos).getType().equals("Exit"))
                             && cells.get(startPos).getType().equals("Sider")
-                            && getPiece(reachablePos).getPlayer().equals(getPiece(startPos).getPlayer())) {
+                            && getPieceAtPosition(reachablePos).getPlayer().equals(getPieceAtPosition(startPos).getPlayer())) {
                             furthestReachable = reachablePos;
                         }
                     }
@@ -185,13 +188,13 @@ public class BoardImpl implements Board, TimedEntity{
         if(start.getX() == dest.getX()) { 
             if(start.getY() < dest.getY()) {
                 for(int i=start.getY()+1; i<dest.getY(); i++) {
-                    if(!cells.get(new Position(start.getX(), i)).canAccept(getPiece(start))) {
+                    if(!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
                 for(int i=start.getY()-1; i<dest.getY(); i--) {
-                    if(!cells.get(new Position(start.getX(), i)).canAccept(getPiece(start))) {
+                    if(!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
@@ -199,13 +202,13 @@ public class BoardImpl implements Board, TimedEntity{
         } else {
             if(start.getX() < dest.getX()) {
                 for(int i=start.getX() + 1; i<dest.getX(); i++) {
-                    if(!cells.get(new Position(i, start.getY())).canAccept(getPiece(start))) {
+                    if(!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
                 for(int i=start.getX() - 1; i<dest.getX(); i--) {
-                    if(!cells.get(new Position(i, start.getY())).canAccept(getPiece(start))) {
+                    if(!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
@@ -237,7 +240,7 @@ public class BoardImpl implements Board, TimedEntity{
      */
     @Override
     public void eat(){
-        Piece currPiece = getPiece(currentPos);
+        Piece currPiece = getPieceAtPosition(currentPos);
         Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece, pieces, cells, size);
         List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
         Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
@@ -304,7 +307,7 @@ public class BoardImpl implements Board, TimedEntity{
         return true;
     }
 
-    private Piece getPiece(Position pos) {
+    private Piece getPieceAtPosition(Position pos) {
         Piece p = pieces.entrySet().stream()
             .filter(x -> x.getValue().containsKey(pos))
             .map(x -> x.getValue().get(pos))
@@ -323,6 +326,69 @@ public class BoardImpl implements Board, TimedEntity{
                                 .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() <this.size)
                                 .collect(Collectors.toSet());
     }
-     
+ 
+    /**
+     * This class is used to save the Board's current status.
+     */
+    public class BoardMementoImpl implements BoardMemento {
+        private final Map<Position, Cell> innerCells;
+        private final Map<Position, Piece> innerAttackerPieces;
+        private final Map<Position, Piece> innerDefenderPieces;
+        private final Position innerCurrentPos;
+        private final Set<Resettable> innerResettableEntities;
+        private final Set<TimedEntity> innerTimedEntities;
+        private final List<PieceMemento> piecesMemento;
+        private final List<CellMemento> cellsMemento;
+        
+        public BoardMementoImpl(
+            final List<PieceMemento> piecesMemento,
+            final List<CellMemento> cellsMemento
+        ) {
+            this.innerCells = BoardImpl.this.cells;
+            this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER);
+            this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER);
+            this.innerCurrentPos = BoardImpl.this.currentPos;
+            this.innerResettableEntities = BoardImpl.this.resettableEntities;
+            this.innerTimedEntities = BoardImpl.this.timedEntities;
+
+            this.piecesMemento = piecesMemento;
+            this.cellsMemento = cellsMemento;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<PieceMemento> getPiecesMemento() {
+            return this.piecesMemento;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<CellMemento> getCellsMemento() {
+            return this.cellsMemento;
+        }
+        public Map<Position, Cell> getInnerCells() {
+            return this.innerCells;
+        }
+        public Map<Position, Piece> getInnerAttackerPieces() {
+            return this.innerAttackerPieces;
+        }
+        public Map<Position, Piece> getInnerDefenderPieces() {
+            return this.innerDefenderPieces;
+        }
+        public Position getInnerCurrentPos() {
+            return this.innerCurrentPos;
+        }
+        public Set<Resettable> getInnerResettableEntities() {
+            return this.innerResettableEntities;
+        }
+        public Set<TimedEntity> getInnerTimedEntities() {
+            return this.innerTimedEntities;
+        }
+
+    }
 }
     
