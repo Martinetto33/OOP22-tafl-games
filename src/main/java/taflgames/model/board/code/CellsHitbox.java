@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.pieces.code.BasicPiece;
+import taflgames.model.board.api.Board;
 import taflgames.model.pieces.api.Piece;
 
 /**
@@ -27,7 +28,7 @@ public class CellsHitbox {
      * @param inputBoard the {@link taflgames.model.board.code.BoardImpl} from which
      * to take the positions of special cells.
      */
-    public CellsHitbox(final BoardImpl inputBoard) {
+    public CellsHitbox(final Board inputBoard) {
         Set<Position> relevantPositions = new HashSet<>();
         inputBoard.getMapCells().entrySet().stream()
             .filter(entry -> entry.getValue().getType().equals("Throne")

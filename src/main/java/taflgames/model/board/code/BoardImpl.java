@@ -20,14 +20,14 @@ public class BoardImpl implements Board, TimedEntity{
     private final int size;
     private Position currentPos;
     private Set<Resettable> resettableEntities = null;
-    private final Eaten eatingManager;
     private Set<TimedEntity> timedEntities = null;
+    private final Eaten eatingManager;
 
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
         this.pieces = pieces;
         this.cells = cells;
         this.size = size;
-        this.eatingManager = new EatenImpl();
+        this.eatingManager = new EatenImpl(this);
     }
 
     @Override
@@ -225,11 +225,11 @@ public class BoardImpl implements Board, TimedEntity{
     }
 
     public Map<Position, Cell> getMapCells() {
-        return this.cells;
+        return Collections.unmodifiableMap(this.cells);
     }
 
     public Map<Player, Map<Position, Piece>> getMapPieces() {
-        return this.pieces;
+        return Collections.unmodifiableMap(this.pieces);
     }
 
     /**

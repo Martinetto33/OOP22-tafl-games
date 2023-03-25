@@ -3,9 +3,12 @@ package taflgames.model.board.api;
 
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
+import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.Resettable;
 import taflgames.model.cell.api.TimedEntity;
+import taflgames.model.pieces.api.Piece;
 
+import java.util.Map;
 import java.util.Set;
 import taflgames.common.Player;
 
@@ -37,5 +40,9 @@ public interface Board {
      * @param timedEntities the timed objects
      */
     void addTimedEntities(final Set<TimedEntity> timedEntities);
+
+    public Map<Position, Cell> getMapCells();
+
+    public Map<Player, Map<Position, Piece>> getMapPieces();
 
 }

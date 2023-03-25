@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.model.board.api.Board;
 import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
@@ -17,6 +18,14 @@ import taflgames.model.pieces.api.Piece;
 public class EatenImpl implements Eaten{
 
     private static final String DEAD_PIECE = "DEAD_PIECE"; //per segnalare morte pedina alle tombe
+    
+    private final Board board;
+    private final CellsHitbox cellsHitbox;
+
+    public EatenImpl(final Board board) {
+        this.board = board;
+        this.cellsHitbox = new CellsHitbox(board);
+    }
 
     public Set<Position> trimHitbox(Piece currentPiece, Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells, final int size) {
         Set<Position> hitbox = currentPiece.whereToHit();

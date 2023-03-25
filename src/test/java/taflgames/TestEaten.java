@@ -23,8 +23,8 @@ import org.junit.jupiter.api.Test;
 import taflgames.model.board.api.Eaten;
 
 public class TestEaten {
-    private static Eaten eat = new EatenImpl();
-    private static Board boardToCeckEaten;
+    private static Board boardToCheckEaten;
+    private static Eaten eat;
     private static Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
     private static Map<Position, Cell> cells = new HashMap<>();
     private static Player p1 = Player.ATTACKER;
@@ -54,7 +54,8 @@ public class TestEaten {
         cells.get(new Position(1,4)).setFree(false);
         cells.get(new Position(3,2)).setFree(false);
         cells.get(new Position(4,0)).setFree(false);
-		boardToCeckEaten = new BoardImpl(pieces, cells, 5);
+		boardToCheckEaten = new BoardImpl(pieces, cells, 5);
+        eat = new EatenImpl((BoardImpl) boardToCheckEaten);
 	}
 
     @Test 
@@ -110,7 +111,7 @@ public class TestEaten {
         enemies = new ArrayList<>();
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(3, 3), p2)));
 
-        final Eaten eat = new EatenImpl();
+        Eaten eat;
         final Board secondBoard;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
@@ -142,6 +143,7 @@ public class TestEaten {
         cells.get(new Position(0,1)).setFree(false);
 
 		secondBoard = new BoardImpl(pieces, cells, 5);
+        eat = new EatenImpl(secondBoard);
 
         //classic piece circondato da due nemici uno sopra e uno sotto
         hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
@@ -171,7 +173,7 @@ public class TestEaten {
 
     @Test 
     void testCheckAllies() {
-        final Eaten eat = new EatenImpl();
+        Eaten eat;
         final Board thirdBoard;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
@@ -201,6 +203,7 @@ public class TestEaten {
 
         
 		thirdBoard = new BoardImpl(pieces, cells, 5);
+        eat = new EatenImpl(thirdBoard);
 
         Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
         List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 1), p1));
@@ -229,8 +232,8 @@ public class TestEaten {
 
     @Test
     void testNotifyAllThreatened() {
-        final Eaten eat = new EatenImpl();
         final Board fourthBoard;
+        Eaten eat;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
         final Player p1 = Player.ATTACKER;
@@ -261,6 +264,7 @@ public class TestEaten {
 
         
         fourthBoard = new BoardImpl(pieces, cells, 5);
+        eat = new EatenImpl(fourthBoard);
 
         Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
         List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 0), p1));

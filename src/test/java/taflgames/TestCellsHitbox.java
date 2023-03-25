@@ -9,11 +9,6 @@ import taflgames.model.board.code.CellsHitbox;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.Exit;
 import taflgames.model.cell.code.Throne;
-import taflgames.model.pieces.api.Piece;
-import taflgames.model.pieces.code.BasicPiece;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -43,7 +38,7 @@ public class TestCellsHitbox {
         expectedHitbox.add(new Position(0, 1));
         expectedHitbox.add(new Position(2, 1));
         expectedHitbox.add(new Position(1, 2));
-        
+
         assertTrue(cellsHitbox.getCellsAsPiecesWithHitbox(Player.ATTACKER).stream()
                 .flatMap(piece -> piece.whereToHit().stream())
                 .collect(Collectors.toUnmodifiableSet()).containsAll(expectedHitbox));
