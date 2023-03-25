@@ -1,6 +1,7 @@
 package taflgames.model;
 
 import taflgames.common.code.Position;
+import taflgames.model.memento.api.BoardMemento;
 import taflgames.common.api.Vector;
 
 import taflgames.common.Player;
@@ -19,5 +20,9 @@ public interface Board {
     Position getFurthestReachablePos(Vector direction);
 
     void moveByVector(Vector direction);
+
+    void restore(BoardMemento boardMemento);
+
+    BoardMemento save();
 
 }

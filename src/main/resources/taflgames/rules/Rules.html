@@ -8,35 +8,126 @@
     <body>
         <h1>RULES</h1>
         <h2>Classic Mode</h2>
-        <p>
-            [TO DO]
-        </p>
-        <h2>Variant Mode</h2>
-        <p>
-            Compared to the classic version of the game, the variant version of the game offers
-            four types of special pieces and one type of special cell.
+        <h3>Teams</h3>
+            The game is played on a 11x11 sized board.
+            <br>There are two playing teams: the <b>Defender</b> and the <b>Attacker</b>.
             <ul>
                 <li>
-                    The <b>Queen</b> is able to bring killed allied pieces back to the game, by moving to a cell
-                    that is adjacent to another cell on which an allied piece has been killed.
+                    The <b>Defender</b> team is composed by 12 Basic Pieces and one King,
+                    which are initially placed in the middle of the grid (see image below), with the
+                    King placed on the Throne, which is the central cell of the grid.
+                    The goal of the Defender team is to make the King reach one of the Exits
+                    (four special cells placed at each corner of the grid) without getting caught
+                    by the Attacker team. In the classic mode, the capture of the King happens
+                    when it is sorrounded by four opponent's pieces in the adjacent cells
+                    (north, east, south and west directions). The Defender also wins when all the
+                    pieces of the Attacker have been killed.
                 </li>
                 <li>
-                    The <b>Archer</b> can take part to the killing of an opponent's piece, by moving on
-                    the same row or column of that opponent's piece.
+                    The <b>Attacker</b> team is composed by 24 Basic Pieces, which are
+                    initially distributed along the borders of the grid (see image below).
+                    The goal of the Attacker is to catch the King before it reaches one of the Exits;
+                    the capture is performed in the way described above.
+                </li>
+            </ul>
+            <img src="rules-images/board-setup.png" alt="board-setup" width="200" height="200">
+            <figcaption>
+                [Credits to:
+                <a href="https://commons.wikimedia.org/wiki/File:Hnefatafl_setup.png">
+                    https://commons.wikimedia.org/wiki/File:Hnefatafl_setup.png
+                </a>]
+            </figcaption>
+        <h3>Cells</h3>
+        <p>
+            In the classic mode, there are three types of cells.
+            <ul>
+                <li>
+                    The <b>Basic Cells</b>, which cover all the positions in the board where
+                    special cells are not present.
+                    <br><img src="rules-images/assets/basic_cell.png" alt="basic_cell" width="70" height="70">
                 </li>
                 <li>
-                    The <b>Shield</b> is a piece that can survive to a killing once.
+                    The <b>Throne</b>, which is the central cell of the board, where the King is initially placed.
+                    Only the King can occupy or pass through it.
+                    <br><img src="rules-images/assets/throne.png" alt="throne" width="70" height="70">
                 </li>
                 <li>
-                    The <b>Swapper</b> can swap its position with one of the opponent's pieces,
-                    apart from the King.
+                    The <b>Exits</b>. There are four of them on the board, one at each corner;
+                    if the King reaches one of them, then the Defender wins. Obviously, Exits cannot be
+                    occupied by any other piece apart from the King.
+                    <br><img src="rules-images/assets/exit.png" alt="exit" width="70" height="70">
                 </li>
+            </ul>
+        </p>
+        <h3>Pieces</h3>
+            In the classic mode, there are two types of pieces:
+            <ul>
+                <li>
+                    the <b>Basic Piece</b>;
+                    <br><img src="rules-images/assets/basic_piece_attacker.png" alt="basic_piece_attacker" width="70" height="70">
+                    <img src="rules-images/assets/basic_piece_defender.png" alt="basic_piece_defender" width="70" height="70">
+                    <figcaption>[Basic Pieces of the Attacker and the Defender respectively]</figcaption>
+                </li>
+                <li>
+                    the <b>King</b>.
+                    <br><img src="rules-images/assets/king.png" alt="king" width="70" height="70">
+                </li>
+            </ul>
+            <p>
+                All the pieces can be moved vertically and horizontally,
+                as long as all the cells covered by the movement are not occupied by any other pieces.
+            </p>
+            <p>
+                The killing of a Basic Piece is performed when two opponent's pieces are placed in two
+                adjacent cells at opposing sides of the targeted piece. The killing of the King, instead,
+                requires the positioning of four Attacker's pieces on all the four adjacent cells, as 
+                described before.
+            </p>
+        <h2>Variant Mode</h2>
+        <p>
+            Compared to the classic version of the game, the variant mode includes
+            four types of special pieces and two types of special cells.
+            <ul>
                 <li>
                     The <b>Slider</b> cell makes the piece that lands on it slide in the furthest
                     reachable position in the direction shown on the cell. These special cells appear and
                     disappear periodically every few turns, changing the direction of the sliding each time.
+                    <br><img src="rules-images/assets/slider.png" alt="slider" width="70" height="70">
+                </li>
+                <li>
+                    The <b>Tomb</b> is a special cell that spawns on a cell where a piece gets killed.
+                    <br><img src="rules-images/assets/tomb_attacker.png" alt="tomb_attacker" width="70" height="70">
+                    <img src="rules-images/assets/tomb_defender.png" alt="tomb_defender" width="70" height="70">
+                </li>
+                <li>
+                    The <b>Queen</b> is able to bring killed allied pieces back to life, by moving to a cell
+                    that is adjacent to a Tomb.
+                    <br><img src="rules-images/assets/queen_attacker.png" alt="queen_attacker" width="70" height="70">
+                    <img src="rules-images/assets/queen_defender.png" alt="queen_defender" width="70" height="70">
+                </li>
+                <li>
+                    The <b>Archer</b> can take part to the killing of an opponent's piece, by moving on
+                    the same row or column of that opponent's piece.
+                    <br><img src="rules-images/assets/archer_attacker.png" alt="archer_attacker" width="70" height="70">
+                    <img src="rules-images/assets/archer_defender.png" alt="archer_defender" width="70" height="70">
+                </li>
+                <li>
+                    The <b>Shield</b> is a piece that can survive to a killing once.
+                    <br><img src="rules-images/assets/shield_attacker.png" alt="shield_attacker" width="70" height="70">
+                    <img src="rules-images/assets/shield_defender.png" alt="shield_defender" width="70" height="70">
+                </li>
+                <li>
+                    The <b>Swapper</b> can swap its position with one of the opponent's pieces
+                    (excluding the King).
+                    <br><img src="rules-images/assets/swapper_attacker.png" alt="swapper_defender" width="70" height="70">
+                    <img src="rules-images/assets/swapper_defender.png" alt="swapper_defender" width="70" height="70">
                 </li>
             </ul>
+            The number of pieces for both teams is the same as in the classic mode of the game.
+            <br>Each team has <b>one Queen</b>, <b>two Archers</b>, <b>two Shields</b> and <b>one Swapper</b>.
+            The defending team includes a single King as in the classic mode.
+            The remaining pieces are Basic Pieces</b> for both teams.
+            <br><b>Four Sliders</b> are placed on the board in fixed locations.
         </p>
     </body>
 </html>

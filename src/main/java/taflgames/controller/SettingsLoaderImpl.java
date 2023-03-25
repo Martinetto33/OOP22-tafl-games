@@ -73,8 +73,8 @@ public final class SettingsLoaderImpl implements SettingsLoader {
             final NodeList nodeList = document.getElementsByTagName("Settings");
             final Element settings = (Element) nodeList.item(0);
             return settings;
-        } catch (final ParserConfigurationException | SAXException | IOException e) {
-            throw new IOException("An error occurred while trying to parse the file.");
+        } catch (final IOException | ParserConfigurationException | SAXException e) {
+            throw new IOException("An error occurred while trying to get or parse the configuration file.");
         }
     }
 

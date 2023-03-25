@@ -3,6 +3,7 @@ import java.util.Set;
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
+import taflgames.model.memento.api.PieceMemento;
 import taflgames.model.pieces.code.AbstractPiece.PieceMementoImpl;
 /**
  * This interface will model the behavior of a generic piece 

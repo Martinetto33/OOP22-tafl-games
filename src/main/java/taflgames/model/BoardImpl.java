@@ -6,6 +6,7 @@ import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.cells.Cell;
+import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.pieces.api.Piece;
 
 /**
@@ -52,6 +53,18 @@ public class BoardImpl implements Board {
     public void moveByVector(Vector direction) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'moveByVector'");
+    }
+
+    @Override
+    public void restore(BoardMemento boardMemento) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'restore'");
+    }
+
+    @Override
+    public BoardMemento save() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
 }
