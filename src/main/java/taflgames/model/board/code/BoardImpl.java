@@ -224,6 +224,14 @@ public class BoardImpl implements Board, TimedEntity{
         }
     }
 
+    public Map<Position, Cell> getMapCells() {
+        return cells;
+    }
+
+    public Map<Player, Map<Position, Piece>> getMapPieces() {
+        return pieces;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -283,20 +291,7 @@ public class BoardImpl implements Board, TimedEntity{
                     .collect(Collectors.toSet()).isEmpty())
                 .findAny().isPresent()) {
                                 return false;
-                }
-                
-             /* System.out.println(pieces.get(playerInTurn).values().stream()
-                    .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
-                        .filter(adjPos -> cells.get(adjPos).canAccept(piece))
-                        .collect(Collectors.toSet()).isEmpty())
-                    .findAny().get()); 
-                    
-                    for (Piece piece : pieces.get(playerInTurn).values()) {
-                System.out.println(getAdjacentPositions(piece.getCurrentPosition()));
-                if(getAdjacentPositions(piece.getCurrentPosition()).stream()
-                    .filter(adjPos -> cells.get(adjPos).canAccept(piece))
-                    .findAny()
-                    .isPresent()) {*/
+            }
             
         return true;
     }
