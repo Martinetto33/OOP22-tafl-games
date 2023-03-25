@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.pieces.code.BasicPiece;
+import taflgames.model.pieces.api.Piece;
 
 /**
  * This class is in charge of informing an {@link taflgames.model.board.api.Eaten}
