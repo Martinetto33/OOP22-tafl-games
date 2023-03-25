@@ -5,9 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
+import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
@@ -70,4 +72,39 @@ public class Tomb extends AbstractCell{
         return "Tomb";
     }
 
+    public CellMemento save() {
+        return this.new TombMementoImpl();
+    }
+
+    public void restore(TombMementoImpl tm) {
+        this.deadPieces = tm.getInnerDeadPieces();
+        super.restore(tm);
+    }
+
+    public class TombMementoImpl implements CellMemento {
+        private final Map<Player, Queue<Piece>> innerDeadPieces;
+        private final boolean isFree;
+
+        public TombMementoImpl() {
+            /* This way of copying maps should create a deep copy. */
+            this.innerDeadPieces = Tomb.this.deadPieces.entrySet().stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            this.isFree = Tomb.this.isFree();
+        }
+
+        @Override
+        public void restore() {
+            Tomb.this.restore(this);
+        }
+
+        @Override
+        public boolean getCellStatus() {
+            return this.isFree;
+        }
+
+        public Map<Player, Queue<Piece>> getInnerDeadPieces() {
+            return this.innerDeadPieces;
+        }
+
+    }
 }

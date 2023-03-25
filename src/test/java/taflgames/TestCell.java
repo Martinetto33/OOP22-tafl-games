@@ -10,7 +10,6 @@ import taflgames.model.pieces.code.Queen;
 import taflgames.model.pieces.code.Swapper;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.AbstractCell;
@@ -112,7 +111,6 @@ public class TestCell {
 
     @Test 
     void testNotifySlider() {
-        Board board;
         Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         Map<Position, Cell> cells = new HashMap<>();
         Player p1 = Player.ATTACKER;
@@ -136,7 +134,7 @@ public class TestCell {
         } 
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
-        board = new BoardImpl(pieces, cells, 5);
+        new BoardImpl(pieces, cells, 5);
 
         //Basic piece on a slider
         cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p1), null, pieces, cells);
@@ -152,7 +150,6 @@ public class TestCell {
 
     @Test 
     void testNotifyTurnHasEnded() {
-        Board board;
         Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         Map<Position, Cell> cells = new HashMap<>();
         Player p1 = Player.ATTACKER;
@@ -176,7 +173,7 @@ public class TestCell {
         } 
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
-        board = new BoardImpl(pieces, cells, 5);
+        new BoardImpl(pieces, cells, 5);
 
         
         cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p1), null, pieces, cells);

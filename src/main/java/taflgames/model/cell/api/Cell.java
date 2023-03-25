@@ -3,6 +3,7 @@ import java.util.*;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
 public interface Cell {
@@ -16,5 +17,7 @@ public interface Cell {
     public String getType();
 
     public boolean isFree();
+
+    public CellMemento save();
 
 }

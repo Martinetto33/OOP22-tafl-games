@@ -15,6 +15,7 @@ import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.memento.api.PieceMemento;
 import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.AbstractPiece;
 
 public class BoardImpl implements Board, TimedEntity{
 
@@ -22,8 +23,7 @@ public class BoardImpl implements Board, TimedEntity{
     private Map<Player, Map<Position, Piece>> pieces;
     private final int size;
     private Position currentPos;
-    private Set<Slider> resettableEntities = null;
-    private Set<Slider> timedEntities = null;
+    private Set<Slider> slidersEntities = null;
     private final Eaten eatingManager;
 
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
@@ -226,11 +226,11 @@ public class BoardImpl implements Board, TimedEntity{
 
     @Override
     public void notifyTurnHasEnded(int turn) {
-        if (this.resettableEntities != null) {
-            this.resettableEntities.forEach(e -> e.reset());
+        if (this.slidersEntities!= null) {
+            this.slidersEntities.forEach(e -> e.reset());
         } 
-        if (this.timedEntities != null) {
-            this.timedEntities.forEach(elem -> elem.notifyTurnHasEnded(turn));
+        if (this.slidersEntities != null) {
+            this.slidersEntities.forEach(elem -> elem.notifyTurnHasEnded(turn));
         }
     }
 
@@ -252,22 +252,6 @@ public class BoardImpl implements Board, TimedEntity{
         List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
         Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
         eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addResettableEntities(final Set<Slider> resettableEntities) {
-        this.resettableEntities = resettableEntities;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addTimedEntities(final Set<Slider> timedEntities) {
-        this.timedEntities = timedEntities;
     }
 
     /**
@@ -342,21 +326,25 @@ public class BoardImpl implements Board, TimedEntity{
         private final Map<Position, Piece> innerAttackerPieces;
         private final Map<Position, Piece> innerDefenderPieces;
         private final Position innerCurrentPos;
-        private final Set<Slider> innerResettableEntities;
-        private final Set<Slider> innerTimedEntities;
+        private final Set<Slider> innerSlidersEntities;
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
         
-        public BoardMementoImpl(
-            final List<PieceMemento> piecesMemento,
-            final List<CellMemento> cellsMemento
-        ) {
-            this.innerCells = BoardImpl.this.cells;
-            this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER);
-            this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER);
+        /**
+         * Creates a BoardMemento from which the board will be able to restore its previous state.
+         * @param piecesMemento a List of the saved states of the pieces.
+         * @param cellsMemento a List of the saved states of the cells.
+         */
+        public BoardMementoImpl(final List<PieceMemento> piecesMemento, final List<CellMemento> cellsMemento) {
+            this.innerCells = BoardImpl.this.cells.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER).entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER).entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerCurrentPos = BoardImpl.this.currentPos;
-            this.innerResettableEntities = BoardImpl.this.resettableEntities;
-            this.innerTimedEntities = BoardImpl.this.timedEntities;
+            this.innerSlidersEntities = BoardImpl.this.slidersEntities.stream()
+            .collect(Collectors.toSet());
 
             this.piecesMemento = piecesMemento;
             this.cellsMemento = cellsMemento;
@@ -377,25 +365,76 @@ public class BoardImpl implements Board, TimedEntity{
         public List<CellMemento> getCellsMemento() {
             return this.cellsMemento;
         }
+
+        /**
+         * Returns the saved state of the cells.
+         * @return a Map of Positions and Cells.
+         */
         public Map<Position, Cell> getInnerCells() {
             return this.innerCells;
         }
+
+        /**
+         * Returns the saved state of the attacker's pieces.
+         * @return a Map of Positions and Pieces.
+         */
         public Map<Position, Piece> getInnerAttackerPieces() {
             return this.innerAttackerPieces;
         }
+
+        /**
+         * Returns the saved state of the defender's pieces.
+         * @return a Map of Positions and Pieces.
+         */
         public Map<Position, Piece> getInnerDefenderPieces() {
             return this.innerDefenderPieces;
         }
+
+        /**
+         * Returns the las saved current position.
+         * @return the Position.
+         */
         public Position getInnerCurrentPos() {
             return this.innerCurrentPos;
         }
-        public Set<Slider> getInnerResettableEntities() {
-            return this.innerResettableEntities;
-        }
-        public Set<Slider> getInnerTimedEntities() {
-            return this.innerTimedEntities;
+        public Set<Slider> getInnerSlidersEntities() {
+            return this.innerSlidersEntities;
         }
 
+        @Override
+        public void restore() {
+            BoardImpl.this.restore(this);
+        }
+
+    }
+
+    /**
+     * Saves a snapshot of the current state of this board.
+     * @return the BoardMemento deriving from the saving of the board status.
+     */
+    public BoardMemento save() {
+        return this.new BoardMementoImpl(
+            this.pieces.entrySet().stream()
+            .flatMap(entry -> entry.getValue().values().stream())
+            .map(piece -> (AbstractPiece) piece)
+            .map(piece -> piece.save())
+            .toList(), null);
+    }
+
+    /**
+     * Restores the status of this board to the one contained in the
+     * {@link taflgames.model.board.code.BoardImpl.BoardMementoImpl}.
+     * @param bm the BoardMemento from which to extract the information
+     * required to restore the state of the board.
+     */
+    public void restore(BoardMementoImpl bm) {
+        this.cells = bm.getInnerCells();
+        this.pieces.put(Player.ATTACKER, bm.getInnerAttackerPieces());
+        this.pieces.put(Player.DEFENDER, bm.getInnerDefenderPieces());
+        this.currentPos = bm.getInnerCurrentPos();
+        this.slidersEntities = bm.getInnerSlidersEntities();
+        bm.getCellsMemento().forEach(c -> c.restore());
+        bm.getPiecesMemento().forEach(p -> p.restore());
     }
 }
     

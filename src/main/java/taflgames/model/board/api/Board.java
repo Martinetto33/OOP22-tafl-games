@@ -4,11 +4,9 @@ package taflgames.model.board.api;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
-import taflgames.model.cell.api.Slider;
 import taflgames.model.pieces.api.Piece;
 
 import java.util.Map;
-import java.util.Set;
 import taflgames.common.Player;
 
 public interface Board {
@@ -27,18 +25,6 @@ public interface Board {
      * This method must be called by Match after method {@link #updatePiecePos}
      */
     void eat();
-
-    /**
-     * This method adds a set of resettable objects like sliders.
-     * @param resettableEntities the resettable objects
-    */
-    void addResettableEntities(final Set<Slider> resettableEntities);
-
-    /**
-     * This method adds a set of timed objects like sliders.
-     * @param timedEntities the timed objects
-     */
-    void addTimedEntities(final Set<Slider> timedEntities);
 
     public Map<Position, Cell> getMapCells();
 

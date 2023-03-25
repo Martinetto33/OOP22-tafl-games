@@ -7,11 +7,10 @@ import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
 import taflgames.model.pieces.api.Piece;
-import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.SliderMediator;
+import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Slider;
-
 
 public class SliderImpl extends AbstractCell implements Slider {
 
