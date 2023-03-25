@@ -108,6 +108,12 @@ public class EatenImpl implements Eaten{
                                         .filter(ally -> ally.getKey().getX() == lastMovedPiece.getCurrentPosition().getX()
                                             || ally.getKey().getY() == lastMovedPiece.getCurrentPosition().getY())
                                         .forEach(ally -> allies.put(ally.getKey(), ally.getValue()));
+
+        /* Exits and Thrones can be considered as allies of the current player! 
+         * This simple addition should work as normal.
+        */
+        this.cellsHitbox.getCellsAsPiecesWithHitbox(lastMovedPiece.getPlayer()).forEach(piece -> allies.put(piece.getCurrentPosition(), piece));
+
         for (Piece enemy : enemiesList) {
             allies.entrySet().stream().forEach(x -> {
                 if(x.getValue().whereToHit().contains(enemy.getCurrentPosition())) {
