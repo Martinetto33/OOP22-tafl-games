@@ -20,7 +20,7 @@ import taflgames.model.pieces.code.Swapper;
 import taflgames.common.Player;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.ClassicCell;
-import taflgames.model.cell.code.Slider;
+import taflgames.model.cell.code.SliderImpl;
 import taflgames.model.cell.code.Throne;
 
 public class TestBoard {
@@ -96,6 +96,8 @@ public class TestBoard {
         assertTrue(board2.isDestinationValid(new Position(0,0), new Position(0,3), p1));
         assertFalse(board2.isDestinationValid(new Position(0,0), new Position(2,2), p1));
         assertTrue(board2.isDestinationValid(new Position(3,4), new Position(0,4), p1));
+        assertFalse(board2.isDestinationValid(new Position(0,0), new Position(1,2), p1));
+        assertFalse(board2.isDestinationValid(new Position(0,0), new Position(3,1), p1));
 
         assertTrue(board2.isDestinationValid(new Position(3,3), new Position(3,4), p2));
         assertTrue(board2.isDestinationValid(new Position(3,3), new Position(0,3), p2));
@@ -104,6 +106,11 @@ public class TestBoard {
         assertFalse(board2.isDestinationValid(new Position(3,3), new Position(3,1), p2));
 
         assertFalse(board2.isDestinationValid(new Position(1,2), new Position(4,2), p1));
+        assertTrue(board2.isDestinationValid(new Position(1,2), new Position(3,1), p1));
+        assertFalse(board2.isDestinationValid(new Position(1,2), new Position(3,4), p1));
+
+
+
     }
 
     @Test
@@ -142,12 +149,20 @@ public class TestBoard {
         piecesPlayer1.put(new Position(0, 3), new Swapper(new Position(0, 3), p1));
         pieces.put(p1, piecesPlayer1);
         cells.get(new Position(0, 3)).setFree(false);
-        cells.get(new Position(3, 3)).setFree(false);
         board3.updatePiecePos(new Position(0, 3), new Position(3, 3));
         assertTrue(pieces.get(p1).keySet().contains(new Position(3, 3)));
         assertTrue(pieces.get(p2).keySet().contains(new Position(0, 3)));
         assertFalse(pieces.get(p2).keySet().contains(new Position(3, 3)));
         assertFalse(pieces.get(p1).keySet().contains(new Position(0, 3)));
+
+        piecesPlayer2.put(new Position(3,1), new Swapper(new Position(3,1), p2));
+        pieces.put(p2, piecesPlayer2);
+        cells.get(new Position(3,1)).setFree(false);
+        board3.updatePiecePos(new Position(3,1), new Position(0,1));
+        assertTrue(pieces.get(p2).keySet().contains(new Position(0,1)));
+        assertTrue(cells.get(new Position(3,1)).isFree());
+        assertFalse(cells.get(new Position(0,1)).isFree());
+
     }
 
     @Test
@@ -169,7 +184,7 @@ public class TestBoard {
                 if(i == 3 && j == 0) {
                     cells.put(new Position(3,0), new Throne());
                 } else if(i==0 && j==3) {
-                    cells.put(new Position(0,3), new Slider(new Position(0,3)));
+                    cells.put(new Position(0,3), new SliderImpl(new Position(0,3)));
                 } else {
                     cells.put(new Position(i,j), new ClassicCell());
                 }

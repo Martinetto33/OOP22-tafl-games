@@ -9,7 +9,7 @@ import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
-import taflgames.model.cell.api.Resettable;
+import taflgames.model.cell.api.Slider;
 import taflgames.model.cell.api.TimedEntity;
 import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.memento.api.CellMemento;
@@ -22,8 +22,8 @@ public class BoardImpl implements Board, TimedEntity{
     private Map<Player, Map<Position, Piece>> pieces;
     private final int size;
     private Position currentPos;
-    private Set<Resettable> resettableEntities = null;
-    private Set<TimedEntity> timedEntities = null;
+    private Set<Slider> resettableEntities = null;
+    private Set<Slider> timedEntities = null;
     private final Eaten eatingManager;
 
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
@@ -31,6 +31,12 @@ public class BoardImpl implements Board, TimedEntity{
         this.cells = cells;
         this.size = size;
         this.eatingManager = new EatenImpl(this);
+        for (Slider slider : cells.values().stream()
+                            .filter(cell -> cell.getType().equals("Slider"))
+                            .map(slider -> (Slider) slider)
+                            .collect(Collectors.toSet())) {
+            slider.addMediator(this);
+        } 
     }
 
     @Override
@@ -97,7 +103,8 @@ public class BoardImpl implements Board, TimedEntity{
         * qualsiasi pedina di un metodo canSwap(), che chiaramente ritorna true nel caso sia uno Swapper e false altrimenti.
         */
         if (piece.canSwap() 
-            && (dest.getX() == start.getX() || dest.getY() == start.getY())) {
+            && (!cells.get(dest).getType().equals("Exit") || !cells.get(dest).getType().equals("Throne"))
+            && !cells.get(dest).isFree()) {
             // Si verifica se la posizione dest è una delle posizioni occupate da una pedina avversaria.
             // Se lo è, allora la mossa è valida, altrimenti no.
 
@@ -119,7 +126,7 @@ public class BoardImpl implements Board, TimedEntity{
             .map(x -> x.getValue().get(oldPos))
             .findAny()
             .get();
-        if(!p.canSwap()) {
+        if(cells.get(newPos).isFree()) {
             pieces.entrySet().stream().forEach(x -> {
                 if(x.getValue().containsKey(oldPos)) {
                     pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
@@ -251,7 +258,7 @@ public class BoardImpl implements Board, TimedEntity{
      * {@inheritDoc}
      */
     @Override
-    public void addResettableEntities(final Set<Resettable> resettableEntities) {
+    public void addResettableEntities(final Set<Slider> resettableEntities) {
         this.resettableEntities = resettableEntities;
     }
 
@@ -259,7 +266,7 @@ public class BoardImpl implements Board, TimedEntity{
      * {@inheritDoc}
      */
     @Override
-    public void addTimedEntities(final Set<TimedEntity> timedEntities) {
+    public void addTimedEntities(final Set<Slider> timedEntities) {
         this.timedEntities = timedEntities;
     }
 
@@ -335,8 +342,8 @@ public class BoardImpl implements Board, TimedEntity{
         private final Map<Position, Piece> innerAttackerPieces;
         private final Map<Position, Piece> innerDefenderPieces;
         private final Position innerCurrentPos;
-        private final Set<Resettable> innerResettableEntities;
-        private final Set<TimedEntity> innerTimedEntities;
+        private final Set<Slider> innerResettableEntities;
+        private final Set<Slider> innerTimedEntities;
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
         
@@ -382,10 +389,10 @@ public class BoardImpl implements Board, TimedEntity{
         public Position getInnerCurrentPos() {
             return this.innerCurrentPos;
         }
-        public Set<Resettable> getInnerResettableEntities() {
+        public Set<Slider> getInnerResettableEntities() {
             return this.innerResettableEntities;
         }
-        public Set<TimedEntity> getInnerTimedEntities() {
+        public Set<Slider> getInnerTimedEntities() {
             return this.innerTimedEntities;
         }
 

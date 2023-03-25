@@ -7,7 +7,7 @@ import taflgames.model.cell.api.SliderMediator;
 
 public class SliderMediatorImpl implements SliderMediator {
 
-    private Board board;
+    private final Board board;
 
     public SliderMediatorImpl(final Board board) {
         this.board = board;

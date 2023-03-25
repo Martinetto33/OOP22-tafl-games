@@ -7,13 +7,16 @@ import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.code.BasicPiece;
 import taflgames.model.pieces.code.King;
 import taflgames.model.pieces.code.Queen;
+import taflgames.model.pieces.code.Swapper;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.model.board.api.Board;
+import taflgames.model.board.code.BoardImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.AbstractCell;
 import taflgames.model.cell.code.ClassicCell;
 import taflgames.model.cell.code.Exit;
-import taflgames.model.cell.code.Slider;
+import taflgames.model.cell.code.SliderImpl;
 import taflgames.model.cell.code.Throne;
 import taflgames.model.cell.code.Tomb;
 
@@ -35,7 +38,7 @@ public class TestCell {
     static void init() {
 		classic = new ClassicCell();
         exit = new Exit();
-        slider = new Slider(new Position(1, 1));
+        slider = new SliderImpl(new Position(1, 1));
         throne = new Throne();
         tomb = new Tomb();
 	}
@@ -109,9 +112,89 @@ public class TestCell {
 
     @Test 
     void testNotifySlider() {
-        
+        Board board;
+        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        Map<Position, Cell> cells = new HashMap<>();
+        Player p1 = Player.ATTACKER;
+        Player p2 = Player.DEFENDER;
+        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        piecesPlayer1.put(new Position(4, 1), new BasicPiece(new Position(4, 1), p1));
+        piecesPlayer1.put(new Position(1,1), new BasicPiece(new Position(1,1), p1));
+        piecesPlayer2.put(new Position(1,4), new BasicPiece(new Position(1,4), p2));
+        pieces.put(p1, piecesPlayer1);
+        pieces.put(p2, piecesPlayer2);
+        for(int i=0; i<5; i++) {
+            for(int j=0; j<5; j++) {
+                if(i == 1 && j == 1) {
+                    cells.put(new Position(i,j), new SliderImpl(new Position(1,1)));
+                } else {
+                    cells.put(new Position(i,j), new ClassicCell());
+                }
+                cells.get(new Position(i,j)).setFree(true);
+            }
+        } 
+        piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+        piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+        board = new BoardImpl(pieces, cells, 5);
+
+        //Basic piece on a slider
+        cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p1), null, pieces, cells);
+        assertTrue(cells.get(new Position(1,1)).isFree());
+        assertFalse(cells.get(new Position(1,3)).isFree());
+
+        //Swapper on a slider
+        cells.get(new Position(1,1)).notify(new Position(1,1), new Swapper(new Position(1,1), p1), null, pieces, cells);
+        assertTrue(cells.get(new Position(1,1)).isFree());
+        assertFalse(cells.get(new Position(1,3)).isFree());
+
     }
-    
-    
-    
+
+    @Test 
+    void testNotifyTurnHasEnded() {
+        Board board;
+        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        Map<Position, Cell> cells = new HashMap<>();
+        Player p1 = Player.ATTACKER;
+        Player p2 = Player.DEFENDER;
+        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        piecesPlayer1.put(new Position(4, 1), new BasicPiece(new Position(4, 1), p1));
+        piecesPlayer1.put(new Position(1,1), new BasicPiece(new Position(1,1), p1));
+        piecesPlayer2.put(new Position(1,4), new BasicPiece(new Position(1,4), p2));
+        pieces.put(p1, piecesPlayer1);
+        pieces.put(p2, piecesPlayer2);
+        for(int i=0; i<5; i++) {
+            for(int j=0; j<5; j++) {
+                if(i == 1 && j == 1) {
+                    cells.put(new Position(i,j), new SliderImpl(new Position(1,1)));
+                } else {
+                    cells.put(new Position(i,j), new ClassicCell());
+                }
+                cells.get(new Position(i,j)).setFree(true);
+            }
+        } 
+        piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+        piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+        board = new BoardImpl(pieces, cells, 5);
+
+        
+        cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p1), null, pieces, cells);
+        assertTrue(cells.get(new Position(1,1)).isFree());
+        assertFalse(cells.get(new Position(1,3)).isFree());
+        SliderImpl sl = (SliderImpl) cells.get(new Position(1,1));
+        sl.notifyTurnHasEnded(1);
+
+        piecesPlayer2.put(new Position(1,1), new BasicPiece(new Position(1,1), p2));
+        pieces.put(p2, piecesPlayer2);
+        cells.get(new Position(1,1)).setFree(false);;
+        cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p2), null, pieces, cells);
+        assertFalse(cells.get(new Position(1,1)).isFree());
+        sl.notifyTurnHasEnded(2);
+        sl.reset();
+
+        cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p2), null, pieces, cells);
+        assertTrue(cells.get(new Position(1,1)).isFree());
+        assertTrue(cells.get(new Position(0,1)).isFree());
+    }
 }
