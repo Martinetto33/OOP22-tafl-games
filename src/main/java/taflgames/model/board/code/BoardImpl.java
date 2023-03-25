@@ -348,11 +348,15 @@ public class BoardImpl implements Board, TimedEntity{
          */
         public BoardMementoImpl(final List<PieceMemento> piecesMemento, final List<CellMemento> cellsMemento) {
             this.innerCells = BoardImpl.this.cells;
-            this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER);
-            this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER);
+            this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER).entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER).entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerCurrentPos = BoardImpl.this.currentPos;
-            this.innerResettableEntities = BoardImpl.this.resettableEntities;
-            this.innerTimedEntities = BoardImpl.this.timedEntities;
+            this.innerResettableEntities = BoardImpl.this.resettableEntities.stream()
+                .collect(Collectors.toSet());
+            this.innerTimedEntities = BoardImpl.this.timedEntities.stream()
+            .collect(Collectors.toSet());
 
             this.piecesMemento = piecesMemento;
             this.cellsMemento = cellsMemento;
