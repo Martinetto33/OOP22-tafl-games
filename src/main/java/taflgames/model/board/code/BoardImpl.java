@@ -260,6 +260,10 @@ public class BoardImpl implements Board, TimedEntity{
         this.timedEntities = timedEntities;
     }
 
+    /**
+     * This method must be called at the beginning of each turn.
+     * @param playerInTurn the player in turn.
+     */
     public boolean isDraw(final Player playerInTurn) {
         /*finding king position */
         Piece king = pieces.get(Player.DEFENDER).entrySet().stream()
@@ -267,14 +271,17 @@ public class BoardImpl implements Board, TimedEntity{
                         .map(x -> x.getValue())
                         .findAny()
                         .get();
-        /*If the king is on the boarder, the position adjacent to it are controlled to see if the king is trapped */
+        /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
         
-
+        /* If there are still any Swappers for the player in turn, there can be no draw */
         if (!pieces.get(playerInTurn).entrySet().stream()
             .filter(pos -> pos.getValue().getMyType().getTypeOfPiece().equals("SWAPPER"))
             .collect(Collectors.toList())
             .isEmpty()) {
                             return false;
+        /* If there are no swappers and the king is trapped on a border by 3 attackers adjacent to it,
+         * it is a draw.
+         */
         } else if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
                 || king.getCurrentPosition().getX() == this.size-1 || king.getCurrentPosition().getX() == this.size-1) {
 
@@ -285,6 +292,7 @@ public class BoardImpl implements Board, TimedEntity{
                     .size() == 3) {
                                 return true;
                 }
+        /* If there are no pieces that can move for the player in turn, it is automatically a draw. */
         } else if(pieces.get(playerInTurn).values().stream()
                 .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
                     .filter(adjPos -> cells.get(adjPos).canAccept(piece))
