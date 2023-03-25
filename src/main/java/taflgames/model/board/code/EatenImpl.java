@@ -90,17 +90,15 @@ public class EatenImpl implements Eaten{
      * @return
      * TODO: insert hitboxes of Exits and Thrones
      */
-    public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemiesList, Map<Player, Map<Position, Piece>> pieces, Player currPlayer) {
+    public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemiesList, Map<Player, Map<Position, Piece>> pieces, Piece lastMovedPiece) {
         Map<Piece, Set<Piece>> mapOfEnemiesAndTheirKillers = new HashMap<>();
-        /* The following map represents the allies of the piece attempting to eat the enemy*/ 
-        Map<Position, Piece> allies = pieces.get(currPlayer);
-
-        /*TODO: the problem we are facing is that thrones and exits are Cells, but the enemies are
-         * only considered to be Pieces.
-         * 
-         * IDEA: each of those cells will be represented by a Basic Piece with normal hitbox.
-         */
-
+        /* The following map represents the allies of the piece attempting to eat the enemy
+        that are on the same row and the same column as the piece */
+        Map<Position, Piece> allies = new HashMap<>();
+        pieces.get(lastMovedPiece.getPlayer()).entrySet().stream()
+                                        .filter(ally -> ally.getKey().getX() == lastMovedPiece.getCurrentPosition().getX()
+                                            || ally.getKey().getY() == lastMovedPiece.getCurrentPosition().getY())
+                                        .forEach(ally -> allies.put(ally.getKey(), ally.getValue()));
         for (Piece enemy : enemiesList) {
             allies.entrySet().stream().forEach(x -> {
                 if(x.getValue().whereToHit().contains(enemy.getCurrentPosition())) {
