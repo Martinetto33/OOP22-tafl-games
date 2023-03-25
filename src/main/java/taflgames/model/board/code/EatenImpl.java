@@ -97,6 +97,8 @@ public class EatenImpl implements Eaten{
 
         /*TODO: the problem we are facing is that thrones and exits are Cells, but the enemies are
          * only considered to be Pieces.
+         * 
+         * IDEA: each of those cells will be represented by a Basic Piece with normal hitbox.
          */
 
         for (Piece enemy : enemiesList) {
@@ -115,9 +117,9 @@ public class EatenImpl implements Eaten{
         return mapOfEnemiesAndTheirKillers;
     }
 
-    public void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, 
+    public void notifyAllThreatened( Map<Piece, Set<Piece>> alliesMenacing, Piece lastMovedPiece, 
                                         Map<Position, Cell> cells, Map<Player, Map<Position, Piece>> pieces) {
-        List<Piece> deadPieces = enemiesAndAllies.entrySet().stream()
+        List<Piece> deadPieces = alliesMenacing.entrySet().stream()
             .filter(entry -> entry.getKey().wasKilled(entry.getValue(), lastMovedPiece.getCurrentPosition()))
             .map(entry -> entry.getKey())
             .toList();
