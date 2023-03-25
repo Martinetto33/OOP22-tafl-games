@@ -26,4 +26,8 @@ public interface BoardMemento {
      */
     List<CellMemento> getCellsMemento();
 
+    /**
+     * Restores the state contained in this BoardMemento.
+     */
+    void restore();
 }

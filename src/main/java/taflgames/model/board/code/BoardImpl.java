@@ -347,7 +347,8 @@ public class BoardImpl implements Board, TimedEntity{
          * @param cellsMemento a List of the saved states of the cells.
          */
         public BoardMementoImpl(final List<PieceMemento> piecesMemento, final List<CellMemento> cellsMemento) {
-            this.innerCells = BoardImpl.this.cells;
+            this.innerCells = BoardImpl.this.cells.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER).entrySet().stream()
@@ -426,8 +427,17 @@ public class BoardImpl implements Board, TimedEntity{
             return this.innerTimedEntities;
         }
 
+        @Override
+        public void restore() {
+            BoardImpl.this.restore(this);
+        }
+
     }
 
+    /**
+     * Saves a snapshot of the current state of this board.
+     * @return the BoardMemento deriving from the saving of the board status.
+     */
     public BoardMemento save() {
         return this.new BoardMementoImpl(
             this.pieces.entrySet().stream()
@@ -435,6 +445,23 @@ public class BoardImpl implements Board, TimedEntity{
             .map(piece -> (AbstractPiece) piece)
             .map(piece -> piece.save())
             .toList(), null);
+    }
+
+    /**
+     * Restores the status of this board to the one contained in the
+     * {@link taflgames.model.board.code.BoardImpl.BoardMementoImpl}.
+     * @param bm the BoardMemento from which to extract the information
+     * required to restore the state of the board.
+     */
+    public void restore(BoardMementoImpl bm) {
+        this.cells = bm.getInnerCells();
+        this.pieces.put(Player.ATTACKER, bm.getInnerAttackerPieces());
+        this.pieces.put(Player.DEFENDER, bm.getInnerDefenderPieces());
+        this.currentPos = bm.getInnerCurrentPos();
+        this.resettableEntities = bm.getInnerResettableEntities();
+        this.timedEntities = bm.getInnerTimedEntities();
+        bm.getCellsMemento().forEach(c -> c.restore());
+        bm.getPiecesMemento().forEach(p -> p.restore());
     }
 }
     
