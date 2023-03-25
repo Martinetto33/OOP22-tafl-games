@@ -285,7 +285,6 @@ public class TestEaten {
     @Test
     void testEatenWithCellsHitbox() {
         final Board fifthBoard;
-        final Eaten eat;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
         final Player p1 = Player.ATTACKER;
@@ -333,8 +332,6 @@ public class TestEaten {
         cells.get(defender2Pos).setFree(false);
 
         fifthBoard = new BoardImpl(pieces, cells, 5);
-        eat = new EatenImpl(fifthBoard);
-
         fifthBoard.updatePiecePos(attackerPosition, attackerPosition);
         fifthBoard.eat();
 

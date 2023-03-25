@@ -19,11 +19,9 @@ public class EatenImpl implements Eaten{
 
     private static final String DEAD_PIECE = "DEAD_PIECE"; //per segnalare morte pedina alle tombe
     
-    private final Board board;
     private final CellsHitbox cellsHitbox;
 
     public EatenImpl(final Board board) {
-        this.board = board;
         this.cellsHitbox = new CellsHitbox(board);
     }
 
@@ -97,7 +95,6 @@ public class EatenImpl implements Eaten{
      * @param pieces
      * @param currPlayer
      * @return
-     * TODO: insert hitboxes of Exits and Thrones
      */
     public Map<Piece, Set<Piece>> checkAllies(List<Piece> enemiesList, Map<Player, Map<Position, Piece>> pieces, Piece lastMovedPiece) {
         Map<Piece, Set<Piece>> mapOfEnemiesAndTheirKillers = new HashMap<>();
