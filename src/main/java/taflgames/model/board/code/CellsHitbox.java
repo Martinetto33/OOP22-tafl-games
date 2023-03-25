@@ -14,16 +14,23 @@ import taflgames.model.pieces.code.BasicPiece;
  * component of a {@link taflgames.model.board.code.BoardImpl} what and where are
  * the hitboxes of the cells that can participate in a capture, namely
  * {@link taflgames.model.cell.code.Throne} and
- * {@link taflgames.model.cell.code.Exit}.
+ * {@link taflgames.model.cell.code.Exit}. This class was created for compatibility
+ * reasons only.
  */
 public class CellsHitbox {
-    
+
     private final Set<Position> throneAndExitsPositions;
 
+    /**
+     * Builds a new class able to return cells with hitboxes as if they were pieces.
+     * @param inputBoard the {@link taflgames.model.board.code.BoardImpl} from which
+     * to take the positions of special cells.
+     */
     public CellsHitbox(final BoardImpl inputBoard) {
         Set<Position> relevantPositions = new HashSet<>();
         inputBoard.getMapCells().entrySet().stream()
-            .filter(entry -> entry.getValue().getType().equals("Throne") || entry.getValue().getType().equals("Exit"))
+            .filter(entry -> entry.getValue().getType().equals("Throne")
+                    || entry.getValue().getType().equals("Exit"))
             .forEach(entry -> relevantPositions.add(entry.getKey()));
         this.throneAndExitsPositions = Collections.unmodifiableSet(relevantPositions);
     }
