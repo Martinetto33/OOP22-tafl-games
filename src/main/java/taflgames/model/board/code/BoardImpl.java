@@ -225,11 +225,11 @@ public class BoardImpl implements Board, TimedEntity{
     }
 
     public Map<Position, Cell> getMapCells() {
-        return cells;
+        return this.cells;
     }
 
     public Map<Player, Map<Position, Piece>> getMapPieces() {
-        return pieces;
+        return this.pieces;
     }
 
     /**
