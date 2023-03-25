@@ -9,8 +9,6 @@ import taflgames.model.pieces.code.King;
 import taflgames.model.pieces.code.Queen;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.board.api.Board;
-import taflgames.model.board.code.BoardImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.AbstractCell;
 import taflgames.model.cell.code.ClassicCell;
@@ -82,7 +80,6 @@ public class TestCell {
 
     @Test
     void testNotifyTomb() {
-        Board board;
         Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         Map<Position, Cell> cells = new HashMap<>();
         Player p1 = Player.ATTACKER;
@@ -103,8 +100,6 @@ public class TestCell {
             }
         } 
         cells.get(new Position(2,1)).setFree(false);
-        board = new BoardImpl(pieces, cells, 5);
-        
         tomb.notify(new Position(2, 2), new BasicPiece(new Position(2, 2), p1), List.of("DEAD_PIECE"), pieces, cells);
         tomb.notify(new Position(2, 1), new Queen(new Position(2, 1), p1), List.of("QUEEN_MOVE"), pieces, cells);
         assertFalse(cells.get(new Position(2,2)).isFree());

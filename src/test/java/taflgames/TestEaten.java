@@ -13,9 +13,12 @@ import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.code.Archer;
 import taflgames.model.pieces.code.BasicPiece;
 import taflgames.model.pieces.code.King;
+import taflgames.model.pieces.code.Swapper;
 import taflgames.common.Player;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.code.ClassicCell;
+import taflgames.model.cell.code.Exit;
+import taflgames.model.cell.code.Throne;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,8 +35,8 @@ public class TestEaten {
 
     @BeforeAll
 	static void init() {
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
         piecesPlayer1.put(new Position(1, 4), new Archer(new Position(1,4), p1));
         piecesPlayer2.put(new Position(3, 3), new BasicPiece(new Position(3, 3), p2));
@@ -111,7 +114,7 @@ public class TestEaten {
         enemies = new ArrayList<>();
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(3, 3), p2)));
 
-        Eaten eat;
+        final Eaten eat;
         final Board secondBoard;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
@@ -173,7 +176,7 @@ public class TestEaten {
 
     @Test 
     void testCheckAllies() {
-        Eaten eat;
+        final Eaten eat;
         final Board thirdBoard;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
@@ -233,7 +236,7 @@ public class TestEaten {
     @Test
     void testNotifyAllThreatened() {
         final Board fourthBoard;
-        Eaten eat;
+        final Eaten eat;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
         final Player p1 = Player.ATTACKER;
@@ -274,6 +277,71 @@ public class TestEaten {
         assertTrue(cells.get(new Position(1,2)).isFree());
         assertFalse(pieces.get(p2).containsKey(new Position(2,1)));
         assertFalse(pieces.get(p2).containsKey(new Position(1,2)));
+    }
+
+    /**
+     * Tests if the hitbox of the cells is considered when checking if pieces were eaten.
+     */
+    @Test
+    void testEatenWithCellsHitbox() {
+        final Board fifthBoard;
+        final Eaten eat;
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
+        final Position thronePos = new Position(2, 2);
+        final Position exitPos = new Position(4, 4);
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                cells.put(new Position(i, j), new ClassicCell());
+            }
+        }
+
+        cells.values().forEach(e -> e.setFree(true));
+        /* A Throne and an Exit */
+        cells.put(thronePos, new Throne());
+        cells.put(exitPos, new Exit());
+
+        /*
+         * Here follows a representation of the situation described by the test
+         * (supposing that the attacker piece ATK was the last moved piece).
+         *
+         *      4 |_|_|_ATK__|DEF|Exit|
+         *      3 |_|_|_DEF__|___|____|
+         *      2 |_|_|Throne|___|____|
+         *      1 |_|_|______|___|____| 
+         *      0 |_|_|______|___|____|
+         *         0 1    2    3    4
+         */
+        final Map<Position, Piece> attackerPieces = new HashMap<>();
+        final Position attackerPosition = new Position(2, 4);
+        attackerPieces.put(attackerPosition, new Swapper(attackerPosition, p1));
+
+        final Map<Position, Piece> defenderPieces = new HashMap<>();
+        final Position defender1Pos = new Position(3, 4);
+        final Position defender2Pos = new Position(2, 3);
+        defenderPieces.put(defender1Pos, new BasicPiece(defender1Pos, p2));
+        defenderPieces.put(defender2Pos, new BasicPiece(defender2Pos, p2));
+
+        pieces.put(Player.ATTACKER, attackerPieces);
+        pieces.put(Player.DEFENDER, defenderPieces);
+
+        cells.get(attackerPosition).setFree(false);
+        cells.get(defender1Pos).setFree(false);
+        cells.get(defender2Pos).setFree(false);
+
+        fifthBoard = new BoardImpl(pieces, cells, 5);
+        eat = new EatenImpl(fifthBoard);
+
+        fifthBoard.updatePiecePos(attackerPosition, attackerPosition);
+        fifthBoard.eat();
+
+        assertTrue(cells.get(defender1Pos).isFree());
+        assertTrue(cells.get(defender2Pos).isFree());
+        assertFalse(cells.get(attackerPosition).isFree());
+
     }
     
 }
