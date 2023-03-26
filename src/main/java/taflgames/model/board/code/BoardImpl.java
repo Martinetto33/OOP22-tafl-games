@@ -366,37 +366,21 @@ public class BoardImpl implements Board, TimedEntity{
             return this.cellsMemento;
         }
 
-        /**
-         * Returns the saved state of the cells.
-         * @return a Map of Positions and Cells.
-         */
         @Override
         public Map<Position, Cell> getInnerCells() {
             return this.innerCells;
         }
 
-        /**
-         * Returns the saved state of the attacker's pieces.
-         * @return a Map of Positions and Pieces.
-         */
         @Override
         public Map<Position, Piece> getInnerAttackerPieces() {
             return this.innerAttackerPieces;
         }
 
-        /**
-         * Returns the saved state of the defender's pieces.
-         * @return a Map of Positions and Pieces.
-         */
         @Override
         public Map<Position, Piece> getInnerDefenderPieces() {
             return this.innerDefenderPieces;
         }
 
-        /**
-         * Returns the las saved current position.
-         * @return the Position.
-         */
         @Override
         public Position getInnerCurrentPos() {
             return this.innerCurrentPos;
