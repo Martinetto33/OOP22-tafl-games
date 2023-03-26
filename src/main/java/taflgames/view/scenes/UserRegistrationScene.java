@@ -168,7 +168,7 @@ public class UserRegistrationScene extends AbstractScene {
         text.setDocument(new Limiter(CHARACTER_LIMIT));
     }
 
-    /*
+    /**
      * Resizes the text areas
      * @param x horizontal size
      * @param y vertical size
