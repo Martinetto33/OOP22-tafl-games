@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.Set;
 
 import taflgames.common.code.Position;
-import taflgames.model.cells.BasicCell;
-import taflgames.model.cells.Cell;
-import taflgames.model.cells.Exit;
-import taflgames.model.cells.Slider;
-import taflgames.model.cells.Throne;
+import taflgames.model.cell.code.ClassicCell;
+import taflgames.model.cell.api.Cell;
+import taflgames.model.cell.code.Exit;
+import taflgames.model.cell.code.SliderImpl;
+import taflgames.model.cell.code.Throne;
 
 /**
  * This class implements a builder to create a collection of cells.
@@ -46,7 +46,7 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
     @Override
     public void addSliders(final Set<Position> positions) {
         for (final var pos : positions) {
-            this.cells.put(pos, new Slider());
+            this.cells.put(pos, new SliderImpl(pos));
         }
     }
 
@@ -56,7 +56,7 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
             for (int col = 0; col < this.boardSize; col++) {
                 final Position pos = new Position(row, col);
                 if (!this.cells.containsKey(pos)) {
-                    this.cells.put(pos, new BasicCell());
+                    this.cells.put(pos, new ClassicCell());
                 }
             }
         }
