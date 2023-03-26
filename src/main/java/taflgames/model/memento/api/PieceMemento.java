@@ -18,9 +18,21 @@ public interface PieceMemento {
      */
     void restore();
 
+    /**
+     * Gets the saved number of lives.
+     * @return the number of lives.
+     */
     int getBackupCurrNumbOfLives();
     
+    /**
+     * Returns the backup {@link taflgames.common.code.Position}
+     * @return the previously saved Position of this Piece.
+     */
     Position getBackupPosition();
 
+    /**
+     * Returns wether this Piece was alive at the moment of the save.
+     * @return true if the Piece was alive, false otherwise.
+     */
     boolean backupIsAlive();
 }
