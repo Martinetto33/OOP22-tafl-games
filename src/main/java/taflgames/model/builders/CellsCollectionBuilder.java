@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import taflgames.common.code.Position;
-import taflgames.model.cells.Cell;
+import taflgames.model.cell.api.Cell;
 
 /**
  * This interface allows to interact with a builder to create a collection of cells.
