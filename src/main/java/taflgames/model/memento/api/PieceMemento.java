@@ -1,5 +1,7 @@
 package taflgames.model.memento.api;
 
+import taflgames.common.code.Position;
+
 /**
  * An interface modelling the behaviour that the Inner Class of the Piece implementation
  * should provide in order to save a snapshot of the current state of a Piece. Said Inner
@@ -16,4 +18,9 @@ public interface PieceMemento {
      */
     void restore();
 
+    int getBackupCurrNumbOfLives();
+    
+    Position getBackupPosition();
+
+    boolean backupIsAlive();
 }

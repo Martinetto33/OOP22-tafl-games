@@ -63,11 +63,6 @@ public abstract class AbstractPiece implements Piece {
         */
         @Override
         public void restore() {
-            /**
-             * da riguardare perchè forse causa problemi 
-             * nelle implementazioni per il fatto
-             * che è astratta 
-             */
             AbstractPiece.this.restore(this);
         }
         /**
@@ -183,11 +178,10 @@ public abstract class AbstractPiece implements Piece {
     public PieceMemento save() {
         return this.new PieceMementoImpl();
     }
-    /**
-     * {@inheritDoc}
+    /* This method should only be called by the Inner Class,
+     * thus it is private.
      */
-    @Override
-    public void restore(final PieceMementoImpl pm) {
+    private void restore(final PieceMemento pm) {
         Objects.requireNonNull(pm);
         this.currentNumbOfLives = pm.getBackupCurrNumbOfLives();
         this.currentPosition = pm.getBackupPosition();
