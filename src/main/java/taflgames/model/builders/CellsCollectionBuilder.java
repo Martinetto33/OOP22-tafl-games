@@ -41,6 +41,12 @@ public interface CellsCollectionBuilder {
     void addBasicCells();
 
     /**
+     * Marks the cell at {@code position} as occupied by a piece.
+     * @param position the position of the occupied cell
+     */
+    void setCellAsOccupied(Position position);
+
+    /**
      * @return the collection of cells that has been set up
      */
     Map<Position, Cell> build();
