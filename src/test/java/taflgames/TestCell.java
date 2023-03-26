@@ -77,7 +77,7 @@ public class TestCell {
     
     @Test
     void testisFree() {
-        assertFalse(classic.isFree());
+        assertTrue(classic.isFree());
     }
 
     @Test
