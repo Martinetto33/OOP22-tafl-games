@@ -370,6 +370,7 @@ public class BoardImpl implements Board, TimedEntity{
          * Returns the saved state of the cells.
          * @return a Map of Positions and Cells.
          */
+        @Override
         public Map<Position, Cell> getInnerCells() {
             return this.innerCells;
         }
@@ -378,6 +379,7 @@ public class BoardImpl implements Board, TimedEntity{
          * Returns the saved state of the attacker's pieces.
          * @return a Map of Positions and Pieces.
          */
+        @Override
         public Map<Position, Piece> getInnerAttackerPieces() {
             return this.innerAttackerPieces;
         }
@@ -386,6 +388,7 @@ public class BoardImpl implements Board, TimedEntity{
          * Returns the saved state of the defender's pieces.
          * @return a Map of Positions and Pieces.
          */
+        @Override
         public Map<Position, Piece> getInnerDefenderPieces() {
             return this.innerDefenderPieces;
         }
@@ -394,9 +397,12 @@ public class BoardImpl implements Board, TimedEntity{
          * Returns the las saved current position.
          * @return the Position.
          */
+        @Override
         public Position getInnerCurrentPos() {
             return this.innerCurrentPos;
         }
+
+        @Override
         public Set<Slider> getInnerSlidersEntities() {
             return this.innerSlidersEntities;
         }
@@ -412,6 +418,7 @@ public class BoardImpl implements Board, TimedEntity{
      * Saves a snapshot of the current state of this board.
      * @return the BoardMemento deriving from the saving of the board status.
      */
+    @Override
     public BoardMemento save() {
         return this.new BoardMementoImpl(
             this.pieces.entrySet().stream()
@@ -427,7 +434,8 @@ public class BoardImpl implements Board, TimedEntity{
      * @param bm the BoardMemento from which to extract the information
      * required to restore the state of the board.
      */
-    public void restore(BoardMementoImpl bm) {
+    @Override
+    public void restore(BoardMemento bm) {
         this.cells = bm.getInnerCells();
         this.pieces.put(Player.ATTACKER, bm.getInnerAttackerPieces());
         this.pieces.put(Player.DEFENDER, bm.getInnerDefenderPieces());
@@ -436,5 +444,5 @@ public class BoardImpl implements Board, TimedEntity{
         bm.getCellsMemento().forEach(c -> c.restore());
         bm.getPiecesMemento().forEach(p -> p.restore());
     }
+
 }
-    
