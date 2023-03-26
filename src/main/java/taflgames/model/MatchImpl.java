@@ -122,7 +122,7 @@ public final class MatchImpl implements Match {
     public void restore(final MatchMemento matchMemento) {
         this.turnNumber = matchMemento.getTurnNumber();
         this.activePlayer = matchMemento.getActivePlayer();
-        this.board.restore(matchMemento.getBoardMemento());
+        matchMemento.getBoardMemento().restore();
     }
 
 }
