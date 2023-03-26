@@ -8,7 +8,7 @@ public abstract class AbstractCell implements Cell{
     private boolean cellStatus;
     
     public AbstractCell() {
-        this.cellStatus = false;
+        this.cellStatus = true;
     }
 
     @Override
