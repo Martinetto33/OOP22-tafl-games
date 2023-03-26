@@ -1,47 +1,55 @@
 package taflgames.model.memento.code;
 
-import taflgames.model.memento.api.Caretaker;
+import java.util.Stack;
 
-//import java.util.ArrayList;
-//import java.util.List;
+import taflgames.model.Match;
+import taflgames.model.memento.api.Caretaker;
+import taflgames.model.memento.api.MatchMemento;
 
 /**
  * This class will model a Caretaker, a class which is part of the pattern Memento
  * and that will be in charge of managing the history of a single Match, which here
  * takes the name of "originator".
  * <br>The updateHistory() method should be called each time a turn ends, while
- * the undo() method could be called when the user presses an "undo" button.
- * 
+ * the undo() method could be called at any given moment in a turn.
  * 
  * This class will be implemented with a Stack, in order to allow methods 
  * "pop" and "push" on the history
+ * 
+ * In this version of the implementation, the Caretaker will dump
+ * any existing state each time a new state is saved.
  */
 public class CaretakerImpl implements Caretaker {
-    //private MatchExample originator;
-    //private List<MatchMemento> history;
+    private final Match originator;
+    private final Stack<MatchMemento> history;
 
     /**
      * Builds a new Caretaker.
      */
-    /* public Caretaker(MatchExample originator) {
+    public CaretakerImpl(Match originator) {
         this.originator = originator;
-        this.history = new ArrayList<>();
-    } */
+        this.history = new Stack<>();
+    }
 
     /**
-     * Registers a new MatchMemento, by pushing it onto the history stack.
+     * {@inheritDoc}
      */
     @Override
     public void updateHistory() {
-        //this.history.add(this.originator.save());
+        if (!this.history.isEmpty()) {
+            this.history.clear();
+        }
+        this.history.push(this.originator.save());
     }
 
-    /* public void undo(int turnNumber) throws IllegalAccessError {
-        if(turnNumber >= 0 && turnNumber < this.history.size()) {
-            this.originator.restore(this.history.get(turnNumber));
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void undo() {
+        if (this.history.isEmpty()) {
+            return;
         }
-        else {
-            throw new IllegalAccessError();
-        }
-    } */
+        this.originator.restore(this.history.pop());
+    }
 }

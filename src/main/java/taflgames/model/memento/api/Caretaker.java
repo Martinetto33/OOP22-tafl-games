@@ -14,8 +14,15 @@ package taflgames.model.memento.api;
  * from which they can restore their previous state.
  */
 public interface Caretaker {
+
     /**
-     * Adds a new snapshot in the history, from the originator class.
+     * Registers a new MatchMemento, by pushing it onto the history stack.
+     * This method should be called by a handler at the end of a turn.
      */
     void updateHistory();
+
+    /**
+     * Returns to the previous saved state.
+     */
+    void undo();
 }
