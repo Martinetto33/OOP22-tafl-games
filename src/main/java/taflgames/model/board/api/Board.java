@@ -33,6 +33,4 @@ public interface Board {
 
     BoardMemento save();
 
-    void restore(BoardMemento boardMemento);
-
 }
