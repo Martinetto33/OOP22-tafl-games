@@ -23,9 +23,9 @@ public interface PieceMemento {
      * @return the number of lives.
      */
     int getBackupCurrNumbOfLives();
-    
+
     /**
-     * Returns the backup {@link taflgames.common.code.Position}
+     * Returns the backup {@link taflgames.common.code.Position}.
      * @return the previously saved Position of this Piece.
      */
     Position getBackupPosition();

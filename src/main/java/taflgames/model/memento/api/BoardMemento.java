@@ -56,7 +56,7 @@ public interface BoardMemento {
      * @return the Position.
      */
     Position getInnerCurrentPos();
-    
+
     /**
      * Returns the saved state of the slider cells.
      * @return a Set of Sliders.
