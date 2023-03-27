@@ -42,7 +42,7 @@ public interface Board {
      * @param oldPos the old Position that must be updated.
      * @param newPos the new Position to which the old one is updated.
      */
-    void updatePiecePos(Position oldPos, Position newPos);
+    void updatePiecePos(Position oldPos, Position newPos, final Player currentPlayer);
 
     /**
      * Calculate the furthest postion that can be reached from a stating position on a certain direction. 

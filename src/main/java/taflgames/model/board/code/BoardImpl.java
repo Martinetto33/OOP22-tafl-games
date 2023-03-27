@@ -1,6 +1,7 @@
 package taflgames.model.board.code;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -149,31 +150,26 @@ public class BoardImpl implements Board, TimedEntity {
      * {@inheritDoc}
      */
     @Override
-    public void updatePiecePos(final Position oldPos, final Position newPos) {
+    public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
         Piece pieceInturn = getPieceAtPosition(oldPos);
         if (cells.get(newPos).isFree()) {
-            pieces.entrySet().stream().forEach(x -> {
-                if (x.getValue().containsKey(oldPos)) {
-                    pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
-                    signalOnMove(newPos, pieceInturn);
-                }
-            });
+            pieces.get(currentPlayer).remove(oldPos);
+            pieces.get(currentPlayer).put(newPos, pieceInturn);
+            pieceInturn.setCurrentPosition(newPos);
             cells.get(oldPos).setFree(true);
             cells.get(newPos).setFree(false);
-        } else {
-            Player palyerInTurn = pieceInturn.getPlayer();
-            pieces.entrySet().stream().forEach(x -> {
-                if (x.getValue().containsKey(oldPos)) {
-                    pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
-                }
-            });
-            pieces.entrySet().stream().forEach(x -> {
-                if (x.getValue().containsKey(newPos) && !x.getKey().equals(palyerInTurn)) {
-                    pieces.replace(x.getKey(), Collections.singletonMap(oldPos, x.getValue().get(newPos)));
-                }
-            });
-            signalOnMove(newPos, pieceInturn);
+        } else if (pieceInturn.canSwap()) {
+            pieces.get(currentPlayer).remove(oldPos);
+            pieces.get(currentPlayer).put(newPos, pieceInturn);
+            pieceInturn.setCurrentPosition(newPos);
+
+            Piece pieceToSwap = pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).get(newPos);
+            pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).remove(newPos);
+            pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).put(oldPos, pieceToSwap);
+            pieceToSwap.setCurrentPosition(oldPos);
         }
+            
+        signalOnMove(newPos, pieceInturn);
         this.currentPos = newPos;
     }
 
