@@ -41,10 +41,7 @@ public class BoardImpl implements Board, TimedEntity{
 
     @Override
     public boolean isStartingPointValid(Position start, Player player) {
-        if(!pieces.entrySet().stream()
-            .filter(x -> x.getKey().equals(player))
-            .filter(y -> y.getValue().keySet().contains(start))
-            .collect(Collectors.toList()).isEmpty()) {
+        if(pieces.get(player).containsKey(start) && pieces.get(player).get(start).isAlive()) {
             this.currentPos = start;
             return true;
         } else {
