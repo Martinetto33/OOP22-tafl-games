@@ -1,6 +1,11 @@
 package taflgames.model.board.code;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import taflgames.common.Player;
@@ -17,7 +22,10 @@ import taflgames.model.memento.api.PieceMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.code.AbstractPiece;
 
-public class BoardImpl implements Board, TimedEntity{
+/**
+ * This class models a board {@link taflgames.model.board.api.Board}.
+ */
+public class BoardImpl implements Board, TimedEntity {
 
     private Map<Position, Cell> cells;
     private Map<Player, Map<Position, Piece>> pieces;
@@ -26,6 +34,13 @@ public class BoardImpl implements Board, TimedEntity{
     private Set<Slider> slidersEntities = null;
     private final Eaten eatingManager;
 
+    /**
+     * Create a new BoardImpl based on the parameters given.
+     * @param pieces a map that associate to each Player it's own map of Piece and Position
+     * in which each of the Player's Piece is associated to it's own Position.
+     * @param cells a map that associate to each position of the board the type of cell that is placed there.
+     * @param size the size of the board.
+     */
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
         this.pieces = pieces;
         this.cells = cells;
@@ -39,9 +54,12 @@ public class BoardImpl implements Board, TimedEntity{
         } 
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     @Override
-    public boolean isStartingPointValid(Position start, Player player) {
-        if(!pieces.entrySet().stream()
+    public boolean isStartingPointValid(final Position start, final Player player) {
+        if (!pieces.entrySet().stream()
             .filter(x -> x.getKey().equals(player))
             .filter(y -> y.getValue().keySet().contains(start))
             .collect(Collectors.toList()).isEmpty()) {
@@ -52,18 +70,23 @@ public class BoardImpl implements Board, TimedEntity{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isDestinationValid(Position start, Position dest, Player player) {
-        //Set<Position> possibleDests = new HashSet<>();
+    public boolean isDestinationValid(final Position start, final Position dest, final Player player) {
         Piece piece = pieces.get(player).get(start);
 
-        //Per le pedine che non sono uno swapper si controlla che la posizione di destinazione non sia già occupata e che possa accogliere quel determinato piece
-        //Mentre se la pedina è uno swapper controllo che la cella di destinazione non sia un trono o un uscita poichè non può andarci
-        if(!piece.canSwap()){
-            if(!cells.get(dest).canAccept(piece)) {
+        /*Per le pedine che non sono uno swapper si controlla che la posizione di destinazione 
+        non sia già occupata e che possa accogliere quel determinato piece
+        Mentre se la pedina è uno swapper controllo che la cella di destinazione non sia 
+        un trono o un uscita poichè non può andarci*/
+
+        if (!piece.canSwap()) {
+            if (!cells.get(dest).canAccept(piece)) {
                 return false;
             }
-        } else if(cells.get(dest).getType().equals("Throne") 
+        } else if (cells.get(dest).getType().equals("Throne") 
                 || cells.get(dest).getType().equals("Exit")
                 || (cells.get(start).getType().equals("Slider") && !cells.get(dest).isFree())
                 || (!cells.get(dest).isFree() && getPieceAtPosition(dest).getPlayer().equals(player))) {
@@ -74,26 +97,30 @@ public class BoardImpl implements Board, TimedEntity{
         Set<Vector> vectors = piece.whereToMove();
         /* Nel caso delle pedine normali, i vettori restituiti saranno (-1,0), (0,1), (1,0), (0,-1).
         *
-        * NOTA1: uno spostamento equivale a sommare la posizione di partenza a un vettore v che indica lo spostamento: start + v = dest
+        * NOTA1: uno spostamento equivale a sommare la posizione di partenza 
+        *    a un vettore v che indica lo spostamento: start + v = dest
         *
-        * NOTA2: per fare un esempio, se una pedina si sposta di N caselle a destra, ciò equivale a dire che dest = start + N * (0, 1);
+        * NOTA2: per fare un esempio, se una pedina si sposta di N caselle a destra, 
+        * ciò equivale a dire che dest = start + N * (0, 1);
         * ciò equivale anche a dire che lo spostamento dato dal vettore (0, 1) è applicato N volte.
         *
         * QUINDI, per verificare se una mossa è valida, si verifica se, per uno dei vettori (v) dati da piece.getVectors(),
         * esiste uno scalare N t.c. start + N * v = dest.
-        * Se se ne trova uno, si deve verificare che tutte le celle nel percorso che porta la pedina da start a dest siano libere.
+        * Se se ne trova uno, si deve verificare che tutte le celle nel percorso 
+        * che porta la pedina da start a dest siano libere.
         * Se lo sono, allora la mossa è valida, altrimenti non lo è e si deve continuare la ricerca.
         */
-        //controllo se la cella di arrivo è libera per lo swapper, poichè se la cella non fosse libera dovrei gestire lo swapper come viene fatto dopo questo if
-        if(cells.get(dest).isFree()) {
+        /*controllo se la cella di arrivo è libera per lo swapper, poichè se la cella non fosse libera 
+        dovrei gestire lo swapper come viene fatto dopo questo if*/
+        if (cells.get(dest).isFree()) {
             for (Vector vector : vectors) {
-                for(int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
-                    if(vector.multiplyByScalar(numberOfBox).applyToPosition(start).equals(dest)) {
-                        if(isPathFree(start, dest)) {
+                for (int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
+                    if (vector.multiplyByScalar(numberOfBox).applyToPosition(start).equals(dest)) {
+                        if (isPathFree(start, dest)) {
                             return true;
                         }
                     }
-                }  
+                }
             }
         }
 
@@ -108,60 +135,61 @@ public class BoardImpl implements Board, TimedEntity{
             // Si verifica se la posizione dest è una delle posizioni occupate da una pedina avversaria.
             // Se lo è, allora la mossa è valida, altrimenti no.
 
-            // trovo la tipologia di pedina nella casella di destinazione dopodichè controllo che non sia un re poichè lo swapper non può scambiare posizione con un re
+            /* trovo la tipologia di pedina nella casella di destinazione 
+            dopodichè controllo che non sia un re poichè lo swapper non può scambiare posizione con un re*/
             Piece destPiece = getPieceAtPosition(dest);
-            if(destPiece != null && destPiece.getMyType().getTypeOfPiece().equals("KING")) {
-                return false;
-            } else {
+            if (destPiece != null && !destPiece.getMyType().getTypeOfPiece().equals("KING")) {
                 return true;
             }
-        }
+        } 
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void updatePiecePos(Position oldPos, Position newPos) {
-        Piece p = pieces.entrySet().stream()
-            .filter(x -> x.getValue().containsKey(oldPos))
-            .map(x -> x.getValue().get(oldPos))
-            .findAny()
-            .get();
-        if(cells.get(newPos).isFree()) {
+    public void updatePiecePos(final Position oldPos, final Position newPos) {
+        Piece pieceInturn = getPieceAtPosition(oldPos);
+        if (cells.get(newPos).isFree()) {
             pieces.entrySet().stream().forEach(x -> {
-                if(x.getValue().containsKey(oldPos)) {
+                if (x.getValue().containsKey(oldPos)) {
                     pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
-                    signalOnMove(newPos, p);
+                    signalOnMove(newPos, pieceInturn);
                 }
             });
             cells.get(oldPos).setFree(true);
             cells.get(newPos).setFree(false);
         } else {
-            Player palyerInTurn = p.getPlayer();
+            Player palyerInTurn = pieceInturn.getPlayer();
             pieces.entrySet().stream().forEach(x -> {
-                if(x.getValue().containsKey(oldPos)) {
+                if (x.getValue().containsKey(oldPos)) {
                     pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
                 }
             });
             pieces.entrySet().stream().forEach(x -> {
-                if(x.getValue().containsKey(newPos) && !x.getKey().equals(palyerInTurn)) {
+                if (x.getValue().containsKey(newPos) && !x.getKey().equals(palyerInTurn)) {
                     pieces.replace(x.getKey(), Collections.singletonMap(oldPos, x.getValue().get(newPos)));
                 }
             });
-            signalOnMove(newPos, p);
+            signalOnMove(newPos, pieceInturn);
         }
         this.currentPos = newPos;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Position getFurthestReachablePos(Position startPos, Vector direction) {
+    public Position getFurthestReachablePos(final Position startPos, final Vector direction) {
         Position furthestReachable = startPos;
-        for(int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
+        for (int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
             Position reachablePos = direction.multiplyByScalar(numberOfBox).applyToPosition(startPos);
-            if(reachablePos.getX() == this.size || reachablePos.getY() == this.size
+            if (reachablePos.getX() == this.size || reachablePos.getY() == this.size
                 || reachablePos.getX() < 0 || reachablePos.getY() < 0 
                 || !cells.get(reachablePos).canAccept(getPieceAtPosition(startPos))) {
-                    if(getPieceAtPosition(startPos).canSwap()){
-                        if( !cells.get(reachablePos).isFree()
+                    if (getPieceAtPosition(startPos).canSwap()) {
+                        if (!cells.get(reachablePos).isFree()
                             && (!cells.get(reachablePos).getType().equals("Throne") 
                                     || !cells.get(reachablePos).getType().equals("Exit"))
                             && cells.get(startPos).getType().equals("Sider")
@@ -177,13 +205,18 @@ public class BoardImpl implements Board, TimedEntity{
         return furthestReachable;
     }
 
-    private void signalOnMove(Position source, Piece movedPiece) {
+    /**
+     * Notify the positions next to the source that a Piece has been moved there.
+     * @param source the Position in which the last Piece was moved.
+     * @param movedPiece the last Piece moved.
+     */
+    private void signalOnMove(final Position source, final Piece movedPiece) {
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
         Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
                 .collect(Collectors.toSet());
-                //.map(x -> new Position(x.getX() + source.getX(), x.getY() + source.getY()))
+                //vedi se al posto della trimHitBox puoi usare adjacentPosition
         // Controllo se nelle posizioni ottenute ci sono entità; in caso, vengono triggerate
-        if(!triggeredPos.isEmpty()) {
+        if (!triggeredPos.isEmpty()) {
             for (Position pos : triggeredPos) {
                 Cell cell = cells.get(pos);
                 cell.notify(source, movedPiece, List.of(movedPiece.sendSignalMove()), pieces, cells);
@@ -191,31 +224,38 @@ public class BoardImpl implements Board, TimedEntity{
         }
     }
 
-    private boolean isPathFree(Position start, Position dest) {
-        if(start.getX() == dest.getX()) { 
-            if(start.getY() < dest.getY()) {
-                for(int i=start.getY()+1; i<dest.getY(); i++) {
-                    if(!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
+    /**
+     * Verify if the path between two Position that are on the same row or on the same column
+     * is free of obstacles or not.
+     * @param start the position from which staring to check.
+     * @param dest the postion to reach.
+     * @return true if the path is free, false otherwise.
+     */
+    private boolean isPathFree(final Position start, final Position dest) {
+        if (start.getX() == dest.getX()) { 
+            if (start.getY() < dest.getY()) {
+                for (int i = start.getY() + 1; i < dest.getY(); i++) {
+                    if (!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
-                for(int i=start.getY()-1; i<dest.getY(); i--) {
-                    if(!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
+                for (int i = start.getY() - 1; i < dest.getY(); i--) {
+                    if (!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             }
         } else {
-            if(start.getX() < dest.getX()) {
-                for(int i=start.getX() + 1; i<dest.getX(); i++) {
-                    if(!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
+            if (start.getX() < dest.getX()) {
+                for (int i = start.getX() + 1; i < dest.getX(); i++) {
+                    if (!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
-                for(int i=start.getX() - 1; i<dest.getX(); i--) {
-                    if(!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
+                for (int i = start.getX() - 1; i < dest.getX(); i--) {
+                    if (!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
@@ -225,8 +265,8 @@ public class BoardImpl implements Board, TimedEntity{
     }
 
     @Override
-    public void notifyTurnHasEnded(int turn) {
-        if (this.slidersEntities!= null) {
+    public void notifyTurnHasEnded(final int turn) {
+        if (this.slidersEntities != null) {
             this.slidersEntities.forEach(e -> e.reset());
         } 
         if (this.slidersEntities != null) {
@@ -234,10 +274,16 @@ public class BoardImpl implements Board, TimedEntity{
         }
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     public Map<Position, Cell> getMapCells() {
         return Collections.unmodifiableMap(this.cells);
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     public Map<Player, Map<Position, Piece>> getMapPieces() {
         return Collections.unmodifiableMap(this.pieces);
     }
@@ -246,7 +292,7 @@ public class BoardImpl implements Board, TimedEntity{
      * {@inheritDoc}
      */
     @Override
-    public void eat(){
+    public void eat() {
         Piece currPiece = getPieceAtPosition(currentPos);
         Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece, pieces, cells, size);
         List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
@@ -255,8 +301,7 @@ public class BoardImpl implements Board, TimedEntity{
     }
 
     /**
-     * This method must be called at the beginning of each turn.
-     * @param playerInTurn the player in turn.
+     * {@inheritDoc}
      */
     public boolean isDraw(final Player playerInTurn) {
         /*finding king position */
@@ -266,7 +311,7 @@ public class BoardImpl implements Board, TimedEntity{
                         .findAny()
                         .get();
         /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
-        
+
         /* If there are still any Swappers for the player in turn, there can be no draw */
         if (!pieces.get(playerInTurn).entrySet().stream()
             .filter(pos -> pos.getValue().getMyType().getTypeOfPiece().equals("SWAPPER"))
@@ -277,7 +322,7 @@ public class BoardImpl implements Board, TimedEntity{
          * it is a draw.
          */
         } else if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
-                || king.getCurrentPosition().getX() == this.size-1 || king.getCurrentPosition().getX() == this.size-1) {
+                || king.getCurrentPosition().getX() == this.size - 1 || king.getCurrentPosition().getX() == this.size - 1) {
 
                 if (getAdjacentPositions(king.getCurrentPosition()).stream()
                     .filter(pos -> !cells.get(pos).isFree())
@@ -287,18 +332,45 @@ public class BoardImpl implements Board, TimedEntity{
                                 return true;
                 }
         /* If there are no pieces that can move for the player in turn, it is automatically a draw. */
-        } else if(pieces.get(playerInTurn).values().stream()
+        } else if (pieces.get(playerInTurn).values().stream()
                 .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
                     .filter(adjPos -> cells.get(adjPos).canAccept(piece))
                     .collect(Collectors.toSet()).isEmpty())
                 .findAny().isPresent()) {
                                 return false;
             }
-            
         return true;
     }
+    
+    /**
+     * {@inheritDoc}  
+     */
+    public Optional<Player> isOver(final Player playerInTurn) {
+        if(pieces.get(Player.DEFENDER).entrySet().stream()
+            .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
+            .findAny()
+            .isEmpty()) {
+                return Optional.of(Player.ATTACKER);
+        } else {
+            Piece king = pieces.get(Player.DEFENDER).entrySet().stream()
+                .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
+                .map(position -> position.getValue())
+                .findAny()
+                .get();
+            if(cells.get(king.getCurrentPosition()).getType().equals("Exit")) {
+                return Optional.of(Player.DEFENDER);
+            } else {
+                return Optional.empty();
+            }
+        } 
+    }
 
-    private Piece getPieceAtPosition(Position pos) {
+    /**
+     * Return the Piece that is on a given Position.
+     * @param pos the Position in which there's the Piece. 
+     * @return the Piece on the given Position.
+     */
+    private Piece getPieceAtPosition(final Position pos) {
         Piece p = pieces.entrySet().stream()
             .filter(x -> x.getValue().containsKey(pos))
             .map(x -> x.getValue().get(pos))
@@ -307,14 +379,20 @@ public class BoardImpl implements Board, TimedEntity{
         return p;
     }
 
+    /**
+     * Return the positions of the Board's cells adjacent to a given Position.
+     * @param currPos the Position of which to find the adjacent cells positions.
+     * @return a Set of Position that contains the adjacent positions.
+     */
     private Set<Position> getAdjacentPositions(final Position currPos) {
         Set<Position> setOfPosition = new HashSet<>();
-        setOfPosition.add(new Position(currPos.getX()+1, currPos.getY()));
-        setOfPosition.add(new Position(currPos.getX()-1, currPos.getY()));
-        setOfPosition.add(new Position(currPos.getX(), currPos.getY()+1));
-        setOfPosition.add(new Position(currPos.getX(), currPos.getY()-1));
+        setOfPosition.add(new Position(currPos.getX() + 1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX() - 1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY() + 1));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY() - 1));
         return setOfPosition.stream()
-                                .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() <this.size)
+                                .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 
+                                    && pos.getX() < this.size && pos.getY() < this.size)
                                 .collect(Collectors.toSet());
     }
  
@@ -329,7 +407,7 @@ public class BoardImpl implements Board, TimedEntity{
         private final Set<Slider> innerSlidersEntities;
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
-        
+
         /**
          * Creates a BoardMemento from which the board will be able to restore its previous state.
          * @param piecesMemento a List of the saved states of the pieces.
@@ -427,7 +505,7 @@ public class BoardImpl implements Board, TimedEntity{
      * @param bm the BoardMemento from which to extract the information
      * required to restore the state of the board.
      */
-    public void restore(BoardMementoImpl bm) {
+    public void restore(final BoardMementoImpl bm) {
         this.cells = bm.getInnerCells();
         this.pieces.put(Player.ATTACKER, bm.getInnerAttackerPieces());
         this.pieces.put(Player.DEFENDER, bm.getInnerDefenderPieces());
@@ -437,4 +515,3 @@ public class BoardImpl implements Board, TimedEntity{
         bm.getPiecesMemento().forEach(p -> p.restore());
     }
 }
-    
