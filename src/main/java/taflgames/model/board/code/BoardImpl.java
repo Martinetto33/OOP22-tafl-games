@@ -172,7 +172,6 @@ public class BoardImpl implements Board, TimedEntity{
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
         Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
                 .collect(Collectors.toSet());
-                //.map(x -> new Position(x.getX() + source.getX(), x.getY() + source.getY()))
         // Controllo se nelle posizioni ottenute ci sono entità; in caso, vengono triggerate
         if(!triggeredPos.isEmpty()) {
             for (Position pos : triggeredPos) {
@@ -185,13 +184,13 @@ public class BoardImpl implements Board, TimedEntity{
     private boolean isPathFree(Position start, Position dest) {
         if(start.getX() == dest.getX()) { 
             if(start.getY() < dest.getY()) {
-                for(int i=start.getY()+1; i<dest.getY(); i++) {
+                for(int i=start.getY()+1; i < dest.getY(); i++) {
                     if(!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
-                for(int i=start.getY()-1; i<dest.getY(); i--) {
+                for(int i=start.getY()-1; i > dest.getY(); i--) {
                     if(!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
@@ -199,13 +198,13 @@ public class BoardImpl implements Board, TimedEntity{
             }
         } else {
             if(start.getX() < dest.getX()) {
-                for(int i=start.getX() + 1; i<dest.getX(); i++) {
+                for(int i=start.getX() + 1; i < dest.getX(); i++) {
                     if(!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
-                for(int i=start.getX() - 1; i<dest.getX(); i--) {
+                for(int i=start.getX() - 1; i > + dest.getX(); i--) {
                     if(!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
