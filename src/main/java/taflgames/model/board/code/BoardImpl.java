@@ -293,6 +293,30 @@ public class BoardImpl implements Board, TimedEntity{
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Player> isOver(final Player playerInTurn) {
+        if(pieces.get(Player.DEFENDER).entrySet().stream()
+            .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
+            .findAny()
+            .isEmpty()) {
+                return Optional.of(Player.ATTACKER);
+        } else {
+            Piece king = pieces.get(Player.DEFENDER).entrySet().stream()
+                .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
+                .map(position -> position.getValue())
+                .findAny()
+                .get();
+            if(cells.get(king.getCurrentPosition()).getType().equals("Exit")) {
+                return Optional.of(Player.DEFENDER);
+            } else {
+                return Optional.empty();
+            }
+        } 
+    }
+
     private Piece getPieceAtPosition(Position pos) {
         Piece p = pieces.entrySet().stream()
             .filter(x -> x.getValue().containsKey(pos))
@@ -444,12 +468,6 @@ public class BoardImpl implements Board, TimedEntity{
         this.slidersEntities = bm.getInnerSlidersEntities();
         bm.getCellsMemento().forEach(c -> c.restore());
         bm.getPiecesMemento().forEach(p -> p.restore());
-    }
-
-    @Override
-    public Optional<Player> isOver(Player playerInTurn) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isOver'");
     }
 
 }
