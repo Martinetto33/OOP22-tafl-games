@@ -1,6 +1,7 @@
 package taflgames.model;
 
 import taflgames.common.code.Position;
+import taflgames.model.memento.api.MatchMemento;
 import taflgames.common.Player;
 
 /**
@@ -12,6 +13,11 @@ public interface Match {
      * @return the active player
      */
     Player getActivePlayer();
+
+    /**
+     * @return the number of the current turn
+     */
+    int getTurnNumber();
 
     /**
      * Updates the active player.
@@ -47,5 +53,17 @@ public interface Match {
      * @return true if the match is over, false otherwise
      */
     boolean isOver();
+
+    /**
+     * Saves a snapshot of the current state of the match, in order to support the "undo" operation.
+     * @return the {@link MatchMemento} that holds the snapshot
+     */
+    MatchMemento save();
+
+    /**
+     * Restores the state of the match saved in the {@link MatchMemento} passed as argument.
+     * @param matchMemento the {@link MatchMemento} that holds the snapshot
+     */
+    void restore(MatchMemento matchMemento);
 
 }

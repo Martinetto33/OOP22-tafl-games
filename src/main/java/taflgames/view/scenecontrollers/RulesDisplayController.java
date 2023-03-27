@@ -7,7 +7,10 @@ import java.io.InputStream;
  * to add specific functions for a {@link taflgames.view.scenes.RulesScene}.
  */
 public interface RulesDisplayController extends BasicSceneController {
-    
+
+    /**
+     * @return the input stream from which the rules document is read
+     */
     InputStream getRulesFileStream();
 
 }

@@ -16,7 +16,8 @@ public abstract class AbstractScene implements Scene {
 
     private final String sceneName;
     private final JPanel scene;
-    private static final String FONT_NAME = "";
+    private static final String DEFAULT_FONT_NAME = "";
+    private static final int DEFAULT_FONT_SIZE = 15;
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP;
 
@@ -54,7 +55,7 @@ public abstract class AbstractScene implements Scene {
      * @return the default font used for the text of the scene
      */
     public static Font getDefaultFont() {
-        return new Font(FONT_NAME, Font.BOLD, 15);
+        return new Font(DEFAULT_FONT_NAME, Font.BOLD, DEFAULT_FONT_SIZE);
     }
 
 }

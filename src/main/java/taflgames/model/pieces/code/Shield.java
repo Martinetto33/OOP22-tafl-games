@@ -15,7 +15,7 @@ public class Shield extends AbstractPiece {
     public Shield(final Position startingPosition, final Player p) {
         this.setCurrentPosition(startingPosition);
         this.setMyPlayer(p);
-        this.setMyType(this.factory.createShieldBehaviour());
+        this.setMyType(this.getFactory().createShieldBehaviour());
         this.getMyType().generate();
         this.setCurrNumbOfLivesLimited(this.getMyType().getTotalNumbOfLives());
     }

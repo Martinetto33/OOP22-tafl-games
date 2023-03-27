@@ -16,4 +16,10 @@ public interface CellMemento {
      */
     void restore();
 
+    /**
+     * Returns the cell status.
+     * @return the cell status.
+     */
+    boolean getCellStatus();
+
 }
