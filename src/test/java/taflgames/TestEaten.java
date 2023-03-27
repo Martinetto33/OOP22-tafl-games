@@ -277,6 +277,7 @@ public class TestEaten {
         assertTrue(cells.get(new Position(1,2)).isFree());
         assertFalse(pieces.get(p2).containsKey(new Position(2,1)));
         assertFalse(pieces.get(p2).containsKey(new Position(1,2)));
+
     }
 
     /**
