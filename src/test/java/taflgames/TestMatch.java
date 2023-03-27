@@ -45,11 +45,7 @@ class TestMatch {
         final CellsCollectionBuilder cellsCollBuilder = new CellsCollectionBuilderImpl();
         final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
         try {
-            /*
-             * Variant mode configuration is loaded, so that the match is tested also when
-             * using special pieces and cells.
-             */ 
-            loader.loadVariantModeConfig(cellsCollBuilder, piecesCollBuilder);
+            loader.loadClassicModeConfig(cellsCollBuilder, piecesCollBuilder);
             final var pieces = piecesCollBuilder.build();
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
@@ -146,7 +142,65 @@ class TestMatch {
         assertFalse(match.selectDestination(new Position(3, 0), new Position(0, 0)));
     }
 
+    /**
+     * Test the movement of a piece on the board.
+     */
+    @Test
+    void testMove() {
+        // The attacker moves the piece at (row=3, col=0) to position (row=3, col=4)
+        Position source = new Position(3, 0);
+        Position dest = new Position(3, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        // Now the position (row=3, col=4) should be a valid source
+        assertTrue(match.selectSource(dest));
+    }
 
+    /**
+     * Test the killing of a piece.
+     */
+    @Test
+    void testPieceKilling() {
+        // Attacker moves piece at (row=3, col=0) to (row=3, col=4)
+        Position source = new Position(3, 0);
+        Position dest = new Position(3, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        /*
+         * Now the defender moves piece at (row=5, col=3) to (row=3, col=3);
+         * the attacker's piece at (row=3, col=4) should be killed,
+         * because there is another defender's piece at (row=3, col=5).
+         */
+        match.setNextActivePlayer();
+        assertTrue(match.getActivePlayer().equals(Player.DEFENDER));
+        source = new Position(5, 3);
+        dest = new Position(3, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        /*
+         * The piece at (row=3, col=4) should have been killed and then
+         * it should not be selectable.
+         */
+        match.setNextActivePlayer();
+        assertTrue(match.getActivePlayer().equals(Player.ATTACKER));
+        source = new Position(3, 4);
+        assertFalse(match.selectSource(source));
+        /*
+         * The defender should also be able to move a piece to the position where the attacker's piece
+         * was killed, at (row=3, col=4).
+         */
+        match.setNextActivePlayer();
+        assertTrue(match.getActivePlayer().equals(Player.DEFENDER));
+        source = new Position(3, 3);
+        dest = new Position(3, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+    }
 
     // CHECKSTYLE: MagicNumber ON
 
