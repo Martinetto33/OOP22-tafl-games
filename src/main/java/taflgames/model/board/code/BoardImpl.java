@@ -153,38 +153,23 @@ public class BoardImpl implements Board, TimedEntity {
     public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
         Piece pieceInturn = getPieceAtPosition(oldPos);
         if (cells.get(newPos).isFree()) {
-            pieces.entrySet().stream().forEach(x -> {
-                if (x.getValue().containsKey(oldPos)) {
-                    pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
-                    signalOnMove(newPos, pieceInturn);
-                }
-            });
+            pieces.get(currentPlayer).remove(oldPos);
+            pieces.get(currentPlayer).put(newPos, pieceInturn);
+            pieceInturn.setCurrentPosition(newPos);
             cells.get(oldPos).setFree(true);
-            cells.get(newPos).setFree(true);
-        } else {
-            Player palyerInTurn = pieceInturn.getPlayer();
-            pieces.entrySet().stream().forEach(x -> {
-                if (x.getValue().containsKey(oldPos)) {
-                    pieces.put(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
-                }
-            });
-            pieces.entrySet().stream().forEach(x -> {
-                if (x.getValue().containsKey(newPos) && !x.getKey().equals(palyerInTurn)) {
-                    pieces.replace(x.getKey(), Collections.singletonMap(oldPos, x.getValue().get(newPos)));
-                }
-            });
-            signalOnMove(newPos, pieceInturn);
+            cells.get(newPos).setFree(false);
+        } else if (pieceInturn.canSwap()) {
+            pieces.get(currentPlayer).remove(oldPos);
+            pieces.get(currentPlayer).put(newPos, pieceInturn);
+            pieceInturn.setCurrentPosition(newPos);
+
+            Piece pieceToSwap = pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).get(newPos);
+            pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).remove(newPos);
+            pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).put(oldPos, pieceToSwap);
+            pieceToSwap.setCurrentPosition(oldPos);
         }
-        pieces.entrySet().stream().forEach(x -> {
-            if (x.getValue().containsKey(oldPos)) {
-               x.getValue().get(oldPos).setCurrentPosition(oldPos);
-            }
-        });
-        pieces.entrySet().stream().forEach(x -> {
-            if (x.getValue().containsKey(newPos)) {
-               x.getValue().get(newPos).setCurrentPosition(newPos);
-            }
-        });
+            
+        signalOnMove(newPos, pieceInturn);
         this.currentPos = newPos;
     }
 
