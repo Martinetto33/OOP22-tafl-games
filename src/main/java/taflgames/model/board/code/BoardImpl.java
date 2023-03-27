@@ -191,7 +191,7 @@ public class BoardImpl implements Board, TimedEntity{
                     }
                 }
             } else {
-                for(int i=start.getY()-1; i<dest.getY(); i--) {
+                for(int i=start.getY()-1; i>dest.getY(); i--) {
                     if(!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
@@ -205,7 +205,7 @@ public class BoardImpl implements Board, TimedEntity{
                     }
                 }
             } else {
-                for(int i=start.getX() - 1; i<dest.getX(); i--) {
+                for(int i=start.getX() - 1; i>dest.getX(); i--) {
                     if(!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }

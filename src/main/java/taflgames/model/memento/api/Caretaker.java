@@ -17,7 +17,11 @@ public interface Caretaker {
 
     /**
      * Registers a new MatchMemento, by pushing it onto the history stack.
-     * This method should be called by a handler at the end of a turn.
+     * This method should be called by a handler at the beginning of a turn,
+     * in order to save the starting state of the match before any changes.
+     * The call to this method causes the history to expand, and also
+     * locks it, so that no caller can undo moves unless the history
+     * is explicitly unlocked.
      */
     void updateHistory();
 
@@ -25,4 +29,11 @@ public interface Caretaker {
      * Returns to the previous saved state.
      */
     void undo();
+
+    /**
+     * Must be called before any {@link #undo()} operation
+     * can be performed. This additional step ensures that the state
+     * of the observed Match has actually changed before calling undo.
+     */
+    void unlockHistory();
 }
