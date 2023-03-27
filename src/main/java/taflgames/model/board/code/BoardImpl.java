@@ -174,6 +174,16 @@ public class BoardImpl implements Board, TimedEntity {
             });
             signalOnMove(newPos, pieceInturn);
         }
+        pieces.entrySet().stream().forEach(x -> {
+            if (x.getValue().containsKey(oldPos)) {
+               x.getValue().get(oldPos).setCurrentPosition(oldPos);
+            }
+        });
+        pieces.entrySet().stream().forEach(x -> {
+            if (x.getValue().containsKey(newPos)) {
+               x.getValue().get(newPos).setCurrentPosition(newPos);
+            }
+        });
         this.currentPos = newPos;
     }
 
