@@ -48,7 +48,7 @@ public class SliderImpl extends AbstractCell implements Slider {
                 this.triggered = true;
                 Position newPosition = this.mediator.requestMove(source, this.orientation); /*Trovo la casella più lontana su cui ci si possa
                 spostare seguendo la direzione del vettore orientamento */
-                this.mediator.updatePiecePos(this.sliderPos, newPosition);
+                this.mediator.updatePiecePos(this.sliderPos, newPosition, movedPiece.getPlayer());
             }
         }
     }

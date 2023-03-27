@@ -1,5 +1,6 @@
 package taflgames.model.cell.code;
 
+import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
@@ -20,8 +21,8 @@ public class SliderMediatorImpl implements SliderMediator {
     }
 
     @Override
-    public void updatePiecePos(Position startPos, Position destPos) {
-        board.updatePiecePos(startPos, destPos);
+    public void updatePiecePos(Position startPos, Position destPos, Player currentPlayer) {
+        board.updatePiecePos(startPos, destPos, currentPlayer);
     }
     
 }

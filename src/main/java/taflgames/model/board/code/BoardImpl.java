@@ -150,7 +150,7 @@ public class BoardImpl implements Board, TimedEntity {
      * {@inheritDoc}
      */
     @Override
-    public void updatePiecePos(final Position oldPos, final Position newPos) {
+    public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
         Piece pieceInturn = getPieceAtPosition(oldPos);
         if (cells.get(newPos).isFree()) {
             pieces.entrySet().stream().forEach(x -> {

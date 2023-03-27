@@ -138,7 +138,7 @@ public class TestBoard {
 		board3 = new BoardImpl(pieces, cells, 5);
 
         //test the position update of a normal piece
-        board3.updatePiecePos(new Position(0, 0), new Position(1, 1));
+        board3.updatePiecePos(new Position(0, 0), new Position(1, 1), p1);
         assertTrue(cells.get(new Position(0, 0)).isFree());
         assertFalse(cells.get(new Position(1, 1)).isFree());
         assertTrue(pieces.get(p1).keySet().contains(new Position(1, 1)));
@@ -150,7 +150,7 @@ public class TestBoard {
         piecesPlayer1.put(new Position(0, 3), new Swapper(new Position(0, 3), p1));
         pieces.put(p1, piecesPlayer1);
         cells.get(new Position(0, 3)).setFree(false);
-        board3.updatePiecePos(new Position(0, 3), new Position(3, 3));
+        board3.updatePiecePos(new Position(0, 3), new Position(3, 3), p1);
         assertTrue(pieces.get(p1).keySet().contains(new Position(3, 3)));
         assertTrue(pieces.get(p2).keySet().contains(new Position(0, 3)));
         assertFalse(pieces.get(p2).keySet().contains(new Position(3, 3)));
@@ -161,7 +161,7 @@ public class TestBoard {
         piecesPlayer2.put(new Position(3,1), new Swapper(new Position(3,1), p2));
         pieces.put(p2, piecesPlayer2);
         cells.get(new Position(3,1)).setFree(false);
-        board3.updatePiecePos(new Position(3,1), new Position(0,1));
+        board3.updatePiecePos(new Position(3,1), new Position(0,1), p2);
         assertTrue(pieces.get(p2).keySet().contains(new Position(0,1)));
         assertTrue(cells.get(new Position(3,1)).isFree());
         assertFalse(cells.get(new Position(0,1)).isFree());

@@ -332,7 +332,7 @@ public class TestEaten {
         cells.get(defender2Pos).setFree(false);
 
         fifthBoard = new BoardImpl(pieces, cells, 5);
-        fifthBoard.updatePiecePos(attackerPosition, attackerPosition);
+        fifthBoard.updatePiecePos(attackerPosition, attackerPosition, Player.ATTACKER);
         fifthBoard.eat();
 
         assertTrue(cells.get(defender1Pos).isFree());
