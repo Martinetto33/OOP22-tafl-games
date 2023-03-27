@@ -1,6 +1,7 @@
 package taflgames.model.board.code;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -159,12 +160,12 @@ public class BoardImpl implements Board, TimedEntity {
                 }
             });
             cells.get(oldPos).setFree(true);
-            cells.get(newPos).setFree(false);
+            cells.get(newPos).setFree(true);
         } else {
             Player palyerInTurn = pieceInturn.getPlayer();
             pieces.entrySet().stream().forEach(x -> {
                 if (x.getValue().containsKey(oldPos)) {
-                    pieces.replace(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
+                    pieces.put(x.getKey(), Collections.singletonMap(newPos, x.getValue().get(oldPos)));
                 }
             });
             pieces.entrySet().stream().forEach(x -> {
