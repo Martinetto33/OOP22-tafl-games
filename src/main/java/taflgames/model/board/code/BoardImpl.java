@@ -151,26 +151,29 @@ public class BoardImpl implements Board, TimedEntity {
      */
     @Override
     public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
-        Piece pieceInturn = getPieceAtPosition(oldPos);
+        final Piece pieceInTurn = getPieceAtPosition(oldPos);
         if (cells.get(newPos).isFree()) {
             pieces.get(currentPlayer).remove(oldPos);
-            pieces.get(currentPlayer).put(newPos, pieceInturn);
-            pieceInturn.setCurrentPosition(newPos);
+            pieces.get(currentPlayer).put(newPos, pieceInTurn);
+            pieceInTurn.setCurrentPosition(newPos);
             cells.get(oldPos).setFree(true);
             cells.get(newPos).setFree(false);
-        } else if (pieceInturn.canSwap()) {
+            this.currentPos = newPos;
+            signalOnMove(newPos, pieceInTurn);
+            
+        } else if (pieceInTurn.canSwap()) {
             pieces.get(currentPlayer).remove(oldPos);
-            pieces.get(currentPlayer).put(newPos, pieceInturn);
-            pieceInturn.setCurrentPosition(newPos);
+            pieces.get(currentPlayer).put(newPos, pieceInTurn);
+            pieceInTurn.setCurrentPosition(newPos);
 
             Piece pieceToSwap = pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).get(newPos);
             pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).remove(newPos);
             pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).put(oldPos, pieceToSwap);
             pieceToSwap.setCurrentPosition(oldPos);
-        }
+            this.currentPos = newPos;
+            signalOnMove(newPos, pieceInTurn);
             
-        signalOnMove(newPos, pieceInturn);
-        this.currentPos = newPos;
+        }
     }
 
     /**
@@ -291,9 +294,13 @@ public class BoardImpl implements Board, TimedEntity {
     public void eat() {
         Piece currPiece = getPieceAtPosition(currentPos);
         Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece, pieces, cells, size);
-        List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
-        Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
-        eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
+        if(!updatedHitbox.isEmpty()) {
+            List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
+            if(!enemies.isEmpty()) {
+                Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
+                eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
+            }
+        }
     }
 
     /**
