@@ -6,6 +6,7 @@ import org.apache.commons.collections4.iterators.LoopingIterator;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.model.board.api.Board;
 import taflgames.model.memento.api.BoardMemento;
 // import taflgames.model.memento.api.Caretaker;
 import taflgames.model.memento.api.MatchMemento;
@@ -66,7 +67,7 @@ public final class MatchImpl implements Match {
 
     @Override
     public void makeMove(final Position start, final Position destination) {
-        this.board.makeMove(start, destination);
+        this.board.updatePiecePos(start, destination);
     }
 
     @Override
@@ -121,7 +122,7 @@ public final class MatchImpl implements Match {
     public void restore(final MatchMemento matchMemento) {
         this.turnNumber = matchMemento.getTurnNumber();
         this.activePlayer = matchMemento.getActivePlayer();
-        this.board.restore(matchMemento.getBoardMemento());
+        matchMemento.getBoardMemento().restore();
     }
 
 }

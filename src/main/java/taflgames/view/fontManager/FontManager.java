@@ -1,10 +1,12 @@
-package taflgames.view.fontManager;
+package taflgames.view.fontmanager;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class can use a custom font located in the resources packages.
@@ -16,27 +18,27 @@ public class FontManager {
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "font" + SEP;
     private static final String FONT_FILE_NAME = "latin_runes_v20.ttf";
+    private static final Logger LOGGER = LoggerFactory.getLogger(FontManager.class);
+
     private Font font;
 
     /**
      * Builds a new FontManager, initialising its font.
      */
-    public FontManager(){
+    public FontManager() {
         this.font = this.initialise(FontManager.FONT_FILE_NAME);
     }
 
-    private Font initialise(String fileName) {
+    private Font initialise(final String fileName) {
         try (InputStream fontFile = Objects.requireNonNull(
             ClassLoader.getSystemResourceAsStream(PATH + fileName)
         )) {
             this.font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
             return this.font;
         } catch (IOException ioex) {
-            System.out.println("Error occurred while trying to read font file.");
-            ioex.printStackTrace();
+            LOGGER.error("Error occurred while trying to read font file.", ioex);
         } catch (FontFormatException e) {
-            System.out.println("Error with the font format.");
-            e.printStackTrace();
+            LOGGER.error("Error with the font format.", e);
         }
         return null;
     }
@@ -56,8 +58,7 @@ public class FontManager {
      * (e.g. Font.PLAIN)
      * @return the modified Font
      */
-    public Font getModifiedFont(float size, int type) {
-        Font result = this.font.deriveFont(type, size);
-        return result;
+    public Font getModifiedFont(final float size, final int type) {
+        return this.font.deriveFont(type, size);
     }
 }

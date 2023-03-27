@@ -445,40 +445,48 @@ public class BoardImpl implements Board, TimedEntity {
         }
 
         /**
-         * Returns the saved state of the cells.
-         * @return a Map of Positions and Cells.
+         * {@inheritDoc}
          */
+        @Override
         public Map<Position, Cell> getInnerCells() {
             return this.innerCells;
         }
 
         /**
-         * Returns the saved state of the attacker's pieces.
-         * @return a Map of Positions and Pieces.
+         * {@inheritDoc}
          */
+        @Override
         public Map<Position, Piece> getInnerAttackerPieces() {
             return this.innerAttackerPieces;
         }
 
         /**
-         * Returns the saved state of the defender's pieces.
-         * @return a Map of Positions and Pieces.
+         * {@inheritDoc}
          */
+        @Override
         public Map<Position, Piece> getInnerDefenderPieces() {
             return this.innerDefenderPieces;
         }
 
         /**
-         * Returns the las saved current position.
-         * @return the Position.
+         * {@inheritDoc}
          */
+        @Override
         public Position getInnerCurrentPos() {
             return this.innerCurrentPos;
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
         public Set<Slider> getInnerSlidersEntities() {
             return this.innerSlidersEntities;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void restore() {
             BoardImpl.this.restore(this);
@@ -490,6 +498,7 @@ public class BoardImpl implements Board, TimedEntity {
      * Saves a snapshot of the current state of this board.
      * @return the BoardMemento deriving from the saving of the board status.
      */
+    @Override
     public BoardMemento save() {
         return this.new BoardMementoImpl(
             this.pieces.entrySet().stream()
@@ -514,4 +523,5 @@ public class BoardImpl implements Board, TimedEntity {
         bm.getCellsMemento().forEach(c -> c.restore());
         bm.getPiecesMemento().forEach(p -> p.restore());
     }
+
 }

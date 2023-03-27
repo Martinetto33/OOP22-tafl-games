@@ -10,7 +10,7 @@ public abstract class AbstractCell implements Cell{
      * 
     */
     public AbstractCell() {
-        this.cellStatus = false;
+        this.cellStatus = true;
     }
 
     @Override

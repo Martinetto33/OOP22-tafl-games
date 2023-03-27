@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import taflgames.common.code.Position;
-import taflgames.model.cells.Cell;
+import taflgames.model.cell.api.Cell;
 
 /**
  * This interface allows to interact with a builder to create a collection of cells.
@@ -39,6 +39,12 @@ public interface CellsCollectionBuilder {
      * Adds the basic cells to the cells collection being built.
      */
     void addBasicCells();
+
+    /**
+     * Marks the cell at {@code position} as occupied by a piece.
+     * @param position the position of the occupied cell
+     */
+    void setCellAsOccupied(Position position);
 
     /**
      * @return the collection of cells that has been set up

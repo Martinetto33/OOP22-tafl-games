@@ -40,9 +40,10 @@ public class CellsHitbox {
     /**
      * This method returns a Set of {@link taflgames.model.pieces.api.Piece}
      * for compatibility reasons only.
+     * @param playerInTurn the player in turn.
      * @return a Set of Pieces with the exact hitbox of the Exits and the Throne.
      */
-    public Set<Piece> getCellsAsPiecesWithHitbox(Player playerInTurn) {
+    public Set<Piece> getCellsAsPiecesWithHitbox(final Player playerInTurn) {
         return this.throneAndExitsPositions.stream()
                 .map(pos -> (Piece) new BasicPiece(pos, playerInTurn))
                 .collect(Collectors.toUnmodifiableSet());

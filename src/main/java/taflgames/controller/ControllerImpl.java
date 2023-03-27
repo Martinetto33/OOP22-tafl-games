@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import taflgames.model.BoardImpl;
+import taflgames.model.board.code.BoardImpl;
 import taflgames.model.Match;
 import taflgames.model.MatchImpl;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -39,8 +39,11 @@ public final class ControllerImpl implements Controller {
         final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
         try {
             loader.loadClassicModeConfig(cellsCollBuilder, piecesCollBuilder);
+            final var pieces = piecesCollBuilder.build();
+            final var cells = cellsCollBuilder.build();
+            final int size = (int) Math.sqrt(cells.size());
             this.match = new MatchImpl(
-                new BoardImpl(cellsCollBuilder.build(), piecesCollBuilder.build())
+                new BoardImpl(pieces, cells, size)
             );
             LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
@@ -61,8 +64,11 @@ public final class ControllerImpl implements Controller {
         final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
         try {
             loader.loadVariantModeConfig(cellsCollBuilder, piecesCollBuilder);
+            final var pieces = piecesCollBuilder.build();
+            final var cells = cellsCollBuilder.build();
+            final int size = (int) Math.sqrt(cells.size());
             this.match = new MatchImpl(
-                new BoardImpl(cellsCollBuilder.build(), piecesCollBuilder.build())
+                new BoardImpl(pieces, cells, size)
             );
             LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
