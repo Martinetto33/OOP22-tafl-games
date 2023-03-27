@@ -68,6 +68,7 @@ public final class MatchImpl implements Match {
     @Override
     public void makeMove(final Position start, final Position destination) {
         this.board.updatePiecePos(start, destination, activePlayer);
+        this.board.eat();
     }
 
     @Override
