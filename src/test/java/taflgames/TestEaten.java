@@ -316,8 +316,9 @@ public class TestEaten {
          *         0 1    2    3    4
          */
         final Map<Position, Piece> attackerPieces = new HashMap<>();
-        final Position attackerPosition = new Position(2, 4);
-        attackerPieces.put(attackerPosition, new Swapper(attackerPosition, p1));
+        final Position attackerStartingPosition = new Position(1, 4);
+        final Position attackerEndingPosition = new Position(2, 4);
+        attackerPieces.put(attackerStartingPosition, new Swapper(attackerStartingPosition, p1));
 
         final Map<Position, Piece> defenderPieces = new HashMap<>();
         final Position defender1Pos = new Position(3, 4);
@@ -328,17 +329,17 @@ public class TestEaten {
         pieces.put(Player.ATTACKER, attackerPieces);
         pieces.put(Player.DEFENDER, defenderPieces);
 
-        cells.get(attackerPosition).setFree(false);
+        cells.get(attackerStartingPosition).setFree(false);
         cells.get(defender1Pos).setFree(false);
         cells.get(defender2Pos).setFree(false);
 
         fifthBoard = new BoardImpl(pieces, cells, 5);
-        fifthBoard.updatePiecePos(attackerPosition, attackerPosition, Player.ATTACKER);
+        fifthBoard.updatePiecePos(attackerStartingPosition, attackerEndingPosition, Player.ATTACKER);
         fifthBoard.eat();
 
         assertTrue(cells.get(defender1Pos).isFree());
         assertTrue(cells.get(defender2Pos).isFree());
-        assertFalse(cells.get(attackerPosition).isFree());
+        assertFalse(cells.get(attackerEndingPosition).isFree());
 
     }
     
