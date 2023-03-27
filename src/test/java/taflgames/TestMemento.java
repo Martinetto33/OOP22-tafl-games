@@ -46,10 +46,6 @@ public class TestMemento {
         final CellsCollectionBuilder cellsCollBuilder = new CellsCollectionBuilderImpl();
         final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
         try {
-            /*
-             * Variant mode configuration is loaded, so that the match is tested also when
-             * using special pieces and cells.
-             */ 
             loader.loadClassicModeConfig(cellsCollBuilder, piecesCollBuilder);
             final var pieces = piecesCollBuilder.build();
             final var cells = cellsCollBuilder.build();
