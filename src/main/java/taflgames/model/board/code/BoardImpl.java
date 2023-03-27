@@ -404,9 +404,9 @@ public class BoardImpl implements Board, TimedEntity {
         private final Map<Position, Piece> innerAttackerPieces;
         private final Map<Position, Piece> innerDefenderPieces;
         private final Position innerCurrentPos;
-        private final Set<Slider> innerSlidersEntities;
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
+        private Set<Slider> innerSlidersEntities = null;
 
         /**
          * Creates a BoardMemento from which the board will be able to restore its previous state.
@@ -421,8 +421,10 @@ public class BoardImpl implements Board, TimedEntity {
             this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerCurrentPos = BoardImpl.this.currentPos;
-            this.innerSlidersEntities = BoardImpl.this.slidersEntities.stream()
-            .collect(Collectors.toSet());
+            if (BoardImpl.this.slidersEntities != null) {
+                this.innerSlidersEntities = BoardImpl.this.slidersEntities.stream()
+                    .collect(Collectors.toSet());
+            }
 
             this.piecesMemento = piecesMemento;
             this.cellsMemento = cellsMemento;
@@ -481,7 +483,7 @@ public class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Set<Slider> getInnerSlidersEntities() {
-            return this.innerSlidersEntities;
+            return this.innerSlidersEntities != null ? this.innerSlidersEntities : null;
         }
 
         /**
@@ -505,7 +507,10 @@ public class BoardImpl implements Board, TimedEntity {
             .flatMap(entry -> entry.getValue().values().stream())
             .map(piece -> (AbstractPiece) piece)
             .map(piece -> piece.save())
-            .toList(), null);
+            .toList(), 
+            this.cells.values().stream()
+            .map(cell -> cell.save())
+            .toList());
     }
 
     /**
