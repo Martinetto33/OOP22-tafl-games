@@ -4,7 +4,6 @@ import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.model.memento.api.PieceMemento;
-import taflgames.model.pieces.code.AbstractPiece.PieceMementoImpl;
 /**
  * This interface will model the behavior of a generic piece 
  * that can move on the board, indipendently from the specific type
@@ -91,11 +90,6 @@ public interface Piece {
      * @return the inner class PieceMemento
      */
     PieceMemento save();
-    /**
-     * restores the previous state of the piece.
-     * @param pm the inner class PieceMementoImpl (non ho potuto fare pieceMemento perchè dà problemi)
-     */
-    void restore(PieceMementoImpl pm);
 
     /**
      * creates a string that rappresents the piece as a whole.

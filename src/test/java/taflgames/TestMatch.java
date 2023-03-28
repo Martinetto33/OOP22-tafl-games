@@ -1,6 +1,8 @@
 package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
@@ -14,9 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import taflgames.common.Player;
+import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
-import taflgames.model.BoardImpl;
+import taflgames.model.board.code.BoardImpl;
 import taflgames.model.Match;
 import taflgames.model.MatchImpl;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -43,14 +46,20 @@ class TestMatch {
         final PiecesCollectionBuilder piecesCollBuilder = new PiecesCollectionBuilderImpl();
         try {
             loader.loadClassicModeConfig(cellsCollBuilder, piecesCollBuilder);
+            final var pieces = piecesCollBuilder.build();
+            final var cells = cellsCollBuilder.build();
+            final int size = (int) Math.sqrt(cells.size());
             this.match = new MatchImpl(
-                new BoardImpl(cellsCollBuilder.build(), piecesCollBuilder.build())
+                new BoardImpl(pieces, cells, size)
             );
         } catch (final IOException ex) {
             LOGGER.error("Cannot read configuration file. {}", ex.getMessage());
             fail();
         }
     }
+
+    // CHECKSTYLE: MagicNumber OFF
+    // MagicNumber rule disabled because the numbers in the following code represent coordinates
 
     /**
      * Test the player turn queue.
@@ -68,5 +77,131 @@ class TestMatch {
             resultingQueue
         );
     }
+
+    /**
+     * Test the selection of the piece to move.
+     */
+    @Test
+    void testPieceSelection() {
+        /*
+         * Case: the current player does a valid selection.
+         * For example, the attacker must be able to select piece initially at position (row=3, col=0).
+         */
+        assertTrue(match.selectSource(new Position(3, 0)));
+        /*
+         * Case: the player does an invalid selection because the chosen piece that does not
+         * belong to its team. For example, the attacker cannot chose the piece initially at position
+         * (row=3, col=5).
+         */
+        assertFalse(match.selectSource(new Position(3, 5)));
+        /*
+         * Case: the player does an invalid selection as the chosen cell does not contain a piece.
+         * For example, the player cannot choose position (row=1, col=1) for the first move.
+         */
+        assertFalse(match.selectSource(new Position(1, 1)));
+
+        /*
+         * Perform the same tests for the defender.
+         */
+        match.setNextActivePlayer();
+        /*
+         * For example, the defender can choose the piece initially at position (row=5, col=3).
+         */
+        assertTrue(match.selectSource(new Position(5, 3)));
+        /*
+         * For example, the defender cannot choose the piece initially at position (row=1, col=5)
+         */
+        assertFalse(match.selectSource(new Position(1, 5)));
+        /*
+         * For example, the defender cannot choose the initially empty cell at position (row=1, col=1).
+         */
+        assertFalse(match.selectSource(new Position(1, 1)));
+    }
+
+    /**
+     * Test the selection of the destination cell of the move.
+     */
+    @Test
+    void testDestinationSelection() {
+        /*
+         * Case: the selected destination is valid because the selected destination cell
+         * is empty (assuming that the selected piece is a classic piece).
+         * For example, the piece at position (row=3, col=0) can move to position (row=2, col=0).
+         */
+        assertTrue(match.selectDestination(new Position(3, 0), new Position(2, 0)));
+        /*
+         * Case: the selected destination is invalid because the selected destination cell 
+         * is not empty and the selected piece is not a swapper.
+         * For example, basic piece at position (row=3, col=0) cannot move to position (row=3, col=5)
+         */
+        assertFalse(match.selectDestination(new Position(3, 0), new Position(3, 5)));
+        /*
+         * Case: the selected destination is invalid because the selected destination is an Exit.
+         * For example, piece at position (row=3, col=0) cannot move to position (row=0, col=0).
+         */
+        assertFalse(match.selectDestination(new Position(3, 0), new Position(0, 0)));
+    }
+
+    /**
+     * Test the movement of a piece on the board.
+     */
+    @Test
+    void testMove() {
+        // The attacker moves the piece at (row=3, col=0) to position (row=3, col=4)
+        Position source = new Position(3, 0);
+        Position dest = new Position(3, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        // Now the position (row=3, col=4) should be a valid source
+        assertTrue(match.selectSource(dest));
+    }
+
+    /**
+     * Test the killing of a piece.
+     */
+    @Test
+    void testPieceKilling() {
+        // Attacker moves piece at (row=3, col=0) to (row=3, col=4)
+        Position source = new Position(3, 0);
+        Position dest = new Position(3, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        /*
+         * Now the defender moves piece at (row=5, col=3) to (row=3, col=3);
+         * the attacker's piece at (row=3, col=4) should be killed,
+         * because there is another defender's piece at (row=3, col=5).
+         */
+        match.setNextActivePlayer();
+        assertTrue(match.getActivePlayer().equals(Player.DEFENDER));
+        source = new Position(5, 3);
+        dest = new Position(3, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        /*
+         * The piece at (row=3, col=4) should have been killed and then
+         * it should not be selectable.
+         */
+        match.setNextActivePlayer();
+        assertTrue(match.getActivePlayer().equals(Player.ATTACKER));
+        source = new Position(3, 4);
+        assertFalse(match.selectSource(source));
+        /*
+         * The defender should also be able to move a piece to the position where the attacker's piece
+         * was killed, at (row=3, col=4).
+         */
+        match.setNextActivePlayer();
+        assertTrue(match.getActivePlayer().equals(Player.DEFENDER));
+        source = new Position(3, 3);
+        dest = new Position(3, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+    }
+
+    // CHECKSTYLE: MagicNumber ON
 
 }

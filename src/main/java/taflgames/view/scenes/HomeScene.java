@@ -11,7 +11,7 @@ import java.util.Optional;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import taflgames.view.fontManager.FontManager;
+import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.HomeController;
 
 import javax.swing.JButton;

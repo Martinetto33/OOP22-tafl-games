@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -15,6 +16,7 @@ import taflgames.view.scenecontrollers.GameChoiceController;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  * Implementation of the game choice scene.
@@ -85,13 +87,21 @@ public class GameChoiceScene extends AbstractScene {
         buttonsPanel.add(seeRulesButton, gbc);
 
         playClassicButton.addActionListener((e) -> {
-            this.controller.createClassicModeMatch();
-            this.controller.goToNextScene();
+            try {
+                this.controller.createClassicModeMatch();
+                this.controller.goToNextScene();
+            } catch (final IOException ex) {
+                JOptionPane.showMessageDialog(scene, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         playVariantButton.addActionListener((e) -> {
-            this.controller.createVariantModeMatch();
-            this.controller.goToNextScene();
+            try {
+                this.controller.createVariantModeMatch();
+                this.controller.goToNextScene();
+            } catch (final IOException ex) {
+                JOptionPane.showMessageDialog(scene, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         seeRulesButton.addActionListener((e) -> {
