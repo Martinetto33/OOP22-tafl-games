@@ -101,11 +101,7 @@ public class EatenImpl implements Eaten {
         /* The following map represents the allies of the piece attempting to eat the enemy
         that are on the same row and the same column as the piece */
         Map<Position, Piece> allies = new HashMap<>();
-        pieces.get(lastMovedPiece.getPlayer()).entrySet().stream()
-                                        .filter(ally -> ally.getKey().getX() == lastMovedPiece.getCurrentPosition().getX()
-                                            || ally.getKey().getY() == lastMovedPiece.getCurrentPosition().getY())
-                                        .forEach(ally -> allies.put(ally.getKey(), ally.getValue()));
-
+        pieces.get(lastMovedPiece.getPlayer()).entrySet().stream().forEach(ally -> allies.put(ally.getKey(), ally.getValue()));
         /* Exits and Thrones can be considered as allies of the current player! 
          * This simple addition should work as normal.
         */
