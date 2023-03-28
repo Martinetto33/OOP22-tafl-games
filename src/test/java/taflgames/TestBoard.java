@@ -109,7 +109,9 @@ public class TestBoard {
         assertTrue(board2.isDestinationValid(new Position(1,2), new Position(3,1), p1));
         assertFalse(board2.isDestinationValid(new Position(1,2), new Position(3,4), p1));
 
-
+        assertFalse(board2.isDestinationValid(new Position(3,4), new Position(3,2), p1));
+        assertFalse(board2.isDestinationValid(new Position(3, 1), new Position(3, 4), p2));
+        assertFalse(board2.isDestinationValid(new Position(4, 2), new Position(0,2), p2));
 
     }
 
