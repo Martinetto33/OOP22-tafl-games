@@ -155,6 +155,14 @@ class TestMatch {
         dest = new Position(0, 1);
         assertFalse(match.selectDestination(source, dest));
         /*
+         * Case: the selected destination is invalid because going from source to destination
+         * would require a move that is not vertical nor horizontal.
+         * For example, piece at (row=3, col=0) cannot move to (row=2, col=1).
+         */
+        source = new Position(3, 0);
+        dest = new Position(2, 1);
+        assertFalse(match.selectDestination(source, dest));
+        /*
          * Case: the selected destination is invalid because the selected destination is an Exit.
          * For example, piece at position (row=3, col=0) cannot move to position (row=0, col=0).
          */
@@ -249,6 +257,7 @@ class TestMatch {
      */
     @Test
     void testAttackerWin() {
+
         /*
          * Move the king in a vulnerable position. Before doing so, it is necessary to move
          * some other pieces to make the path free for the king.
@@ -257,6 +266,7 @@ class TestMatch {
         match.setNextActivePlayer();
         assertEquals(Player.DEFENDER, match.getActivePlayer());
 
+        // Move piece (shield) from (5, 3) to (5, 2)
         Position source = new Position(5, 3);
         Position dest = new Position(5, 2);
         assertTrue(match.selectSource(source));
@@ -264,6 +274,7 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
+        // Move piece (archer) from (5, 4) to (5, 3)
         source = new Position(5, 4);
         dest = new Position(5, 3);
         assertTrue(match.selectSource(source));
@@ -271,6 +282,7 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
+        // Move piece (basic) from (4, 4) to (4, 3)
         source = new Position(4, 4);
         dest = new Position(4, 3);
         assertTrue(match.selectSource(source));
@@ -278,6 +290,7 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
+        // Move king from (5, 5) to (5, 4)
         source = new Position(5, 5);
         dest = new Position(5, 4);
         assertTrue(match.selectSource(source));
@@ -285,6 +298,7 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
+        // Move king from (5, 5) to (5, 4)
         source = new Position(5, 4);
         dest = new Position(1, 4);
         assertTrue(match.selectSource(source));
@@ -301,9 +315,14 @@ class TestMatch {
         // Check that the match is not over yet, since the king is sorrounded only at two sides
         assertTrue(match.getMatchEndStatus().isEmpty());
 
+        // Check that king position is still selectable at (1, 4)
+        source = new Position(1, 4);
+        assertTrue(match.selectSource(source));
+
         match.setNextActivePlayer();
         assertEquals(Player.ATTACKER, match.getActivePlayer());
 
+        // Move piece (basic) from (3, 0) to (1, 0)
         source = new Position(3, 0);
         dest = new Position(1, 0);
         assertTrue(match.selectSource(source));
@@ -311,6 +330,7 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
+        // Move piece (basic) from (1, 0) to (1, 3)
         source = new Position(1, 0);
         dest = new Position(1, 3);
         assertTrue(match.selectSource(source));
@@ -321,6 +341,16 @@ class TestMatch {
         // Check that the match is not over yet, since the king is sorrounded only at three sides
         assertTrue(match.getMatchEndStatus().isEmpty());
 
+        // Check that king position is still selectable at (1, 4)
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(1, 4);
+        assertTrue(match.selectSource(source));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move piece (basic) from (3, 10) to (2, 10)
         source = new Position(3, 10);
         dest = new Position(2, 10);
         assertTrue(match.selectSource(source));
@@ -328,12 +358,29 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
+        // Move piece (basic) from (2, 10) to (2, 4)
         source = new Position(2, 10);
         dest = new Position(2, 4);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
+
+        // Double check the presence of all the four attacker's pieces on the four sides of the king
+        source = new Position(0, 4);
+        assertTrue(match.selectSource(source));
+        source = new Position(1, 3);
+        assertTrue(match.selectSource(source));
+        source = new Position(1, 5);
+        assertTrue(match.selectSource(source));
+        source = new Position(2, 4);
+        assertTrue(match.selectSource(source));
+
+        // Then the king should have been killed; check that the king is no more selectable
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(1, 4);
+        assertFalse(match.selectSource(source));
 
         // Now the match must end with the victory of the attacker
         assertTrue(match.getMatchEndStatus().isPresent());
