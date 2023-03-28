@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import taflgames.common.Player;
+import taflgames.common.code.MatchResult;
 import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
@@ -214,7 +215,7 @@ class TestMatch {
          * because there is another defender's piece at (row=3, col=5).
          */
         match.setNextActivePlayer();
-        assertTrue(match.getActivePlayer().equals(Player.DEFENDER));
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
         source = new Position(5, 3);
         dest = new Position(3, 3);
         assertTrue(match.selectSource(source));
@@ -225,7 +226,7 @@ class TestMatch {
          * it should not be selectable.
          */
         match.setNextActivePlayer();
-        assertTrue(match.getActivePlayer().equals(Player.ATTACKER));
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
         source = new Position(3, 4);
         assertFalse(match.selectSource(source));
         /*
@@ -233,13 +234,119 @@ class TestMatch {
          * was killed, at (row=3, col=4).
          */
         match.setNextActivePlayer();
-        assertTrue(match.getActivePlayer().equals(Player.DEFENDER));
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
         source = new Position(3, 3);
         dest = new Position(3, 4);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
+    }
+
+    /**
+     * Test that the match ends and that the correct result is returned when the conditions for
+     * the conditions for the attacker victory are verified.
+     */
+    @Test
+    void testAttackerWin() {
+        /*
+         * Move the king in a vulnerable position. Before doing so, it is necessary to move
+         * some other pieces to make the path free for the king.
+         */
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        Position source = new Position(5, 3);
+        Position dest = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        source = new Position(5, 4);
+        dest = new Position(5, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        source = new Position(4, 4);
+        dest = new Position(4, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        source = new Position(5, 5);
+        dest = new Position(5, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        source = new Position(5, 4);
+        dest = new Position(1, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        /*
+         * Now the king is at (row=1, col=4). It is already sorrounded by two attacker pieces at 
+         * (row=0, col=4) and (row=1, col=5). In order to win, the attacker can place two pieces at 
+         * (row=1, col=3) and (row=2, col=4).
+         */
+
+        // Check that the match is not over yet, since the king is sorrounded only at two sides
+        assertTrue(match.getMatchEndStatus().isEmpty());
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        source = new Position(3, 0);
+        dest = new Position(1, 0);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        source = new Position(1, 0);
+        dest = new Position(1, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Check that the match is not over yet, since the king is sorrounded only at three sides
+        assertTrue(match.getMatchEndStatus().isEmpty());
+
+        source = new Position(3, 10);
+        dest = new Position(2, 10);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        source = new Position(2, 10);
+        dest = new Position(2, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the match must end with the victory of the attacker
+        assertTrue(match.getMatchEndStatus().isPresent());
+        // Check attacker victory
+        assertEquals(
+            MatchResult.VICTORY,
+            match.getMatchEndStatus().get().getX()
+        );
+        // Check defender defeat
+        assertEquals(
+            MatchResult.DEFEAT,
+            match.getMatchEndStatus().get().getY()
+        );
     }
 
     // CHECKSTYLE: MagicNumber ON
