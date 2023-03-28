@@ -16,5 +16,7 @@ public interface LoaderImages {
     Map<CellImageInfo,ImageIcon> getCellImageMap();
 
     Map<PieceImageInfo,ImageIcon> getPieceImageMap();
+
+    ImageIcon rotateImage(final ImageIcon originalImg);
     
 }

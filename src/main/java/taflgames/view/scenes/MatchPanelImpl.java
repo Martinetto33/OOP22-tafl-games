@@ -95,6 +95,35 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
 
     @Override
     public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
+        ImageIcon imageTombAttacker = mapCellsImageIcons.entrySet().stream()
+                                    .filter(elem -> elem.getKey().getName().equals("CELL_TOMB_ATTACKER"))
+                                    .map(elem -> elem.getValue())
+                                    .findAny()
+                                    .get();
+        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_TOMB_ATTACKER"))
+                                .forEach(cell -> {
+                                    this.mapBoard.get(cell.getKey()).setIcon(null);
+                                    this.mapBoard.get(cell.getKey()).setIcon(imageTombAttacker);
+                                });
+        ImageIcon imageTombDefender = mapCellsImageIcons.entrySet().stream()
+                                .filter(elem -> elem.getKey().getName().equals("CELL_TOMB_DEFENDERS"))
+                                .map(elem -> elem.getValue())
+                                .findAny()
+                                .get();
+        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_TOMB_DEFENDERS"))
+                            .forEach(cell -> {
+                                this.mapBoard.get(cell.getKey()).setIcon(null);
+                                this.mapBoard.get(cell.getKey()).setIcon(imageTombDefender);
+                            });
+
+        ImageIcon imageSlider = loader.rotateImage(mapCellsImageIcons.entrySet().stream()
+                                                    .filter(elem -> elem.getKey().getName().equals("imageTombDefender"))
+                                                    .map(elem -> elem.getValue()).findAny().get());
+        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_TOMB_DEFENDERS"))
+                                .forEach(cell -> {
+                                    this.mapBoard.get(cell.getKey()).setIcon(null);
+                                    this.mapBoard.get(cell.getKey()).setIcon(imageSlider);
+                                });
     }
 
     @Override

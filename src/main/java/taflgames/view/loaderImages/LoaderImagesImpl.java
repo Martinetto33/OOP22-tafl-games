@@ -1,6 +1,8 @@
 package taflgames.view.loaderImages;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,28 +50,28 @@ public class LoaderImagesImpl implements LoaderImages{
     @Override
     public void loadCellsImages() {
         cellImages = new HashMap<>();
-        cellImages.put(new CellImageInfo(CELL_BASIC, Player.DEFENDER), getImage(CELL_BASIC));
-        cellImages.put(new CellImageInfo(CELL_EXIT, Player.DEFENDER), getImage(CELL_EXIT));
-        cellImages.put(new CellImageInfo(CELL_SLIDER, Player.DEFENDER), getImage(CELL_SLIDER));
-        cellImages.put(new CellImageInfo(CELL_THRONE, Player.DEFENDER), getImage(CELL_THRONE));
-        cellImages.put(new CellImageInfo(CELL_TOMB_ATTACKER, Player.ATTACKER), getImage(CELL_TOMB_ATTACKER));
-        cellImages.put(new CellImageInfo(CELL_TOMB_DEFENDERS, Player.DEFENDER), getImage(CELL_TOMB_DEFENDERS));
+        cellImages.put(new CellImageInfo("CELL_BASIC", Player.DEFENDER), getImage(CELL_BASIC));
+        cellImages.put(new CellImageInfo("CELL_EXIT", Player.DEFENDER), getImage(CELL_EXIT));
+        cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER), getImage(CELL_SLIDER));
+        cellImages.put(new CellImageInfo("CELL_THRONE", Player.DEFENDER), getImage(CELL_THRONE));
+        cellImages.put(new CellImageInfo("CELL_TOMB_ATTACKER", Player.ATTACKER), getImage(CELL_TOMB_ATTACKER));
+        cellImages.put(new CellImageInfo("CELL_TOMB_DEFENDERS", Player.DEFENDER), getImage(CELL_TOMB_DEFENDERS));
     }
 
     @Override
     public void loadPiecesImages() {
         pieceImages = new HashMap<>();
-        pieceImages.put(new PieceImageInfo(ARCHER_ATTACKER, Player.ATTACKER), getImage(ARCHER_ATTACKER));
-        pieceImages.put(new PieceImageInfo(ARCHER_DEFENDER, Player.DEFENDER), getImage(ARCHER_DEFENDER));
-        pieceImages.put(new PieceImageInfo(BASIC_PIECE_ATTACKER, Player.ATTACKER), getImage(BASIC_PIECE_ATTACKER));
-        pieceImages.put(new PieceImageInfo(BASIC_PIECE_DEFENDER, Player.DEFENDER), getImage(BASIC_PIECE_DEFENDER));
-        pieceImages.put(new PieceImageInfo(KING, Player.DEFENDER), getImage(KING));
-        pieceImages.put(new PieceImageInfo(QUEEN_ATTACKER, Player.ATTACKER), getImage(QUEEN_ATTACKER));
-        pieceImages.put(new PieceImageInfo(QUEEN_DEFENDER, Player.DEFENDER), getImage(QUEEN_DEFENDER));
-        pieceImages.put(new PieceImageInfo(SHIELD_ATTACKER, Player.ATTACKER), getImage(SHIELD_ATTACKER));
-        pieceImages.put(new PieceImageInfo(SHIELD_DEFENDER, Player.DEFENDER), getImage(SHIELD_DEFENDER));
-        pieceImages.put(new PieceImageInfo(SWAPPER_ATTACKER, Player.ATTACKER), getImage(SWAPPER_ATTACKER));
-        pieceImages.put(new PieceImageInfo(SWAPPER_DEFENDER, Player.DEFENDER), getImage(SWAPPER_DEFENDER));
+        pieceImages.put(new PieceImageInfo("ARCHER_ATTACKER", Player.ATTACKER), getImage(ARCHER_ATTACKER));
+        pieceImages.put(new PieceImageInfo("ARCHER_DEFENDER", Player.DEFENDER), getImage(ARCHER_DEFENDER));
+        pieceImages.put(new PieceImageInfo("BASIC_PIECE_ATTACKER", Player.ATTACKER), getImage(BASIC_PIECE_ATTACKER));
+        pieceImages.put(new PieceImageInfo("BASIC_PIECE_DEFENDER", Player.DEFENDER), getImage(BASIC_PIECE_DEFENDER));
+        pieceImages.put(new PieceImageInfo("KING", Player.DEFENDER), getImage(KING));
+        pieceImages.put(new PieceImageInfo("QUEEN_ATTACKER", Player.ATTACKER), getImage(QUEEN_ATTACKER));
+        pieceImages.put(new PieceImageInfo("QUEEN_DEFENDER", Player.DEFENDER), getImage(QUEEN_DEFENDER));
+        pieceImages.put(new PieceImageInfo("SHIELD_ATTACKER", Player.ATTACKER), getImage(SHIELD_ATTACKER));
+        pieceImages.put(new PieceImageInfo("SHIELD_DEFENDER", Player.DEFENDER), getImage(SHIELD_DEFENDER));
+        pieceImages.put(new PieceImageInfo("SWAPPER_ATTACKER", Player.ATTACKER), getImage(SWAPPER_ATTACKER));
+        pieceImages.put(new PieceImageInfo("SWAPPER_DEFENDER", Player.DEFENDER), getImage(SWAPPER_DEFENDER));
     }
 
     private ImageIcon getImage(final String imageName) {
@@ -86,5 +88,14 @@ public class LoaderImagesImpl implements LoaderImages{
     @Override
     public Map<PieceImageInfo,ImageIcon> getPieceImageMap() {
         return pieceImages;
+    }
+
+    @Override
+    public ImageIcon rotateImage(final ImageIcon originalImg) {
+        BufferedImage blankCanvas = new BufferedImage(originalImg.getIconWidth(), originalImg.getIconHeight(), BufferedImage.SCALE_SMOOTH);
+        Graphics2D g2 = (Graphics2D) blankCanvas.getGraphics();
+        g2.rotate(Math.toRadians(90), originalImg.getIconWidth()/2, originalImg.getIconHeight()/2);
+        g2.drawImage(blankCanvas, 0, 0, null);
+        return new ImageIcon(blankCanvas);
     }
 }
