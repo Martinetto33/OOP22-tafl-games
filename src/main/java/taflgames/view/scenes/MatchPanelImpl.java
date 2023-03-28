@@ -34,7 +34,8 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int piecePanelSize;
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
-    public MatchPanelImpl(final int numbCellsInGrid) {
+
+    public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
         this.mySize = MatchPanelImpl.TEMP_CONST_FOR_SMALL_COMPUTERS*
                                     numbCellsInGrid;
         this.setLayout(new FlowLayout());
