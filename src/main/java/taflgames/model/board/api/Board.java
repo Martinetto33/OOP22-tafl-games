@@ -66,7 +66,7 @@ public interface Board {
      * @return Optional of the Player winning or an empty Optional 
      * if the game is still on and none of the Player has won yet.
      */
-    Optional<Player> isOver(final Player playerInTurn);
+    Optional<Player> hasAPlayerWon(final Player playerInTurn);
 
     /**
      * This method must be called by Match after method {@link #updatePiecePos}.
