@@ -58,9 +58,6 @@ class TestMatch {
         }
     }
 
-    // CHECKSTYLE: MagicNumber OFF
-    // MagicNumber rule disabled because the numbers in the following code represent coordinates
-
     /**
      * Test the player turn queue.
      */
@@ -77,6 +74,9 @@ class TestMatch {
             resultingQueue
         );
     }
+
+    // CHECKSTYLE: MagicNumber OFF
+    // MagicNumber rule disabled because the numbers in the following code represent coordinates
 
     /**
      * Test the selection of the piece to move.
@@ -146,6 +146,14 @@ class TestMatch {
         dest = new Position(3, 5);
         assertFalse(match.selectDestination(source, dest));
         /*
+         * Case: the selected destination is invalid because there is a piece in the middle 
+         * of the path to the destination and the moved piece is not an opponent's swapper.
+         * For example, piece at (row=0, col=4) cannot move to (row=0, col=1).
+         */
+        source = new Position(0, 4);
+        dest = new Position(0, 1);
+        assertFalse(match.selectDestination(source, dest));
+        /*
          * Case: the selected destination is invalid because the selected destination is an Exit.
          * For example, piece at position (row=3, col=0) cannot move to position (row=0, col=0).
          */
@@ -185,6 +193,8 @@ class TestMatch {
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
+        // Now the attacker should be able to select the swapper at (7, 5)
+        assertTrue(match.selectSource(dest));
     }
 
     /**
