@@ -74,6 +74,8 @@ public interface Board {
      */
     void eat();
 
+    void notifyTurnHasEnded(int turn);
+
     /**
      * Return the map of Position and Cell that that associate 
      * to each Position of the Board the type of Cell that is placed there.
