@@ -77,8 +77,8 @@ public final class MatchImpl implements Match {
 
     @Override
     public Optional<Pair<MatchResult, MatchResult>> getMatchEndStatus() {
-        if (this.board.hasAPlayerWon(activePlayer).isPresent()) {
-            final Player winner = this.board.hasAPlayerWon(activePlayer).get();
+        if (this.board.hasAPlayerWon().isPresent()) {
+            final Player winner = this.board.hasAPlayerWon().get();
             return winner.equals(Player.ATTACKER)
                     ? Optional.of(new Pair<>(MatchResult.VICTORY, MatchResult.DEFEAT))
                     : Optional.of(new Pair<>(MatchResult.DEFEAT, MatchResult.VICTORY));
