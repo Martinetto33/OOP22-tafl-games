@@ -57,7 +57,7 @@ public class LoaderImagesImpl implements LoaderImages{
         pieceImages.put("", getImage(SWAPPER_DEFENDER));
     }
 
-    public ImageIcon getImage(final String imageName) {
+    private ImageIcon getImage(final String imageName) {
         final URL imageURL = ClassLoader.getSystemResource("src/main/resources/taflgames/images/" + imageName);
         final ImageIcon elemntToDraw = new ImageIcon(imageURL);
         return new ImageIcon(elemntToDraw.getImage().getScaledInstance(0, 0, 0));
