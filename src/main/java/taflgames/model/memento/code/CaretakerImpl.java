@@ -71,4 +71,12 @@ public class CaretakerImpl implements Caretaker {
         this.locked = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isLocked() {
+        return this.locked;
+    }
+
 }

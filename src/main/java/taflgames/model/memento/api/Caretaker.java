@@ -36,4 +36,11 @@ public interface Caretaker {
      * of the observed Match has actually changed before calling undo.
      */
     void unlockHistory();
+
+    /**
+     * Returns whether the history is locked. If yes, {@link #undo()}
+     * method cannot be called until the history is unlocked.
+     * @return true if the history is locked.
+     */
+    boolean isLocked();
 }
