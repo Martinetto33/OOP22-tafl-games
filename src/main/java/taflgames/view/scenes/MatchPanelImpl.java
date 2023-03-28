@@ -17,8 +17,12 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import taflgames.common.code.Position;
+import taflgames.view.loaderImages.LoaderImages;
+import taflgames.view.loaderImages.LoaderImagesImpl;
 
 public class MatchPanelImpl extends JPanel implements MatchPanel{
+
+    private LoaderImages loader;
 
     private static final int TEMP_CONST_FOR_SMALL_COMPUTERS = 11;
     private final Map<Position,JButton> mapBottoni = new HashMap<>();
@@ -36,6 +40,10 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int sizeOfGrid;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
+        this.loader = new LoaderImagesImpl(MatchPanelImpl.TEMP_CONST_FOR_SMALL_COMPUTERS*
+                                            numbCellsInGrid, numbCellsInGrid);
+        mapPieceImageIcons.putAll(loader.getPieceImageMap());
+        mapCellsImageIcons.putAll(loader.getCellImageMap());
         this.mySize = MatchPanelImpl.TEMP_CONST_FOR_SMALL_COMPUTERS*
                                     numbCellsInGrid;
         this.setLayout(new FlowLayout());
@@ -74,6 +82,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         this.createButtonsForGrid(buttonPanel, this.mapBottoni, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(piecePanel, this.mapPedine, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid); //ok
+        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);//ok
     }
 
     @Override
