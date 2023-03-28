@@ -44,6 +44,8 @@ public interface Board {
      */
     void updatePiecePos(Position oldPos, Position newPos, final Player currentPlayer);
 
+    void movePlaceholder(final Position oldPos, final Position newPos, final Player currentPlayer);
+
     /**
      * Calculate the furthest postion that can be reached from a stating position on a certain direction. 
      * @param startPos the starting position from which calculate the furthest reacheable position.
@@ -51,6 +53,8 @@ public interface Board {
      * @return the furthest reacheable position.
      */
     Position getFurthestReachablePos(Position startPos, Vector direction);
+
+    void notifyTurnHasEnded(int turn);
 
     /**
      * This method must be called at the beginning of each turn.

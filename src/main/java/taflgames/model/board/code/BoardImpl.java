@@ -116,8 +116,7 @@ public class BoardImpl implements Board, TimedEntity{
         return false;
     }
 
-    @Override
-    public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
+    public void movePlaceholder(final Position oldPos, final Position newPos, final Player currentPlayer) {
         final Piece pieceInTurn = getPieceAtPosition(oldPos);
         if (cells.get(newPos).isFree()) {
             pieces.get(currentPlayer).remove(oldPos);
@@ -126,7 +125,6 @@ public class BoardImpl implements Board, TimedEntity{
             cells.get(oldPos).setFree(true);
             cells.get(newPos).setFree(false);
             this.currentPos = newPos;
-            signalOnMove(newPos, pieceInTurn);
             
         } else if (pieceInTurn.canSwap()) {
             pieces.get(currentPlayer).remove(oldPos);
@@ -138,9 +136,13 @@ public class BoardImpl implements Board, TimedEntity{
             pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).put(oldPos, pieceToSwap);
             pieceToSwap.setCurrentPosition(oldPos);
             this.currentPos = newPos;
-            signalOnMove(newPos, pieceInTurn);
-            
         }
+    }
+
+    @Override
+    public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
+        movePlaceholder(oldPos, newPos, currentPlayer);
+        signalOnMove(currentPos, getPieceAtPosition(currentPos));
     }
 
     @Override
@@ -169,6 +171,9 @@ public class BoardImpl implements Board, TimedEntity{
     }
 
     private void signalOnMove(Position source, Piece movedPiece) {
+        if(cells.get(source).getType().equals("Slider")) {
+            cells.get(source).notify(source, movedPiece, List.of(movedPiece.sendSignalMove()), pieces, cells);
+        }
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
         Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
                 .collect(Collectors.toSet());
