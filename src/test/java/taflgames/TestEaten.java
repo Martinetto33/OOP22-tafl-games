@@ -43,7 +43,6 @@ public class TestEaten {
         piecesPlayer2.put(new Position(3, 2), new Archer(new Position(3, 2), p2));
         piecesPlayer2.put(new Position(4, 0), new King(new Position(3, 2)));
 
-
         pieces.put(p1, piecesPlayer1);
         pieces.put(p2, piecesPlayer2);
         for(int i=0; i<5; i++) {
@@ -101,7 +100,6 @@ public class TestEaten {
         //re
         expectedHitbox = new HashSet<>();
         assertEquals(expectedHitbox, eat.trimHitbox(new King(new Position(4,0)), pieces, cells, 5));
-
     }
 
     @Test
