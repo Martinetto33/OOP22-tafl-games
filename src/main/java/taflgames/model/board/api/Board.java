@@ -74,6 +74,10 @@ public interface Board {
      */
     void eat();
 
+    /**
+     * Signals to the board that the turn of the current player has ended.
+     * @param turn the number of the turn
+     */
     void notifyTurnHasEnded(int turn);
 
     /**
