@@ -1,10 +1,13 @@
 package taflgames.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.collections4.iterators.LoopingIterator;
 
 import taflgames.common.Player;
+import taflgames.common.code.MatchResult;
+import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.memento.api.BoardMemento;
@@ -52,6 +55,7 @@ public final class MatchImpl implements Match {
     @Override
     public void setNextActivePlayer() {
         this.activePlayer = this.turnQueue.next();
+        this.board.notifyTurnHasEnded(turnNumber);
         this.turnNumber++;
     }
 
@@ -68,13 +72,21 @@ public final class MatchImpl implements Match {
     @Override
     public void makeMove(final Position start, final Position destination) {
         this.board.updatePiecePos(start, destination, activePlayer);
-        this.board.eat();
+        this.board.eat();   // Performs the eatings caused by the move just made.
     }
 
     @Override
-    public boolean isOver() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isOver'");
+    public Optional<Pair<MatchResult, MatchResult>> getMatchEndStatus() {
+        if (this.board.hasAPlayerWon(activePlayer).isPresent()) {
+            final Player winner = this.board.hasAPlayerWon(activePlayer).get();
+            return winner.equals(Player.ATTACKER)
+                    ? Optional.of(new Pair<>(MatchResult.VICTORY, MatchResult.DEFEAT))
+                    : Optional.of(new Pair<>(MatchResult.DEFEAT, MatchResult.VICTORY));
+        } else if (this.board.isDraw(activePlayer)) {
+            return Optional.of(new Pair<>(MatchResult.DRAW, MatchResult.DRAW));
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**
