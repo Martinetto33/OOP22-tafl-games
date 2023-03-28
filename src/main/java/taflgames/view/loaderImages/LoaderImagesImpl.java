@@ -1,10 +1,15 @@
 package taflgames.view.loaderImages;
 
+import java.awt.Image;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+
+import taflgames.common.Player;
+import taflgames.view.scenes.CellImageInfo;
+import taflgames.view.scenes.PieceImageInfo;
 
 public class LoaderImagesImpl implements LoaderImages{
 
@@ -26,40 +31,60 @@ public class LoaderImagesImpl implements LoaderImages{
     public static final String CELL_THRONE = "CELL_THRONE.png";
     public static final String CELL_TOMB_ATTACKER = "CELL_TOMB_ATTACKER.png";
     public static final String CELL_TOMB_DEFENDERS = "CELL_TOMB_DEFENDERS.png";
-    public static final String CELL_TOMB_NEUTRAL = "CELL_TOMB_NEUTRAL.png";
+
+    /* private int panelSize;
+    private final int numberOfCells; */
+    private int unitToScale;
+
+    public LoaderImagesImpl(final int panelSize, final int numberOfCells) {
+        /* this.panelSize = panelSize;
+        this.numberOfCells = numberOfCells; */
+        unitToScale = panelSize/numberOfCells;
+    }
     
-    public Map<String,ImageIcon> cellImages;
-    public Map<String,ImageIcon> pieceImages;
+    public Map<CellImageInfo,ImageIcon> cellImages;
+    public Map<PieceImageInfo,ImageIcon> pieceImages;
 
     @Override
     public void loadCellsImages() {
         cellImages = new HashMap<>();
-        cellImages.put("", getImage(CELL_BASIC));
-        cellImages.put("", getImage(CELL_EXIT));
-        cellImages.put("", getImage(CELL_SLIDER));
-        cellImages.put("", getImage(CELL_THRONE));
-        cellImages.put("", getImage(CELL_TOMB_ATTACKER));
-        cellImages.put("", getImage(CELL_TOMB_DEFENDERS));
-        cellImages.put("", getImage(CELL_TOMB_NEUTRAL));
+        cellImages.put(new CellImageInfo(CELL_BASIC, Player.DEFENDER), getImage(CELL_BASIC));
+        cellImages.put(new CellImageInfo(CELL_EXIT, Player.DEFENDER), getImage(CELL_EXIT));
+        cellImages.put(new CellImageInfo(CELL_SLIDER, Player.DEFENDER), getImage(CELL_SLIDER));
+        cellImages.put(new CellImageInfo(CELL_THRONE, Player.DEFENDER), getImage(CELL_THRONE));
+        cellImages.put(new CellImageInfo(CELL_TOMB_ATTACKER, Player.ATTACKER), getImage(CELL_TOMB_ATTACKER));
+        cellImages.put(new CellImageInfo(CELL_TOMB_DEFENDERS, Player.DEFENDER), getImage(CELL_TOMB_DEFENDERS));
     }
 
     @Override
     public void loadPiecesImages() {
         pieceImages = new HashMap<>();
-        pieceImages.put("", getImage(ARCHER_ATTACKER));
-        pieceImages.put("", getImage(ARCHER_DEFENDER));
-        pieceImages.put("", getImage(BASIC_PIECE_ATTACKER));
-        pieceImages.put("", getImage(KING));
-        pieceImages.put("", getImage(QUEEN_ATTACKER));
-        pieceImages.put("", getImage(SHIELD_ATTACKER));
-        pieceImages.put("", getImage(SHIELD_DEFENDER));
-        pieceImages.put("", getImage(SWAPPER_ATTACKER));
-        pieceImages.put("", getImage(SWAPPER_DEFENDER));
+        pieceImages.put(new PieceImageInfo(ARCHER_ATTACKER, Player.ATTACKER), getImage(ARCHER_ATTACKER));
+        pieceImages.put(new PieceImageInfo(ARCHER_DEFENDER, Player.DEFENDER), getImage(ARCHER_DEFENDER));
+        pieceImages.put(new PieceImageInfo(BASIC_PIECE_ATTACKER, Player.ATTACKER), getImage(BASIC_PIECE_ATTACKER));
+        pieceImages.put(new PieceImageInfo(BASIC_PIECE_DEFENDER, Player.DEFENDER), getImage(BASIC_PIECE_DEFENDER));
+        pieceImages.put(new PieceImageInfo(KING, Player.DEFENDER), getImage(KING));
+        pieceImages.put(new PieceImageInfo(QUEEN_ATTACKER, Player.ATTACKER), getImage(QUEEN_ATTACKER));
+        pieceImages.put(new PieceImageInfo(QUEEN_DEFENDER, Player.DEFENDER), getImage(QUEEN_DEFENDER));
+        pieceImages.put(new PieceImageInfo(SHIELD_ATTACKER, Player.ATTACKER), getImage(SHIELD_ATTACKER));
+        pieceImages.put(new PieceImageInfo(SHIELD_DEFENDER, Player.DEFENDER), getImage(SHIELD_DEFENDER));
+        pieceImages.put(new PieceImageInfo(SWAPPER_ATTACKER, Player.ATTACKER), getImage(SWAPPER_ATTACKER));
+        pieceImages.put(new PieceImageInfo(SWAPPER_DEFENDER, Player.DEFENDER), getImage(SWAPPER_DEFENDER));
     }
 
     private ImageIcon getImage(final String imageName) {
         final URL imageURL = ClassLoader.getSystemResource("src/main/resources/taflgames/images/" + imageName);
         final ImageIcon elemntToDraw = new ImageIcon(imageURL);
-        return new ImageIcon(elemntToDraw.getImage().getScaledInstance(0, 0, 0));
+        return new ImageIcon(elemntToDraw.getImage().getScaledInstance(unitToScale, unitToScale, Image.SCALE_SMOOTH));
+    }
+
+    @Override
+    public Map<CellImageInfo,ImageIcon> getCellImageMap() {
+        return cellImages;
+    }
+
+    @Override
+    public Map<PieceImageInfo,ImageIcon> getPieceImageMap() {
+        return pieceImages;
     }
 }
