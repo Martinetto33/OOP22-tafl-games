@@ -85,15 +85,41 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     }
 
     @Override
-    public void drawAllSpecialCells(Map<CellImageInfo, ImageIcon> cells) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'drawAllSpecialCells'");
+    public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
     }
 
     @Override
-    public void drawBackgroundCells(Map<CellImageInfo, ImageIcon> cells) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'drawBackgroundCells'");
+    public void drawBackgroundCells(Map<Position, CellImageInfo> cells) {
+        ImageIcon imageBasicCell = mapCellsImageIcons.entrySet().stream()
+                                    .filter(elem -> elem.getKey().getName().equals("CELL_BASIC"))
+                                    .map(elem -> elem.getValue())
+                                    .findAny()
+                                    .get();
+        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_BASIC"))
+                                .forEach(cell -> {
+                                    this.mapBoard.get(cell.getKey()).setIcon(null);
+                                    this.mapBoard.get(cell.getKey()).setIcon(imageBasicCell);
+                                });
+        ImageIcon imageThrone = mapCellsImageIcons.entrySet().stream()
+                                    .filter(elem -> elem.getKey().getName().equals("CELL_THRONE"))
+                                    .map(elem -> elem.getValue())
+                                    .findAny()
+                                    .get();
+        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_THRONE"))
+                                .forEach(cell -> {
+                                    this.mapBoard.get(cell.getKey()).setIcon(null);
+                                    this.mapBoard.get(cell.getKey()).setIcon(imageThrone);
+                                });
+        ImageIcon imageExit= mapCellsImageIcons.entrySet().stream()
+                                    .filter(elem -> elem.getKey().getName().equals("CELL_EXIT"))
+                                    .map(elem -> elem.getValue())
+                                    .findAny()
+                                    .get();
+        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_EXIT"))
+                                .forEach(cell -> {
+                                    this.mapBoard.get(cell.getKey()).setIcon(null);
+                                    this.mapBoard.get(cell.getKey()).setIcon(imageExit);
+                                });
     }
 
     @Override

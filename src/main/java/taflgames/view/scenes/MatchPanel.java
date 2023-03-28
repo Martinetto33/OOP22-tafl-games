@@ -18,13 +18,13 @@ public interface MatchPanel {
      * dedicated to the special cells.
      * @param cells
      */
-    public void drawAllSpecialCells(final Map<CellImageInfo, ImageIcon> cells);
+    public void drawAllSpecialCells(final Map<Position, CellImageInfo> cells);
     /**
      * draws all special cells given by the MatchController on the layer
      * dedicated to the special cells.
      * @param cells
      */
-    public void drawBackgroundCells(final Map<CellImageInfo,ImageIcon> cells);
+    public void drawBackgroundCells(final Map<Position, CellImageInfo> cells);
     /**
      * removes the images of every JLabel in the chosen mapLabel.
      * @param mapLabel
