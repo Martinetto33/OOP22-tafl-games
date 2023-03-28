@@ -53,6 +53,7 @@ public interface Board {
     Position getFurthestReachablePos(Position startPos, Vector direction);
 
     /**
+     * This method must be called at the beginning of each turn.
      * Check if there's a tie between the two players.
      * @param playerInTurn the player that is playing in that specific turn.
      * @return true if it is a draw, false otherwise.
@@ -62,11 +63,10 @@ public interface Board {
     /**
      * This method must must be called by Match before method {@link #isDraw(Player)}.
      * Check if the game is over and retunr the winning Player.
-     * @param playerInTurn the Player in turn.
-     * @return Optional of the Player winning or an empty Optional 
+     * @return an Optional of the Player winning or an empty Optional 
      * if the game is still on and none of the Player has won yet.
      */
-    Optional<Player> isOver(final Player playerInTurn);
+    Optional<Player> isOver();
 
     /**
      * This method must be called by Match after method {@link #updatePiecePos}.

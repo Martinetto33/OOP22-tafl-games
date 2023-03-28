@@ -249,8 +249,7 @@ public class BoardImpl implements Board, TimedEntity{
     }
 
     /**
-     * This method must be called at the beginning of each turn.
-     * @param playerInTurn the player in turn.
+     * {@inheritDoc}
      */
     public boolean isDraw(final Player playerInTurn) {
         /*finding king position */
@@ -296,7 +295,7 @@ public class BoardImpl implements Board, TimedEntity{
      * {@inheritDoc}
      */
     @Override
-    public Optional<Player> isOver(final Player playerInTurn) {
+    public Optional<Player> isOver() {
         if(pieces.get(Player.DEFENDER).entrySet().stream()
             .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
             .findAny()
@@ -327,10 +326,10 @@ public class BoardImpl implements Board, TimedEntity{
 
     private Set<Position> getAdjacentPositions(final Position currPos) {
         Set<Position> setOfPosition = new HashSet<>();
-        setOfPosition.add(new Position(currPos.getX()+1, currPos.getY()));
-        setOfPosition.add(new Position(currPos.getX()-1, currPos.getY()));
-        setOfPosition.add(new Position(currPos.getX(), currPos.getY()+1));
-        setOfPosition.add(new Position(currPos.getX(), currPos.getY()-1));
+        setOfPosition.add(new Position(currPos.getX() + 1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX() - 1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY() + 1));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY() - 1));
         return setOfPosition.stream()
                                 .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() <this.size)
                                 .collect(Collectors.toSet());
