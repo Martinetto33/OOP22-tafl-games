@@ -1,47 +1,84 @@
 package taflgames.model.memento.code;
 
-import taflgames.model.memento.api.Caretaker;
+import java.util.Stack;
 
-//import java.util.ArrayList;
-//import java.util.List;
+import taflgames.model.Match;
+import taflgames.model.memento.api.Caretaker;
+import taflgames.model.memento.api.MatchMemento;
 
 /**
  * This class will model a Caretaker, a class which is part of the pattern Memento
  * and that will be in charge of managing the history of a single Match, which here
  * takes the name of "originator".
- * <br>The updateHistory() method should be called each time a turn ends, while
- * the undo() method could be called when the user presses an "undo" button.
- * 
+ * <br>The updateHistory() method should be called each time a new turn begins, while
+ * the undo() method could be called at any given moment in a turn.
  * 
  * This class will be implemented with a Stack, in order to allow methods 
  * "pop" and "push" on the history
+ * 
+ * In this version of the implementation, the Caretaker will dump
+ * any existing state each time a new state is saved.
  */
 public class CaretakerImpl implements Caretaker {
-    //private MatchExample originator;
-    //private List<MatchMemento> history;
+    private final Match originator;
+    private final Stack<MatchMemento> history;
+    private boolean locked;
 
     /**
      * Builds a new Caretaker.
+     * @param originator the Match to save the state of.
      */
-    /* public Caretaker(MatchExample originator) {
+    public CaretakerImpl(final Match originator) {
         this.originator = originator;
-        this.history = new ArrayList<>();
-    } */
+        this.history = new Stack<>();
+        this.locked = false;
+    }
 
     /**
-     * Registers a new MatchMemento, by pushing it onto the history stack.
+     * {@inheritDoc}
      */
     @Override
     public void updateHistory() {
-        //this.history.add(this.originator.save());
+        if (!this.history.isEmpty()) {
+            this.history.clear();
+        }
+        this.history.push(this.originator.save());
+        this.locked = true;
     }
 
-    /* public void undo(int turnNumber) throws IllegalAccessError {
-        if(turnNumber >= 0 && turnNumber < this.history.size()) {
-            this.originator.restore(this.history.get(turnNumber));
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void undo() {
+        if (this.history.isEmpty()) {
+            return;
+        } else if (this.locked) {
+            throw new HistoryLockedException();
         }
-        else {
-            throw new IllegalAccessError();
-        }
-    } */
+        this.originator.restore(this.history.pop());
+        /* When going back to a certain state, there needs
+         * to be another save in case the player makes a mistake
+         * again and wants to go back once more. This will
+         * result in another lock, which is fine.
+         */
+        this.updateHistory();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unlockHistory() {
+        this.locked = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isLocked() {
+        return this.locked;
+    }
+
 }

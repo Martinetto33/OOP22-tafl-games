@@ -44,6 +44,8 @@ public interface Board {
      */
     void updatePiecePos(Position oldPos, Position newPos, final Player currentPlayer);
 
+    void movePlaceholder(final Position oldPos, final Position newPos, final Player currentPlayer);
+
     /**
      * Calculate the furthest postion that can be reached from a stating position on a certain direction. 
      * @param startPos the starting position from which calculate the furthest reacheable position.
@@ -53,6 +55,7 @@ public interface Board {
     Position getFurthestReachablePos(Position startPos, Vector direction);
 
     /**
+     * This method must be called at the beginning of each turn.
      * Check if there's a tie between the two players.
      * @param playerInTurn the player that is playing in that specific turn.
      * @return true if it is a draw, false otherwise.
@@ -62,8 +65,7 @@ public interface Board {
     /**
      * This method must must be called by Match before method {@link #isDraw(Player)}.
      * Check if the game is over and retunr the winning Player.
-     * @param playerInTurn the Player in turn.
-     * @return Optional of the Player winning or an empty Optional 
+     * @return an Optional of the Player winning or an empty Optional 
      * if the game is still on and none of the Player has won yet.
      */
     Optional<Player> hasAPlayerWon(final Player playerInTurn);

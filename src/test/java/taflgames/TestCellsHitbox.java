@@ -17,15 +17,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Tests if the {@link taflgames.model.cell.code.Exit} cells and
+ * the {@link taflgames.model.cell.code.Throne} cell have a correct
+ * hitbox and participate as expected in pieces captures.
+ */
 public class TestCellsHitbox {
 
     @Test
     void testCellsHitbox() {
         final Map<Position, Cell> cells = new HashMap<>();
-        
+
         cells.put(new Position(0, 0), new Throne());
         cells.put(new Position(1, 1), new Exit());
-		final BoardImpl board = new BoardImpl(null, cells, 5);
+        final BoardImpl board = new BoardImpl(null, cells, 5);
         final CellsHitbox cellsHitbox = new CellsHitbox(board);
 
         final Set<Position> expectedHitbox = new HashSet<>();

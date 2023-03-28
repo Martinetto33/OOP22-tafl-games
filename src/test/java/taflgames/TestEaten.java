@@ -226,6 +226,7 @@ public class TestEaten {
         enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 2), p2));
         allies = new HashSet<>();
         allies.add(new BasicPiece(new Position(1, 2), p2));
+        allies.add(new BasicPiece(new Position(2, 1), p2));
         finalmap = new HashMap<>();
         finalmap.put(new BasicPiece(new Position(1, 1), p1), allies);
 
@@ -270,7 +271,7 @@ public class TestEaten {
         eat = new EatenImpl(fourthBoard);
 
         Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
-        List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 0), p1));
+        List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 1), p1));
         Map<Piece, Set<Piece>> finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 1), p1));
         eat.notifyAllThreatened(finalmap, new BasicPiece(new Position(1, 1), p1), cells, pieces);
         assertTrue(cells.get(new Position(2,1)).isFree());
@@ -278,6 +279,30 @@ public class TestEaten {
         assertFalse(pieces.get(p2).containsKey(new Position(2,1)));
         assertFalse(pieces.get(p2).containsKey(new Position(1,2)));
 
+        /*creating a new map*/
+        piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
+        piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
+        piecesPlayer1.clear();
+        piecesPlayer2.clear();
+        piecesPlayer1.put(new Position(2, 0), new BasicPiece(new Position(2, 0), p1));
+        piecesPlayer1.put(new Position(1, 1), new BasicPiece(new Position(1, 1), p1));
+        piecesPlayer1.put(new Position(3, 1), new BasicPiece(new Position(3, 1), p1));
+        piecesPlayer1.put(new Position(2, 2), new BasicPiece(new Position(2, 2), p1));
+
+        piecesPlayer2.put(new Position(2,1), new King(new Position(2, 1)));
+
+        pieces.clear();
+        pieces.put(p1, piecesPlayer1);
+        pieces.put(p2, piecesPlayer2);
+
+        piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+        piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 2), p1), pieces, cells, 5);
+        enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(2, 2), p1));
+        finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 2), p1));
+        eat.notifyAllThreatened(finalmap, new BasicPiece(new Position(2, 2), p1), cells, pieces);
+        assertTrue(cells.get(new Position(2,1)).isFree());
+        assertFalse(pieces.get(p2).containsKey(new Position(2,1)));
     }
 
     /**

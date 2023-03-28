@@ -192,6 +192,10 @@ public class TestCell {
 
         cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p2), null, pieces, cells);
         assertTrue(cells.get(new Position(1,1)).isFree());
-        assertTrue(cells.get(new Position(0,1)).isFree());
+        assertTrue(cells.get(new Position(1, 0)).isFree());
+        assertTrue(cells.get(new Position(3, 1)).isFree());
+        assertFalse(cells.get(new Position(0, 1)).isFree());
+        System.out.println(cells);
+        
     }
 }

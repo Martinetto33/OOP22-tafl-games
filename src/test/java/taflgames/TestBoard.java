@@ -200,11 +200,13 @@ public class TestBoard {
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
 		board1 = new BoardImpl(pieces, cells, 5);
 
-        assertEquals(new Position(3, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(0, 1))); 
+        assertEquals(new Position(3, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(0, 1)));
         assertEquals(new Position(3, 0), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(0, -1))); 
         assertEquals(new Position(4, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(1, 0)));
-        assertEquals(new Position(0, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(-1, 0)));  
+        assertEquals(new Position(0, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(-1, 0)));
         assertEquals(new Position(2, 0), board1.getFurthestReachablePos(new Position(0, 0), new VectorImpl(1, 0)));
+        assertEquals(new Position(0, 4), board1.getFurthestReachablePos(new Position(0, 0), new VectorImpl(0, 1)));
+
 
         /*BasicPiece on a slider and a piece of the other player on the direction 
         in which we are trying to find the furthest position reacheable*/
