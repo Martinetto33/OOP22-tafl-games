@@ -26,8 +26,9 @@ public class CaretakerImpl implements Caretaker {
 
     /**
      * Builds a new Caretaker.
+     * @param originator the Match to save the state of.
      */
-    public CaretakerImpl(Match originator) {
+    public CaretakerImpl(final Match originator) {
         this.originator = originator;
         this.history = new Stack<>();
         this.locked = false;
@@ -67,6 +68,7 @@ public class CaretakerImpl implements Caretaker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void unlockHistory() {
         this.locked = false;
     }

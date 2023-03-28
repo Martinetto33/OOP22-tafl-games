@@ -34,6 +34,10 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 
+/**
+ * Tests if the Memento pattern is correctly implemented, allowing
+ * to save normal and variant matches status.
+ */
 public class TestMemento {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
@@ -78,12 +82,16 @@ public class TestMemento {
         }
     }
 
+    /**
+     * Tests the Caretaker and the memento pattern in the case of a classic mode
+     * match.
+     */
     @Test
     void testCaretakerClassic() {
         final Caretaker caretaker = new CaretakerImpl(this.classicMatch);
         final Position startingPosition = new Position(0, 3);
         final Position endingPosition = new Position(0, 1);
-        
+
         /* Saves the game state at the beginning of the turn */
         caretaker.updateHistory();
 
@@ -100,7 +108,7 @@ public class TestMemento {
          * before "unlockHistory".
          */
         assertThrows(HistoryLockedException.class, () -> caretaker.undo());
-        
+
         /* The following "unlockHistory" call will be performed automatically 
          * by a call to the method of the Match "makeMove()".
          */
@@ -159,7 +167,7 @@ public class TestMemento {
         assertTrue(this.classicMatch.selectSource(secondAttackerStartingPos));
         assertTrue(this.classicMatch.selectDestination(secondAttackerStartingPos, secondAttackerEndingPos));
         this.classicMatch.makeMove(secondAttackerStartingPos, secondAttackerEndingPos);
-        
+
         assertTrue(this.classicBoard.getMapCells().get(targetPiecePosition).isFree()); //the cell should be free
         /* This piece should be dead */
         assertFalse(this.classicBoard.getMapPieces().get(Player.DEFENDER).containsKey(targetPiecePosition));
@@ -173,6 +181,10 @@ public class TestMemento {
         /* Pieces are correctly respawned! */
     }
 
+    /**
+     * Tests the Caretaker and the memento pattern in case of a variant
+     * mode match.
+     */
     @Test
     void testCaretakerVariant() {
         final Caretaker caretaker = new CaretakerImpl(this.variantMatch);
@@ -194,7 +206,7 @@ public class TestMemento {
         final Map<Position, Piece> defenderPiecesMapBefore = this.variantBoard.getMapPieces().get(Player.DEFENDER)
                 .entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-        
+
         caretaker.updateHistory();
         assertTrue(this.variantMatch.selectSource(attackerSwapperStartPos));
         assertTrue(this.variantMatch.selectDestination(attackerSwapperStartPos, attackerSwapperEndPos));

@@ -20,6 +20,9 @@ public interface CellMemento {
      * Returns the cell status.
      * @return the cell status.
      */
-    boolean getCellStatus();
+    boolean getCellStatus(); //NOPMD
+    /* PMD error regarding this method's name suppressed
+     * because 'isCellStatus' makes no sense.
+     */
 
 }
