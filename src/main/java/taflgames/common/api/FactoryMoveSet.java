@@ -18,7 +18,7 @@ public interface FactoryMoveSet {
     Set<Vector> createBasicMoveSet();
     /**
      * IT'S NOT USED IN THE PROGRAM BUT IT COULD BE
-     * USED TO IMPROOVE EXTENSIBILITY OF THE PROGRAM WITH A MEDIATOR FOR SWAPPER
+     * USED TO IMPROOVE EXTENSIBILITY OF THE PROGRAM WITH A MEDIATOR FOR SWAPPER...
      * creates the move-set for the Swapper starting from the
      * enemy pieces' positions.
      * @param enemyPositions
