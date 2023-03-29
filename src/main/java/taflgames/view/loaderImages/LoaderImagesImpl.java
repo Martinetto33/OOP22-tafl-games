@@ -98,4 +98,5 @@ public class LoaderImagesImpl implements LoaderImages{
         g2.drawImage(blankCanvas, 0, 0, null);
         return new ImageIcon(blankCanvas);
     }
+    /*probabilmente serve un campo nell'info delle celle in cui sappiamo se lo slider ha ruotato o no*/
 }
