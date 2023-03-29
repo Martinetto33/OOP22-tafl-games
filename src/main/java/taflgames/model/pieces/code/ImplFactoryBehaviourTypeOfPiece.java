@@ -256,7 +256,7 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
             /*DEVI FARE QUI LA MODIFICA DI TEMP */
             temp.add(new Position(0, 2));
             temp.add(new Position(2, 1));
-            return this.getFacMoveSet().createSwapperMoveSet(temp);
+            return this.getFacMoveSet().createBasicMoveSet();
         }
         /**
         * {@inheritDoc}.
