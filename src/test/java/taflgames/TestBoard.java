@@ -321,7 +321,9 @@ public class TestBoard {
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
 
-        board4.updatePiecePos(new Position(2, 2), new Position(2, 1), p2);
+        board4.updatePiecePos(new Position(2, 2), new Position(2, 1), p1);
+        assertTrue(pieces.get(p1).keySet().contains(new Position(2, 1)));
+        assertFalse(pieces.get(p1).keySet().contains(new Position(2, 2)));
         assertTrue(cells.get(new Position(2, 2)).isFree());
         assertFalse(cells.get(new Position(2, 1)).isFree());
         board4.eat();
