@@ -200,6 +200,5 @@ public class TestCell {
         assertTrue(cells.get(new Position(1, 0)).isFree());
         assertTrue(cells.get(new Position(3, 1)).isFree());
         assertFalse(cells.get(new Position(0, 1)).isFree());
-        System.out.println(cells);
     }
 }
