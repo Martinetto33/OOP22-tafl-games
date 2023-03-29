@@ -292,7 +292,6 @@ public class BoardImpl implements Board, TimedEntity{
                 .findAny().isPresent()) {
                                 return false;
             }
-            
         return true;
     }
 
