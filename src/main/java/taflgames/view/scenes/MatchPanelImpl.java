@@ -42,6 +42,8 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
         this.loader = new LoaderImagesImpl(MatchPanelImpl.TEMP_CONST_FOR_SMALL_COMPUTERS*
                                             numbCellsInGrid, numbCellsInGrid);
+        this.loader.loadCellsImages();
+        this.loader.loadPiecesImages();
         mapPieceImageIcons.putAll(loader.getPieceImageMap());
         mapCellsImageIcons.putAll(loader.getCellImageMap());
         this.mySize = MatchPanelImpl.TEMP_CONST_FOR_SMALL_COMPUTERS*
