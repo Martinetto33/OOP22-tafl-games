@@ -482,7 +482,7 @@ class TestMatch {
         );
     }
 
-     /**
+    /**
      * Test that the match ends and that the correct result is returned when the conditions for
      * the conditions for draw are verified.
      */
@@ -583,6 +583,13 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
+        // Check that king position is still selectable at (2, 0)
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(2, 0);
+        assertTrue(match.selectSource(source));
+        match.setNextActivePlayer();
+
         // Move piece (basic) from (2, 10) to (2, 1)
         source = new Position(2, 10);
         dest = new Position(2, 1);
@@ -597,6 +604,12 @@ class TestMatch {
         source = new Position(2, 1);
         assertTrue(match.selectSource(source));
         source = new Position(3, 0);
+        assertTrue(match.selectSource(source));
+
+        // Check that king position is still selectable at (2, 0)
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(2, 0);
         assertTrue(match.selectSource(source));
 
         // Now the match must end with a draw
