@@ -298,7 +298,7 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
-        // Move king from (5, 5) to (5, 4)
+        // Move king from (5, 4) to (1, 4)
         source = new Position(5, 4);
         dest = new Position(1, 4);
         assertTrue(match.selectSource(source));
@@ -392,6 +392,91 @@ class TestMatch {
         // Check defender defeat
         assertEquals(
             MatchResult.DEFEAT,
+            match.getMatchEndStatus().get().getY()
+        );
+    }
+
+    /**
+     * Test that the match ends and that the correct result is returned when the conditions for
+     * the conditions for the defender victory are verified.
+     */
+    @Test
+    void testDefenderWin() {
+        
+        /*
+         * Move the king to the exit in the uppper-left corner of the board. Before doing so,
+         * it is necessary to move some other pieces to make the path free for the king.
+         */
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move piece (shield) from (5, 3) to (5, 2)
+        Position source = new Position(5, 3);
+        Position dest = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move piece (archer) from (5, 4) to (5, 3)
+        source = new Position(5, 4);
+        dest = new Position(5, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move piece (basic) from (4, 4) to (4, 3)
+        source = new Position(4, 4);
+        dest = new Position(4, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move king from (5, 5) to (5, 4)
+        source = new Position(5, 5);
+        dest = new Position(5, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move king from (5, 4) to (1, 4)
+        source = new Position(5, 4);
+        dest = new Position(1, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move king from (1, 4) to (1, 0)
+        source = new Position(1, 4);
+        dest = new Position(1, 0);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move king from (1, 0) to the exit (0, 0)
+        source = new Position(1, 0);
+        dest = new Position(0, 0);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the match must end with the victory of the defender
+        assertTrue(match.getMatchEndStatus().isPresent());
+        // Check attacker defeat
+        assertEquals(
+            MatchResult.DEFEAT,
+            match.getMatchEndStatus().get().getX()
+        );
+        // Check defender victory
+        assertEquals(
+            MatchResult.VICTORY,
             match.getMatchEndStatus().get().getY()
         );
     }
