@@ -48,12 +48,17 @@ public class TestCell {
         /*testing only ClassicCell and Throne beacuse Tomb and Slider method canAccept 
         behave like the one of ClassicCell, while Throne and Exit method canAccept behave in the same way*/
         /*expected false because when initialized the cell is set to not free */
-        assertFalse(classic.canAccept(piece));
-        classic.setFree(true);
+        classic = new ClassicCell();
         assertTrue(classic.canAccept(piece));
+        classic.setFree(false);
+        assertFalse(classic.canAccept(piece));
         Piece king = new King(new Position(2, 2));
+        throne = new Throne();
         throne.setFree(true);
         assertTrue(throne.canAccept(king));
+        exit = new Exit();
+        exit.setFree(true);
+        assertTrue(exit.canAccept(king));
     } 
 
     
@@ -196,6 +201,5 @@ public class TestCell {
         assertTrue(cells.get(new Position(3, 1)).isFree());
         assertFalse(cells.get(new Position(0, 1)).isFree());
         System.out.println(cells);
-        
     }
 }

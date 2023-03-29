@@ -22,7 +22,7 @@ public class Exit extends AbstractCell{
 
     @Override
     public boolean canAccept(Piece piece) {
-        if(piece.toString().equals("KING") && super.isFree()) {
+        if(piece.getMyType().getTypeOfPiece().equals("KING") && super.isFree()) {
             return true;
         } else {
             return false;
