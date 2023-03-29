@@ -247,7 +247,7 @@ public class BoardImpl implements Board, TimedEntity{
         if(!updatedHitbox.isEmpty()) {
             List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
             if(!enemies.isEmpty()) {
-                Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
+                Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece, cells, size);
                 eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
             }
         }
