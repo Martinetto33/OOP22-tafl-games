@@ -15,24 +15,27 @@ import taflgames.view.scenes.PieceImageInfo;
 
 public class LoaderImagesImpl implements LoaderImages{
 
-    public static final String ARCHER_ATTACKER = "taflgames/images/ARCHER_ATTACKER.png";
-    public static final String ARCHER_DEFENDER = "taflgames/images/ARCHER_DEFENDER.png";
-    public static final String BASIC_PIECE_ATTACKER = "taflgames/images/BASIC_PIECE_ATTACKER.png";
-    public static final String BASIC_PIECE_DEFENDER = "taflgames/images/BASIC_PIECE_DEFENDER.png";
-    public static final String KING = "taflgames/images/KING.png";
-    public static final String QUEEN_ATTACKER = "taflgames/images/QUEEN_ATTACKER.png";
-    public static final String QUEEN_DEFENDER = "taflgames/images/QUEEN_DEFENDER.png";
-    public static final String SHIELD_ATTACKER = "taflgames/images/SHIELD_ATTACKER.png";
-    public static final String SHIELD_DEFENDER = "taflgames/images/SHIELD_DEFENDER.png";
-    public static final String SWAPPER_ATTACKER = "taflgames/images/SWAPPER_ATTACKER.png";
-    public static final String SWAPPER_DEFENDER = "taflgames/images/SWAPPER_DEFENDER.png";
+    public static final String ARCHER_ATTACKER = "ARCHER_ATTACKER.png";
+    public static final String ARCHER_DEFENDER = "ARCHER_DEFENDER.png";
+    public static final String BASIC_PIECE_ATTACKER = "BASIC_PIECE_ATTACKER.png";
+    public static final String BASIC_PIECE_DEFENDER = "BASIC_PIECE_DEFENDER.png";
+    public static final String KING = "KING.png";
+    public static final String QUEEN_ATTACKER = "QUEEN_ATTACKER.png";
+    public static final String QUEEN_DEFENDER = "QUEEN_DEFENDER.png";
+    public static final String SHIELD_ATTACKER = "SHIELD_ATTACKER.png";
+    public static final String SHIELD_DEFENDER = "SHIELD_DEFENDER.png";
+    public static final String SWAPPER_ATTACKER = "SWAPPER_ATTACKER.png";
+    public static final String SWAPPER_DEFENDER = "SWAPPER_DEFENDER.png";
 
-    public static final String CELL_BASIC = "taflgames/images/CELL_BASIC.png";
-    public static final String CELL_EXIT = "taflgames/images/CELL_EXIT.png";
-    public static final String CELL_SLIDER = "taflgames/images/CELL_SLIDER.png";
-    public static final String CELL_THRONE = "taflgames/images/CELL_THRONE.png";
-    public static final String CELL_TOMB_ATTACKERS = "taflgames/images/CELL_TOMB_ATTACKERS.png";
-    public static final String CELL_TOMB_DEFENDERS = "taflgames/images/CELL_TOMB_DEFENDERS.png";
+    public static final String CELL_BASIC = "CELL_BASIC.png";
+    public static final String CELL_EXIT = "CELL_EXIT.png";
+    public static final String CELL_SLIDER = "CELL_SLIDER.png";
+    public static final String CELL_THRONE = "CELL_THRONE.png";
+    public static final String CELL_TOMB_ATTACKERS = "CELL_TOMB_ATTACKERS.png";
+    public static final String CELL_TOMB_DEFENDERS = "CELL_TOMB_DEFENDERS.png";
+    private static final String SEP = System.getProperty("file.separator");
+    private static final String ROOT = "taflgames" + SEP + "images" + SEP;
+    
 
     /* private int panelSize;
     private final int numberOfCells; */
@@ -75,8 +78,9 @@ public class LoaderImagesImpl implements LoaderImages{
         this.pieceImages.put(new PieceImageInfo("SWAPPER", Player.DEFENDER), getImage(SWAPPER_DEFENDER));
     }
 
-    private ImageIcon getImage(final String imagePath) {
-        final URL imageURL = ClassLoader.getSystemResource(imagePath);
+    private ImageIcon getImage(final String imageName) {
+        final URL imageURL = ClassLoader.getSystemResource(ROOT + imageName);
+        System.out.println(imageURL);
         final ImageIcon elemntToDraw = new ImageIcon(imageURL);
         return new ImageIcon(elemntToDraw.getImage().getScaledInstance(unitToScale, unitToScale, Image.SCALE_SMOOTH));
     }
