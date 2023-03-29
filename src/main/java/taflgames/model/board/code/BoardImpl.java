@@ -257,15 +257,6 @@ public class BoardImpl implements Board, TimedEntity{
      * {@inheritDoc}
      */
     public boolean isDraw(final Player playerInTurn) {
-
-        /*as first it checks that the king is alive */
-        if(pieces.get(Player.DEFENDER).entrySet().stream()
-            .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
-            .findAny()
-            .isEmpty()) {
-                return false;
-            }
-
         /*finding king position */
         Piece king = pieces.get(Player.DEFENDER).entrySet().stream()
                         .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
