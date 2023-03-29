@@ -54,8 +54,6 @@ public interface Board {
      */
     Position getFurthestReachablePos(Position startPos, Vector direction);
 
-    void notifyTurnHasEnded(int turn);
-
     /**
      * This method must be called at the beginning of each turn.
      * Check if there's a tie between the two players.
@@ -70,13 +68,19 @@ public interface Board {
      * @return an Optional of the Player winning or an empty Optional 
      * if the game is still on and none of the Player has won yet.
      */
-    Optional<Player> isOver();
+    Optional<Player> hasAPlayerWon();
 
     /**
      * This method must be called by Match after method {@link #updatePiecePos}.
      * Verify the eating of a piece.
      */
     void eat();
+
+    /**
+     * Signals to the board that the turn of the current player has ended.
+     * @param turn the number of the turn
+     */
+    void notifyTurnHasEnded(int turn);
 
     /**
      * Return the map of Position and Cell that that associate 
