@@ -95,8 +95,17 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
 
     @Override
     public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
-        ImageIcon imageTombAttacker = mapCellsImageIcons.entrySet().stream()
-                                    .filter(elem -> elem.getKey().getName().equals("CELL_TOMB_ATTACKER"))
+        cells.entrySet().stream()
+                        .filter(elem -> elem.getValue().getName() != "CELL_BASIC"
+                                            && elem.getValue().getName() != "CELL_EXIT"
+                                            && elem.getValue().getName() != "CELL_THRONE")
+                        .forEach(elem -> {
+                            this.mapSpecialCell.get(elem.getKey()).setIcon(null);
+                            this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
+                        });
+        /* ImageIcon imageTombAttacker = mapCellsImageIcons.entrySet().stream()
+                                    .filter(elem -> elem.getKey().getName().equals("CELL_TOMB"))
+                                    .filter(null)
                                     .map(elem -> elem.getValue())
                                     .findAny()
                                     .get();
@@ -116,19 +125,28 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                                 this.mapBoard.get(cell.getKey()).setIcon(imageTombDefender);
                             });
 
-        ImageIcon imageSlider = loader.rotateImage(mapCellsImageIcons.entrySet().stream()
-                                                    .filter(elem -> elem.getKey().getName().equals("imageTombDefender"))
-                                                    .map(elem -> elem.getValue()).findAny().get());
+        ImageIcon imageSlider0 = mapCellsImageIcons.entrySet().stream()
+                                                    .filter(elem -> elem.getKey().getName().equals("CELL_SLIDER_0"))
+                                                    .map(elem -> elem.getValue()).findAny().get();
         cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_TOMB_DEFENDERS"))
                                 .forEach(cell -> {
                                     this.mapBoard.get(cell.getKey()).setIcon(null);
                                     this.mapBoard.get(cell.getKey()).setIcon(imageSlider);
-                                });
+                                }); */
     }
 
     @Override
     public void drawBackgroundCells(Map<Position, CellImageInfo> cells) {
-        ImageIcon imageBasicCell = mapCellsImageIcons.entrySet().stream()
+
+        cells.entrySet().stream()
+                        .filter(elem -> elem.getValue().getName() == "CELL_BASIC"
+                                            || elem.getValue().getName() == "CELL_EXIT"
+                                            || elem.getValue().getName() == "CELL_THRONE")
+                        .forEach(elem -> {
+                            this.mapSpecialCell.get(elem.getKey()).setIcon(null);
+                            this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
+                        });
+        /* ImageIcon imageBasicCell = mapCellsImageIcons.entrySet().stream()
                                     .filter(elem -> elem.getKey().getName().equals("CELL_BASIC"))
                                     .map(elem -> elem.getValue())
                                     .findAny()
@@ -157,7 +175,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                                 .forEach(cell -> {
                                     this.mapBoard.get(cell.getKey()).setIcon(null);
                                     this.mapBoard.get(cell.getKey()).setIcon(imageExit);
-                                });
+                                }); */
     }
 
     @Override

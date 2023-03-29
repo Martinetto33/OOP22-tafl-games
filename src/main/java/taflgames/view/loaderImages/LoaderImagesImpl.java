@@ -50,28 +50,31 @@ public class LoaderImagesImpl implements LoaderImages{
     @Override
     public void loadCellsImages() {
         cellImages = new HashMap<>();
-        cellImages.put(new CellImageInfo("CELL_BASIC", Player.DEFENDER), getImage(CELL_BASIC));
-        cellImages.put(new CellImageInfo("CELL_EXIT", Player.DEFENDER), getImage(CELL_EXIT));
-        cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER), getImage(CELL_SLIDER));
-        cellImages.put(new CellImageInfo("CELL_THRONE", Player.DEFENDER), getImage(CELL_THRONE));
-        cellImages.put(new CellImageInfo("CELL_TOMB_ATTACKER", Player.ATTACKER), getImage(CELL_TOMB_ATTACKER));
-        cellImages.put(new CellImageInfo("CELL_TOMB_DEFENDERS", Player.DEFENDER), getImage(CELL_TOMB_DEFENDERS));
+        cellImages.put(new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0), getImage(CELL_BASIC));
+        cellImages.put(new CellImageInfo("CELL_EXIT", Player.DEFENDER, 0), getImage(CELL_EXIT));
+        cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 0), getImage(CELL_SLIDER));
+        cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 90), rotateImage(getImage(CELL_SLIDER), 90));
+        cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 180), rotateImage(getImage(CELL_SLIDER), 180));
+        cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 270), rotateImage(getImage(CELL_SLIDER), 270));
+        cellImages.put(new CellImageInfo("CELL_THRONE", Player.DEFENDER, 0), getImage(CELL_THRONE));
+        cellImages.put(new CellImageInfo("CELL_TOMB", Player.ATTACKER, 0), getImage(CELL_TOMB_ATTACKER));
+        cellImages.put(new CellImageInfo("CELL_TOMB", Player.DEFENDER, 0), getImage(CELL_TOMB_DEFENDERS));
     }
 
     @Override
     public void loadPiecesImages() {
         pieceImages = new HashMap<>();
-        pieceImages.put(new PieceImageInfo("ARCHER_ATTACKER", Player.ATTACKER), getImage(ARCHER_ATTACKER));
-        pieceImages.put(new PieceImageInfo("ARCHER_DEFENDER", Player.DEFENDER), getImage(ARCHER_DEFENDER));
-        pieceImages.put(new PieceImageInfo("BASIC_PIECE_ATTACKER", Player.ATTACKER), getImage(BASIC_PIECE_ATTACKER));
-        pieceImages.put(new PieceImageInfo("BASIC_PIECE_DEFENDER", Player.DEFENDER), getImage(BASIC_PIECE_DEFENDER));
+        pieceImages.put(new PieceImageInfo("ARCHER", Player.ATTACKER), getImage(ARCHER_ATTACKER));
+        pieceImages.put(new PieceImageInfo("ARCHER", Player.DEFENDER), getImage(ARCHER_DEFENDER));
+        pieceImages.put(new PieceImageInfo("BASIC_PIECE", Player.ATTACKER), getImage(BASIC_PIECE_ATTACKER));
+        pieceImages.put(new PieceImageInfo("BASIC_PIECE", Player.DEFENDER), getImage(BASIC_PIECE_DEFENDER));
         pieceImages.put(new PieceImageInfo("KING", Player.DEFENDER), getImage(KING));
-        pieceImages.put(new PieceImageInfo("QUEEN_ATTACKER", Player.ATTACKER), getImage(QUEEN_ATTACKER));
-        pieceImages.put(new PieceImageInfo("QUEEN_DEFENDER", Player.DEFENDER), getImage(QUEEN_DEFENDER));
-        pieceImages.put(new PieceImageInfo("SHIELD_ATTACKER", Player.ATTACKER), getImage(SHIELD_ATTACKER));
-        pieceImages.put(new PieceImageInfo("SHIELD_DEFENDER", Player.DEFENDER), getImage(SHIELD_DEFENDER));
-        pieceImages.put(new PieceImageInfo("SWAPPER_ATTACKER", Player.ATTACKER), getImage(SWAPPER_ATTACKER));
-        pieceImages.put(new PieceImageInfo("SWAPPER_DEFENDER", Player.DEFENDER), getImage(SWAPPER_DEFENDER));
+        pieceImages.put(new PieceImageInfo("QUEEN", Player.ATTACKER), getImage(QUEEN_ATTACKER));
+        pieceImages.put(new PieceImageInfo("QUEEN", Player.DEFENDER), getImage(QUEEN_DEFENDER));
+        pieceImages.put(new PieceImageInfo("SHIELD", Player.ATTACKER), getImage(SHIELD_ATTACKER));
+        pieceImages.put(new PieceImageInfo("SHIELD", Player.DEFENDER), getImage(SHIELD_DEFENDER));
+        pieceImages.put(new PieceImageInfo("SWAPPER", Player.ATTACKER), getImage(SWAPPER_ATTACKER));
+        pieceImages.put(new PieceImageInfo("SWAPPER", Player.DEFENDER), getImage(SWAPPER_DEFENDER));
     }
 
     private ImageIcon getImage(final String imageName) {
@@ -91,12 +94,12 @@ public class LoaderImagesImpl implements LoaderImages{
     }
 
     @Override
-    public ImageIcon rotateImage(final ImageIcon originalImg) {
+    public ImageIcon rotateImage(final ImageIcon originalImg, final int rotation) {
         BufferedImage blankCanvas = new BufferedImage(originalImg.getIconWidth(), originalImg.getIconHeight(), BufferedImage.SCALE_SMOOTH);
         Graphics2D g2 = (Graphics2D) blankCanvas.getGraphics();
-        g2.rotate(Math.toRadians(90), originalImg.getIconWidth()/2, originalImg.getIconHeight()/2);
-        g2.drawImage(blankCanvas, 0, 0, null);
-        return new ImageIcon(blankCanvas);
+        g2.rotate(Math.toRadians(rotation), originalImg.getIconWidth()/2, originalImg.getIconHeight()/2);
+        g2.drawImage(originalImg.getImage(), 0, 0, null);
+        originalImg.setImage(blankCanvas);
+        return new ImageIcon(originalImg.getImage());
     }
-    /*probabilmente serve un campo nell'info delle celle in cui sappiamo se lo slider ha ruotato o no*/
 }

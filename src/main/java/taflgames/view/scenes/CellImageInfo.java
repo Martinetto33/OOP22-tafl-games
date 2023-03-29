@@ -5,10 +5,12 @@ import taflgames.common.Player;
 public class CellImageInfo implements ImageInfo{
     private final String name;
     private final Player player;
+    private final int rotation;
     //private final QUALCOSA
-    public CellImageInfo(String name, Player player) {
+    public CellImageInfo(String name, Player player, int rotation) {
         this.name = name;
         this.player = player;
+        this.rotation = rotation;
     }
     @Override
     public String getName() {
@@ -19,12 +21,17 @@ public class CellImageInfo implements ImageInfo{
     public Player getPlayer() {
         return this.player;
     }
-    @Override
+
+    public int getRotation() {
+        return rotation;
+    }
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((player == null) ? 0 : player.hashCode());
+        result = prime * result + rotation;
         return result;
     }
     @Override
@@ -43,7 +50,11 @@ public class CellImageInfo implements ImageInfo{
             return false;
         if (player != other.player)
             return false;
+        if (rotation != other.rotation)
+            return false;
         return true;
     }
+
+    
     //finire il getter di QUALCOSA, l'hashCode e L'equals
 }

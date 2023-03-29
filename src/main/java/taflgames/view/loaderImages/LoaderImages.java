@@ -17,6 +17,6 @@ public interface LoaderImages {
 
     Map<PieceImageInfo,ImageIcon> getPieceImageMap();
 
-    ImageIcon rotateImage(final ImageIcon originalImg);
+    ImageIcon rotateImage(final ImageIcon originalImg, final int rotation);
     
 }
