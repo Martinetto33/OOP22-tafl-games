@@ -262,7 +262,7 @@ public class TestEaten {
         assertEquals(finalmap, eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 1), p1), cells, 5));
 
         /*creating a new map*/
-        /*king on the boarder of the map with 3 enemies around and an archer of the other team*/
+        /*basic piece between a king and a basic piece*/
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
         piecesPlayer1.clear();
