@@ -61,7 +61,7 @@ public class BoardImpl implements Board, TimedEntity {
      */
     @Override
     public boolean isStartingPointValid(final Position start, final Player player) {
-        if(pieces.get(player).containsKey(start) && pieces.get(player).get(start).isAlive()) {
+        if (pieces.get(player).containsKey(start) && pieces.get(player).get(start).isAlive()) {
             this.currentPos = start;
             return true;
         } else {
@@ -104,15 +104,15 @@ public class BoardImpl implements Board, TimedEntity {
         * Se lo sono, allora la mossa è valida, altrimenti non lo è e si deve continuare la ricerca.
         */
         //controllo se la cella di arrivo è libera per lo swapper, poichè se la cella non fosse libera dovrei gestire lo swapper come viene fatto dopo questo if
-        if(cells.get(dest).isFree()) {
+        if (cells.get(dest).isFree()) {
             for (Vector vector : vectors) {
-                for(int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
+                for (int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
                     if (vector.multiplyByScalar(numberOfBox).applyToPosition(start).equals(dest)) {
                         if (isPathFree(start, dest)) {
                             return true;
                         }
                     }
-                }  
+                }
             }
         }
 
@@ -156,9 +156,9 @@ public class BoardImpl implements Board, TimedEntity {
             pieces.get(currentPlayer).put(newPos, pieceInTurn);
             pieceInTurn.setCurrentPosition(newPos);
 
-            Piece pieceToSwap = pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).get(newPos);
-            pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).remove(newPos);
-            pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).put(oldPos, pieceToSwap);
+            Piece pieceToSwap = pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).get(newPos);
+            pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).remove(newPos);
+            pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).put(oldPos, pieceToSwap);
             pieceToSwap.setCurrentPosition(oldPos);
             this.currentPos = newPos;
         }
@@ -177,15 +177,15 @@ public class BoardImpl implements Board, TimedEntity {
      * {@inheritDoc}
      */
     @Override
-    public Position getFurthestReachablePos(Position startPos, Vector direction) {
+    public Position getFurthestReachablePos(final Position startPos, final Vector direction) {
         Position furthestReachable = startPos;
-        for(int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
+        for (int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
             Position reachablePos = direction.multiplyByScalar(numberOfBox).applyToPosition(startPos);
             if (reachablePos.getX() == this.size || reachablePos.getY() == this.size
                 || reachablePos.getX() < 0 || reachablePos.getY() < 0 
                 || !cells.get(reachablePos).canAccept(getPieceAtPosition(startPos))) {
                     if (getPieceAtPosition(startPos).canSwap()) {
-                        if ( !cells.get(reachablePos).isFree()
+                        if (!cells.get(reachablePos).isFree()
                             && (!cells.get(reachablePos).getType().equals("Throne") 
                                     || !cells.get(reachablePos).getType().equals("Exit"))
                             && cells.get(startPos).getType().equals("Sider")
@@ -208,7 +208,7 @@ public class BoardImpl implements Board, TimedEntity {
      * @param source the Position where the Piece moved to.
      * @param movedPiece the Piece that was moved.
      */
-    private void signalOnMove(Position source, Piece movedPiece) {
+    private void signalOnMove(final Position source, final Piece movedPiece) {
         if (cells.get(source).getType().equals("Slider")) {
             cells.get(source).notify(source, movedPiece, List.of(movedPiece.sendSignalMove()), pieces, cells);
         }
@@ -230,16 +230,16 @@ public class BoardImpl implements Board, TimedEntity {
      * @param dest the Position to reach.
      * @return true if the path is free, false otherwise 
      */
-    private boolean isPathFree(Position start, Position dest) {
+    private boolean isPathFree(final Position start, final Position dest) {
         if (start.getX() == dest.getX()) { 
             if (start.getY() < dest.getY()) {
-                for(int i=start.getY() + 1; i < dest.getY(); i++) {
+                for (int i = start.getY() + 1; i < dest.getY(); i++) {
                     if (!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
-                for(int i=start.getY() - 1; i > dest.getY(); i--) {
+                for (int i = start.getY() - 1; i > dest.getY(); i--) {
                     if (!cells.get(new Position(start.getX(), i)).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
@@ -247,13 +247,13 @@ public class BoardImpl implements Board, TimedEntity {
             }
         } else {
             if (start.getX() < dest.getX()) {
-                for(int i=start.getX() + 1; i < dest.getX(); i++) {
+                for (int i = start.getX() + 1; i < dest.getX(); i++) {
                     if (!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
                 }
             } else {
-                for(int i=start.getX() - 1; i > + dest.getX(); i--) {
+                for (int i = start.getX() - 1; i > dest.getX(); i--) {
                     if (!cells.get(new Position(i, start.getY())).canAccept(getPieceAtPosition(start))) {
                         return false;
                     }
@@ -267,7 +267,7 @@ public class BoardImpl implements Board, TimedEntity {
      * {@inheritDoc}
      */
     @Override
-    public void notifyTurnHasEnded(int turn) {
+    public void notifyTurnHasEnded(final int turn) {
         if (this.slidersEntities != null) {
             this.slidersEntities.forEach(e -> e.reset());
         } 
@@ -288,12 +288,12 @@ public class BoardImpl implements Board, TimedEntity {
      * {@inheritDoc}
      */
     @Override
-    public void eat(){
+    public void eat() {
         Piece currPiece = getPieceAtPosition(currentPos);
         Set<Position> updatedHitbox = eatingManager.trimHitbox(currPiece, pieces, cells, size);
-        if(!updatedHitbox.isEmpty()) {
+        if (!updatedHitbox.isEmpty()) {
             List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
-            if(!enemies.isEmpty()) {
+            if (!enemies.isEmpty()) {
                 Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece, cells, size);
                 eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
             }
@@ -313,7 +313,7 @@ public class BoardImpl implements Board, TimedEntity {
         /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
         
         if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
-                || king.getCurrentPosition().getX() == this.size-1 || king.getCurrentPosition().getX() == this.size-1) {
+                || king.getCurrentPosition().getX() == this.size - 1 || king.getCurrentPosition().getX() == this.size - 1) {
 
                 if (getAdjacentPositions(king.getCurrentPosition()).stream()
                     .filter(pos -> !cells.get(pos).isFree())
@@ -340,7 +340,7 @@ public class BoardImpl implements Board, TimedEntity {
      */
     @Override
     public Optional<Player> hasAPlayerWon() {
-        if(pieces.get(Player.DEFENDER).entrySet().stream()
+        if (pieces.get(Player.DEFENDER).entrySet().stream()
             .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
             .findAny()
             .isEmpty()) {
@@ -364,7 +364,7 @@ public class BoardImpl implements Board, TimedEntity {
      * @param pos the position where the piece is located.
      * @return the Piece that is on the Position given.
      */
-    private Piece getPieceAtPosition(Position pos) {
+    private Piece getPieceAtPosition(final Position pos) {
         Piece p = pieces.entrySet().stream()
             .filter(x -> x.getValue().containsKey(pos))
             .map(x -> x.getValue().get(pos))
@@ -380,7 +380,7 @@ public class BoardImpl implements Board, TimedEntity {
         setOfPosition.add(new Position(currPos.getX(), currPos.getY() + 1));
         setOfPosition.add(new Position(currPos.getX(), currPos.getY() - 1));
         return setOfPosition.stream()
-                                .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() <this.size)
+                                .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() < this.size)
                                 .collect(Collectors.toSet());
     }
  
