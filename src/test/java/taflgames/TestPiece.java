@@ -294,8 +294,6 @@ class TestPiece {
         mov.add(new VectorImpl(p, new Position(4, 7), true));
         mov.add(new VectorImpl(p, new Position(3, 6), true));
         mov.add(new VectorImpl(p, new Position(4, 5), true));
-        mov.add(new VectorImpl(p, new Position(0, 2), false));
-        mov.add(new VectorImpl(p, new Position(2, 1), false));
         assertNotEquals(np.whereToMove(), null);
         assertNotEquals(np.whereToMove(), new HashSet<>());
         assertEquals(mov, np.whereToMove());
