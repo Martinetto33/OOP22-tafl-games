@@ -265,16 +265,7 @@ public class BoardImpl implements Board, TimedEntity{
                         .get();
         /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
         
-        /* If there are still any Swappers for the player in turn, there can be no draw */
-        if (!pieces.get(playerInTurn).entrySet().stream()
-            .filter(pos -> pos.getValue().getMyType().getTypeOfPiece().equals("SWAPPER"))
-            .collect(Collectors.toList())
-            .isEmpty()) {
-                            return false;
-        /* If there are no swappers and the king is trapped on a border by 3 attackers adjacent to it,
-         * it is a draw.
-         */
-        } else if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
+        if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
                 || king.getCurrentPosition().getX() == this.size-1 || king.getCurrentPosition().getX() == this.size-1) {
 
                 if (getAdjacentPositions(king.getCurrentPosition()).stream()
@@ -285,14 +276,16 @@ public class BoardImpl implements Board, TimedEntity{
                                 return true;
                 }
         /* If there are no pieces that can move for the player in turn, it is automatically a draw. */
-        } else if(pieces.get(playerInTurn).values().stream()
-                .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
-                    .filter(adjPos -> cells.get(adjPos).canAccept(piece))
-                    .collect(Collectors.toSet()).isEmpty())
-                .findAny().isPresent()) {
-                                return false;
-            }
-        return true;
+        }
+        if(pieces.get(playerInTurn).values().stream()
+            .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
+                .filter(adjPos -> cells.get(adjPos).canAccept(piece))
+                .collect(Collectors.toSet()).isEmpty())
+            .findAny().isPresent()) {
+                return false;
+        } else {
+            return true;
+        }
     }
 
     /**
