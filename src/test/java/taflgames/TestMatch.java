@@ -366,23 +366,9 @@ class TestMatch {
          * part to the killing.
          */
 
-        match.setNextActivePlayer();
-        assertEquals(Player.ATTACKER, match.getActivePlayer());
-
-        // Move attacker's piece (basic) from (10, 3) to (8, 3)
-        source = new Position(10, 3);
-        dest = new Position(8, 3);
-        assertTrue(match.selectSource(source));
-        assertTrue(match.selectDestination(source, dest));
-        match.makeMove(source, dest);
-        assertTrue(match.selectSource(dest));
-
-        match.setNextActivePlayer();
-        assertEquals(Player.DEFENDER, match.getActivePlayer());
-
-        // Move defender's piece (basic) from (6, 4) to (8, 4)
+        // Move defender's piece (basic) from (6, 4) to (9, 4)
         source = new Position(6, 4);
-        dest = new Position(8, 4);
+        dest = new Position(9, 4);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
@@ -391,36 +377,32 @@ class TestMatch {
         match.setNextActivePlayer();
         assertEquals(Player.ATTACKER, match.getActivePlayer());
 
-        // Move attacker's piece (basic) from (6, 10) to (8, 10)
-        source = new Position(6, 10);
-        dest = new Position(8, 10);
+        // Move attacker's piece (basic) from (5, 2) to (9, 2)
+        source = new Position(5, 2);
+        dest = new Position(9, 2);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
-        // Move attacker's piece (basic) from (8, 10) to (8, 5)
-        source = new Position(8, 10);
-        dest = new Position(8, 5);
-        assertTrue(match.selectSource(source));
-        assertTrue(match.selectDestination(source, dest));
-        match.makeMove(source, dest);
-        assertTrue(match.selectSource(dest));
-
-        // Move attacker's archer from (7, 1) to (8, 1)
+        // Move attacker's archer from (7, 1) to (9, 1)
         source = new Position(7, 1);
-        dest = new Position(8, 1);
+        dest = new Position(9, 1);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
-        // The attacker's archer at (8, 1) is on the same row of the defender's piece at (8,4)
-        // and there is another attacker's piece at (8, 5),
-        // but there is another attacker's piece at (8, 3), so the defender's piece should not have been killed.
+        // Check that there is an attacker's piece (shield) at (9, 5), according to the initial configuration
+        source = new Position(9, 5);
+        assertTrue(match.selectSource(dest));
+
+        // Now, there is a defender's piece at (9, 4), an attacker's piece at (9, 5) and
+        // an attacker's archer at (9, 1), but there is another piece at (9, 2),
+        // so the defender's piece must not get killed. Check that it is still selectable.
         match.setNextActivePlayer();
         assertEquals(Player.DEFENDER, match.getActivePlayer());
-        source = new Position(8, 4);
+        source = new Position(9, 4);
         assertTrue(match.selectSource(source));
     }
 
