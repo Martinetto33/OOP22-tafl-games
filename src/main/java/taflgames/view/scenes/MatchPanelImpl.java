@@ -25,7 +25,7 @@ import taflgames.view.loaderImages.LoaderImagesImpl;
 public class MatchPanelImpl extends JPanel implements MatchPanel{
 
     private LoaderImages loader;
-
+    private static final int HIGHT_OF_PC_APPLICATION_BAR = 75; 
     private final Map<JButton, Position> mapBottoni = new HashMap<>();
     private final Map<Position,JLabel> mapPedine = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
@@ -41,13 +41,14 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int sizeOfGrid;
     private Position precPos;
 
-    public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
-        this.loader = new LoaderImagesImpl(sizeOfSide, numbCellsInGrid);
+    public MatchPanelImpl(final int numbCellsInGrid, final Double sizeOfSide) {
+        this.loader = new LoaderImagesImpl(sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR, 
+                                            numbCellsInGrid);
         this.loader.loadCellsImages();
         this.loader.loadPiecesImages();
         mapPieceImageIcons.putAll(loader.getPieceImageMap());
         mapCellsImageIcons.putAll(loader.getCellImageMap());
-        this.mySize = sizeOfSide;
+        this.mySize = sizeOfSide.intValue() - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR;
         this.setLayout(new FlowLayout());
         this.buttonPanelSize = this.mySize;
         this.generalPanelSize = this.mySize;

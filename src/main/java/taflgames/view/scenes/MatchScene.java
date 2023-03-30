@@ -18,7 +18,7 @@ public class MatchScene extends AbstractScene {
         super(MatchScene.MATCH, Optional.of("home-background.jpeg"));
         this.controller = controller;
         final JPanel scene = super.getScene();
-        final MatchPanelImpl match = new MatchPanelImpl(MatchScene.NUMB_CELLS_SIDE, 75);//CHANGE
-        scene.add(match);
+        //final MatchPanelImpl match = new MatchPanelImpl(MatchScene.NUMB_CELLS_SIDE, 75);//CHANGE
+        //scene.add(match);
     }
 }
