@@ -255,11 +255,11 @@ class TestMatch {
     }
 
     /**
-     * Test the effect of the archer, which is the power of
-     * taking part to the killing of a piece by distance if:
-     * - the archer moves to a position in the same row or column of the target piece;
-     * - on that row or column, the target piece is within three positions far from teh archer;
-     * - there are no other pieces in path from the archer to the target piece.
+     * Test the effect of the archer.
+     * To take part to the killing of an opponent's piece, differently from the other pieces,
+     * an archer does not have to be on an adjacent cell of the target piece:
+     * it can be positioned within three cells far from the target piece
+     * on the same row or column of the target piece.
      */
     @Test
     void testArcherEffect() {
