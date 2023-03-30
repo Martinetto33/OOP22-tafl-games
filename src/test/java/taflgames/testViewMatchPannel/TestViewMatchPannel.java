@@ -2,8 +2,6 @@ package taflgames.testViewMatchPannel;
 
 import javax.swing.JFrame;
 
-import taflgames.view.loaderImages.EntitiesToDraw;
-import taflgames.view.loaderImages.EntitiesToDrawImpl;
 import taflgames.view.scenes.MatchPanelImpl;
 
 public class TestViewMatchPannel extends JFrame{

@@ -1,4 +1,4 @@
-package taflgames.view.loaderImages;
+package taflgames.testViewMatchPannel;
 
 import java.util.*;
 import taflgames.common.Player;
@@ -24,7 +24,7 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
     }
 
     public void createBackgroundCells() {
-       this.backgroundCells.put(new Position(1, 1), new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0));
+       this.backgroundCells.put(new Position(3, 2), new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0));
        this.backgroundCells.put(new Position(5, 7), new CellImageInfo("CELL_THRONE", Player.DEFENDER, 0));
        this.backgroundCells.put(new Position(8, 8), new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0));
        this.backgroundCells.put(new Position(1, 1), new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0));

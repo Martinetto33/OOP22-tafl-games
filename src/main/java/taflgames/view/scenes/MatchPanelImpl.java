@@ -15,6 +15,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import taflgames.common.code.Position;
 import taflgames.view.loaderImages.LoaderImages;
@@ -24,11 +26,11 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
 
     private LoaderImages loader;
 
-    private static final int TEMP_CONST_FOR_SMALL_COMPUTERS = 11;
-    private final Map<Position,JButton> mapBottoni = new HashMap<>();
+    private final Map<JButton, Position> mapBottoni = new HashMap<>();
     private final Map<Position,JLabel> mapPedine = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
     private final Map<Position,JLabel> mapBoard = new HashMap<>();
+    private final Map<Position,JLabel> mapSelection = new HashMap<>();
     private final Map<PieceImageInfo,ImageIcon> mapPieceImageIcons = new HashMap<>();
     private final Map<CellImageInfo,ImageIcon> mapCellsImageIcons = new HashMap<>();
     
@@ -38,16 +40,15 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int piecePanelSize;
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
+    private Position precPos;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
-        this.loader = new LoaderImagesImpl(MatchPanelImpl.TEMP_CONST_FOR_SMALL_COMPUTERS*
-                                            numbCellsInGrid, numbCellsInGrid);
+        this.loader = new LoaderImagesImpl(sizeOfSide, numbCellsInGrid);
         this.loader.loadCellsImages();
         this.loader.loadPiecesImages();
         mapPieceImageIcons.putAll(loader.getPieceImageMap());
         mapCellsImageIcons.putAll(loader.getCellImageMap());
-        this.mySize = MatchPanelImpl.TEMP_CONST_FOR_SMALL_COMPUTERS*
-                                    numbCellsInGrid;
+        this.mySize = sizeOfSide;
         this.setLayout(new FlowLayout());
         this.buttonPanelSize = this.mySize;
         this.generalPanelSize = this.mySize;
@@ -84,7 +85,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         this.createButtonsForGrid(buttonPanel, this.mapBottoni, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(piecePanel, this.mapPedine, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid); //ok
-        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);//ok
+        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);//
     }
 
     @Override
@@ -196,6 +197,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         for (int i=0; i < mySizeGrid; i++){
             for (int j=0; j < mySizeGrid; j++) {
                 final JLabel labelPiece = new JLabel();
+                labelPiece.setSize(this.mySize, this.mySize);
                 labelPiece.setOpaque(false);
                 labelPiece.setBackground(null);
                 labelPiece.setIcon(null);
@@ -217,21 +219,38 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             mapPedine.get(newPosition).setIcon(temp);
         }
     }
-    public void createButtonsForGrid (final JPanel me, Map<Position, JButton> myMapButtons, final int mySizeGrid) {
+    public void createButtonsForGrid (final JPanel me, Map<JButton, Position> myMapButtons, final int mySizeGrid) {
+        
+        ActionListener al = new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+        	    var button = (JButton)e.getSource();
+        	    var position = mapBottoni.get(button);
+                if(precPos != null) {
+                    mapSelection.get(precPos).setOpaque(false);
+                    mapSelection.get(precPos).setBackground(null);
+                }
+                if (!mapPedine.get(position).equals(null)) {
+                    precPos = position;
+                    mapSelection.get(position).setOpaque(true);
+                    mapSelection.get(position).setBackground(new Color(255, 155, 155));
+                } 
+            }
+        };
+
         for (int i=0; i < mySizeGrid; i++){
             for (int j=0; j < mySizeGrid; j++){
                 final JButton jb = new JButton();
                 jb.setOpaque(false);
                 jb.setContentAreaFilled(false);
                 jb.setIcon(null);
-                myMapButtons.put(new Position(i, j), jb);
+                jb.addActionListener(al);
+                myMapButtons.put(jb, new Position(i, j));
                 me.add(jb);
             }
         }
-        /**DA AGGIUNGERE IL LISTENER */
     }
 
-    public Map<Position, JButton> getMapBottoni() {
+    public Map<JButton, Position> getMapBottoni() {
         return this.mapBottoni;
     }
 
