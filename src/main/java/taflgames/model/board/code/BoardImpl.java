@@ -303,6 +303,7 @@ public class BoardImpl implements Board, TimedEntity {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isDraw(final Player playerInTurn) {
         /*finding king position */
         Piece king = pieces.get(Player.DEFENDER).entrySet().stream()

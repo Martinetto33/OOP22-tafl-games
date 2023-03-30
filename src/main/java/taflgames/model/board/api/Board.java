@@ -44,7 +44,7 @@ public interface Board {
      * @param newPos the new Position to which the old one is updated.
      * @param currentPlayer the player in turn.
      */
-    void updatePiecePos(Position oldPos, Position newPos, final Player currentPlayer);
+    void updatePiecePos(Position oldPos, Position newPos, Player currentPlayer);
 
     /**
      * Update the Position of a piece.
@@ -52,7 +52,7 @@ public interface Board {
      * @param newPos the new Position to which the old one is updated.
      * @param currentPlayer the player in turn.
      */
-    void movePlaceholder(final Position oldPos, final Position newPos, final Player currentPlayer);
+    void movePlaceholder(Position oldPos, Position newPos, Player currentPlayer);
 
     /**
      * Calculate the furthest postion that can be reached from a stating position on a certain direction. 
@@ -68,7 +68,7 @@ public interface Board {
      * @param playerInTurn the player that is playing in that specific turn.
      * @return true if it is a draw, false otherwise.
      */
-    boolean isDraw(final Player playerInTurn);
+    boolean isDraw(Player playerInTurn);
 
     /**
      * This method must must be called by Match before method {@link #isDraw(Player)}.
