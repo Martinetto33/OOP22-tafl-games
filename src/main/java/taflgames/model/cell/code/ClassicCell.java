@@ -14,11 +14,17 @@ public class ClassicCell extends AbstractCell{
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
             Map<Position, Cell> cells) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean canAccept(Piece piece) {
         if(super.isFree()) {
@@ -28,6 +34,9 @@ public class ClassicCell extends AbstractCell{
         }   
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getType() {
         return "ClassicCell";

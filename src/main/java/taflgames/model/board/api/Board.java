@@ -30,20 +30,28 @@ public interface Board {
      * and the final position there are no obstacles. 
      * If the final postion is not free the method check if the piece is a swapper 
      * and if it can swap with the piece that postion.
-     * @param start the starting position
-     * @param dest the final destination to reach
-     * @param player the player whose movement is being checked
-     * @return true if the movement is allowed, false otherwise
+     * @param start the starting position.
+     * @param dest the final destination to reach.
+     * @param player the player whose movement is being checked.
+     * @return true if the movement is allowed, false otherwise.
      */
     boolean isDestinationValid(Position start, Position dest, Player player);
+
+    /**
+     * Update the Position of a piece thanks to method {@link #movePlaceholder(Position, Position, Player)}
+     * and notify the cell the piece moved to and the ones adjacent to it that the piece was moved.
+     * @param oldPos the old Position that must be updated.
+     * @param newPos the new Position to which the old one is updated.
+     * @param currentPlayer the player in turn.
+     */
+    void updatePiecePos(Position oldPos, Position newPos, final Player currentPlayer);
 
     /**
      * Update the Position of a piece.
      * @param oldPos the old Position that must be updated.
      * @param newPos the new Position to which the old one is updated.
+     * @param currentPlayer the player in turn.
      */
-    void updatePiecePos(Position oldPos, Position newPos, final Player currentPlayer);
-
     void movePlaceholder(final Position oldPos, final Position newPos, final Player currentPlayer);
 
     /**
@@ -77,8 +85,9 @@ public interface Board {
     void eat();
 
     /**
-     * Signals to the board that the turn of the current player has ended.
-     * @param turn the number of the turn
+     * Signals the resattable entities of the game (e.g. sliders) 
+     * that the turn of the current player has ended.
+     * @param turn the number of the turn.
      */
     void notifyTurnHasEnded(int turn);
 

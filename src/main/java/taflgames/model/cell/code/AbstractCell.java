@@ -13,12 +13,16 @@ public abstract class AbstractCell implements Cell{
         this.cellStatus = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isFree() {
         return cellStatus;
     }
+
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void setFree(final boolean cellStatus) {        
