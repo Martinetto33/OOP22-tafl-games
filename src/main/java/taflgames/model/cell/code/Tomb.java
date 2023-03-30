@@ -9,12 +9,13 @@ import java.util.stream.Collectors;
 
 import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
+import taflgames.model.cell.api.CellComponent;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
 
-public class Tomb extends AbstractCell{
+public class Tomb extends AbstractCell implements CellComponent {
 
     private Map<Player, Queue<Piece>> deadPieces = new HashMap<>();	
 
@@ -106,5 +107,11 @@ public class Tomb extends AbstractCell{
             return this.innerDeadPieces;
         }
 
+    }
+
+    @Override
+    public void notifyComponent(Position source, Piece sender, List<String> events,
+            Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells) {
+        this.notify(source, sender, events, pieces, cells);
     }
 }
