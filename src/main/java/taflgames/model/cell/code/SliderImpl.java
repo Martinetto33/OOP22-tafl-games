@@ -59,7 +59,7 @@ public class SliderImpl extends AbstractCell implements Slider {
 
     public void notifyTurnHasEnded(final int turn){
         if (turn - this.lastActivityTurn == SliderImpl.TURNS_FOR_REACTIVATION) {
-            this.orientation.rotate(SliderImpl.ANGLE_ROTATION);
+            this.orientation = this.orientation.rotate(SliderImpl.ANGLE_ROTATION).get();
 			this.active = true;
 			this.lastActivityTurn = turn;
 		}

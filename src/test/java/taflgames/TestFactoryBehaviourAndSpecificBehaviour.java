@@ -139,7 +139,7 @@ class TestFactoryBehaviourAndSpecificBehaviour {
         k.add(new Position(0, 2));
         final var toTest = n.createSwapperBehaviour(); 
         final var hitb = h.createBasicHitbox();
-        final var movs = m.createSwapperMoveSet(new HashSet<>(k));
+        final var movs = m.createBasicMoveSet();
         assertEquals(hitb, toTest.getHitbox());
         assertEquals(movs, toTest.getMoveSet());
         assertNotEquals(toTest.generateHitbox(), null);
