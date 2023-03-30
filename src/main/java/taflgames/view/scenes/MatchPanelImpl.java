@@ -25,7 +25,7 @@ import taflgames.view.loaderImages.LoaderImagesImpl;
 public class MatchPanelImpl extends JPanel implements MatchPanel{
 
     private LoaderImages loader;
-    private static final int HIGHT_OF_PC_APPLICATION_BAR = 75; 
+    private static final int HIGHT_OF_PC_APPLICATION_BAR = 80; 
     private final Map<JButton, Position> mapBottoni = new HashMap<>();
     private final Map<Position,JLabel> mapPedine = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
