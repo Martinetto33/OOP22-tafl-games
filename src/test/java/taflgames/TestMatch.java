@@ -407,6 +407,56 @@ class TestMatch {
     }
 
     /**
+     * Test the effect of the slider cell.
+     * The slider makes the piece that lands on it slide to the furthest reachable position
+     * in north/east/south/west direction.
+     */
+    @Test
+    void testSliderEffect() {
+
+        // Move piece from (5, 1) to (5,2)
+        Position source = new Position(5, 1);
+        Position dest = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move piece from (5, 2) to (2, 2); at that position there is a slider
+        source = new Position(5, 2);
+        dest = new Position(2, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        
+        // The default direction for slider effect is east, so the piece should be at (2, 10)
+        source = new Position(2, 10);
+        assertTrue(match.selectSource(source));
+
+        // Two turns after, the sliding direction should change to north
+        match.setNextActivePlayer();
+        match.setNextActivePlayer();
+
+        // Move piece from (3, 0) to (3, 2); at that position there is a slider
+        source = new Position(3, 0);
+        dest = new Position(3, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+
+        // Move piece from (3, 2) to (2, 2); at that position there is a slider
+        source = new Position(3, 2);
+        dest = new Position(2, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+
+        // The piece should be at (0, 2)
+        source = new Position(0, 2);
+        assertTrue(match.selectSource(source));
+    }
+
+    /**
      * Test that the match ends and that the correct result is returned when the conditions for
      * the conditions for the attacker victory are verified.
      */
