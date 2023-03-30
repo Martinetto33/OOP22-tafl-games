@@ -695,8 +695,7 @@ class TestMatch {
     void testDraw() {
 
         /* 
-         * The draw happens when the king is trapped on a border by 3 attackers adjacent to it
-         * and there are no swappers playing.
+         * The draw happens when the king is trapped on a border of the grid by 3 attackers on the three adjacent cells.
          * In this test, the king will be moved to (0, 2), which is a position along the border,
          * and then it will be trapped on the three adjacent sides. 
          */
