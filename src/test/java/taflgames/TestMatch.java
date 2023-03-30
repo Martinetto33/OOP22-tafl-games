@@ -207,10 +207,13 @@ class TestMatch {
     }
 
     /**
-     * Test the killing of a piece.
+     * Test the classic killing of a piece, which is performed by
+     * placing two pieces at two opposite adjacent sides of
+     * an opponent's piece (note: the target piece of a classic killing
+     * cannot be the king).
      */
     @Test
-    void testPieceKilling() {
+    void testClassicKilling() {
         // Attacker moves piece at (row=3, col=0) to (row=3, col=4)
         Position source = new Position(3, 0);
         Position dest = new Position(3, 4);
@@ -249,6 +252,175 @@ class TestMatch {
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
+    }
+
+    /**
+     * Test the effect of the archer, which is the power of
+     * taking part to the killing of a piece by distance if:
+     * - the archer moves to a position in the same row or column of the target piece;
+     * - on that row or column, the target piece is within three positions far from teh archer;
+     * - there are no other pieces in path from the archer to the target piece.
+     */
+    @Test
+    void testArcherEffect() {
+
+        /*
+         * Case: the archer moves to a position in the same column of the target piece
+         * and the path from the archer to the target piece is free.
+         */
+        
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move defender's piece (basic) from (3, 5) to (3, 1)
+        Position source = new Position(3, 5);
+        Position dest = new Position(3, 1);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece (basic) from (0, 3) to (0, 1)
+        source = new Position(0, 3);
+        dest = new Position(0, 1);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's piece (basic) from (0, 1) to (2, 1)
+        source = new Position(0, 1);
+        dest = new Position(2, 1);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's piece (basic) from (5, 1) to (5, 2)
+        source = new Position(5, 1);
+        dest = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's archer from (5, 0) to (5, 1)
+        source = new Position(5, 0);
+        dest = new Position(5, 1);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the piece at (3, 1) should have been killed; check it is no more selectable
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(3, 1);
+        assertFalse(match.selectSource(source));
+
+        /*
+         * Case: the archer moves to a position in the same row of the target piece
+         * and the path from the archer to the target piece is free.
+         */
+
+        // Move defender's piece (basic) from (7, 5) to (7, 4)
+        source = new Position(7, 5);
+        dest = new Position(7, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece (basic) from (7, 10) to (7, 5)
+        source = new Position(7, 10);
+        dest = new Position(7, 5);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's archer from (5, 1) to (7, 1)
+        source = new Position(5, 1);
+        dest = new Position(7, 1);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the defender's piece at (7, 5) should have been killed; check it is no more selectable
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(7, 5);
+        assertFalse(match.selectSource(source));
+
+        /*
+         * Case: the archer moves to a position in the same row or column of the target piece,
+         * but the path from the archer to the target piece is not free, so the archer cannot take
+         * part to the killing.
+         */
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece (basic) from (10, 3) to (8, 3)
+        source = new Position(10, 3);
+        dest = new Position(8, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move defender's piece (basic) from (6, 4) to (8, 4)
+        source = new Position(6, 4);
+        dest = new Position(8, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece (basic) from (6, 10) to (8, 10)
+        source = new Position(6, 10);
+        dest = new Position(8, 10);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's piece (basic) from (8, 10) to (8, 5)
+        source = new Position(8, 10);
+        dest = new Position(8, 5);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's archer from (7, 1) to (8, 1)
+        source = new Position(7, 1);
+        dest = new Position(8, 1);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // The attacker's archer at (8, 1) is on the same row of the defender's piece at (8,4)
+        // and there is another attacker's piece at (8, 5),
+        // but there is another attacker's piece at (8, 3), so the defender's piece should not have been killed.
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(8, 4);
+        assertTrue(match.selectSource(source));
     }
 
     /**
