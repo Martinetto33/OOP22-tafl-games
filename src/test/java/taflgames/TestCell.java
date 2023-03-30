@@ -188,6 +188,7 @@ public class TestCell {
         assertTrue(pieces.get(p1).keySet().contains(new Position(1, 3)));
         SliderImpl sl = (SliderImpl) cells.get(new Position(1,1));
         sl.notifyTurnHasEnded(1);
+        sl.reset();
 
         piecesPlayer2.put(new Position(1,1), new BasicPiece(new Position(1,1), p2));
         pieces.put(p2, piecesPlayer2);

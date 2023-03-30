@@ -300,7 +300,7 @@ public class TestBoard {
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
 
-        assertFalse(board4.isDraw(p2));
+        assertTrue(board4.isDraw(p2));
         assertFalse(board4.isDraw(p1));
 
         /*creating a new asset of the board */

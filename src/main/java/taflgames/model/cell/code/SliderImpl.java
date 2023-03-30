@@ -15,11 +15,11 @@ import taflgames.model.cell.api.Slider;
 public class SliderImpl extends AbstractCell implements Slider {
 
     private Vector orientation = new VectorImpl(0, 1); //un versore che indica la direzione in cui questo slider punta
-	private boolean triggered = false; //dice se è già stata attivata in questo turno
+	private boolean triggered; //dice se è già stata attivata in questo turno
 	private SliderMediator mediator;
 	private final Position sliderPos;
 	private int lastActivityTurn;
-	private boolean active = true;
+	private boolean active;
 	private static final int TURNS_FOR_REACTIVATION = 2;
     private static final int ANGLE_ROTATION = 90;
 
