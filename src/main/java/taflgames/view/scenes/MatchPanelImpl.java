@@ -30,7 +30,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final Map<Position,JLabel> mapPedine = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
     private final Map<Position,JLabel> mapBoard = new HashMap<>();
-    private final Map<Position,JLabel> mapSelection = new HashMap<>();
     private final Map<PieceImageInfo,ImageIcon> mapPieceImageIcons = new HashMap<>();
     private final Map<CellImageInfo,ImageIcon> mapCellsImageIcons = new HashMap<>();
     
@@ -91,8 +90,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         this.createUnitsForGridLayerPanel(piecePanel, this.mapPedine, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);//ok
-        this.createUnitsForGridLayerPanel(selectionPanel, this.mapSelection, this.sizeOfGrid);//
-
     }
 
     @Override
@@ -113,36 +110,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                             this.mapSpecialCell.get(elem.getKey()).setIcon(null);
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
                         });
-        /* ImageIcon imageTombAttacker = mapCellsImageIcons.entrySet().stream()
-                                    .filter(elem -> elem.getKey().getName().equals("CELL_TOMB"))
-                                    .filter(null)
-                                    .map(elem -> elem.getValue())
-                                    .findAny()
-                                    .get();
-        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_TOMB_ATTACKER"))
-                                .forEach(cell -> {
-                                    this.mapBoard.get(cell.getKey()).setIcon(null);
-                                    this.mapBoard.get(cell.getKey()).setIcon(imageTombAttacker);
-                                });
-        ImageIcon imageTombDefender = mapCellsImageIcons.entrySet().stream()
-                                .filter(elem -> elem.getKey().getName().equals("CELL_TOMB_DEFENDERS"))
-                                .map(elem -> elem.getValue())
-                                .findAny()
-                                .get();
-        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_TOMB_DEFENDERS"))
-                            .forEach(cell -> {
-                                this.mapBoard.get(cell.getKey()).setIcon(null);
-                                this.mapBoard.get(cell.getKey()).setIcon(imageTombDefender);
-                            });
-
-        ImageIcon imageSlider0 = mapCellsImageIcons.entrySet().stream()
-                                                    .filter(elem -> elem.getKey().getName().equals("CELL_SLIDER_0"))
-                                                    .map(elem -> elem.getValue()).findAny().get();
-        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_TOMB_DEFENDERS"))
-                                .forEach(cell -> {
-                                    this.mapBoard.get(cell.getKey()).setIcon(null);
-                                    this.mapBoard.get(cell.getKey()).setIcon(imageSlider);
-                                }); */
     }
 
     @Override
@@ -156,36 +123,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                             this.mapSpecialCell.get(elem.getKey()).setIcon(null);
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
                         });
-        /* ImageIcon imageBasicCell = mapCellsImageIcons.entrySet().stream()
-                                    .filter(elem -> elem.getKey().getName().equals("CELL_BASIC"))
-                                    .map(elem -> elem.getValue())
-                                    .findAny()
-                                    .get();
-        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_BASIC"))
-                                .forEach(cell -> {
-                                    this.mapBoard.get(cell.getKey()).setIcon(null);
-                                    this.mapBoard.get(cell.getKey()).setIcon(imageBasicCell);
-                                });
-        ImageIcon imageThrone = mapCellsImageIcons.entrySet().stream()
-                                    .filter(elem -> elem.getKey().getName().equals("CELL_THRONE"))
-                                    .map(elem -> elem.getValue())
-                                    .findAny()
-                                    .get();
-        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_THRONE"))
-                                .forEach(cell -> {
-                                    this.mapBoard.get(cell.getKey()).setIcon(null);
-                                    this.mapBoard.get(cell.getKey()).setIcon(imageThrone);
-                                });
-        ImageIcon imageExit= mapCellsImageIcons.entrySet().stream()
-                                    .filter(elem -> elem.getKey().getName().equals("CELL_EXIT"))
-                                    .map(elem -> elem.getValue())
-                                    .findAny()
-                                    .get();
-        cells.entrySet().stream().filter(cell -> cell.getValue().getName().equals("CELL_EXIT"))
-                                .forEach(cell -> {
-                                    this.mapBoard.get(cell.getKey()).setIcon(null);
-                                    this.mapBoard.get(cell.getKey()).setIcon(imageExit);
-                                }); */
     }
 
     @Override
@@ -233,14 +170,14 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         	    var button = (JButton)e.getSource();
         	    var position = mapBottoni.get(button);
                 if(precPos != null) {
-                    mapSelection.get(precPos).setOpaque(false);
-                    mapSelection.get(precPos).setBackground(null);
+                    mapPedine.get(precPos).setOpaque(false);
+                    mapPedine.get(precPos).setBackground(null);
                 }
                 try{
                     if (mapPedine.get(position).getIcon() != null) {
                         precPos = position;
-                        mapSelection.get(position).setOpaque(true);
-                        mapSelection.get(position).setBackground(new Color(255, 155, 155));
+                        mapPedine.get(position).setBackground(new Color(255, 155, 155));
+                        mapPedine.get(position).setOpaque(true);
                     }
                 } catch(NullPointerException n){
                     /*no action necessary */
