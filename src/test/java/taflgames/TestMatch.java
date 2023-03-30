@@ -414,6 +414,8 @@ class TestMatch {
     @Test
     void testSliderEffect() {
 
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
         // Move piece from (5, 1) to (5,2)
         Position source = new Position(5, 1);
         Position dest = new Position(5, 2);
@@ -422,36 +424,39 @@ class TestMatch {
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
-        // Move piece from (5, 2) to (2, 2); at that position there is a slider
+        // Move piece from (5, 2) to (2, 2); at that position, there is a slider
         source = new Position(5, 2);
         dest = new Position(2, 2);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         
-        // The default direction for slider effect is east, so the piece should be at (2, 10)
+        // The default direction for slider effect is east, so the piece is moved to (2, 10)
         source = new Position(2, 10);
         assertTrue(match.selectSource(source));
 
-        // Two turns after, the sliding direction should change to north
+        // At the second turn of the match, the slider disappears, and it appears again two turns later.
+        // The sliding direction should be north.
         match.setNextActivePlayer();
         match.setNextActivePlayer();
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
 
-        // Move piece from (3, 0) to (3, 2); at that position there is a slider
-        source = new Position(3, 0);
+        // Move piece from (3, 5) to (3, 2)
+        source = new Position(3, 5);
         dest = new Position(3, 2);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
 
-        // Move piece from (3, 2) to (2, 2); at that position there is a slider
+        // Move piece from (3, 2) to (2, 2), on the slider
         source = new Position(3, 2);
         dest = new Position(2, 2);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
 
-        // The piece should be at (0, 2)
+        // The sliding direction should be north now, so the piece should be moved to (0, 2)
         source = new Position(0, 2);
         assertTrue(match.selectSource(source));
     }
