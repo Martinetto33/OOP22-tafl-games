@@ -221,7 +221,7 @@ public class BoardImpl implements Board, TimedEntity{
 
     @Override
     public void notifyTurnHasEnded(int turn) {
-        if (this.slidersEntities!= null) {
+        if (this.slidersEntities != null) {
             this.slidersEntities.forEach(e -> e.reset());
         } 
         if (this.slidersEntities != null) {
