@@ -2,6 +2,8 @@ package taflgames.testViewMatchPannel;
 
 import javax.swing.JFrame;
 
+import taflgames.view.loaderImages.EntitiesToDraw;
+import taflgames.view.loaderImages.EntitiesToDrawImpl;
 import taflgames.view.scenes.MatchPanelImpl;
 
 public class TestViewMatchPannel extends JFrame{
@@ -11,7 +13,11 @@ public class TestViewMatchPannel extends JFrame{
         this.setSize(60*sizeFrame, 60*sizeFrame);
         MatchPanelImpl a = new MatchPanelImpl(11, 60*sizeFrame);
         this.add(a);
-        //a.drawAllPieces();
+        EntitiesToDraw toDraw = new EntitiesToDrawImpl();
+        toDraw.createPiecesAlive();
+        toDraw.createBackgroundCells();
+        a.drawAllPieces(toDraw.getPiecesAlive());
+        a.drawBackgroundCells(toDraw.getBackgroundCells());
         this.setVisible(true);
     }
 

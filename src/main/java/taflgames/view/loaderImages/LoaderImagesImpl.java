@@ -80,7 +80,6 @@ public class LoaderImagesImpl implements LoaderImages{
 
     private ImageIcon getImage(final String imageName) {
         final URL imageURL = ClassLoader.getSystemResource(ROOT + imageName);
-        System.out.println(imageURL);
         final ImageIcon elemntToDraw = new ImageIcon(imageURL);
         return new ImageIcon(elemntToDraw.getImage().getScaledInstance(unitToScale, unitToScale, Image.SCALE_SMOOTH));
     }
