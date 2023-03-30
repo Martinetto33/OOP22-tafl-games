@@ -37,7 +37,7 @@ public final class MatchImpl implements Match {
         this.turnQueue = new LoopingIterator<>(
             List.of(Player.ATTACKER, Player.DEFENDER)
         );
-        this.setNextActivePlayer();
+        this.activePlayer = this.turnQueue.next();
         this.turnNumber = 0;
         // this.caretaker = new CaretakerImpl(this);
     }
