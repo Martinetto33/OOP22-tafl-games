@@ -72,6 +72,11 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         piecePanel.setOpaque(false);
         generPanel.add(piecePanel);
 
+        JPanel selectionPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
+        selectionPanel.setSize(new Dimension(piecePanelSize, piecePanelSize));
+        selectionPanel.setOpaque(false);
+        generPanel.add(selectionPanel);
+
         JPanel specialCellsPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
         specialCellsPanel.setSize(new Dimension(cellsPanelsSize, cellsPanelsSize));
         specialCellsPanel.setOpaque(false);
@@ -85,7 +90,9 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         this.createButtonsForGrid(buttonPanel, this.mapBottoni, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(piecePanel, this.mapPedine, this.sizeOfGrid); //ok
         this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid); //ok
-        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);//
+        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);//ok
+        this.createUnitsForGridLayerPanel(selectionPanel, this.mapSelection, this.sizeOfGrid);//
+
     }
 
     @Override
@@ -229,11 +236,15 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                     mapSelection.get(precPos).setOpaque(false);
                     mapSelection.get(precPos).setBackground(null);
                 }
-                if (!mapPedine.get(position).equals(null)) {
-                    precPos = position;
-                    mapSelection.get(position).setOpaque(true);
-                    mapSelection.get(position).setBackground(new Color(255, 155, 155));
-                } 
+                try{
+                    if (mapPedine.get(position).getIcon() != null) {
+                        precPos = position;
+                        mapSelection.get(position).setOpaque(true);
+                        mapSelection.get(position).setBackground(new Color(255, 155, 155));
+                    }
+                } catch(NullPointerException n){
+                    /*no action necessary */
+                }
             }
         };
 
