@@ -259,7 +259,8 @@ class TestMatch {
      * To take part to the killing of an opponent's piece, differently from the other pieces,
      * an archer does not have to be on an adjacent cell of the target piece:
      * it can be positioned within three cells far from the target piece
-     * on the same row or column of the target piece.
+     * on the same row or column of the target piece, but the path from the archer
+     * to the opponent's piece has to be free.
      */
     @Test
     void testArcherEffect() {
