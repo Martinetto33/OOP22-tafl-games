@@ -11,7 +11,6 @@ import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
 import taflgames.model.cell.api.ComposableCell;
-import taflgames.model.cell.api.TimedEntity;
 import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
