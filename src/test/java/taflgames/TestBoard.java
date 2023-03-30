@@ -14,6 +14,7 @@ import taflgames.common.code.VectorImpl;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.Archer;
 import taflgames.model.pieces.code.BasicPiece;
 import taflgames.model.pieces.code.King;
 import taflgames.model.pieces.code.Swapper;
@@ -327,8 +328,9 @@ public class TestBoard {
         assertTrue(cells.get(new Position(2, 2)).isFree());
         assertFalse(cells.get(new Position(2, 1)).isFree());
         board4.eat();
+        assertEquals(Optional.empty(), board4.hasAPlayerWon()); 
         assertTrue(board4.isDraw(p2));
         assertTrue(board4.isDraw(p1));
-        assertEquals(Optional.empty(), board4.hasAPlayerWon()); 
+
     }
 }
