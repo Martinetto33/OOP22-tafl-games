@@ -1,16 +1,29 @@
 package taflgames.model.cell.code;
 
-import taflgames.model.cell.api.Cell;
-import taflgames.model.memento.api.CellMemento;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public abstract class AbstractCell implements Cell{
+import taflgames.common.Player;
+import taflgames.common.code.Position;
+import taflgames.model.cell.api.Cell;
+import taflgames.model.cell.api.CellComponent;
+import taflgames.model.cell.api.ComposableCell;
+import taflgames.model.memento.api.CellComponentMemento;
+import taflgames.model.memento.api.CellMemento;
+import taflgames.model.pieces.api.Piece;
+
+public abstract class AbstractCell implements Cell, ComposableCell {
 
     private boolean cellStatus;
+    private final Set<CellComponent> cellComponents;
     /** 
      * 
     */
     public AbstractCell() {
         this.cellStatus = true;
+        this.cellComponents = new HashSet<>();
     }
 
     @Override
@@ -25,9 +38,55 @@ public abstract class AbstractCell implements Cell{
         this.cellStatus = cellStatus;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void attachComponent(CellComponent cellComponent) {
+        this.cellComponents.add(cellComponent);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void detachComponent(CellComponent cellComponent) {
+        this.cellComponents.remove(cellComponent);
+    }
+
+    /**
+     * {@inheritDoc}
+     * //TODO
+     */
+    @Override
+    public CellComponentMemento saveComponentsState() {
+        return null;
+    }
+
+    /**
+     * Only subclasses of this class should call this method.
+     * @param source the {@link taflgames.common.code.Position} where the
+     * event(s) occurred.
+     * @param sender the {@link taflgames.model.pieces.api.Piece} that
+     * produced the event(s).
+     * @param events the List of occurred events.
+     * @param pieces the Map containing the {@link taflgames.model.pieces.api.Piece}
+     * elements.
+     * @param cells the Map containing the {@link taflgames.model.cell.api.Cell}
+     * elements.
+     */
+    protected void updateComponents(Position source, Piece sender, List<String> events, Map<Player,
+                                    Map<Position, Piece>> pieces, Map<Position, Cell> cells) {
+        if (!this.cellComponents.isEmpty()) {
+            this.cellComponents
+                .forEach(component -> component.notifyComponent(source, sender, events, pieces, cells));
+        }
+    }
+
     public CellMemento save() {
         return this.new CellMementoImpl();
     }
+
 
     public void restore(CellMemento cm) {
         this.cellStatus = cm.getCellStatus();

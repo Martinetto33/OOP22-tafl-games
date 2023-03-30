@@ -49,6 +49,14 @@ public class SliderImpl extends AbstractCell implements Slider {
                 Position newPosition = this.mediator.requestMove(source, this.orientation); /*Trovo la casella più lontana su cui ci si possa
                 spostare seguendo la direzione del vettore orientamento */
                 this.mediator.updatePiecePos(this.sliderPos, newPosition, movedPiece.getPlayer());
+                
+                if (movedPiece.getCurrentPosition().equals(this.sliderPos)) {
+                    /* If the piece is still here after requesting a move to the Mediator,
+                     * it means it is stuck by obstacles in its way and therefore any
+                     * CellComponents attached to this cell should be notified.
+                    */
+                    super.updateComponents(source, movedPiece, events, pieces, cells);
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ public class ClassicCell extends AbstractCell{
     @Override
     public void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
             Map<Position, Cell> cells) {
+        super.updateComponents(source, sender, events, pieces, cells);
     }
 
     @Override

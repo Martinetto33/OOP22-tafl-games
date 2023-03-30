@@ -26,4 +26,10 @@ public interface CellComponent {
      */
     void notifyComponent(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
                          Map<Position, Cell> cells);
+
+    /**
+     * Returns wether this CellComponent is still active.
+     * @return true if this Component is still active and should not be detached.
+     */
+    boolean isActive();
 }

@@ -109,9 +109,20 @@ public class Tomb extends AbstractCell implements CellComponent {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyComponent(Position source, Piece sender, List<String> events,
             Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells) {
         this.notify(source, sender, events, pieces, cells);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isActive() {
+        return this.deadPieces.get(Player.ATTACKER).isEmpty() && this.deadPieces.get(Player.DEFENDER).isEmpty();
     }
 }

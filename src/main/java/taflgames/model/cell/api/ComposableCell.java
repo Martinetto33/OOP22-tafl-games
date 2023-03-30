@@ -27,6 +27,6 @@ public interface ComposableCell {
      * @return the {@link taflgames.model.memento.api.CellComponentMemento}
      * representing the saved state of this component.
      */
-    CellComponentMemento saveComponentState();
+    CellComponentMemento saveComponentsState();
 
 }
