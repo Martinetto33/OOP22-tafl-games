@@ -19,7 +19,7 @@ public class SliderImpl extends AbstractCell implements Slider {
 	private SliderMediator mediator;
 	private final Position sliderPos;
 	private int lastActivityTurn;
-	private boolean active;
+	private boolean active = true;
 	private static final int TURNS_FOR_REACTIVATION = 2;
     private static final int ANGLE_ROTATION = 90;
 

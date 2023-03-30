@@ -23,7 +23,7 @@ public class BoardImpl implements Board, TimedEntity{
     private Map<Player, Map<Position, Piece>> pieces;
     private final int size;
     private Position currentPos;
-    private Set<Slider> slidersEntities = null;
+    private Set<Slider> slidersEntities = new HashSet<>();
     private final Eaten eatingManager;
 
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
@@ -36,6 +36,7 @@ public class BoardImpl implements Board, TimedEntity{
                             .map(slider -> (Slider) slider)
                             .collect(Collectors.toSet())) {
             slider.addMediator(this);
+            slidersEntities.add(slider);
         } 
     }
 
