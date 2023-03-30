@@ -14,6 +14,8 @@ import taflgames.model.board.api.Board;
 import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
+import taflgames.model.cell.api.ComposableCell;
+import taflgames.model.cell.code.Tomb;
 
 /**
  * This class models the eating of a Piece {@link taflgames.model.board.api.Eaten}.
@@ -128,13 +130,14 @@ public class EatenImpl implements Eaten {
      * {@inheritDoc}
      */
     public void notifyAllThreatened(final Map<Piece, Set<Piece>> alliesMenacing, final Piece lastMovedPiece, 
-                                    final Map<Position, Cell> cells, final Map<Player, Map<Position, Piece>> pieces) {
+                                    final Map<Position, Cell> cells, final Map<Player,
+                                    Map<Position, Piece>> pieces, boolean doTombsSpawn) {
         List<Piece> deadPieces = alliesMenacing.entrySet().stream()
             .filter(entry -> entry.getKey().wasKilled(entry.getValue(), lastMovedPiece.getCurrentPosition()))
             .map(entry -> entry.getKey())
             .toList();
         if (!deadPieces.isEmpty()) {
-            this.notifyCellsThatPiecesDied(deadPieces, cells, pieces);
+            this.notifyCellsThatPiecesDied(deadPieces, cells, pieces, doTombsSpawn);
         }
     }
 
@@ -146,10 +149,17 @@ public class EatenImpl implements Eaten {
      * @param pieces the Map that associate to each Player it's own Map of Piece and Position.
      */
     private void notifyCellsThatPiecesDied(final List<Piece> killedPieces, final Map<Position, Cell> cells, 
-                                            final Map<Player, Map<Position, Piece>> pieces) {
+                                            final Map<Player, Map<Position, Piece>> pieces, boolean doTombsSpawn) {
         for (final Piece deadPiece : killedPieces) {
             cells.get(deadPiece.getCurrentPosition()).setFree(true);
             pieces.get(deadPiece.getPlayer()).remove(deadPiece.getCurrentPosition());
+
+            /* Spawning Tombs if needed */
+            if (doTombsSpawn) {
+                ComposableCell cell = (ComposableCell) cells.get(deadPiece.getCurrentPosition());
+                cell.attachComponent(new Tomb());
+            }
+
             cells.get(deadPiece.getCurrentPosition()).notify(deadPiece.getCurrentPosition(), deadPiece, 
                         List.of(EatenImpl.DEAD_PIECE), pieces, cells);
         }

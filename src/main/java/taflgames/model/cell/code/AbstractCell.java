@@ -4,12 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
 import taflgames.model.cell.api.ComposableCell;
+import taflgames.model.cell.api.TimedEntity;
 import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
@@ -80,6 +82,22 @@ public abstract class AbstractCell implements Cell, ComposableCell {
         if (!this.cellComponents.isEmpty()) {
             this.cellComponents
                 .forEach(component -> component.notifyComponent(source, sender, events, pieces, cells));
+        }
+    }
+
+    /**
+     * At the end of each turn, inactive components are detached
+     * by the Board.
+     */
+    @Override
+    public void notifyCellThatTurnHasEnded() {
+        if (!this.cellComponents.isEmpty()) {
+            Set<CellComponent> inactiveComponents = this.cellComponents.stream()
+                    .filter(component -> !component.isActive())
+                    .collect(Collectors.toSet());
+            if (!inactiveComponents.isEmpty()) {
+                inactiveComponents.forEach(component -> this.detachComponent(component));
+            }
         }
     }
 

@@ -20,4 +20,6 @@ public interface Cell {
 
     public CellMemento save();
 
+    public void notifyCellThatTurnHasEnded();
+
 }

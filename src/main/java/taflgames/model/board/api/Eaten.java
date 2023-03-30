@@ -52,7 +52,9 @@ public interface Eaten {
      * @param cells the Map of Position and Cell that that associate
      * to each Position of the Board the type of Cell that is placed there.
      * @param pieces the Map that associate to each Player it's own map of Piece and Position.
+     * @param doTombsSpawn true if Tombs can spawn, false otherwise.
      */
-    void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, Map<Position, Cell> cells, Map<Player, Map<Position, Piece>> pieces );
+    void notifyAllThreatened( Map<Piece, Set<Piece>> enemiesAndAllies, Piece lastMovedPiece, Map<Position, Cell> cells, Map<Player,
+                             Map<Position, Piece>> pieces, boolean doTombsSpawn);
     
 }

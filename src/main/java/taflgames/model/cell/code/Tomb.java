@@ -123,7 +123,17 @@ public class Tomb extends AbstractCell implements CellComponent {
      */
     @Override
     public boolean isActive() {
-        return this.deadPieces.get(Player.ATTACKER).isEmpty() && this.deadPieces.get(Player.DEFENDER).isEmpty();
+        if (this.deadPieces.isEmpty()) {
+            return false;
+        }
+        /* If there's at least one of the
+         * queues that is not empty, this Tomb is still
+         * active.
+         */
+        return this.deadPieces.values().stream()
+                .filter(queue -> !queue.isEmpty())
+                .findAny()
+                .isPresent();
     }
 
     /**

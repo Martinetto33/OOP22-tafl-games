@@ -222,11 +222,15 @@ public class BoardImpl implements Board, TimedEntity{
     @Override
     public void notifyTurnHasEnded(int turn) {
         if (this.slidersEntities!= null) {
-            this.slidersEntities.forEach(e -> e.reset());
-        } 
-        if (this.slidersEntities != null) {
-            this.slidersEntities.forEach(elem -> elem.notifyTurnHasEnded(turn));
+            this.slidersEntities.forEach(e -> {
+                e.reset();
+                e.notifyTurnHasEnded(turn);
+            });
         }
+        /* The following line determines if any inactive CellComponents
+         * attached to the Cells should be removed.
+         */
+        this.cells.values().forEach(cell -> cell.notifyCellThatTurnHasEnded());
     }
 
     public Map<Position, Cell> getMapCells() {
@@ -248,7 +252,7 @@ public class BoardImpl implements Board, TimedEntity{
             List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
             if(!enemies.isEmpty()) {
                 Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
-                eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
+                eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces, this.doTombsSpawn());
             }
         }
     }
@@ -471,6 +475,15 @@ public class BoardImpl implements Board, TimedEntity{
         this.slidersEntities = bm.getInnerSlidersEntities();
         bm.getCellsMemento().forEach(c -> c.restore());
         bm.getPiecesMemento().forEach(p -> p.restore());
+    }
+
+    /* Tombs don't spawn if there are no more Queens. */
+    private boolean doTombsSpawn() {
+        return this.pieces.values().stream()
+                .flatMap(map -> map.values().stream())
+                .filter(piece -> piece.getMyType().getTypeOfPiece().equals("QUEEN"))
+                .findAny()
+                .isPresent();
     }
 
 }
