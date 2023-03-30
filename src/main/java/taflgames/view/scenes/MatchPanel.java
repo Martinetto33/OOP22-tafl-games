@@ -2,10 +2,11 @@ package taflgames.view.scenes;
 
 import java.util.Map;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import taflgames.common.code.Position;
-
+/**
+ * the panel in wich the match will take place
+ */
 public interface MatchPanel {
     /**
      * draws all the pieces that are still alive given by the MatchController

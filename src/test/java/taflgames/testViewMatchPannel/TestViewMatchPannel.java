@@ -20,7 +20,6 @@ public class TestViewMatchPannel extends JFrame{
         toDraw.createBackgroundCells();
         a.drawAllPieces(toDraw.getPiecesAlive());
         a.drawBackgroundCells(toDraw.getBackgroundCells());
-        a.removeAllIconsOnLayer(a.getMapPedine());
         this.setVisible(true);
     }
     public static void main(String[] args) throws java.io.IOException {

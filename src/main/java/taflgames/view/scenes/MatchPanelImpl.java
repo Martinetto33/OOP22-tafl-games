@@ -22,10 +22,17 @@ import taflgames.common.code.Position;
 import taflgames.view.loaderImages.LoaderImages;
 import taflgames.view.loaderImages.LoaderImagesImpl;
 
+/**
+ * implementation of MatchPanel.
+ * MAY NEED IMPROOVEMENTS.
+ */
 public class MatchPanelImpl extends JPanel implements MatchPanel{
 
     private LoaderImages loader;
-    private static final int HIGHT_OF_PC_APPLICATION_BAR = 80; 
+    /*used to make sure the entire board will be visible entirely on the screen.
+     * Without it it may be covered by the application-bar of the pc.
+     */
+    private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
     private final Map<JButton, Position> mapBottoni = new HashMap<>();
     private final Map<Position,JLabel> mapPedine = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
@@ -86,13 +93,12 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         boardBackground.setSize(new Dimension(cellsPanelsSize, cellsPanelsSize));
         boardBackground.setBackground(Color.CYAN);
         generPanel.add(boardBackground);
-
-        this.createButtonsForGrid(buttonPanel, this.mapBottoni, this.sizeOfGrid); //ok
-        this.createUnitsForGridLayerPanel(piecePanel, this.mapPedine, this.sizeOfGrid); //ok
-        this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid); //ok
-        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);//ok
+        /*initializings panels*/
+        this.createButtonsForGrid(buttonPanel, this.mapBottoni, this.sizeOfGrid);
+        this.createUnitsForGridLayerPanel(piecePanel, this.mapPedine, this.sizeOfGrid);
+        this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid);
+        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);
     }
-
     @Override
     public void drawAllPieces(Map<Position, PieceImageInfo> piecesAlive) {
         piecesAlive.forEach((a,b) -> {
@@ -100,7 +106,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             this.mapPedine.get(a).setIcon(this.mapPieceImageIcons.get(b));
         });
     }
-
     @Override
     public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
         cells.entrySet().stream()
@@ -112,10 +117,8 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
                         });
     }
-
     @Override
     public void drawBackgroundCells(Map<Position, CellImageInfo> cells) {
-
         cells.entrySet().stream()
                         .filter(elem -> elem.getValue().getName() == "CELL_BASIC"
                                             || elem.getValue().getName() == "CELL_EXIT"
@@ -125,12 +128,17 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
                         });
     }
-
     @Override
     public void removeAllIconsOnLayer(Map<Position, JLabel> mapLabel) {
         mapLabel.forEach((a,b) -> b.setIcon(null) );
     }
-    
+    /**
+     * initializes a generic squared-gridlayered JPanel that contains a series of JLabels, 
+     * which are then added to the map of JLabel.
+     * @param me JPanel
+     * @param myMapLabel map of JLabel
+     * @param mySizeGrid number of cells on the side of gridlayered JPanel
+     */
     private void createUnitsForGridLayerPanel(final JPanel me, final Map<Position,JLabel> myMapLabel, final int mySizeGrid) {
         if (me.getLayout().getClass() != new GridLayout().getClass()) {
             throw new IllegalArgumentException("i'm not a gridLayout");
@@ -151,8 +159,10 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             }
         }
     }
-
     @Override
+    /**
+     * WILL PROBABLY REMOVE
+     */
     public void movePiece(Position originalPos, Position newPosition) {
         if (!originalPos.equals(newPosition) && mapPedine.get(newPosition).getIcon() != null) {
             throw new IllegalArgumentException("CRITICAL ERROR: there's another piece in the way! problem with MODEL");
@@ -164,8 +174,16 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             mapPedine.get(newPosition).setIcon(temp);
         }
     }
-    public void createButtonsForGrid (final JPanel me, Map<JButton, Position> myMapButtons, final int mySizeGrid) {
-        
+    /**
+     * 
+     * @param me Jpannel of buttons.
+     * @param myMapButtons map of Buttons.
+     * @param mySizeGrid number of cells on the side of gridlayered JPanel.
+     */
+    private void createButtonsForGrid (final JPanel me, Map<JButton, Position> myMapButtons, final int mySizeGrid) {
+        /**
+         * TO DO: this listener must be changed after the creation of controller
+         */
         ActionListener al = new ActionListener(){
             public void actionPerformed(ActionEvent e){
         	    var button = (JButton)e.getSource();
@@ -181,11 +199,13 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                         mapPedine.get(position).setOpaque(true);
                     }
                 } catch(NullPointerException n){
-                    /*no action necessary */
+                    /*no action necessary: just catching the exception for cleaner program.*/
                 }
             }
         };
-
+        /**
+         * creating the buttons.
+         */
         for (int i=0; i < mySizeGrid; i++){
             for (int j=0; j < mySizeGrid; j++){
                 final JButton jb = new JButton();
@@ -198,25 +218,19 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             }
         }
     }
-
     public Map<JButton, Position> getMapBottoni() {
         return this.mapBottoni;
     }
-
     public Map<Position, JLabel> getMapPedine() {
         return this.mapPedine;
     }
-
     public Map<Position, JLabel> getMapSpecialCell() {
         return this.mapSpecialCell;
     }
-
     public Map<Position, JLabel> getMapBoard() {
         return this.mapBoard;
     }
-
     public int getMySize() {
         return this.mySize;
     }
-    
 }
