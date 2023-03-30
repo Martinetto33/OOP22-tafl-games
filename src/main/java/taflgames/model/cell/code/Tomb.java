@@ -125,4 +125,12 @@ public class Tomb extends AbstractCell implements CellComponent {
     public boolean isActive() {
         return this.deadPieces.get(Player.ATTACKER).isEmpty() && this.deadPieces.get(Player.DEFENDER).isEmpty();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getComponentType() {
+        return this.getType();
+    }
 }

@@ -32,4 +32,10 @@ public interface CellComponent {
      * @return true if this Component is still active and should not be detached.
      */
     boolean isActive();
+
+    /**
+     * Returns the type of this CellComponent.
+     * @return a String representing the type of this CellComponent.
+     */
+    String getComponentType();
 }
