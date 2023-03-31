@@ -13,7 +13,10 @@ import taflgames.common.Player;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
-public class LoaderImagesImpl implements LoaderImages{
+/**
+ * This class models a LoaderImages {@link taflgames.view.loaderImages.LoaderImages}
+ */
+public class LoaderImagesImpl implements LoaderImages {
 
     public static final String ARCHER_ATTACKER = "ARCHER_ATTACKER.png";
     public static final String ARCHER_DEFENDER = "ARCHER_DEFENDER.png";
@@ -35,20 +38,23 @@ public class LoaderImagesImpl implements LoaderImages{
     public static final String CELL_TOMB_DEFENDERS = "CELL_TOMB_DEFENDERS.png";
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP + "images" + SEP;
+
+    private static final int ANGLE_90 = 90;
+    private static final int ANGLE_180 = 180;
+    private static final int ANGLE_270 = 90;
     
 
     /* private int panelSize;
     private final int numberOfCells; */
     private int unitToScale;
+    private Map<CellImageInfo, ImageIcon> cellImages = new HashMap<>();
+    private Map<PieceImageInfo, ImageIcon> pieceImages = new HashMap<>();
 
     public LoaderImagesImpl(final Double panelSize, final int numberOfCells) {
         /* this.panelSize = panelSize;
         this.numberOfCells = numberOfCells; */
-        unitToScale = panelSize.intValue()/numberOfCells;
+        unitToScale = panelSize.intValue() / numberOfCells;
     }
-    
-    public Map<CellImageInfo,ImageIcon> cellImages = new HashMap<>();
-    public Map<PieceImageInfo,ImageIcon> pieceImages = new HashMap<>();
 
     /**
      * {@inheritDoc}
@@ -58,9 +64,9 @@ public class LoaderImagesImpl implements LoaderImages{
         this.cellImages.put(new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0), getImage(CELL_BASIC));
         this.cellImages.put(new CellImageInfo("CELL_EXIT", Player.DEFENDER, 0), getImage(CELL_EXIT));
         this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 0), getImage(CELL_SLIDER));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 90), rotateImage(getImage(CELL_SLIDER), 90));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 180), rotateImage(getImage(CELL_SLIDER), 180));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, 270), rotateImage(getImage(CELL_SLIDER), 270));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, ANGLE_90), rotateImage(getImage(CELL_SLIDER), ANGLE_90));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, ANGLE_180), rotateImage(getImage(CELL_SLIDER), ANGLE_180));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, ANGLE_270), rotateImage(getImage(CELL_SLIDER), ANGLE_270));
         this.cellImages.put(new CellImageInfo("CELL_THRONE", Player.DEFENDER, 0), getImage(CELL_THRONE));
         this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.ATTACKER, 0), getImage(CELL_TOMB_ATTACKERS));
         this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.DEFENDER, 0), getImage(CELL_TOMB_DEFENDERS));
@@ -100,7 +106,7 @@ public class LoaderImagesImpl implements LoaderImages{
      * {@inheritDoc}
      */
     @Override
-    public Map<CellImageInfo,ImageIcon> getCellImageMap() {
+    public Map<CellImageInfo, ImageIcon> getCellImageMap() {
         return cellImages;
     }
 
@@ -108,7 +114,7 @@ public class LoaderImagesImpl implements LoaderImages{
      * {@inheritDoc}
      */
     @Override
-    public Map<PieceImageInfo,ImageIcon> getPieceImageMap() {
+    public Map<PieceImageInfo, ImageIcon> getPieceImageMap() {
         return pieceImages;
     }
 
@@ -121,7 +127,7 @@ public class LoaderImagesImpl implements LoaderImages{
     private ImageIcon rotateImage(final ImageIcon originalImg, final int rotation) {
         BufferedImage blankCanvas = new BufferedImage(originalImg.getIconWidth(), originalImg.getIconHeight(), BufferedImage.SCALE_SMOOTH);
         Graphics2D g2 = (Graphics2D) blankCanvas.getGraphics();
-        g2.rotate(Math.toRadians(rotation), originalImg.getIconWidth()/2, originalImg.getIconHeight()/2);
+        g2.rotate(Math.toRadians(rotation), originalImg.getIconWidth() / 2, originalImg.getIconHeight() / 2);
         g2.drawImage(originalImg.getImage(), 0, 0, null);
         originalImg.setImage(blankCanvas);
         return new ImageIcon(originalImg.getImage());

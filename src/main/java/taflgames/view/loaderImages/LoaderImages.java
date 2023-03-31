@@ -7,6 +7,10 @@ import javax.swing.ImageIcon;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * This inteface allows to load the images that are used to represent 
+ * the pieces and the cells of the game.
+ */
 public interface LoaderImages {
 
     /**
@@ -27,11 +31,11 @@ public interface LoaderImages {
      * Return the map that contains the cells'images.
      * @return a Map of CellImageInfo and ImageIcon that contains the cells'images.
      */
-    Map<CellImageInfo,ImageIcon> getCellImageMap();
+    Map<CellImageInfo, ImageIcon> getCellImageMap();
 
     /**
      * Return the map that contains the pieces'images.
      * @return a Map of PieceImageInfo and ImageIcon that contains the pieces'images.
      */
-    Map<PieceImageInfo,ImageIcon> getPieceImageMap();
+    Map<PieceImageInfo, ImageIcon> getPieceImageMap();
 }
