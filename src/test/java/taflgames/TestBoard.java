@@ -14,7 +14,6 @@ import taflgames.common.code.VectorImpl;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.model.pieces.api.Piece;
-import taflgames.model.pieces.code.Archer;
 import taflgames.model.pieces.code.BasicPiece;
 import taflgames.model.pieces.code.King;
 import taflgames.model.pieces.code.Swapper;
