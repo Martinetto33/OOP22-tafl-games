@@ -150,7 +150,7 @@ public class BoardImpl implements Board, TimedEntity {
             cells.get(oldPos).setFree(true);
             cells.get(newPos).setFree(false);
             this.currentPos = newPos;
-            
+
         } else if (pieceInTurn.canSwap()) {
             pieces.get(currentPlayer).remove(oldPos);
             pieces.get(currentPlayer).put(newPos, pieceInTurn);
@@ -312,7 +312,7 @@ public class BoardImpl implements Board, TimedEntity {
                         .findAny()
                         .get();
         /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
-        
+
         if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
                 || king.getCurrentPosition().getX() == this.size - 1 || king.getCurrentPosition().getX() == this.size - 1) {
 
@@ -325,7 +325,7 @@ public class BoardImpl implements Board, TimedEntity {
                 }
         /* If there are no pieces that can move for the player in turn, it is automatically a draw. */
         }
-        if(pieces.get(playerInTurn).values().stream()
+        if (pieces.get(playerInTurn).values().stream()
             .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
                 .filter(adjPos -> cells.get(adjPos).canAccept(piece))
                 .collect(Collectors.toSet()).isEmpty())
@@ -396,7 +396,7 @@ public class BoardImpl implements Board, TimedEntity {
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
         private Set<Slider> innerSlidersEntities = null;
-        
+
         /**
          * Creates a BoardMemento from which the board will be able to restore its previous state.
          * @param piecesMemento a List of the saved states of the pieces.
@@ -508,7 +508,7 @@ public class BoardImpl implements Board, TimedEntity {
      * @param bm the BoardMemento from which to extract the information
      * required to restore the state of the board.
      */
-    private void restore(BoardMemento bm) {
+    private void restore(final BoardMemento bm) {
         this.cells = bm.getInnerCells();
         this.pieces.put(Player.ATTACKER, bm.getInnerAttackerPieces());
         this.pieces.put(Player.DEFENDER, bm.getInnerDefenderPieces());

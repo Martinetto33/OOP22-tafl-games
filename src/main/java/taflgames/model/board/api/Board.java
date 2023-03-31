@@ -12,6 +12,11 @@ import java.util.Optional;
 
 import taflgames.common.Player;
 
+/**
+ * This interface models the board of the game
+ * and has methods that allow to control the movement of a piece, 
+ * the death of one and that in general control the execution of the game.
+ */
 public interface Board {
 
     /**

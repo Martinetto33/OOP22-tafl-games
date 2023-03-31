@@ -1,13 +1,22 @@
 package taflgames.model.cell.api;
-import java.util.*;
+
+import java.util.List;
+import java.util.Map;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * This interface models the cells of the board.
+ * Allows to know if a cell is free, 
+ * if it can accept a certain type of piece and
+ * the type of the cell.
+ * Let set the status of the cell and notify it that a piece has moved.
+ */
 public interface Cell {
-    
+
     /**
      * Notifies the cell of the movement of a piece.
      * @param source the Position in which the piece moved.
@@ -18,7 +27,8 @@ public interface Cell {
      * @param cells the Map of Position and Cell that that associate
      * to each Position of the Board the type of Cell that is placed there.
      */
-    void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells);
+    void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces, 
+                    Map<Position, Cell> cells);
 
     /**
      * Verify if a Piece is allowed to move on the cell.

@@ -8,7 +8,7 @@ import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
-public class ClassicCell extends AbstractCell{
+public class ClassicCell extends AbstractCell {
 
     public ClassicCell() {
         super();
@@ -18,7 +18,7 @@ public class ClassicCell extends AbstractCell{
      * {@inheritDoc}
      */
     @Override
-    public void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
+    public void notify(final Position source, final Piece sender, final List<String> events, final Map<Player, Map<Position, Piece>> pieces,
             Map<Position, Cell> cells) {
     }
 
@@ -26,12 +26,12 @@ public class ClassicCell extends AbstractCell{
      * {@inheritDoc}
      */
     @Override
-    public boolean canAccept(Piece piece) {
-        if(super.isFree()) {
+    public boolean canAccept(final Piece piece) {
+        if (super.isFree()) {
             return true;
         } else {
             return false;
-        }   
+        } 
     }
 
     /**
@@ -41,6 +41,4 @@ public class ClassicCell extends AbstractCell{
     public String getType() {
         return "ClassicCell";
     }
-
-    
 }
