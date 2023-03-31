@@ -255,13 +255,11 @@ public class TestMemento {
         this.variantMatch.setNextActivePlayer();
 
         /* Defender's turn, going to slider.
-         * TODO: this part of the test should be updated when the
-         * status of the sliders will change dinamically through
-         * the method 'notifyTurnHasEnded'.
          * Sliders point to the right (orientation = 0,1) at the moment
-         * of their creation.
+         * of their creation. Now three turns have passed, so they
+         * should point north (-1, 0).
          */
-        final Position expectedEndPositionAfterSlider = new Position(8, 10); //TODO: change, sliders might rotate
+        final Position expectedEndPositionAfterSlider = new Position(0, 2);
         caretaker.updateHistory();
 
         final Piece defenderPiece = this.variantBoard.getMapPieces().get(Player.DEFENDER).get(defenderBasicEndPos);
@@ -278,7 +276,7 @@ public class TestMemento {
         this.variantBoard.getMapCells().get(sliderPosition).notify(sliderPosition, defenderPiece, 
         List.of(defenderPiece.sendSignalMove()), this.variantBoard.getMapPieces(), this.variantBoard.getMapCells());
 
-        assertEquals(defenderPiece.getCurrentPosition(), expectedEndPositionAfterSlider);
+        assertEquals(expectedEndPositionAfterSlider, defenderPiece.getCurrentPosition());
         assertFalse(this.variantBoard.getMapCells().get(expectedEndPositionAfterSlider).isFree());
         assertEquals("Slider", this.variantBoard.getMapCells().get(sliderPosition).getType());
         assertTrue(this.variantBoard.getMapCells().get(sliderPosition).isFree());
