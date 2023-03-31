@@ -22,7 +22,7 @@ public class SliderMediatorImpl implements SliderMediator {
 
     @Override
     public void updatePiecePos(Position startPos, Position destPos, Player currentPlayer) {
-        board.updatePiecePos(startPos, destPos, currentPlayer);
+        board.movePlaceholder(startPos, destPos, currentPlayer);
     }
     
 }

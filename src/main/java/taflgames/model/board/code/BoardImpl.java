@@ -116,8 +116,7 @@ public class BoardImpl implements Board, TimedEntity{
         return false;
     }
 
-    @Override
-    public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
+    public void movePlaceholder(final Position oldPos, final Position newPos, final Player currentPlayer) {
         final Piece pieceInTurn = getPieceAtPosition(oldPos);
         if (cells.get(newPos).isFree()) {
             pieces.get(currentPlayer).remove(oldPos);
@@ -126,7 +125,6 @@ public class BoardImpl implements Board, TimedEntity{
             cells.get(oldPos).setFree(true);
             cells.get(newPos).setFree(false);
             this.currentPos = newPos;
-            signalOnMove(newPos, pieceInTurn);
             
         } else if (pieceInTurn.canSwap()) {
             pieces.get(currentPlayer).remove(oldPos);
@@ -138,9 +136,13 @@ public class BoardImpl implements Board, TimedEntity{
             pieces.get(Player.values()[(currentPlayer.ordinal()+1) % Player.values().length]).put(oldPos, pieceToSwap);
             pieceToSwap.setCurrentPosition(oldPos);
             this.currentPos = newPos;
-            signalOnMove(newPos, pieceInTurn);
-            
         }
+    }
+
+    @Override
+    public void updatePiecePos(final Position oldPos, final Position newPos, final Player currentPlayer) {
+        movePlaceholder(oldPos, newPos, currentPlayer);
+        signalOnMove(currentPos, getPieceAtPosition(currentPos));
     }
 
     @Override
@@ -169,6 +171,9 @@ public class BoardImpl implements Board, TimedEntity{
     }
 
     private void signalOnMove(Position source, Piece movedPiece) {
+        if(cells.get(source).getType().equals("Slider")) {
+            cells.get(source).notify(source, movedPiece, List.of(movedPiece.sendSignalMove()), pieces, cells);
+        }
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
         Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
                 .collect(Collectors.toSet());
@@ -242,15 +247,14 @@ public class BoardImpl implements Board, TimedEntity{
         if(!updatedHitbox.isEmpty()) {
             List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
             if(!enemies.isEmpty()) {
-                Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece);
+                Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece, cells, size);
                 eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces);
             }
         }
     }
 
     /**
-     * This method must be called at the beginning of each turn.
-     * @param playerInTurn the player in turn.
+     * {@inheritDoc}
      */
     public boolean isDraw(final Player playerInTurn) {
         /*finding king position */
@@ -288,7 +292,6 @@ public class BoardImpl implements Board, TimedEntity{
                 .findAny().isPresent()) {
                                 return false;
             }
-            
         return true;
     }
 
@@ -296,7 +299,7 @@ public class BoardImpl implements Board, TimedEntity{
      * {@inheritDoc}
      */
     @Override
-    public Optional<Player> isOver(final Player playerInTurn) {
+    public Optional<Player> hasAPlayerWon() {
         if(pieces.get(Player.DEFENDER).entrySet().stream()
             .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
             .findAny()
@@ -327,10 +330,10 @@ public class BoardImpl implements Board, TimedEntity{
 
     private Set<Position> getAdjacentPositions(final Position currPos) {
         Set<Position> setOfPosition = new HashSet<>();
-        setOfPosition.add(new Position(currPos.getX()+1, currPos.getY()));
-        setOfPosition.add(new Position(currPos.getX()-1, currPos.getY()));
-        setOfPosition.add(new Position(currPos.getX(), currPos.getY()+1));
-        setOfPosition.add(new Position(currPos.getX(), currPos.getY()-1));
+        setOfPosition.add(new Position(currPos.getX() + 1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX() - 1, currPos.getY()));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY() + 1));
+        setOfPosition.add(new Position(currPos.getX(), currPos.getY() - 1));
         return setOfPosition.stream()
                                 .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() <this.size)
                                 .collect(Collectors.toSet());
@@ -344,9 +347,9 @@ public class BoardImpl implements Board, TimedEntity{
         private final Map<Position, Piece> innerAttackerPieces;
         private final Map<Position, Piece> innerDefenderPieces;
         private final Position innerCurrentPos;
-        private final Set<Slider> innerSlidersEntities;
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
+        private Set<Slider> innerSlidersEntities = null;
         
         /**
          * Creates a BoardMemento from which the board will be able to restore its previous state.
@@ -361,8 +364,10 @@ public class BoardImpl implements Board, TimedEntity{
             this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerCurrentPos = BoardImpl.this.currentPos;
-            this.innerSlidersEntities = BoardImpl.this.slidersEntities.stream()
-            .collect(Collectors.toSet());
+            if (BoardImpl.this.slidersEntities != null) {
+                this.innerSlidersEntities = BoardImpl.this.slidersEntities.stream()
+                    .collect(Collectors.toSet());
+            }
 
             this.piecesMemento = piecesMemento;
             this.cellsMemento = cellsMemento;
@@ -421,7 +426,7 @@ public class BoardImpl implements Board, TimedEntity{
          */
         @Override
         public Set<Slider> getInnerSlidersEntities() {
-            return this.innerSlidersEntities;
+            return this.innerSlidersEntities != null ? this.innerSlidersEntities : null;
         }
 
         /**
@@ -445,7 +450,10 @@ public class BoardImpl implements Board, TimedEntity{
             .flatMap(entry -> entry.getValue().values().stream())
             .map(piece -> (AbstractPiece) piece)
             .map(piece -> piece.save())
-            .toList(), null);
+            .toList(), 
+            this.cells.values().stream()
+            .map(cell -> cell.save())
+            .toList());
     }
 
     /**

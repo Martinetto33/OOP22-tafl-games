@@ -1,7 +1,12 @@
 package taflgames.model;
 
+import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 import taflgames.model.memento.api.MatchMemento;
+
+import java.util.Optional;
+
+import taflgames.common.code.MatchResult;
 import taflgames.common.Player;
 
 /**
@@ -49,10 +54,12 @@ public interface Match {
     void makeMove(Position start, Position destination);
 
     /**
-     * Checks if the match is over.
-     * @return true if the match is over, false otherwise
+     * Checks if the match is over; if it is, then returns the result of the match.
+     * @return if the match is over, it returns an {@link Optional} of a {@link Pair} contaning the result of the match
+     * for the attacker (first element) and the defender (second element);
+     * otherwise, an empty {@link Optional} is returned.
      */
-    boolean isOver();
+    Optional<Pair<MatchResult, MatchResult>> getMatchEndStatus();
 
     /**
      * Saves a snapshot of the current state of the match, in order to support the "undo" operation.

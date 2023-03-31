@@ -14,6 +14,7 @@ import taflgames.common.code.VectorImpl;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.model.pieces.api.Piece;
+import taflgames.model.pieces.code.Archer;
 import taflgames.model.pieces.code.BasicPiece;
 import taflgames.model.pieces.code.King;
 import taflgames.model.pieces.code.Swapper;
@@ -200,11 +201,13 @@ public class TestBoard {
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
 		board1 = new BoardImpl(pieces, cells, 5);
 
-        assertEquals(new Position(3, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(0, 1))); 
+        assertEquals(new Position(3, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(0, 1)));
         assertEquals(new Position(3, 0), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(0, -1))); 
         assertEquals(new Position(4, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(1, 0)));
-        assertEquals(new Position(0, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(-1, 0)));  
+        assertEquals(new Position(0, 3), board1.getFurthestReachablePos(new Position(3, 3), new VectorImpl(-1, 0)));
         assertEquals(new Position(2, 0), board1.getFurthestReachablePos(new Position(0, 0), new VectorImpl(1, 0)));
+        assertEquals(new Position(0, 4), board1.getFurthestReachablePos(new Position(0, 0), new VectorImpl(0, 1)));
+
 
         /*BasicPiece on a slider and a piece of the other player on the direction 
         in which we are trying to find the furthest position reacheable*/
@@ -299,6 +302,35 @@ public class TestBoard {
 
         assertFalse(board4.isDraw(p2));
         assertFalse(board4.isDraw(p1));
+
+        /*creating a new asset of the board */
+        /*moved piece, king on the boarder with 3 enemies around */
+        piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
+        piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
+        piecesPlayer1.clear();
+        piecesPlayer2.clear();
+        piecesPlayer1.put(new Position(1, 0), new BasicPiece(new Position(1, 0), p1));
+        piecesPlayer1.put(new Position(3, 0), new BasicPiece(new Position(3, 0), p1));
+        piecesPlayer1.put(new Position(2, 2), new BasicPiece(new Position(2, 2), p1));
+
+        piecesPlayer2.put(new Position(2, 0), new King(new Position(2, 0)));
+
+        pieces.clear();
+        pieces.put(p1, piecesPlayer1);
+        pieces.put(p2, piecesPlayer2);
+
+        piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+        piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
+
+        board4.updatePiecePos(new Position(2, 2), new Position(2, 1), p1);
+        assertTrue(pieces.get(p1).keySet().contains(new Position(2, 1)));
+        assertFalse(pieces.get(p1).keySet().contains(new Position(2, 2)));
+        assertTrue(cells.get(new Position(2, 2)).isFree());
+        assertFalse(cells.get(new Position(2, 1)).isFree());
+        board4.eat();
+        assertEquals(Optional.empty(), board4.hasAPlayerWon()); 
+        assertTrue(board4.isDraw(p2));
+        assertTrue(board4.isDraw(p1));
+
     }
-    
 }

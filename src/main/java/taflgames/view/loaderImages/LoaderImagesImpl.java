@@ -41,10 +41,10 @@ public class LoaderImagesImpl implements LoaderImages{
     private final int numberOfCells; */
     private int unitToScale;
 
-    public LoaderImagesImpl(final int panelSize, final int numberOfCells) {
+    public LoaderImagesImpl(final Double panelSize, final int numberOfCells) {
         /* this.panelSize = panelSize;
         this.numberOfCells = numberOfCells; */
-        unitToScale = panelSize/numberOfCells;
+        unitToScale = panelSize.intValue()/numberOfCells;
     }
     
     public Map<CellImageInfo,ImageIcon> cellImages = new HashMap<>();
