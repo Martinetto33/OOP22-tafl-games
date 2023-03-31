@@ -64,7 +64,7 @@ public class TestCellComponents {
             fail();
         }
     }
-    
+
     /**
      * Tests if the basic operations of attaching and detaching components work.
      */
@@ -237,7 +237,7 @@ public class TestCellComponents {
 
         final Position queenStartPos = new Position(6, 5);
         final Position adjacentDeathPosition = new Position(7, 5);
-        
+
         assertTrue(this.match.selectSource(queenStartPos));
         assertTrue(this.match.selectDestination(queenStartPos, adjacentDeathPosition));
         this.match.makeMove(queenStartPos, adjacentDeathPosition);

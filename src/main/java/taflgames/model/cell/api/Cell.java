@@ -57,9 +57,18 @@ public interface Cell {
      */
     boolean isFree();
 
+    /**
+     * Saves the current state of this cell.
+     * @return a {@link taflgames.model.memento.api.CellMemento}
+     * describing the saved state of this Cell.
+     */
     CellMemento save();
 
-    public void notifyCellThatTurnHasEnded();
+    /**
+     * At the end of each turn, inactive components are detached
+     * by the Board.
+     */
+    void notifyCellThatTurnHasEnded();
 
     /**
      * Attaches the given {@link taflgames.model.cell.api.CellComponent}
@@ -70,7 +79,7 @@ public interface Cell {
 
     /**
      * Searches through all the {@link taflgames.model.cell.api.CellComponent}
-     * and tries to detach the first occurrency of the Cell
+     * and tries to detach the first occurrency of the Cell.
      * @param cellComponent the component to be detached.
      */
     void detachComponent(CellComponent cellComponent);

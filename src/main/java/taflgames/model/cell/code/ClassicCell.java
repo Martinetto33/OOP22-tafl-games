@@ -10,16 +10,12 @@ import taflgames.model.pieces.api.Piece;
 
 public class ClassicCell extends AbstractCell {
 
-    public ClassicCell() {
-        super();
-    }
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void notify(final Position source, final Piece sender, final List<String> events, final Map<Player, Map<Position, Piece>> pieces,
-            Map<Position, Cell> cells) {
+            final Map<Position, Cell> cells) {
         super.updateComponents(source, sender, events, pieces, cells);
     }
 
@@ -32,7 +28,7 @@ public class ClassicCell extends AbstractCell {
             return true;
         } else {
             return false;
-        } 
+        }
     }
 
     /**

@@ -130,7 +130,7 @@ public class EatenImpl implements Eaten {
      */
     public void notifyAllThreatened(final Map<Piece, Set<Piece>> alliesMenacing, final Piece lastMovedPiece, 
                                     final Map<Position, Cell> cells, final Map<Player,
-                                    Map<Position, Piece>> pieces, boolean doTombsSpawn) {
+                                    Map<Position, Piece>> pieces, final boolean doTombsSpawn) {
         List<Piece> deadPieces = alliesMenacing.entrySet().stream()
             .filter(entry -> entry.getKey().wasKilled(entry.getValue(), lastMovedPiece.getCurrentPosition()))
             .map(entry -> entry.getKey())
@@ -146,9 +146,10 @@ public class EatenImpl implements Eaten {
      * @param cells the Map of Position and Cell that that associate
      * to each Position of the Board the type of Cell that is placed there.
      * @param pieces the Map that associate to each Player it's own Map of Piece and Position.
+     * @param doTombsSpawn true if Tombs can still spawn.
      */
     private void notifyCellsThatPiecesDied(final List<Piece> killedPieces, final Map<Position, Cell> cells, 
-                                            final Map<Player, Map<Position, Piece>> pieces, boolean doTombsSpawn) {
+                                            final Map<Player, Map<Position, Piece>> pieces, final boolean doTombsSpawn) {
         for (final Piece deadPiece : killedPieces) {
             cells.get(deadPiece.getCurrentPosition()).setFree(true);
             pieces.get(deadPiece.getPlayer()).remove(deadPiece.getCurrentPosition());

@@ -39,7 +39,7 @@ public abstract class AbstractCell implements Cell {
      * {@inheritDoc}
      */
     @Override
-    public void setFree(final boolean cellStatus) {        
+    public void setFree(final boolean cellStatus) {
         this.cellStatus = cellStatus;
     }
 
@@ -47,7 +47,7 @@ public abstract class AbstractCell implements Cell {
      * {@inheritDoc}
      */
     @Override
-    public void attachComponent(CellComponent cellComponent) {
+    public void attachComponent(final CellComponent cellComponent) {
         this.cellComponents.add(cellComponent);
     }
 
@@ -55,7 +55,7 @@ public abstract class AbstractCell implements Cell {
      * {@inheritDoc}
      */
     @Override
-    public void detachComponent(CellComponent cellComponent) {
+    public void detachComponent(final CellComponent cellComponent) {
         this.cellComponents.remove(cellComponent);
     }
 
@@ -88,8 +88,8 @@ public abstract class AbstractCell implements Cell {
      * @param cells the Map containing the {@link taflgames.model.cell.api.Cell}
      * elements.
      */
-    protected void updateComponents(Position source, Piece sender, List<String> events, Map<Player,
-                                    Map<Position, Piece>> pieces, Map<Position, Cell> cells) {
+    protected void updateComponents(final Position source, final Piece sender, final List<String> events, 
+                                    final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells) {
         if (!this.cellComponents.isEmpty()) {
             this.cellComponents
                 .forEach(component -> component.notifyComponent(source, sender, events, pieces, cells));
@@ -97,13 +97,12 @@ public abstract class AbstractCell implements Cell {
     }
 
     /**
-     * At the end of each turn, inactive components are detached
-     * by the Board.
+     * {@inheritDoc}
      */
     @Override
     public void notifyCellThatTurnHasEnded() {
         if (!this.cellComponents.isEmpty()) {
-            Set<CellComponent> inactiveComponents = this.cellComponents.stream()
+            final Set<CellComponent> inactiveComponents = this.cellComponents.stream()
                     .filter(component -> !component.isActive())
                     .collect(Collectors.toSet());
             if (!inactiveComponents.isEmpty()) {
@@ -112,27 +111,52 @@ public abstract class AbstractCell implements Cell {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public CellMemento save() {
         return this.new CellMementoImpl();
     }
 
-
-    public void restore(CellMemento cm) {
+    /**
+     * Only subclasses should be able to access this
+     * method. Restores this Cell's status to the snapshot
+     * saved in the given CellMemento parameter.
+     * @param cm the CellMemento containing the status
+     * to which this Cell will be reverted.
+     */
+    protected void restore(final CellMemento cm) {
         this.cellStatus = cm.getCellStatus();
     }
-    
+
+    /**
+     * Represents the state of this Cell at a given turn
+     * in the match.
+     */
     public class CellMementoImpl implements CellMemento {
 
         private final boolean innerCellStatus;
 
+        /**
+         * Builds a new CellMemento representing
+         * the state of this cell.
+         */
         public CellMementoImpl() {
             this.innerCellStatus = AbstractCell.this.cellStatus;
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
         public boolean getCellStatus() {
             return this.innerCellStatus;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void restore() {
             AbstractCell.this.restore(this);
@@ -140,4 +164,3 @@ public abstract class AbstractCell implements Cell {
 
     }
 }
-    
