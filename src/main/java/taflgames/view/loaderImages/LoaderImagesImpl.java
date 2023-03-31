@@ -50,6 +50,9 @@ public class LoaderImagesImpl implements LoaderImages{
     public Map<CellImageInfo,ImageIcon> cellImages = new HashMap<>();
     public Map<PieceImageInfo,ImageIcon> pieceImages = new HashMap<>();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void loadCellsImages() {
         this.cellImages.put(new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0), getImage(CELL_BASIC));
@@ -63,6 +66,9 @@ public class LoaderImagesImpl implements LoaderImages{
         this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.DEFENDER, 0), getImage(CELL_TOMB_DEFENDERS));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void loadPiecesImages() {
         this.pieceImages.put(new PieceImageInfo("ARCHER", Player.ATTACKER), getImage(ARCHER_ATTACKER));
@@ -78,24 +84,41 @@ public class LoaderImagesImpl implements LoaderImages{
         this.pieceImages.put(new PieceImageInfo("SWAPPER", Player.DEFENDER), getImage(SWAPPER_DEFENDER));
     }
 
+    /**
+     * Return the ImageIcon of the image given.
+     * Search the image in the path specified by {@link #ROOT}. 
+     * @param imageName a String representing the name of the file image.
+     * @return an ImageIcon of the given image.
+     */
     private ImageIcon getImage(final String imageName) {
         final URL imageURL = ClassLoader.getSystemResource(ROOT + imageName);
         final ImageIcon elemntToDraw = new ImageIcon(imageURL);
         return new ImageIcon(elemntToDraw.getImage().getScaledInstance(unitToScale, unitToScale, Image.SCALE_SMOOTH));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<CellImageInfo,ImageIcon> getCellImageMap() {
         return cellImages;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<PieceImageInfo,ImageIcon> getPieceImageMap() {
         return pieceImages;
     }
 
-    @Override
-    public ImageIcon rotateImage(final ImageIcon originalImg, final int rotation) {
+    /**
+     * Rotate an ImageIcon of a given angle.
+     * @param originalImg the Imageicon that should be rotated.
+     * @param rotation the angle of the rotation in degrees.
+     * @return am ImageIcon of the rotated image.
+     */
+    private ImageIcon rotateImage(final ImageIcon originalImg, final int rotation) {
         BufferedImage blankCanvas = new BufferedImage(originalImg.getIconWidth(), originalImg.getIconHeight(), BufferedImage.SCALE_SMOOTH);
         Graphics2D g2 = (Graphics2D) blankCanvas.getGraphics();
         g2.rotate(Math.toRadians(rotation), originalImg.getIconWidth()/2, originalImg.getIconHeight()/2);
