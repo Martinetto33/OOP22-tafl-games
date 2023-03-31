@@ -14,7 +14,6 @@ import taflgames.model.board.api.Board;
 import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
-import taflgames.model.cell.api.ComposableCell;
 import taflgames.model.cell.code.Tomb;
 
 /**
@@ -156,8 +155,7 @@ public class EatenImpl implements Eaten {
 
             /* Spawning Tombs if needed */
             if (doTombsSpawn) {
-                ComposableCell cell = (ComposableCell) cells.get(deadPiece.getCurrentPosition());
-                cell.attachComponent(new Tomb());
+                cells.get(deadPiece.getCurrentPosition()).attachComponent(new Tomb());
             }
 
             cells.get(deadPiece.getCurrentPosition()).notify(deadPiece.getCurrentPosition(), deadPiece, 

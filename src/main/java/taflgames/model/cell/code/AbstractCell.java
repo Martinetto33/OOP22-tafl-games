@@ -10,12 +10,11 @@ import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
-import taflgames.model.cell.api.ComposableCell;
 import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
-public abstract class AbstractCell implements Cell, ComposableCell {
+public abstract class AbstractCell implements Cell {
 
     private boolean cellStatus;
     private final Set<CellComponent> cellComponents;
