@@ -51,10 +51,7 @@ public class Tomb extends AbstractCell implements CellComponent {
             Piece pieceToResume = deadPieces.get(player).poll();	// prende la prima pedina in coda
             pieceToResume.reanimate();	// ora è viva
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
-            Map<Position, Piece> resumedPiece = new HashMap<>();
-            resumedPiece.put(pieceToResume.getCurrentPosition(), pieceToResume);
-            pieces.put(player, resumedPiece);
-            
+            pieces.get(player).put(pieceToResume.getCurrentPosition(), pieceToResume);
         }
     }
 

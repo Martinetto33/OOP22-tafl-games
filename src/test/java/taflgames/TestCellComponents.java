@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
@@ -30,6 +31,7 @@ import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
 import taflgames.model.cell.code.ClassicCell;
 import taflgames.model.cell.code.Tomb;
+import taflgames.model.pieces.api.Piece;
 
 /**
  * Tests the CellComponents, which in our case are only the Tombs.
@@ -86,8 +88,8 @@ public class TestCellComponents {
      */
     @Test
     void testTombCreationAsComponents() {
-        final Position attacker1StartingPos = new Position(3, 0);
-        final Position attacker1EndPos = new Position(3, 4);
+        final Position attacker1StartingPos = new Position(7, 0);
+        final Position attacker1EndPos = new Position(7, 4);
 
         assertTrue(this.match.selectSource(attacker1StartingPos));
         assertTrue(this.match.selectDestination(attacker1StartingPos, attacker1EndPos));
@@ -102,20 +104,43 @@ public class TestCellComponents {
         this.match.makeMove(defenderStartingPos, defenderEndPos);
         this.match.setNextActivePlayer();
 
-        final Position attacker2StartPos = new Position(3, 10);
-        final Position attacker2EndPos = new Position(3, 6);
+        final Position attacker2StartPos = new Position(7, 10);
+        final Position attacker2EndPos = new Position(7, 6);
         final Position expectedKillPosition = new Position(7, 5);
+        final Piece victim = this.board.getMapPieces().get(Player.DEFENDER).get(expectedKillPosition);
 
         assertTrue(this.match.selectSource(attacker2StartPos));
         assertTrue(this.match.selectDestination(attacker2StartPos, attacker2EndPos));
         this.match.makeMove(attacker2StartPos, attacker2EndPos);
 
-        assertTrue(this.board.getMapCells().get(expectedKillPosition).isFree());
-        assertTrue(this.board.getMapCells().get(expectedKillPosition).getComponents().size() == 1);
-        final CellComponent tomb = this.board.getMapCells().get(expectedKillPosition).getComponents().stream()
+        final Cell tombPositionCell = this.board.getMapCells().get(expectedKillPosition);
+
+        assertTrue(tombPositionCell.isFree());
+        assertTrue(tombPositionCell.getComponents().size() == 1);
+        final CellComponent tomb = tombPositionCell.getComponents().stream()
                                     .findFirst().get();
         assertTrue(tomb.isActive());
 
-        //TODO: if many pieces die on the same cell, there still should be only one Tomb component.
+        this.match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, this.match.getActivePlayer());
+        /* The defender Queen in (6, 5) will attempt to revive the dead piece in (7, 5) */
+        final Position queenStartPos = new Position(6, 5);
+
+        /* Moving the Queen to a Cell adjacent to the tomb cell. */
+        final Position queenEndPos = new Position(8, 5);
+
+        assertTrue(this.match.selectSource(queenStartPos));
+        assertTrue(this.match.selectDestination(queenStartPos, queenEndPos));
+        this.match.makeMove(queenStartPos, queenEndPos);
+
+        assertFalse(tombPositionCell.isFree());
+        assertFalse(tomb.isActive());
+        assertEquals(victim, this.board.getMapPieces().get(Player.DEFENDER).get(expectedKillPosition));
+    }
+    
+    @Test
+    void testNoMoreThanOneTombPerCell() {
+        /* TODO: If many pieces die on the same cell, there still should be only one Tomb component. */
+        this.init();
     }
 }

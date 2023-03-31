@@ -153,9 +153,15 @@ public class EatenImpl implements Eaten {
             cells.get(deadPiece.getCurrentPosition()).setFree(true);
             pieces.get(deadPiece.getPlayer()).remove(deadPiece.getCurrentPosition());
 
-            /* Spawning Tombs if needed */
+            /* Spawning Tombs if needed; no more than one Tomb for each cell. */
             if (doTombsSpawn) {
-                cells.get(deadPiece.getCurrentPosition()).attachComponent(new Tomb());
+                /* A new Tomb CellComponent is attached only if there aren't any already
+                 * attached.
+                 */
+                if (!cells.get(deadPiece.getCurrentPosition()).getComponents().stream()
+                        .anyMatch(c -> c.getComponentType().equals("Tomb"))) {
+                    cells.get(deadPiece.getCurrentPosition()).attachComponent(new Tomb());
+                }
             }
 
             cells.get(deadPiece.getCurrentPosition()).notify(deadPiece.getCurrentPosition(), deadPiece, 
