@@ -97,7 +97,7 @@ public class EatenImpl implements Eaten {
      * {@inheritDoc}
      */
     public Map<Piece, Set<Piece>> checkAllies(final List<Piece> enemiesList, final Map<Player, Map<Position, Piece>> pieces, 
-                                                final Piece lastMovedPiece) {
+                                                final Piece lastMovedPiece, final Map<Position, Cell> cells, final int size) {
         Map<Piece, Set<Piece>> mapOfEnemiesAndTheirKillers = new HashMap<>();
         /* The following map represents the allies of the piece attempting to eat the enemy
         that are on the same row and the same column as the piece */
@@ -111,7 +111,7 @@ public class EatenImpl implements Eaten {
 
         for (Piece enemy : enemiesList) {
             allies.entrySet().stream().forEach(x -> {
-                if (x.getValue().whereToHit().contains(enemy.getCurrentPosition())) {
+                if(trimHitbox(x.getValue(), pieces, cells, size).contains(enemy.getCurrentPosition())) {
                     if (!mapOfEnemiesAndTheirKillers.containsKey(enemy)) {
                         Set<Piece> alliesPositions = new HashSet<>();
                         alliesPositions.add(x.getValue());

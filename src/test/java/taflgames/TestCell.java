@@ -184,6 +184,8 @@ public class TestCell {
         cells.get(new Position(1,1)).notify(new Position(1,1), new BasicPiece(new Position(1,1), p1), null, pieces, cells);
         assertTrue(cells.get(new Position(1,1)).isFree());
         assertFalse(cells.get(new Position(1,3)).isFree());
+        assertFalse(pieces.get(p1).keySet().contains(new Position(1,1)));
+        assertTrue(pieces.get(p1).keySet().contains(new Position(1, 3)));
         SliderImpl sl = (SliderImpl) cells.get(new Position(1,1));
         sl.notifyTurnHasEnded(1);
 

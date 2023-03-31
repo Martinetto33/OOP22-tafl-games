@@ -42,7 +42,7 @@ public interface Eaten {
      * @param lastMovedPiece the last moved Piece, that is the one trying to eat 
      * @return a Map that associates each menaced enemy to all the allies that are threatening it 
      */
-    Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Piece lastMovedPiece);
+    Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Piece lastMovedPiece, final Map<Position, Cell> cells, final int size);
 
     /**
      * Get all the enemies that have two or more pieces threatening them, then
