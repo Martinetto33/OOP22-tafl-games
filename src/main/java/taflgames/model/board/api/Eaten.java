@@ -9,6 +9,13 @@ import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * This interface handles the eating of pieces during the game.
+ * The methods of this inteface allows to determine the hitbox of a piece,
+ * the enemy or enemies that a given piece threat, 
+ * the allies that threaten those same enemies
+ * and then verify if the enemies were eaten and notify them of their death.
+ */
 public interface Eaten {
     /**
      * Delete from the Set of Position that represent the hitbox of the given pice 
@@ -22,7 +29,8 @@ public interface Eaten {
      * @param size the size of the board.
      * @return the modified hitbox.
      */
-    Set<Position> trimHitbox(Piece currentPiece,Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells, final int size);
+    Set<Position> trimHitbox(Piece currentPiece, Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells, 
+                                int size);
 
     /**
      * Finds the enemies that are in the hitbox of the piece that wants to eat.
@@ -39,10 +47,13 @@ public interface Eaten {
      * of them.
      * @param enemies the pieces that represent the enemies that are in the hitbox of the piece that wants to eat
      * @param pieces the Map that associate to each Player it's own map of Piece and Position.
-     * @param lastMovedPiece the last moved Piece, that is the one trying to eat 
-     * @return a Map that associates each menaced enemy to all the allies that are threatening it 
+     * @param lastMovedPiece the last moved Piece, that is the one trying to eat.
+     * @param cells
+     * @param size
+     * @return a Map that associates each menaced enemy to all the allies that are threatening it.
      */
-    Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Piece lastMovedPiece, final Map<Position, Cell> cells, final int size);
+    Map<Piece, Set<Piece>> checkAllies(List<Piece> enemies, Map<Player, Map<Position, Piece>> pieces, Piece lastMovedPiece, 
+                                        Map<Position, Cell> cells, int size);
 
     /**
      * Get all the enemies that have two or more pieces threatening them, then

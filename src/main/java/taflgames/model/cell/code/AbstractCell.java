@@ -27,12 +27,16 @@ public abstract class AbstractCell implements Cell {
         this.cellComponents = new HashSet<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isFree() {
         return cellStatus;
     }
+
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void setFree(final boolean cellStatus) {        

@@ -111,7 +111,7 @@ public class EatenImpl implements Eaten {
 
         for (Piece enemy : enemiesList) {
             allies.entrySet().stream().forEach(x -> {
-                if(trimHitbox(x.getValue(), pieces, cells, size).contains(enemy.getCurrentPosition())) {
+                if (trimHitbox(x.getValue(), pieces, cells, size).contains(enemy.getCurrentPosition())) {
                     if (!mapOfEnemiesAndTheirKillers.containsKey(enemy)) {
                         Set<Piece> alliesPositions = new HashSet<>();
                         alliesPositions.add(x.getValue());

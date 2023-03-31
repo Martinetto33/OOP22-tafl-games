@@ -13,26 +13,32 @@ public class Throne extends AbstractCell{
     public Throne() {
         super();
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
-            Map<Position, Cell> cells) {
+    public void notify(final Position source, final Piece sender, final List<String> events, 
+                        final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells) {
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean canAccept(Piece piece) {
-        if(piece.getMyType().getTypeOfPiece().equals("KING") && super.isFree()) {
+    public boolean canAccept(final Piece piece) {
+        if (piece.getMyType().getTypeOfPiece().equals("KING") && super.isFree()) {
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getType() {
         return "Throne";
     }
-
-
-
 }

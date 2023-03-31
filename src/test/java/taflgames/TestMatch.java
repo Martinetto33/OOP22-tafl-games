@@ -175,7 +175,7 @@ class TestMatch {
      * Test the movement of a piece on the board.
      */
     @Test
-    void testMove() {
+    void testClassicMove() {
         /*
          * Case: move of a piece which is not a swapper.
          */
@@ -186,23 +186,6 @@ class TestMatch {
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         // Now the position (row=3, col=4) should be a valid source
-        assertTrue(match.selectSource(dest));
-        /*
-         * Case: move of a swapper.
-         */
-        // Move piece at (9, 5) to be able to move the swapper at (10, 5)
-        source = new Position(9, 5);
-        dest = new Position(9, 4);
-        assertTrue(match.selectSource(source));
-        assertTrue(match.selectDestination(source, dest));
-        match.makeMove(source, dest);
-        // Now the swapper should be allowed to move to (7,5), even if a defender's piece is present.
-        source = new Position(10, 5);
-        dest = new Position(7, 5);
-        assertTrue(match.selectSource(source));
-        assertTrue(match.selectDestination(source, dest));
-        match.makeMove(source, dest);
-        // Now the attacker should be able to select the swapper at (7, 5)
         assertTrue(match.selectSource(dest));
     }
 
@@ -404,6 +387,151 @@ class TestMatch {
         assertEquals(Player.DEFENDER, match.getActivePlayer());
         source = new Position(9, 4);
         assertTrue(match.selectSource(source));
+    }
+
+    /**
+     * Test the effect of the shield.
+     * The shield can survive to a killing once.
+     */
+    @Test
+    void testShieldEffect() {
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move defender's shield from (5, 3) to (5, 2)
+        Position source = new Position(5, 3);
+        Position dest = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece from (0, 3) to (5, 3)
+        source = new Position(0, 3);
+        dest = new Position(5, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the shield at (5, 2) is between two attacker's pieces at (5, 1) and (5, 3)
+        // but it shouldn't have been killed since it survives to the first killing attempt.
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+
+        // Move attacker's piece from (5, 3) to (4, 3)
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+        source = new Position(5, 3);
+        dest = new Position(4, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's piece from (4, 3) back to (5, 3)
+        source = new Position(4, 3);
+        dest = new Position(5, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the shield should have been killed, since it survives to a killing only once
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(5, 2);
+        assertFalse(match.selectSource(source));
+    }
+
+    /**
+     * Test the effect of the swapper.
+     * The swapper can not only move horizontally and vertically like all the other pieces;
+     * it can also swap with an opponent's piece (apart from the king).
+     */
+    @Test
+    void testSwapperEffect() {
+
+        /*
+         * Case: legal move of the swapper.
+         */
+
+        // Move piece at (9, 5) to be able to move the swapper at (10, 5)
+        Position source = new Position(9, 5);
+        Position dest = new Position(9, 4);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+
+        // Now the swapper should be allowed to move to (7,5), even if a defender's piece is present.
+        source = new Position(10, 5);
+        dest = new Position(7, 5);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+
+        // Now the attacker should be able to select the swapper at (7, 5)
+        assertTrue(match.selectSource(dest));
+
+        // Now the defender should be able to select the swapped piece at (10, 5)
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(10, 5);
+        assertTrue(match.selectSource(source));
+
+        /*
+         * Case: the swapper cannot swap position with the king.
+         */
+
+        // Move defender's piece from (6, 6) to (6, 7)
+        source = new Position(6, 6);
+        dest = new Position(6, 7);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // The piece at (6, 5) has been killed because it is between an attacker's piece
+        // and the throne (which acts like a sort of wall).
+        source = new Position(6, 5);
+        assertFalse(match.selectSource(source));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // The swapper at (7, 5) must not allowed to move to the king in (5, 5)
+        // also because the cell at (5, 5) is the throne, which can be accessed only by the king.
+        source = new Position(7, 5);
+        dest = new Position(5, 5);
+        assertTrue(match.selectSource(source));
+        assertFalse(match.selectDestination(source, dest));
+
+        // The swapper must not be able to swap with the king even if the king moves out of the throne
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move king from (5, 5) to (6, 5)
+        source = new Position(5, 5);
+        dest = new Position(6, 5);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // The swapper cannot swap with the king even if the king is at (6, 5)
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+        source = new Position(7, 5);
+        dest = new Position(6, 5);
+        assertTrue(match.selectSource(source));
+        assertFalse(match.selectDestination(source, dest));
     }
 
     /**
