@@ -38,6 +38,12 @@ public interface Cell {
     void detachComponent(CellComponent cellComponent);
 
     /**
+     * Returns the Set of CellComponents attached to this Cell.
+     * @return the Set of CellComponents.
+     */
+    Set<CellComponent> getComponents();
+
+    /**
      * Saves the state of the CellComponent.
      * @return the {@link taflgames.model.memento.api.CellComponentMemento}
      * representing the saved state of this component.

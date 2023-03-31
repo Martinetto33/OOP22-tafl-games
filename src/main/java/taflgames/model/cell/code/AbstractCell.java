@@ -1,5 +1,6 @@
 package taflgames.model.cell.code;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,14 @@ public abstract class AbstractCell implements Cell {
     @Override
     public void detachComponent(CellComponent cellComponent) {
         this.cellComponents.remove(cellComponent);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<CellComponent> getComponents() {
+        return Collections.unmodifiableSet(this.cellComponents);
     }
 
     /**
