@@ -25,8 +25,6 @@ public final class ViewImpl implements View {
     private static final double MIN_FRAME_WIDTH_PROP = 0.60;
     private static final double MIN_FRAME_HEIGHT_PROP = 0.60;
 
-    private final Controller controller;
-
     private final JFrame frame;
     private final CardLayout frameLayout;
     private final Set<String> addedScenes;
@@ -36,8 +34,6 @@ public final class ViewImpl implements View {
      * Sets up the view.
      */
     public ViewImpl() {
-
-        this.controller = new ControllerImpl(this);
 
         frame = new JFrame(FRAME_TITLE);
 
@@ -60,7 +56,9 @@ public final class ViewImpl implements View {
         frame.setLayout(frameLayout);
 
         addedScenes = new HashSet<>();
-        setScene(new HomeScene(new HomeControllerImpl(this, this.controller)));
+
+        final Controller controller = new ControllerImpl(this);
+        setScene(new HomeScene(new HomeControllerImpl(this, controller)));
 
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
