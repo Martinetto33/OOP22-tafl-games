@@ -390,6 +390,67 @@ class TestMatch {
     }
 
     /**
+     * Test the effect of the shield.
+     * The shield can survive to a killing once.
+     */
+    @Test
+    void testShieldEffect() {
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move defender's shield from (5, 3) to (5, 2)
+        Position source = new Position(5, 3);
+        Position dest = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece from (0, 3) to (5, 3)
+        source = new Position(0, 3);
+        dest = new Position(5, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the shield at (5, 2) is between two attacker's pieces at (5, 1) and (5, 3)
+        // but it shouldn't have been killed since it survives to the first killing attempt.
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+
+        // Move attacker's piece from (5, 3) to (4, 3)
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+        source = new Position(5, 3);
+        dest = new Position(4, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's piece from (4, 3) back to (5, 3)
+        source = new Position(4, 3);
+        dest = new Position(5, 3);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the shield should have been killed, since it survives to a killing only once
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(5, 2);
+        assertFalse(match.selectSource(source));
+    }
+
+    /**
      * Test the effect of the swapper.
      * The swapper can not only move horizontally and vertically like all the other pieces;
      * it can also swap with an opponent's piece (apart from the king).
