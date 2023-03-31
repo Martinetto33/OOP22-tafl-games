@@ -136,7 +136,10 @@ public class TestCellComponents {
         assertFalse(tomb.isActive());
         assertEquals(victim, this.board.getMapPieces().get(Player.DEFENDER).get(expectedKillPosition));
     }
-    
+
+    /**
+     * Ensures that no more than one Tomb per Cell is spawned.
+     */
     @Test
     void testNoMoreThanOneTombPerCell() {
         this.init();
@@ -183,5 +186,67 @@ public class TestCellComponents {
 
         final Cell deathCell = this.board.getMapCells().get(deathPosition);
         assertTrue(deathCell.getComponents().size() == 1); //No more than one Tomb!
+    }
+
+    /**
+     * Ensures that only Queens of the same team of the dead piece can reanimate
+     * said dead piece from the Tomb.
+     */
+    @Test
+    void testResurrectionConsistency() {
+        this.init();
+        final Position attacker1StartPos = new Position(10, 4);
+        final Position deathPosition = new Position(7, 4);
+
+        assertTrue(this.match.selectSource(attacker1StartPos));
+        assertTrue(this.match.selectDestination(attacker1StartPos, deathPosition));
+        this.match.makeMove(attacker1StartPos, deathPosition);
+        this.match.setNextActivePlayer();
+
+        final Position defender1StartPos = new Position(5, 3);
+        final Position defender1EndPos = new Position(7, 3);
+
+        assertTrue(this.match.selectSource(defender1StartPos));
+        assertTrue(this.match.selectDestination(defender1StartPos, defender1EndPos));
+        this.match.makeMove(defender1StartPos, defender1EndPos);
+        this.match.setNextActivePlayer();
+
+        final Position randomAttackerStartPos = new Position(10, 7);
+        final Position randomAttackerEndPos = new Position(10, 8);
+
+        assertTrue(this.match.selectSource(randomAttackerStartPos));
+        assertTrue(this.match.selectDestination(randomAttackerStartPos, randomAttackerEndPos));
+        this.match.makeMove(randomAttackerStartPos, randomAttackerEndPos);
+        this.match.setNextActivePlayer();
+
+        /* Moving defender in (7, 5) out of the way of the defender Queen. */
+
+        final Position blockingAttackerStartPos = new Position(7, 5);
+        final Position blockingAttackerEndPos = new Position(7, 9);
+
+        assertTrue(this.match.selectSource(blockingAttackerStartPos));
+        assertTrue(this.match.selectDestination(blockingAttackerStartPos, blockingAttackerEndPos));
+        this.match.makeMove(blockingAttackerStartPos, blockingAttackerEndPos);
+        this.match.setNextActivePlayer();
+
+        /* Random attacker move again */
+        assertTrue(this.match.selectSource(randomAttackerEndPos));
+        assertTrue(this.match.selectDestination(randomAttackerEndPos, randomAttackerStartPos));
+        this.match.makeMove(randomAttackerEndPos, randomAttackerStartPos);
+        this.match.setNextActivePlayer();
+
+        final Position queenStartPos = new Position(6, 5);
+        final Position adjacentDeathPosition = new Position(7, 5);
+        
+        assertTrue(this.match.selectSource(queenStartPos));
+        assertTrue(this.match.selectDestination(queenStartPos, adjacentDeathPosition));
+        this.match.makeMove(queenStartPos, adjacentDeathPosition);
+        this.match.setNextActivePlayer();
+
+        final Cell deathCell = this.board.getMapCells().get(deathPosition);
+        assertTrue(deathCell.isFree()); //the piece was not resurrected
+        final CellComponent tomb = deathCell.getComponents().stream().findFirst().get();
+        /* Since there was no resurrection, the tomb component should still be active. */
+        assertTrue(tomb.isActive());
     }
 }

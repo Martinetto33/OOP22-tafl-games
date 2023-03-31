@@ -47,7 +47,7 @@ public class Tomb extends AbstractCell implements CellComponent {
     private void resumePiece(final Player player, Map<Player, Map<Position, Piece>> pieces,
                                 Map<Position, Cell> cells) {
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
-        if (!deadPieces.get(player).isEmpty()) {
+        if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
             Piece pieceToResume = deadPieces.get(player).poll();	// prende la prima pedina in coda
             pieceToResume.reanimate();	// ora è viva
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
@@ -86,7 +86,16 @@ public class Tomb extends AbstractCell implements CellComponent {
         public TombMementoImpl() {
             /* This way of copying maps should create a deep copy. */
             this.innerDeadPieces = Tomb.this.deadPieces.entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .map(entry -> {
+                    /* This longer lambda creates a deep copy of the Queues, to
+                     * ensure that modifications of the state of the match do not
+                     * affect this snapshot of the queued dead pieces.
+                     */
+                    final Queue<Piece> queue = new LinkedList<>();
+                    entry.getValue().stream().forEachOrdered(piece -> queue.add(piece));
+                    return Map.entry(entry.getKey(), queue);
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.isFree = Tomb.this.isFree();
         }
 
