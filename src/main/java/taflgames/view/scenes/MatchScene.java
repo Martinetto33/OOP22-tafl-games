@@ -13,7 +13,8 @@ public class MatchScene extends AbstractScene {
     private static final int NUMB_CELLS_SIDE = 11;
     //private MatchController = new ImplMatchController();
     //TO DO: MODIFY BASICSCENECONTROLLER AS ABOVE
-    private MatchSceneController controller;
+    private final MatchSceneController controller;
+    
     public MatchScene(final MatchSceneController controller) {
         super(MatchScene.MATCH, Optional.of("home-background.jpeg"));
         this.controller = controller;
