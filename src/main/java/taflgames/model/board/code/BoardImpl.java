@@ -75,9 +75,10 @@ public class BoardImpl implements Board, TimedEntity {
     @Override
     public boolean isDestinationValid(final Position start, final Position dest, final Player player) {
         Piece piece = pieces.get(player).get(start);
-
-        //Per le pedine che non sono uno swapper si controlla che la posizione di destinazione non sia già occupata e che possa accogliere quel determinato piece
-        //Mentre se la pedina è uno swapper controllo che la cella di destinazione non sia un trono o un uscita poichè non può andarci
+        /*
+         * For the pieces that aren't a Swapper it's controlled that the Position of destination is free and can accept them.
+         * Otherwise if the Piece is a Swapper it's controlled that the destination cell can accept it.
+         */
         if (!piece.canSwap()) {
             if (!cells.get(dest).canAccept(piece)) {
                 return false;
@@ -89,7 +90,7 @@ public class BoardImpl implements Board, TimedEntity {
                 return false;
         }
 
-        // Si ottengono i vettori che rappresentano i possibili spostamenti della pedina
+        /*This set represent the possible movements of a piece expressed by Vector*/
         Set<Vector> vectors = piece.whereToMove();
         /* Nel caso delle pedine normali, i vettori restituiti saranno (-1,0), (0,1), (1,0), (0,-1).
         *
