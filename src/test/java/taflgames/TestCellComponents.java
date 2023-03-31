@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.IOException;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -140,7 +139,49 @@ public class TestCellComponents {
     
     @Test
     void testNoMoreThanOneTombPerCell() {
-        /* TODO: If many pieces die on the same cell, there still should be only one Tomb component. */
         this.init();
+        final Position attacker1StartPos = new Position(3, 10);
+        final Position deathPosition = new Position(3, 6);
+
+        assertTrue(this.match.selectSource(attacker1StartPos));
+        assertTrue(this.match.selectDestination(attacker1StartPos, deathPosition));
+        this.match.makeMove(attacker1StartPos, deathPosition);
+        this.match.setNextActivePlayer();
+
+        final Position defender1StartPos = new Position(5, 7);
+        final Position defender1EndPos = new Position(3, 7);
+
+        assertTrue(this.match.selectSource(defender1StartPos));
+        assertTrue(this.match.selectDestination(defender1StartPos, defender1EndPos));
+        this.match.makeMove(defender1StartPos, defender1EndPos);
+        this.match.setNextActivePlayer();
+
+        final Position attacker2StartPos = new Position(0, 6);
+
+        assertTrue(this.match.selectSource(attacker2StartPos));
+        assertTrue(this.match.selectDestination(attacker2StartPos, deathPosition));
+        this.match.makeMove(attacker2StartPos, deathPosition);
+        this.match.setNextActivePlayer();
+
+        /* Going back to start pos with the defender */
+        assertTrue(this.match.selectSource(defender1EndPos));
+        assertTrue(this.match.selectDestination(defender1EndPos, defender1StartPos));
+        this.match.makeMove(defender1EndPos, defender1StartPos);
+        this.match.setNextActivePlayer();
+
+        final Position randomAttackerStartPos = new Position(10, 3);
+        final Position randomAttackerEndPos = new Position(10, 2);
+
+        assertTrue(this.match.selectSource(randomAttackerStartPos));
+        assertTrue(this.match.selectDestination(randomAttackerStartPos, randomAttackerEndPos));
+        this.match.makeMove(randomAttackerStartPos, randomAttackerEndPos);
+        this.match.setNextActivePlayer();
+
+        assertTrue(this.match.selectSource(defender1StartPos));
+        assertTrue(this.match.selectDestination(defender1StartPos, defender1EndPos));
+        this.match.makeMove(defender1StartPos, defender1EndPos);
+
+        final Cell deathCell = this.board.getMapCells().get(deathPosition);
+        assertTrue(deathCell.getComponents().size() == 1); //No more than one Tomb!
     }
 }
