@@ -52,7 +52,7 @@ public class Tomb extends AbstractCell{
     private void resumePiece(final Player player, Map<Player, Map<Position, Piece>> pieces,
                                 Map<Position, Cell> cells) {
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
-        if (!deadPieces.get(player).isEmpty()) {
+        if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
             Piece pieceToResume = deadPieces.get(player).poll();// prende la prima pedina in coda
             pieceToResume.reanimate();	// ora è viva
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
