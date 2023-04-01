@@ -332,7 +332,7 @@ public class TestBoard {
         assertTrue(cells.get(new Position(2, 2)).isFree());
         assertFalse(cells.get(new Position(2, 1)).isFree());
         board4.eat();
-        assertEquals(Optional.empty(), board4.hasAPlayerWon()); 
+        assertEquals(Optional.empty(), board4.checkForWinningPlayer()); 
         assertTrue(board4.isDraw(p2));
         assertTrue(board4.isDraw(p1));
 

@@ -80,7 +80,7 @@ public interface Board {
      * @return an Optional of the Player winning or an empty Optional 
      * if the game is still on and none of the Player has won yet.
      */
-    Optional<Player> hasAPlayerWon();
+    Optional<Player> checkForWinningPlayer();
 
     /**
      * This method must be called by Match after method {@link #updatePiecePos}.

@@ -345,7 +345,7 @@ public final class BoardImpl implements Board, TimedEntity {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Player> hasAPlayerWon() {
+    public Optional<Player> checkForWinningPlayer() {
         if (pieces.get(Player.DEFENDER).entrySet().stream()
             .filter(elem -> elem.getValue().getMyType().getTypeOfPiece().equals("KING"))
             .findAny()
