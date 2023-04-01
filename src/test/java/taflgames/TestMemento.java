@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -349,7 +348,7 @@ public class TestMemento {
 
         /* If the piece dies, the board removes it from the map of pieces. */
         assertFalse(this.variantBoard.getMapPieces().get(Player.DEFENDER).containsKey(expectedKillPosition));
-        
+
         /* This is a 'paradox' caused by the fact that the order of restore calls is:
          * match → board → cells + pieces; so if the board restores its previous
          * state before the victim, its pieces map does not contain the victim (since dead pieces

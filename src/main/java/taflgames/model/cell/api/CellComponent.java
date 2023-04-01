@@ -39,7 +39,7 @@ public interface CellComponent {
      * @return a String representing the type of this CellComponent.
      */
     String getComponentType();
-    
+
     /**
      * Saves the state of this CellComponent.
      * @return a {@link taflgames.model.memento.api.CellComponentMemento}

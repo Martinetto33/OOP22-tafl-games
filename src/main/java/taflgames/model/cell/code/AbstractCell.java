@@ -120,7 +120,7 @@ public abstract class AbstractCell implements Cell {
             return this.new CellMementoImpl(this.cellComponents.stream()
                     .map(component -> component.saveComponentState())
                     .toList());
-            
+
         }
         return this.new CellMementoImpl(Collections.emptyList());
     }
@@ -149,6 +149,8 @@ public abstract class AbstractCell implements Cell {
         /**
          * Builds a new CellMemento representing
          * the state of this cell.
+         * @param componentMementos the list of the mementos
+         * of the components of this cell.
          */
         public CellMementoImpl(final List<CellComponentMemento> componentMementos) {
             this.innerCellStatus = AbstractCell.this.cellStatus;

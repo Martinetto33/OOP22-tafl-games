@@ -27,6 +27,11 @@ public interface CellMemento {
      * because 'isCellStatus' makes no sense.
      */
 
+    /**
+     * Returns a collection of all the saved status of the
+     * components of this cell.
+     * @return a List of {@link taflgames.model.memento.api.CellComponentMemento}.
+     */
     List<CellComponentMemento> getComponentMementos();
 
 }

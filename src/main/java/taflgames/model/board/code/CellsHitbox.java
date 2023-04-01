@@ -29,7 +29,7 @@ public class CellsHitbox {
      * to take the positions of special cells.
      */
     public CellsHitbox(final Board inputBoard) {
-        Set<Position> relevantPositions = new HashSet<>();
+        final Set<Position> relevantPositions = new HashSet<>();
         inputBoard.getMapCells().entrySet().stream()
             .filter(entry -> entry.getValue().getType().equals("Throne")
                     || entry.getValue().getType().equals("Exit"))
