@@ -6,7 +6,7 @@ import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 import taflgames.controller.gameloop.api.GameLoop;
-import taflgames.model.Match;
+import taflgames.model.Model;
 import taflgames.model.memento.api.Caretaker;
 import taflgames.model.memento.code.CaretakerImpl;
 
@@ -15,14 +15,14 @@ import taflgames.model.memento.code.CaretakerImpl;
  * class.
  */
 public class GameLoopImpl implements GameLoop {
-    private final Match match;
+    private final Model match;
     private final Caretaker caretaker;
 
     /**
      * Builds a new GameLoop.
      * @param match the match that this GameLoop will run.
      */
-    public GameLoopImpl(final Match match) {
+    public GameLoopImpl(final Model match) {
         this.match = match;
         this.caretaker = new CaretakerImpl(match);
         this.caretaker.updateHistory(); //register the beginning state of the Match.

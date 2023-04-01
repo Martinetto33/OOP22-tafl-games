@@ -18,8 +18,8 @@ import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
+import taflgames.model.Model;
 import taflgames.model.Match;
-import taflgames.model.MatchImpl;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -43,7 +43,7 @@ class TestCellComponents {
 
     private static final String TOMB = "Tomb";
 
-    private Match match;
+    private Model match;
     private Board board;
 
     /**
@@ -61,7 +61,7 @@ class TestCellComponents {
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
             this.board = new BoardImpl(pieces, cells, size);
-            this.match = new MatchImpl(this.board);
+            this.match = new Match(this.board);
         } catch (final IOException ex) {
             LOGGER.error("Cannot read configuration file. {}", ex.getMessage());
             fail();

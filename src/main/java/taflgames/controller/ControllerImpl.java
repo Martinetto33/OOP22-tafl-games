@@ -19,8 +19,8 @@ import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 import taflgames.controller.gameloop.api.GameLoop;
 import taflgames.controller.gameloop.code.GameLoopImpl;
+import taflgames.model.Model;
 import taflgames.model.Match;
-import taflgames.model.MatchImpl;
 import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.CellsCollectionBuilderImpl;
 import taflgames.model.builders.PiecesCollectionBuilder;
@@ -35,7 +35,7 @@ public final class ControllerImpl implements Controller {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerImpl.class);
 
     private final View view;
-    private Match match;  // the model
+    private Model match;
     private Board board;
     private GameLoop gameLoop;
 
@@ -58,7 +58,7 @@ public final class ControllerImpl implements Controller {
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
             this.board = new BoardImpl(pieces, cells, size);
-            this.match = new MatchImpl(this.board);
+            this.match = new Match(this.board);
             LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
@@ -84,7 +84,7 @@ public final class ControllerImpl implements Controller {
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
             this.board = new BoardImpl(pieces, cells, size);
-            this.match = new MatchImpl(this.board);
+            this.match = new Match(this.board);
             LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*

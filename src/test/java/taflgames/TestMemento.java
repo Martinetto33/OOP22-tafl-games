@@ -8,8 +8,8 @@ import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
+import taflgames.model.Model;
 import taflgames.model.Match;
-import taflgames.model.MatchImpl;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -43,9 +43,9 @@ class TestMemento {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
-    private Match classicMatch;
+    private Model classicMatch;
     private Board classicBoard;
-    private Match variantMatch;
+    private Model variantMatch;
     private Board variantBoard;
 
     /**
@@ -63,7 +63,7 @@ class TestMemento {
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
             this.classicBoard = new BoardImpl(pieces, cells, size);
-            this.classicMatch = new MatchImpl(this.classicBoard);
+            this.classicMatch = new Match(this.classicBoard);
         } catch (final IOException ex) {
             LOGGER.error("Cannot read configuration file. {}", ex.getMessage());
             fail();
@@ -77,7 +77,7 @@ class TestMemento {
             final var cells = cellsCollBuilder2.build();
             final int size = (int) Math.sqrt(cells.size());
             this.variantBoard = new BoardImpl(pieces, cells, size);
-            this.variantMatch = new MatchImpl(this.variantBoard);
+            this.variantMatch = new Match(this.variantBoard);
         } catch (final IOException ex) {
             LOGGER.error("Cannot read configuration file. {}", ex.getMessage());
             fail();

@@ -8,7 +8,7 @@ import taflgames.common.code.Position;
 
 /**
  * An interface modelling a GameLoop, responsible for the direct communication
- * with a {@link taflgames.model.Match}.
+ * with a {@link taflgames.model.Model}.
  */
 public interface GameLoop {
 

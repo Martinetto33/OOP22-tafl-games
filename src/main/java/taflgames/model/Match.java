@@ -1,76 +1,141 @@
 package taflgames.model;
 
-import taflgames.common.code.Pair;
-import taflgames.common.code.Position;
-import taflgames.model.memento.api.MatchMemento;
-
+import java.util.List;
 import java.util.Optional;
 
-import taflgames.common.code.MatchResult;
+import org.apache.commons.collections4.iterators.LoopingIterator;
+
 import taflgames.common.Player;
+import taflgames.common.code.MatchResult;
+import taflgames.common.code.Pair;
+import taflgames.common.code.Position;
+import taflgames.model.board.api.Board;
+import taflgames.model.memento.api.BoardMemento;
+// import taflgames.model.memento.api.Caretaker;
+import taflgames.model.memento.api.MatchMemento;
+// import taflgames.model.memento.code.CaretakerImpl;
 
 /**
- * Interface to interact with the game logic.
+ * This class implements a match.
  */
-public interface Match {
+public final class Match implements Model {
+
+    private final Board board;
+    private final LoopingIterator<Player> turnQueue;
+    private Player activePlayer;
+    private int turnNumber;
+
+    // A reference to the Caretaker class, that handles the "undo" operation
+    // private final Caretaker caretaker;
 
     /**
-     * @return the active player
+     * Creates a new match.
+     * @param board the board used for the match
      */
-    Player getActivePlayer();
+    public Match(final Board board) {
+        this.board = board;
+        this.turnQueue = new LoopingIterator<>(
+            List.of(Player.ATTACKER, Player.DEFENDER)
+        );
+        this.activePlayer = this.turnQueue.next();
+        this.turnNumber = 0;
+        // this.caretaker = new CaretakerImpl(this);
+    }
+
+    @Override
+    public Player getActivePlayer() {
+        return this.activePlayer;
+    }
+
+    @Override
+    public int getTurnNumber() {
+        return this.turnNumber;
+    }
+
+    @Override
+    public void setNextActivePlayer() {
+        this.activePlayer = this.turnQueue.next();
+        this.board.notifyTurnHasEnded(turnNumber);
+        this.turnNumber++;
+    }
+
+    @Override
+    public boolean selectSource(final Position start) {
+        return this.board.isStartingPointValid(start, activePlayer);
+    }
+
+    @Override
+    public boolean selectDestination(final Position start, final Position destination) {
+        return this.board.isDestinationValid(start, destination, activePlayer);
+    }
+
+    @Override
+    public void makeMove(final Position start, final Position destination) {
+        this.board.updatePiecePos(start, destination, activePlayer);
+        this.board.eat();   // Performs the eatings caused by the move just made.
+    }
+
+    @Override
+    public Optional<Pair<MatchResult, MatchResult>> getMatchEndStatus() {
+        if (this.board.checkForWinningPlayer().isPresent()) {
+            final Player winner = this.board.checkForWinningPlayer().get();
+            return winner.equals(Player.ATTACKER)
+                    ? Optional.of(new Pair<>(MatchResult.VICTORY, MatchResult.DEFEAT))
+                    : Optional.of(new Pair<>(MatchResult.DEFEAT, MatchResult.VICTORY));
+        } else if (this.board.isDraw(activePlayer)) {
+            return Optional.of(new Pair<>(MatchResult.DRAW, MatchResult.DRAW));
+        } else {
+            return Optional.empty();
+        }
+    }
 
     /**
-     * @return the number of the current turn
+     * This inner class implements a {@link MatchMemento}, which is responsible
+     * for saving the current state of the match and provide it on request.
      */
-    int getTurnNumber();
+    public final class MatchMementoImpl implements MatchMemento {
 
-    /**
-     * Updates the active player.
-     */
-    void setNextActivePlayer();
+        private final int turnNumber;
+        private final Player activePlayer;
+        private final BoardMemento boardMemento;
 
-    /**
-     * Checks if the selected starting position is valid.
-     * @param start the selected starting position
-     * @return true if the position is valid, false otherwise
-     */
-    boolean selectSource(Position start);
+        /**
+         * Creates a new snapshot of the current state of the match.
+         * @param boardMemento the snapshot of the current state of the {@link Board}
+         */
+        public MatchMementoImpl(final BoardMemento boardMemento) {
+            this.turnNumber = Match.this.turnNumber;
+            this.activePlayer = Match.this.activePlayer;
+            this.boardMemento = boardMemento;
+        }
 
-    /**
-     * Given the starting position {@code start}, checks if the selected destination
-     * is valid.
-     * @param start the starting position
-     * @param destination the destination
-     * @return true if the destination is valid, false otherwise
-     */
-    boolean selectDestination(Position start, Position destination);
+        @Override
+        public int getTurnNumber() {
+            return this.turnNumber;
+        }
 
-    /**
-     * Prompts the execution of the move from the starting position {@code start}
-     * to the destination {@code destination}.
-     * @param start the starting position
-     * @param destination the destination
-     */
-    void makeMove(Position start, Position destination);
+        @Override
+        public Player getActivePlayer() {
+            return this.activePlayer;
+        }
 
-    /**
-     * Checks if the match is over; if it is, then returns the result of the match.
-     * @return if the match is over, it returns an {@link Optional} of a {@link Pair} contaning the result of the match
-     * for the attacker (first element) and the defender (second element);
-     * otherwise, an empty {@link Optional} is returned.
-     */
-    Optional<Pair<MatchResult, MatchResult>> getMatchEndStatus();
+        @Override
+        public BoardMemento getBoardMemento() {
+            return this.boardMemento;
+        }
 
-    /**
-     * Saves a snapshot of the current state of the match, in order to support the "undo" operation.
-     * @return the {@link MatchMemento} that holds the snapshot
-     */
-    MatchMemento save();
+    }
 
-    /**
-     * Restores the state of the match saved in the {@link MatchMemento} passed as argument.
-     * @param matchMemento the {@link MatchMemento} that holds the snapshot
-     */
-    void restore(MatchMemento matchMemento);
+    @Override
+    public MatchMemento save() {
+        return new MatchMementoImpl(this.board.save());
+    }
+
+    @Override
+    public void restore(final MatchMemento matchMemento) {
+        this.turnNumber = matchMemento.getTurnNumber();
+        this.activePlayer = matchMemento.getActivePlayer();
+        matchMemento.getBoardMemento().restore();
+    }
 
 }

@@ -21,21 +21,21 @@ import taflgames.common.code.Position;
 import taflgames.controller.SettingsLoader;
 import taflgames.controller.SettingsLoaderImpl;
 import taflgames.model.board.code.BoardImpl;
+import taflgames.model.Model;
 import taflgames.model.Match;
-import taflgames.model.MatchImpl;
 import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.CellsCollectionBuilderImpl;
 import taflgames.model.builders.PiecesCollectionBuilder;
 import taflgames.model.builders.PiecesCollectionBuilderImpl;
 
 /**
- * JUnit tests for {@link Match}.
+ * JUnit tests for {@link Model}.
  */
 class TestMatch {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
-    private Match match;
+    private Model match;
 
     /**
      * Initializes each test before its execution.
@@ -50,7 +50,7 @@ class TestMatch {
             final var pieces = piecesCollBuilder.build();
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
-            this.match = new MatchImpl(
+            this.match = new Match(
                 new BoardImpl(pieces, cells, size)
             );
         } catch (final IOException ex) {

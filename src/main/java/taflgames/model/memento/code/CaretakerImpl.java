@@ -2,7 +2,7 @@ package taflgames.model.memento.code;
 
 import java.util.Stack;
 
-import taflgames.model.Match;
+import taflgames.model.Model;
 import taflgames.model.memento.api.Caretaker;
 import taflgames.model.memento.api.MatchMemento;
 
@@ -20,7 +20,7 @@ import taflgames.model.memento.api.MatchMemento;
  * any existing state each time a new state is saved.
  */
 public class CaretakerImpl implements Caretaker {
-    private final Match originator;
+    private final Model originator;
     private final Stack<MatchMemento> history;
     private boolean locked;
 
@@ -28,7 +28,7 @@ public class CaretakerImpl implements Caretaker {
      * Builds a new Caretaker.
      * @param originator the Match to save the state of.
      */
-    public CaretakerImpl(final Match originator) {
+    public CaretakerImpl(final Model originator) {
         this.originator = originator;
         this.history = new Stack<>();
         this.locked = false;
