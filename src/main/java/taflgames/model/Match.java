@@ -73,4 +73,8 @@ public interface Match {
      */
     void restore(MatchMemento matchMemento);
 
+    /**
+     * @return true if the Match is over.
+     */
+    boolean isOver();
 }
