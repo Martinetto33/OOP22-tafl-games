@@ -48,6 +48,7 @@ class TestCellComponents {
 
     /**
      * Initializes each test before its execution.
+     * {credits for this test to Elena Boschetti}
      */
     @BeforeEach
     void init() {
