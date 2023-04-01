@@ -11,9 +11,7 @@ import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.memento.api.BoardMemento;
-// import taflgames.model.memento.api.Caretaker;
 import taflgames.model.memento.api.MatchMemento;
-// import taflgames.model.memento.code.CaretakerImpl;
 
 /**
  * This class implements a match.
@@ -24,9 +22,6 @@ public final class Match implements Model {
     private final LoopingIterator<Player> turnQueue;
     private Player activePlayer;
     private int turnNumber;
-
-    // A reference to the Caretaker class, that handles the "undo" operation
-    // private final Caretaker caretaker;
 
     /**
      * Creates a new match.
@@ -39,7 +34,6 @@ public final class Match implements Model {
         );
         this.activePlayer = this.turnQueue.next();
         this.turnNumber = 0;
-        // this.caretaker = new CaretakerImpl(this);
     }
 
     @Override
