@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TestCell {
+class TestCell {
 
     private static final int DEFAULT_BOARD_SIZE = 5;
 
@@ -48,7 +48,7 @@ public class TestCell {
 
     @Test
     void testCanAccept() {
-        Piece piece = new BasicPiece(new Position(0, 0), Player.ATTACKER);
+        final Piece piece = new BasicPiece(new Position(0, 0), Player.ATTACKER);
         /*testing only ClassicCell and Throne beacuse Tomb and Slider method canAccept 
         behave like the one of ClassicCell, while Throne and Exit method canAccept behave in the same way*/
         /*expected false because when initialized the cell is set to not free */
@@ -56,7 +56,7 @@ public class TestCell {
         assertTrue(classic.canAccept(piece));
         classic.setFree(false);
         assertFalse(classic.canAccept(piece));
-        Piece king = new King(new Position(2, 2));
+        final Piece king = new King(new Position(2, 2));
         throne = new Throne();
         throne.setFree(true);
         assertTrue(throne.canAccept(king));
@@ -90,12 +90,12 @@ public class TestCell {
 
     @Test
     void testNotifyTomb() {
-        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
-        Map<Position, Cell> cells = new HashMap<>();
-        Player p1 = Player.ATTACKER;
-        Player p2 = Player.DEFENDER;
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(2, 1), new Queen(new Position(2, 1), p1));
         pieces.put(p1, piecesPlayer1);
         pieces.put(p2, piecesPlayer2);
@@ -119,12 +119,12 @@ public class TestCell {
 
     @Test 
     void testNotifySlider() {
-        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
-        Map<Position, Cell> cells = new HashMap<>();
-        Player p1 = Player.ATTACKER;
-        Player p2 = Player.DEFENDER;
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(4, 1), new BasicPiece(new Position(4, 1), p1));
         piecesPlayer1.put(new Position(1, 1), new BasicPiece(new Position(1, 1), p1));
         piecesPlayer2.put(new Position(1, 4), new BasicPiece(new Position(1, 4), p2));
@@ -158,12 +158,12 @@ public class TestCell {
 
     @Test 
     void testNotifyTurnHasEnded() {
-        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
-        Map<Position, Cell> cells = new HashMap<>();
-        Player p1 = Player.ATTACKER;
-        Player p2 = Player.DEFENDER;
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(4, 1), new BasicPiece(new Position(4, 1), p1));
         piecesPlayer1.put(new Position(1, 1), new BasicPiece(new Position(1, 1), p1));
         piecesPlayer2.put(new Position(1, 4), new BasicPiece(new Position(1, 4), p2));
@@ -189,7 +189,7 @@ public class TestCell {
         assertFalse(cells.get(new Position(1, 3)).isFree());
         assertFalse(pieces.get(p1).keySet().contains(new Position(1, 1)));
         assertTrue(pieces.get(p1).keySet().contains(new Position(1, 3)));
-        SliderImpl sl = (SliderImpl) cells.get(new Position(1, 1));
+        final SliderImpl sl = (SliderImpl) cells.get(new Position(1, 1));
         sl.notifyTurnHasEnded(1);
         sl.reset();
 

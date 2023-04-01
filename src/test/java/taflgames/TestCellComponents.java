@@ -37,9 +37,11 @@ import taflgames.model.pieces.api.Piece;
  * It uses an instance of a Variant mode Match to see if the application
  * behaves naturally after calls to the Match object.
  */
-public class TestCellComponents {
+class TestCellComponents {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
+
+    private static final String TOMB = "Tomb";
 
     private Match match;
     private Board board;
@@ -76,7 +78,7 @@ public class TestCellComponents {
         assertEquals(Set.of(tombComponent), basicCell.getComponents());
         assertTrue(basicCell.getComponents().stream()
                 .map(c -> c.getComponentType())
-                .anyMatch(type -> type.equals("Tomb")));
+                .anyMatch(type -> TOMB.equals(type)));
         basicCell.detachComponent(tombComponent);
         assertTrue(basicCell.getComponents().isEmpty());
     }
@@ -115,7 +117,7 @@ public class TestCellComponents {
         final Cell tombPositionCell = this.board.getMapCells().get(expectedKillPosition);
 
         assertTrue(tombPositionCell.isFree());
-        assertTrue(tombPositionCell.getComponents().size() == 1);
+        assertEquals(1, tombPositionCell.getComponents().size());
         final CellComponent tomb = tombPositionCell.getComponents().stream()
                                     .findFirst().get();
         assertTrue(tomb.isActive());
@@ -185,7 +187,7 @@ public class TestCellComponents {
         this.match.makeMove(defender1StartPos, defender1EndPos);
 
         final Cell deathCell = this.board.getMapCells().get(deathPosition);
-        assertTrue(deathCell.getComponents().size() == 1); //No more than one Tomb!
+        assertEquals(1, deathCell.getComponents().size()); //No more than one Tomb!
     }
 
     /**

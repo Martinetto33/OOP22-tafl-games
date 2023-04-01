@@ -26,7 +26,7 @@ import taflgames.model.cell.code.ClassicCell;
 import taflgames.model.cell.code.SliderImpl;
 import taflgames.model.cell.code.Throne;
 
-public class TestBoard {
+class TestBoard {
 
     private static final int DEFAULT_BOARD_SIZE = 5;
 
@@ -38,8 +38,8 @@ public class TestBoard {
 
     @BeforeAll
     static void init() {
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
         piecesPlayer2.put(new Position(3, 3), new BasicPiece(new Position(3, 3), p2));
         pieces.put(p1, piecesPlayer1);
@@ -66,12 +66,12 @@ public class TestBoard {
     @Test
     void testIsDestinationValid() {
         Board board2;
-        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
-        Map<Position, Cell> cells = new HashMap<>();
-        Player p1 = Player.ATTACKER;
-        Player p2 = Player.DEFENDER;
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(3, 4), new BasicPiece(new Position(3, 4), p1));
         piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
         piecesPlayer1.put(new Position(1, 2), new Swapper(new Position(1, 2), p1));
@@ -123,13 +123,13 @@ public class TestBoard {
     @Test
     void testUpdatePiecePos() {
         Board board3;
-        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
-        Map<Position, Cell> cells = new HashMap<>();
-        Player p1 = Player.ATTACKER;
-        Player p2 = Player.DEFENDER;
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
 
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
         piecesPlayer2.put(new Position(3, 3), new BasicPiece(new Position(3, 3), p2));
         pieces.put(p1, piecesPlayer1);
@@ -178,12 +178,12 @@ public class TestBoard {
     @Test
     void testgetFurthestReachablePos() {
         Board board1;
-        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
-        Map<Position, Cell> cells = new HashMap<>();
-        Player p1 = Player.ATTACKER;
-        Player p2 = Player.DEFENDER;
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(3, 4), new BasicPiece(new Position(3, 4), p1));
         piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
         piecesPlayer2.put(new Position(3, 3), new King(new Position(3, 3)));
@@ -224,12 +224,12 @@ public class TestBoard {
     @Test
     void testIsDraw() {
         Board board4;
-        Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
-        Map<Position, Cell> cells = new HashMap<>();
-        Player p1 = Player.ATTACKER;
-        Player p2 = Player.DEFENDER;
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
+        final Map<Position, Cell> cells = new HashMap<>();
+        final Player p1 = Player.ATTACKER;
+        final Player p2 = Player.DEFENDER;
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(0, 3), new BasicPiece(new Position(0, 3), p1));
         piecesPlayer1.put(new Position(0, 1), new BasicPiece(new Position(0, 1), p1));
         piecesPlayer1.put(new Position(1, 2), new BasicPiece(new Position(1, 2), p1));

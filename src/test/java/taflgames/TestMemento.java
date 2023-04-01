@@ -38,7 +38,8 @@ import org.junit.jupiter.api.BeforeEach;
  * Tests if the Memento pattern is correctly implemented, allowing
  * to save normal and variant matches status.
  */
-public class TestMemento {
+class TestMemento {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
     private Match classicMatch;

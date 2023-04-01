@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import taflgames.model.board.api.Eaten;
 
-public class TestEaten {
+class TestEaten {
 
     private static final int DEFAULT_BOARD_SIZE = 5;
 
@@ -129,8 +129,8 @@ public class TestEaten {
         final Player p1 = Player.ATTACKER;
         final Player p2 = Player.DEFENDER;
 
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(1, 1), new BasicPiece(new Position(1, 1), p1));
         piecesPlayer1.put(new Position(4, 1), new Archer(new Position(4, 1), p1));
         piecesPlayer2.put(new Position(1, 0), new BasicPiece(new Position(1, 0), p2));
@@ -192,8 +192,8 @@ public class TestEaten {
         final Player p1 = Player.ATTACKER;
         final Player p2 = Player.DEFENDER;
 
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(1, 1), new BasicPiece(new Position(1, 1), p1));
         piecesPlayer1.put(new Position(4, 1), new Archer(new Position(4, 1), p1));
         piecesPlayer2.put(new Position(2, 1), new BasicPiece(new Position(2, 1), p2));
@@ -318,8 +318,8 @@ public class TestEaten {
         final Player p1 = Player.ATTACKER;
         final Player p2 = Player.DEFENDER;
 
-        Map<Position, Piece> piecesPlayer1 = new HashMap<>();
-        Map<Position, Piece> piecesPlayer2 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
+        final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(1, 1), new BasicPiece(new Position(1, 1), p1));
         piecesPlayer1.put(new Position(4, 1), new Archer(new Position(4, 1), p1));
         piecesPlayer1.put(new Position(1, 3), new BasicPiece(new Position(1, 3), p1));
