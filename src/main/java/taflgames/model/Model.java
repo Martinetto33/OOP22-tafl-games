@@ -4,6 +4,8 @@ import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 import taflgames.model.memento.api.MatchMemento;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import taflgames.common.code.MatchResult;
@@ -60,6 +62,18 @@ public interface Model {
      * otherwise, an empty {@link Optional} is returned.
      */
     Optional<Pair<MatchResult, MatchResult>> getMatchEndStatus();
+
+    /**
+     * @return a collection that maps each position of the grid to a list of labels
+     * that indicate the cell and (if present) the cells components located at that position.
+     */
+    Map<Position, List<String>> getCellsMapping();
+
+    /**
+     * @return a collection that, for each player, contains the mapping of the player's
+     * pieces positions to the type of pieces located at each position.
+     */
+    Map<Player, Map<Position, String>> getPiecesMapping();
 
     /**
      * Saves a snapshot of the current state of the match, in order to support the "undo" operation.
