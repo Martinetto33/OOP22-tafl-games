@@ -180,8 +180,8 @@ class TestMatch {
          * Case: move of a piece which is not a swapper.
          */
         // The attacker moves the piece at (row=3, col=0) to position (row=3, col=4)
-        Position source = new Position(3, 0);
-        Position dest = new Position(3, 4);
+        final Position source = new Position(3, 0);
+        final Position dest = new Position(3, 4);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
@@ -378,7 +378,7 @@ class TestMatch {
 
         // Check that there is an attacker's piece (shield) at (9, 5), according to the initial configuration
         source = new Position(9, 5);
-        assertTrue(match.selectSource(dest));
+        assertTrue(match.selectSource(source));
 
         // Now, there is a defender's piece at (9, 4), an attacker's piece at (9, 5) and
         // an attacker's archer at (9, 1), but there is another piece at (9, 2),
