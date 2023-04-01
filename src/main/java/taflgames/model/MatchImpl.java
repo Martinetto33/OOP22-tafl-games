@@ -80,7 +80,7 @@ public final class MatchImpl implements Match {
      */
     @Override
     public boolean isOver() {
-        return this.board.hasAPlayerWon().isPresent();
+        return this.board.hasAPlayerWon().isPresent() || this.board.isDraw(activePlayer);
     }
 
     @Override
