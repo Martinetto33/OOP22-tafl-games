@@ -6,7 +6,6 @@ import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
@@ -89,12 +88,5 @@ public interface Cell {
      * @return the Set of CellComponents.
      */
     Set<CellComponent> getComponents();
-
-    /**
-     * Saves the state of the CellComponent.
-     * @return the {@link taflgames.model.memento.api.CellComponentMemento}
-     * representing the saved state of this component.
-     */
-    CellComponentMemento saveComponentsState();
 
 }
