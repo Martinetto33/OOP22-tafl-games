@@ -16,6 +16,8 @@ import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.CellsCollectionBuilderImpl;
 import taflgames.model.builders.PiecesCollectionBuilder;
 import taflgames.model.builders.PiecesCollectionBuilderImpl;
+import taflgames.model.cell.api.Cell;
+import taflgames.model.cell.api.CellComponent;
 import taflgames.model.memento.api.Caretaker;
 import taflgames.model.memento.code.CaretakerImpl;
 import taflgames.model.memento.code.HistoryLockedException;
@@ -270,12 +272,6 @@ public class TestMemento {
         assertTrue(this.variantMatch.selectDestination(defenderBasicEndPos, sliderPosition));
         this.variantMatch.makeMove(defenderBasicEndPos, sliderPosition);
 
-        /* The following code notifies the Slider that a piece landed onto it. 
-         * TODO: ideally, this should happen automatically.
-        */
-        this.variantBoard.getMapCells().get(sliderPosition).notify(sliderPosition, defenderPiece, 
-        List.of(defenderPiece.sendSignalMove()), this.variantBoard.getMapPieces(), this.variantBoard.getMapCells());
-
         assertEquals(expectedEndPositionAfterSlider, defenderPiece.getCurrentPosition());
         assertFalse(this.variantBoard.getMapCells().get(expectedEndPositionAfterSlider).isFree());
         assertEquals("Slider", this.variantBoard.getMapCells().get(sliderPosition).getType());
@@ -288,6 +284,94 @@ public class TestMemento {
          * which corresponds to 'defenderBasicEndPos'.
          */
         assertEquals(defenderPiece.getCurrentPosition(), defenderBasicEndPos);
+    }
+
+    /**
+     * Tests if the CellComponentMemento works as expected.
+     */
+    @Test
+    void testCellComponentMemento() {
+        this.init();
+
+        final Caretaker caretaker = new CaretakerImpl(this.variantMatch);
+
+        final Position attacker1StartingPos = new Position(7, 0);
+        final Position attacker1EndPos = new Position(7, 4);
+
+        this.newTurn(caretaker, attacker1StartingPos, attacker1EndPos);
+
+        final Position defenderStartingPos = new Position(6, 6);
+        final Position defenderEndPos = new Position(9, 6);
+
+        this.newTurn(caretaker, defenderStartingPos, defenderEndPos);
+
+        final Position attacker2StartPos = new Position(7, 10);
+        final Position attacker2EndPos = new Position(7, 6);
+        final Position expectedKillPosition = new Position(7, 5);
+        final Piece victim = this.variantBoard.getMapPieces().get(Player.DEFENDER).get(expectedKillPosition);
+
+        caretaker.updateHistory();
+        assertTrue(this.variantMatch.selectSource(attacker2StartPos));
+        assertTrue(this.variantMatch.selectDestination(attacker2StartPos, attacker2EndPos));
+        this.variantMatch.makeMove(attacker2StartPos, attacker2EndPos);
+
+        final Cell tombPositionCell = this.variantBoard.getMapCells().get(expectedKillPosition);
+
+        assertTrue(tombPositionCell.isFree());
+        assertTrue(tombPositionCell.getComponents().size() == 1);
+        final CellComponent tomb = tombPositionCell.getComponents().stream()
+                                    .findFirst().get();
+        assertTrue(tomb.isActive());
+        assertFalse(victim.isAlive());
+
+        this.variantMatch.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, this.variantMatch.getActivePlayer());
+        /* The defender Queen in (6, 5) will attempt to revive the dead piece in (7, 5) */
+        final Position queenStartPos = new Position(6, 5);
+
+        /* Moving the Queen to a Cell adjacent to the tomb cell. */
+        final Position queenEndPos = new Position(8, 5);
+
+        caretaker.updateHistory();
+        assertTrue(this.variantMatch.selectSource(queenStartPos));
+        assertTrue(this.variantMatch.selectDestination(queenStartPos, queenEndPos));
+        this.variantMatch.makeMove(queenStartPos, queenEndPos);
+
+        assertFalse(tombPositionCell.isFree());
+        assertFalse(tomb.isActive());
+        assertEquals(victim, this.variantBoard.getMapPieces().get(Player.DEFENDER).get(expectedKillPosition));
+
+        /* If the CellComponent works as expected, by undoing the move it should become active again. */
+        caretaker.unlockHistory();
+        caretaker.undo();
+
+        assertTrue(tomb.isActive());
+
+        /* If the piece dies, the board removes it from the map of pieces. */
+        assertFalse(this.variantBoard.getMapPieces().get(Player.DEFENDER).containsKey(expectedKillPosition));
+        
+        /* This is a 'paradox' caused by the fact that the order of restore calls is:
+         * match → board → cells + pieces; so if the board restores its previous
+         * state before the victim, its pieces map does not contain the victim (since dead pieces
+         * are removed from the map) and thus restore is never called on the pieces
+         * that are not included in the map. This is why this eliminated piece's status
+         * is 'alive'.
+         */
+        assertTrue(victim.isAlive());
+        assertEquals(expectedKillPosition, victim.getCurrentPosition());
+
+        /* To better prove the point of the previous comment, selecting the position
+         * where the piece died is impossible.
+         */
+        assertFalse(this.variantMatch.selectSource(expectedKillPosition));
+    }
+
+    private void newTurn(final Caretaker caretaker, final Position startPos, final Position endPos) {
+        caretaker.updateHistory();
+        assertTrue(this.variantMatch.selectSource(startPos));
+        assertTrue(this.variantMatch.selectDestination(startPos, endPos));
+        this.variantMatch.makeMove(startPos, endPos);
+        this.variantMatch.setNextActivePlayer();
     }
 }
 

@@ -122,7 +122,7 @@ public abstract class AbstractCell implements Cell {
                     .toList());
             
         }
-        return this.new CellMementoImpl(null);
+        return this.new CellMementoImpl(Collections.emptyList());
     }
 
     /**
@@ -134,6 +134,7 @@ public abstract class AbstractCell implements Cell {
      */
     protected void restore(final CellMemento cm) {
         this.cellStatus = cm.getCellStatus();
+        cm.getComponentMementos().forEach(component -> component.restore());
     }
 
     /**
