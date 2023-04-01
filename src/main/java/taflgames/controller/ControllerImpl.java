@@ -1,17 +1,14 @@
 package taflgames.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
@@ -36,7 +33,6 @@ public final class ControllerImpl implements Controller {
 
     private final View view;
     private Model match;
-    private Board board;
     private GameLoop gameLoop;
 
     /**
@@ -57,8 +53,9 @@ public final class ControllerImpl implements Controller {
             final var pieces = piecesCollBuilder.build();
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
-            this.board = new BoardImpl(pieces, cells, size);
-            this.match = new Match(this.board);
+            this.match = new Match(
+                new BoardImpl(pieces, cells, size)
+            );
             LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
@@ -83,8 +80,9 @@ public final class ControllerImpl implements Controller {
             final var pieces = piecesCollBuilder.build();
             final var cells = cellsCollBuilder.build();
             final int size = (int) Math.sqrt(cells.size());
-            this.board = new BoardImpl(pieces, cells, size);
-            this.match = new Match(this.board);
+            this.match = new Match(
+                new BoardImpl(pieces, cells, size)
+            );
             LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
@@ -170,20 +168,7 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public Map<Position, List<String>> getCellsDisposition() {
-        return this.board.getMapCells().entrySet().stream()
-                .map(entry -> {
-                    final List<String> cellTypes = new ArrayList<>();
-                    cellTypes.add(0, entry.getValue().getType());
-
-                    /* Mixes cell types with component types; the sprites corresponding
-                     * to each of these elements should be drawn. In position 0 there
-                     * will be the Cell type, in the others there will optionally
-                     * be the types of the CellComponents (such as Tombs).
-                    */
-                    entry.getValue().getComponents().forEach(e -> cellTypes.add(e.getComponentType()));
-                    return Map.entry(entry.getKey(), cellTypes);
-                })
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+        return this.match.getCellsMapping();
     }
 
     /**
@@ -191,14 +176,7 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public Map<Player, Map<Position, String>> getPiecesDisposition() {
-        return this.board.getMapPieces().entrySet().stream()
-                .map(entry -> {
-                    final Map<Position, String> pieceTypes = entry.getValue().entrySet().stream()
-                            .collect(Collectors.toUnmodifiableMap(
-                                     Map.Entry::getKey, elem -> elem.getValue().getMyType().getTypeOfPiece()));
-                    return Map.entry(entry.getKey(), pieceTypes);
-                })
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+        return this.match.getPiecesMapping();
     }
 
     /**
