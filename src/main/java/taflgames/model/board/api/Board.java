@@ -64,7 +64,9 @@ public interface Board {
      * @param direction the direction along which to find the furthest reacheable position.
      * @return the furthest reacheable position.
      */
-    Position getFurthestReachablePos(Position startPos, Vector direction);
+    Position getFurthestReachablePos(Position startPos, Vector direction);  // NOPMD 
+    // The Vector class models a vector and provides features that a List does not support
+    // (such as vector rotation).
 
     /**
      * This method must be called at the beginning of each turn.
