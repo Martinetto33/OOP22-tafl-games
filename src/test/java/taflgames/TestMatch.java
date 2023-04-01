@@ -252,7 +252,7 @@ class TestMatch {
          * Case: the archer moves to a position in the same column of the target piece
          * and the path from the archer to the target piece is free.
          */
-        
+
         match.setNextActivePlayer();
         assertEquals(Player.DEFENDER, match.getActivePlayer());
 
@@ -386,6 +386,90 @@ class TestMatch {
         match.setNextActivePlayer();
         assertEquals(Player.DEFENDER, match.getActivePlayer());
         source = new Position(9, 4);
+        assertTrue(match.selectSource(source));
+    }
+
+    /**
+     * Test the effect of the queen and the tomb.
+     * In the variant mode, when a piece is killed, a tomb spawns at the position
+     * where the piece has been killed.
+     * If a queen moves to a cell adjacent to a tomb and the piece killed there
+     * belongs to the same team as the queen, then the queen brings the killed piece
+     * back to life.
+     */
+    @Test
+    void testQueenAndTombEffect() {
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move defender's piece (basic) from (7, 5) to (7, 9)
+        Position source = new Position(7, 5);
+        Position dest = new Position(7, 9);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece (basic) from (0, 7) to (0, 8)
+        source = new Position(0, 7);
+        dest = new Position(0, 8);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move attacker's piece (basic) from (0, 8) to (7, 8)
+        source = new Position(0, 8);
+        dest = new Position(7, 8);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the piece at (7, 9) should have been killed, because it is between
+        // two attacker's piece at (7, 8) and (7, 10). Also, a tomb should spawn at (7, 9).
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+        source = new Position(7, 9);
+        assertFalse(match.selectSource(source));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.ATTACKER, match.getActivePlayer());
+
+        // Move attacker's piece (basic) from (7, 8) to (6, 8)
+        source = new Position(7, 8);
+        dest = new Position(6, 8);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        match.setNextActivePlayer();
+        assertEquals(Player.DEFENDER, match.getActivePlayer());
+
+        // Move defender's queen from (6, 5) to (7, 5)
+        source = new Position(6, 5);
+        dest = new Position(7, 5);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move defender's queen from (7, 5) to (7, 8)
+        source = new Position(7, 5);
+        dest = new Position(7, 8);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Now the queen is at (7, 8), in a cell adjacent to the tomb at (7, 9),
+        // so the defender's piece killed at (7, 9) should respawn.
+        source = new Position(7, 9);
         assertTrue(match.selectSource(source));
     }
 
@@ -558,7 +642,7 @@ class TestMatch {
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
-        
+
         // The default direction for slider effect is east, so the piece is moved to (2, 10)
         source = new Position(2, 10);
         assertTrue(match.selectSource(source));
@@ -741,7 +825,7 @@ class TestMatch {
      */
     @Test
     void testDefenderWin() {
-        
+
         /*
          * Move the king to the exit in the uppper-left corner of the board. Before doing so,
          * it is necessary to move some other pieces to make the path free for the king.
