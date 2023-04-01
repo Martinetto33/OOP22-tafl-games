@@ -63,7 +63,7 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
     }
 
     @Override
-    public void setCellAsOccupied(Position position) {
+    public void setCellAsOccupied(final Position position) {
         this.cells.get(position).setFree(false);
     }
 
