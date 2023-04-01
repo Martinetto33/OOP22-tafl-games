@@ -6,7 +6,7 @@ import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.SliderMediator;
 
-public class SliderMediatorImpl implements SliderMediator {
+public final class SliderMediatorImpl implements SliderMediator {
 
     private final Board board;
 
@@ -15,14 +15,13 @@ public class SliderMediatorImpl implements SliderMediator {
     }
 
     @Override
-    public Position requestMove(Position source, Vector orientation) {
+    public Position requestMove(final Position source, final Vector orientation) {
         return board.getFurthestReachablePos(source, orientation);
-        
     }
 
     @Override
-    public void updatePiecePos(Position startPos, Position destPos, Player currentPlayer) {
+    public void updatePiecePos(final Position startPos, final Position destPos, final Player currentPlayer) {
         board.movePlaceholder(startPos, destPos, currentPlayer);
     }
-    
+
 }

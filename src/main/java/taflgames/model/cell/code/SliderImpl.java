@@ -14,16 +14,17 @@ import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Slider;
 
 /**
- * Thid class models a Slider {@link taflgames.model.cell.api.Slider}
+ * Thid class models a Slider {@link taflgames.model.cell.api.Slider}.
  */
-public class SliderImpl extends AbstractCell implements Slider {
+public final class SliderImpl extends AbstractCell implements Slider {
+
     private Vector orientation = new VectorImpl(0, 1); //un versore che indica la direzione in cui questo slider punta
-	private boolean triggered; //dice se è già stata attivata in questo turno
-	private SliderMediator mediator;
-	private final Position sliderPos;
-	private int lastActivityTurn;
-	private boolean active;
-	private static final int TURNS_FOR_REACTIVATION = 2;
+    private boolean triggered; //dice se è già stata attivata in questo turno
+    private SliderMediator mediator;
+    private final Position sliderPos;
+    private int lastActivityTurn;
+    private boolean active;
+    private static final int TURNS_FOR_REACTIVATION = 2;
     private static final int ANGLE_ROTATION = 90;
 
     /**
@@ -42,27 +43,28 @@ public class SliderImpl extends AbstractCell implements Slider {
      */
     @Override
     public boolean canAccept(final Piece piece) {
-        if(super.isFree()) {
-            return true;
-        } else {
-            return false;
-        }
+        return super.isFree();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void notify(final Position source, final Piece movedPiece, final List<String> events, final Map<Player, Map<Position, Piece>> pieces, 
-                        final Map<Position, Cell> cells) {
+    public void notify(
+        final Position source,
+        final Piece movedPiece,
+        final List<String> events,
+        final Map<Player, Map<Position, Piece>> pieces, 
+        final Map<Position, Cell> cells
+    ) {
         if (this.sliderPos.equals(source)) {
             /* Non mi importa che tipo di pezzo sia arrivato, lo slider lo fa scivolare */
             if (!this.triggered && this.active) {
                 this.triggered = true;
-                Position newPosition = this.mediator.requestMove(source, this.orientation); /*Trovo la casella più lontana su cui ci si possa
-                spostare seguendo la direzione del vettore orientamento */
+                Position newPosition = this.mediator.requestMove(source, this.orientation);
+                /*Trovo la casella più lontana su cui ci si possa spostare seguendo la direzione del vettore orientamento */
                 this.mediator.updatePiecePos(this.sliderPos, newPosition, movedPiece.getPlayer());
-                
+
                 if (movedPiece.getCurrentPosition().equals(this.sliderPos)) {
                     /* If the piece is still here after requesting a move to the Mediator,
                      * it means it is stuck by obstacles in its way and therefore any
@@ -81,12 +83,12 @@ public class SliderImpl extends AbstractCell implements Slider {
     public void notifyTurnHasEnded(final int turn) {
         if (turn - this.lastActivityTurn == SliderImpl.TURNS_FOR_REACTIVATION) {
             this.orientation = this.orientation.rotate(SliderImpl.ANGLE_ROTATION).get();
-			this.active = true;
-			this.lastActivityTurn = turn;
-		} else {
-			this.active = false;
-		}
-	}
+            this.active = true;
+            this.lastActivityTurn = turn;
+        } else {
+            this.active = false;
+        }
+    }
 
     /**
      * {@inheritDoc}

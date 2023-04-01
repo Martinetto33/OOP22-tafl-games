@@ -15,9 +15,9 @@ import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
 
-public class Tomb extends AbstractCell implements CellComponent {
+public final class Tomb extends AbstractCell implements CellComponent {
 
-    private Map<Player, Queue<Piece>> deadPieces = new HashMap<>();	
+    private Map<Player, Queue<Piece>> deadPieces = new HashMap<>();
 
     public Tomb() {
         super();
@@ -27,13 +27,19 @@ public class Tomb extends AbstractCell implements CellComponent {
      * {@inheritDoc}
      */
     @Override
-    public void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
-                            Map<Position, Cell> cells) {
+    public void notify(
+        final Position source,
+        final Piece sender,
+        final List<String> events,
+        final Map<Player, Map<Position, Piece>> pieces,
+        final Map<Position, Cell> cells
+    ) {
         // Per ora considero event come una stringa
         if (events.contains("QUEEN_MOVE")) {
-            resumePiece(sender.getPlayer(), pieces, cells);  // viene resuscitata una pedina del giocatore mangiata sulla casella corrente (se esiste)
+            // viene resuscitata una pedina del giocatore mangiata sulla casella corrente (se esiste)
+            resumePiece(sender.getPlayer(), pieces, cells);
         }
-        if(events.contains("DEAD_PIECE")) {
+        if (events.contains("DEAD_PIECE")) {
             addDeadPieces(sender.getPlayer(), sender);
         }
     }
@@ -42,16 +48,15 @@ public class Tomb extends AbstractCell implements CellComponent {
      * {@inheritDoc}
      */
     @Override
-    public boolean canAccept(Piece piece) {
-        if(super.isFree()) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean canAccept(final Piece piece) {
+        return super.isFree();
     }
-    
-    private void resumePiece(final Player player, Map<Player, Map<Position, Piece>> pieces,
-                                Map<Position, Cell> cells) {
+
+    private void resumePiece(
+        final Player player,
+        final Map<Player, Map<Position, Piece>> pieces,
+        final Map<Position, Cell> cells
+    ) {
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
         if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
             Piece pieceToResume = deadPieces.get(player).poll();	// prende la prima pedina in coda
@@ -61,8 +66,8 @@ public class Tomb extends AbstractCell implements CellComponent {
         }
     }
 
-    public void addDeadPieces(final Player player, Piece piece) {
-        if(!deadPieces.containsKey(player)) {
+    public void addDeadPieces(final Player player, final Piece piece) {
+        if (!deadPieces.containsKey(player)) {
             Queue<Piece> list = new LinkedList<>();
             list.add(piece);
             deadPieces.put(player, list);
@@ -83,12 +88,12 @@ public class Tomb extends AbstractCell implements CellComponent {
         return this.new TombMementoImpl();
     }
 
-    public void restore(TombMementoImpl tm) {
+    public void restore(final TombMementoImpl tm) {
         this.deadPieces = tm.getInnerDeadPieces();
         super.restore(tm);
     }
 
-    public class TombMementoImpl implements CellMemento {
+    public final class TombMementoImpl implements CellMemento {
         private final Map<Player, Queue<Piece>> innerDeadPieces;
         private final boolean isFree;
 
@@ -128,8 +133,13 @@ public class Tomb extends AbstractCell implements CellComponent {
      * {@inheritDoc}
      */
     @Override
-    public void notifyComponent(Position source, Piece sender, List<String> events,
-            Map<Player, Map<Position, Piece>> pieces, Map<Position, Cell> cells) {
+    public void notifyComponent(
+        final Position source,
+        final Piece sender,
+        final List<String> events,
+        final Map<Player, Map<Position, Piece>> pieces,
+        final Map<Position, Cell> cells
+    ) {
         this.notify(source, sender, events, pieces, cells);
     }
 

@@ -25,7 +25,7 @@ import taflgames.model.pieces.code.AbstractPiece;
 /**
  * This class models a Board {@link taflgames.model.board.api.Board}.
  */
-public class BoardImpl implements Board, TimedEntity {
+public final class BoardImpl implements Board, TimedEntity {
 
     private Map<Position, Cell> cells;
     private Map<Player, Map<Position, Piece>> pieces;
@@ -94,17 +94,22 @@ public class BoardImpl implements Board, TimedEntity {
         Set<Vector> vectors = piece.whereToMove();
         /* Nel caso delle pedine normali, i vettori restituiti saranno (-1,0), (0,1), (1,0), (0,-1).
         *
-        * NOTA1: uno spostamento equivale a sommare la posizione di partenza a un vettore v che indica lo spostamento: start + v = dest
+        * NOTA1: uno spostamento equivale a sommare la posizione di partenza a un vettore v
+        * che indica lo spostamento: start + v = dest
         *
-        * NOTA2: per fare un esempio, se una pedina si sposta di N caselle a destra, ciò equivale a dire che dest = start + N * (0, 1);
+        * NOTA2: per fare un esempio, se una pedina si sposta di N caselle a destra,
+        * ciò equivale a dire che dest = start + N * (0, 1);
         * ciò equivale anche a dire che lo spostamento dato dal vettore (0, 1) è applicato N volte.
         *
         * QUINDI, per verificare se una mossa è valida, si verifica se, per uno dei vettori (v) dati da piece.getVectors(),
         * esiste uno scalare N t.c. start + N * v = dest.
-        * Se se ne trova uno, si deve verificare che tutte le celle nel percorso che porta la pedina da start a dest siano libere.
+        * Se se ne trova uno, si deve verificare che tutte le celle nel percorso
+        * che porta la pedina da start a dest siano libere.
         * Se lo sono, allora la mossa è valida, altrimenti non lo è e si deve continuare la ricerca.
         */
-        //controllo se la cella di arrivo è libera per lo swapper, poichè se la cella non fosse libera dovrei gestire lo swapper come viene fatto dopo questo if
+        
+        // Controllo se la cella di arrivo è libera per lo swapper,
+        // poichè se la cella non fosse libera dovrei gestire lo swapper come viene fatto dopo questo if
         if (cells.get(dest).isFree()) {
             for (Vector vector : vectors) {
                 for (int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
@@ -128,14 +133,12 @@ public class BoardImpl implements Board, TimedEntity {
             // Si verifica se la posizione dest è una delle posizioni occupate da una pedina avversaria.
             // Se lo è, allora la mossa è valida, altrimenti no.
 
-            // trovo la tipologia di pedina nella casella di destinazione dopodichè controllo che non sia un re poichè lo swapper non può scambiare posizione con un re
-            Piece destPiece = getPieceAtPosition(dest);
-            if (destPiece != null && destPiece.getMyType().getTypeOfPiece().equals("KING")) {
-                return false;
-            } else {
-                return true;
-            }
+            // trovo la tipologia di pedina nella casella di destinazione dopodichè controllo
+            // che non sia un re poichè lo swapper non può scambiare posizione con un re
+            final Piece destPiece = getPieceAtPosition(dest);
+            return !(destPiece != null && destPiece.getMyType().getTypeOfPiece().equals("KING"));
         }
+
         return false;
     }
 
@@ -269,7 +272,7 @@ public class BoardImpl implements Board, TimedEntity {
      */
     @Override
     public void notifyTurnHasEnded(final int turn) {
-        if (this.slidersEntities!= null) {
+        if (this.slidersEntities != null) {
             this.slidersEntities.forEach(e -> {
                 e.reset();
                 e.notifyTurnHasEnded(turn);
@@ -328,17 +331,14 @@ public class BoardImpl implements Board, TimedEntity {
                     .size() == 3) {
                                 return true;
                 }
+        }
+
         /* If there are no pieces that can move for the player in turn, it is automatically a draw. */
-        }
-        if (pieces.get(playerInTurn).values().stream()
-            .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
-                .filter(adjPos -> cells.get(adjPos).canAccept(piece))
-                .collect(Collectors.toSet()).isEmpty())
-            .findAny().isPresent()) {
-                return false;
-        } else {
-            return true;
-        }
+        return pieces.get(playerInTurn).values().stream()
+                    .filter(piece -> !getAdjacentPositions(piece.getCurrentPosition()).stream()
+                        .filter(adjPos -> cells.get(adjPos).canAccept(piece))
+                        .collect(Collectors.toSet()).isEmpty())
+                    .findAny().isEmpty();
     }
 
     /**
@@ -357,7 +357,7 @@ public class BoardImpl implements Board, TimedEntity {
                 .map(position -> position.getValue())
                 .findAny()
                 .get();
-            if(cells.get(king.getCurrentPosition()).getType().equals("Exit")) {
+            if (cells.get(king.getCurrentPosition()).getType().equals("Exit")) {
                 return Optional.of(Player.DEFENDER);
             } else {
                 return Optional.empty();
@@ -386,7 +386,8 @@ public class BoardImpl implements Board, TimedEntity {
         setOfPosition.add(new Position(currPos.getX(), currPos.getY() + 1));
         setOfPosition.add(new Position(currPos.getX(), currPos.getY() - 1));
         return setOfPosition.stream()
-                                .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() < this.size && pos.getY() < this.size)
+                                .filter(pos -> pos.getX() >= 0 && pos.getY() >= 0
+                                        && pos.getX() < this.size && pos.getY() < this.size)
                                 .collect(Collectors.toSet());
     }
  

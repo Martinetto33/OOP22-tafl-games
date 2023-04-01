@@ -14,8 +14,13 @@ public class ClassicCell extends AbstractCell {
      * {@inheritDoc}
      */
     @Override
-    public void notify(final Position source, final Piece sender, final List<String> events, final Map<Player, Map<Position, Piece>> pieces,
-            final Map<Position, Cell> cells) {
+    public void notify(
+        final Position source,
+        final Piece sender,
+        final List<String> events,
+        final Map<Player, Map<Position, Piece>> pieces,
+        final Map<Position, Cell> cells
+    ) {
         super.updateComponents(source, sender, events, pieces, cells);
     }
 
@@ -24,11 +29,7 @@ public class ClassicCell extends AbstractCell {
      */
     @Override
     public boolean canAccept(final Piece piece) {
-        if (super.isFree()) {
-            return true;
-        } else {
-            return false;
-        }
+        return super.isFree();
     }
 
     /**
