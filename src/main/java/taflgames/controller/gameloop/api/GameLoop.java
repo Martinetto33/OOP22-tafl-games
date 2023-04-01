@@ -6,6 +6,10 @@ import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 
+/**
+ * An interface modelling a GameLoop, responsible for the direct communication
+ * with a {@link taflgames.model.Match}.
+ */
 public interface GameLoop {
 
     /**

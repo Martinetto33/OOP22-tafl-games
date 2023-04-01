@@ -34,7 +34,7 @@ public interface Controller {
      * @return true if the selection is a valid starting point for a move for the player
      * in turn.
      */
-    boolean isStartingPointValid(final Position p);
+    boolean isStartingPointValid(Position p);
 
     /**
      * Checks if the move is valid.
@@ -42,14 +42,14 @@ public interface Controller {
      * @param endPos the ending {@link taflgames.common.code.Position}.
      * @return true if the move is valid.
      */
-    boolean isDestinationValid(final Position startPos, final Position endPos);
+    boolean isDestinationValid(Position startPos, Position endPos);
 
     /**
      * Makes a move, only if starting point and ending point represent a legal move.
      * @param startPos the starting {@link taflgames.common.code.Position}.
      * @param endPos the ending {@link taflgames.common.code.Position}.
      */
-    void makeMove(final Position startPos, final Position endPos);
+    void makeMove(Position startPos, Position endPos);
 
     /**
      * @return true if the match is over.

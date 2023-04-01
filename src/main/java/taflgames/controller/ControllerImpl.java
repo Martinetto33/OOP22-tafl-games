@@ -194,7 +194,8 @@ public final class ControllerImpl implements Controller {
         return this.board.getMapPieces().entrySet().stream()
                 .map(entry -> {
                     final Map<Position, String> pieceTypes = entry.getValue().entrySet().stream()
-                            .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, elem -> elem.getValue().getMyType().getTypeOfPiece()));
+                            .collect(Collectors.toUnmodifiableMap(
+                                     Map.Entry::getKey, elem -> elem.getValue().getMyType().getTypeOfPiece()));
                     return Map.entry(entry.getKey(), pieceTypes);
                 })
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));

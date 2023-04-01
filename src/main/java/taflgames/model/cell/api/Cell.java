@@ -6,7 +6,6 @@ import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
