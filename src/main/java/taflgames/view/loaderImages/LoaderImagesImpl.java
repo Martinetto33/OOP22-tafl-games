@@ -50,10 +50,10 @@ public class LoaderImagesImpl implements LoaderImages {
     private Map<CellImageInfo, ImageIcon> cellImages = new HashMap<>();
     private Map<PieceImageInfo, ImageIcon> pieceImages = new HashMap<>();
 
-    public LoaderImagesImpl(final Double panelSize, final int numberOfCells) {
+    public LoaderImagesImpl(final int panelSize, final int numberOfCells) {
         /* this.panelSize = panelSize;
         this.numberOfCells = numberOfCells; */
-        unitToScale = panelSize.intValue() / numberOfCells;
+        unitToScale = panelSize / numberOfCells;
     }
 
     /**

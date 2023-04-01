@@ -2,6 +2,7 @@ package taflgames.view.scenes;
 
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import taflgames.common.code.Position;
 /**
@@ -13,29 +14,40 @@ public interface MatchPanel {
      * the layer dedicated to the pieces.
      * @param piecesAlive
      */
-    public void drawAllPieces(final Map<Position, PieceImageInfo> piecesAlive);
+    void drawAllPieces(Map<Position, PieceImageInfo> piecesAlive);
     /**
      * draws all special cells given by the MatchController on the layer
      * dedicated to the special cells.
      * @param cells
      */
-    public void drawAllSpecialCells(final Map<Position, CellImageInfo> cells);
+    void drawAllSpecialCells(Map<Position, CellImageInfo> cells);
     /**
      * draws all special cells given by the MatchController on the layer
      * dedicated to the special cells.
      * @param cells
      */
-    public void drawBackgroundCells(final Map<Position, CellImageInfo> cells);
+    void drawBackgroundCells(Map<Position, CellImageInfo> cells);
     /**
      * removes the images of every JLabel in the chosen mapLabel.
      * @param mapLabel
      */
-    public void removeAllIconsOnLayer(Map<Position,JLabel> mapLabel);
+    void removeAllIconsOnLayer(Map<Position,JLabel> mapLabel);
     /**
      * moves the piece from the original position to the new position
      * if the new position isn't occupied by other pieces
      * @param originalPos
      * @param newPosition
      */
-    public void movePiece(Position originalPos, Position newPosition);
+    void movePiece(Position originalPos, Position newPosition);
+
+    Map<JButton, Position> getMapBottoni();
+
+    Map<Position, JLabel> getMapPedine();
+
+    Map<Position, JLabel> getMapSpecialCell();
+
+    Map<Position, JLabel> getMapBoard();
+
+    int getMySize();
+    
 }
