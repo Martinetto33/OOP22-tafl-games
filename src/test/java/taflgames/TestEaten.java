@@ -4,7 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import taflgames.common.code.Position;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.code.BoardImpl;
@@ -26,6 +32,9 @@ import org.junit.jupiter.api.Test;
 import taflgames.model.board.api.Eaten;
 
 public class TestEaten {
+
+    private static final int DEFAULT_BOARD_SIZE = 5;
+
     private static Board boardToCheckEaten;
     private static Eaten eat;
     private static Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
@@ -34,31 +43,32 @@ public class TestEaten {
     private static Player p2 = Player.DEFENDER;
 
     @BeforeAll
-	static void init() {
+    static void init() {
         final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
         final Map<Position, Piece> piecesPlayer2 = new HashMap<>();
         piecesPlayer1.put(new Position(0, 0), new BasicPiece(new Position(0, 0), p1));
-        piecesPlayer1.put(new Position(1, 4), new Archer(new Position(1,4), p1));
+        piecesPlayer1.put(new Position(1, 4), new Archer(new Position(1, 4), p1));
         piecesPlayer2.put(new Position(3, 3), new BasicPiece(new Position(3, 3), p2));
         piecesPlayer2.put(new Position(3, 2), new Archer(new Position(3, 2), p2));
         piecesPlayer2.put(new Position(4, 0), new King(new Position(3, 2)));
 
         pieces.put(p1, piecesPlayer1);
         pieces.put(p2, piecesPlayer2);
-        for(int i=0; i<5; i++) {
-            for(int j=0; j<5; j++) {
-                cells.put(new Position(i,j), new ClassicCell());
-                cells.get(new Position(i,j)).setFree(true);
+
+        for (int i = 0; i < DEFAULT_BOARD_SIZE; i++) {
+            for (int j = 0; j < DEFAULT_BOARD_SIZE; j++) {
+                cells.put(new Position(i, j), new ClassicCell());
+                cells.get(new Position(i, j)).setFree(true);
             }
         } 
-        cells.get(new Position(0,0)).setFree(false);
-        cells.get(new Position(3,3)).setFree(false);
-        cells.get(new Position(1,4)).setFree(false);
-        cells.get(new Position(3,2)).setFree(false);
-        cells.get(new Position(4,0)).setFree(false);
-		boardToCheckEaten = new BoardImpl(pieces, cells, 5);
+        cells.get(new Position(0, 0)).setFree(false);
+        cells.get(new Position(3, 3)).setFree(false);
+        cells.get(new Position(1, 4)).setFree(false);
+        cells.get(new Position(3, 2)).setFree(false);
+        cells.get(new Position(4, 0)).setFree(false);
+        boardToCheckEaten = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
         eat = new EatenImpl((BoardImpl) boardToCheckEaten);
-	}
+    }
 
     @Test 
     void trimHitbox() {
@@ -66,14 +76,14 @@ public class TestEaten {
         expectedHitbox.add(new Position(1, 0));
         expectedHitbox.add(new Position(0, 1));
         //pedina normale vicino al bordo
-        assertEquals(expectedHitbox, eat.trimHitbox(new BasicPiece(new Position(0, 0), p1), pieces, cells, 5));
+        assertEquals(expectedHitbox, eat.trimHitbox(new BasicPiece(new Position(0, 0), p1), pieces, cells, DEFAULT_BOARD_SIZE));
 
         expectedHitbox = new HashSet<>();
         expectedHitbox.add(new Position(3, 4));
         expectedHitbox.add(new Position(2, 3));
         expectedHitbox.add(new Position(4, 3));
         //pedina normale al centro con vicino una della stessa squadra
-        assertEquals(expectedHitbox, eat.trimHitbox(new BasicPiece(new Position(3, 3), p2), pieces, cells, 5));
+        assertEquals(expectedHitbox, eat.trimHitbox(new BasicPiece(new Position(3, 3), p2), pieces, cells, DEFAULT_BOARD_SIZE));
 
         expectedHitbox = new HashSet<>();
 
@@ -84,7 +94,7 @@ public class TestEaten {
         expectedHitbox.add(new Position(2, 2));
         expectedHitbox.add(new Position(4, 2));
         //arciere al centro con vicino una della stessa squadra
-        assertEquals(expectedHitbox, eat.trimHitbox(new Archer(new Position(3, 2), p2), pieces, cells, 5));
+        assertEquals(expectedHitbox, eat.trimHitbox(new Archer(new Position(3, 2), p2), pieces, cells, DEFAULT_BOARD_SIZE));
 
         expectedHitbox = new HashSet<>();
         expectedHitbox.add(new Position(0, 4));
@@ -95,20 +105,20 @@ public class TestEaten {
         expectedHitbox.add(new Position(3, 4));
         expectedHitbox.add(new Position(4, 4));
         //arciere vicino al bordo
-        assertEquals(expectedHitbox, eat.trimHitbox(new Archer(new Position(1,4), p1), pieces, cells, 5));
-        
+        assertEquals(expectedHitbox, eat.trimHitbox(new Archer(new Position(1, 4), p1), pieces, cells, DEFAULT_BOARD_SIZE));
+
         //re
         expectedHitbox = new HashSet<>();
-        assertEquals(expectedHitbox, eat.trimHitbox(new King(new Position(4,0)), pieces, cells, 5));
+        assertEquals(expectedHitbox, eat.trimHitbox(new King(new Position(4, 0)), pieces, cells, DEFAULT_BOARD_SIZE));
     }
 
     @Test
     void testGetThreatenedPos() {
-        Set<Position> hitbox = eat.trimHitbox(new Archer(new Position(1,4), p1), pieces, cells, 5);
+        Set<Position> hitbox = eat.trimHitbox(new Archer(new Position(1, 4), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         List<Piece> enemies = new ArrayList<>();
-        assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new Archer(new Position(1,4), p1)));
+        assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new Archer(new Position(1, 4), p1)));
 
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(3, 3), p2), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(3, 3), p2), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(3, 3), p2)));
 
@@ -130,24 +140,25 @@ public class TestEaten {
 
         pieces.put(p1, piecesPlayer1);
         pieces.put(p2, piecesPlayer2);
-        for(int i=0; i<5; i++) {
-            for(int j=0; j<5; j++) {
-                cells.put(new Position(i,j), new ClassicCell());
-                cells.get(new Position(i,j)).setFree(true);
-            }
-        } 
-        cells.get(new Position(1,1)).setFree(false);
-        cells.get(new Position(4,1)).setFree(false);
-        cells.get(new Position(1,0)).setFree(false);
-        cells.get(new Position(1,2)).setFree(false);
-        cells.get(new Position(4,4)).setFree(false);
-        cells.get(new Position(0,1)).setFree(false);
 
-		secondBoard = new BoardImpl(pieces, cells, 5);
+        for (int i = 0; i < DEFAULT_BOARD_SIZE; i++) {
+            for (int j = 0; j < DEFAULT_BOARD_SIZE; j++) {
+                cells.put(new Position(i, j), new ClassicCell());
+                cells.get(new Position(i, j)).setFree(true);
+            }
+        }
+        cells.get(new Position(1, 1)).setFree(false);
+        cells.get(new Position(4, 1)).setFree(false);
+        cells.get(new Position(1, 0)).setFree(false);
+        cells.get(new Position(1, 2)).setFree(false);
+        cells.get(new Position(4, 4)).setFree(false);
+        cells.get(new Position(0, 1)).setFree(false);
+
+        secondBoard = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
         eat = new EatenImpl(secondBoard);
 
         //classic piece circondato da due nemici uno sopra e uno sotto
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         enemies.add(new BasicPiece(new Position(1, 0), p2));
         enemies.add(new BasicPiece(new Position(1, 2), p2));
@@ -155,19 +166,19 @@ public class TestEaten {
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 1), p1)));
 
         //arciere che presenta un nemico nella sua hitbox
-        hitbox = eat.trimHitbox(new Archer(new Position(4, 1), p1), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new Archer(new Position(4, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         enemies.add(new BasicPiece(new Position(4, 4), p2));
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new Archer(new Position(4, 1), p1)));
 
         //classic piece vicino al bordo e con un nemico nella hitbox
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 0), p2), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 0), p2), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         enemies.add(new BasicPiece(new Position(1, 1), p1));
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 0), p2)));
 
         //re con difianco un nemico
-        hitbox = eat.trimHitbox(new King(new Position(0, 1)), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new King(new Position(0, 1)), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new King(new Position(0, 1))));
     }
@@ -188,25 +199,24 @@ public class TestEaten {
         piecesPlayer2.put(new Position(2, 1), new BasicPiece(new Position(2, 1), p2));
         piecesPlayer2.put(new Position(1, 2), new BasicPiece(new Position(1, 2), p2));
 
-
         pieces.put(p1, piecesPlayer1);
         pieces.put(p2, piecesPlayer2);
-        for(int i=0; i<5; i++) {
-            for(int j=0; j<5; j++) {
-                cells.put(new Position(i,j), new ClassicCell());
-                cells.get(new Position(i,j)).setFree(true);
+
+        for (int i = 0; i < DEFAULT_BOARD_SIZE; i++) {
+            for (int j = 0; j < DEFAULT_BOARD_SIZE; j++) {
+                cells.put(new Position(i, j), new ClassicCell());
+                cells.get(new Position(i, j)).setFree(true);
             }
         } 
-        cells.get(new Position(1,1)).setFree(false);
-        cells.get(new Position(4,1)).setFree(false);
-        cells.get(new Position(2,1)).setFree(false);
-        cells.get(new Position(1,2)).setFree(false);
-
-        
-		thirdBoard = new BoardImpl(pieces, cells, 5);
+        cells.get(new Position(1, 1)).setFree(false);
+        cells.get(new Position(4, 1)).setFree(false);
+        cells.get(new Position(2, 1)).setFree(false);
+        cells.get(new Position(1, 2)).setFree(false);
+ 
+        thirdBoard = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
         eat = new EatenImpl(thirdBoard);
 
-        Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
+        Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 1), p1));
         Map<Piece, Set<Piece>> finalmap = new HashMap<>();
         Set<Piece> allies = new HashSet<>();
@@ -218,9 +228,12 @@ public class TestEaten {
         allies.add(new BasicPiece(new Position(1, 1), p1));
         finalmap.put(new BasicPiece(new Position(1, 2), p2), allies);
 
-        assertEquals(finalmap, eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 1), p1), cells, 5));
+        assertEquals(
+            finalmap,
+            eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 1), p1), cells, DEFAULT_BOARD_SIZE)
+        );
 
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 2), p2), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 2), p2), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 2), p2));
         allies = new HashSet<>();
         allies.add(new BasicPiece(new Position(1, 2), p2));
@@ -228,7 +241,10 @@ public class TestEaten {
         finalmap = new HashMap<>();
         finalmap.put(new BasicPiece(new Position(1, 1), p1), allies);
 
-        assertEquals(finalmap, eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 2), p2), cells, 5));
+        assertEquals(
+            finalmap,
+            eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 2), p2), cells, DEFAULT_BOARD_SIZE)
+        );
 
         /*creating a new map*/
         /*king on the boarder of the map with 3 enemies around and an archer of the other team*/
@@ -250,7 +266,7 @@ public class TestEaten {
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
 
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 1), p1), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(2, 1), p1));
         allies = new HashSet<>();
         allies.add(new BasicPiece(new Position(2, 1), p1));
@@ -258,8 +274,11 @@ public class TestEaten {
         allies.add(new BasicPiece(new Position(3, 0), p1));
         finalmap = new HashMap<>();
         finalmap.put(new King(new Position(2, 0)), allies);
-        
-        assertEquals(finalmap, eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 1), p1), cells, 5));
+
+        assertEquals(
+            finalmap,
+            eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 1), p1), cells, DEFAULT_BOARD_SIZE)
+        );
 
         /*creating a new map*/
         /*basic piece between a king and a basic piece*/
@@ -278,13 +297,16 @@ public class TestEaten {
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
 
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 0), p2), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 0), p2), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 0), p2));
         allies = new HashSet<>();
         allies.add(new BasicPiece(new Position(1, 0), p2));
         finalmap = new HashMap<>();
         finalmap.put(new BasicPiece(new Position(2, 0), p1), allies);
-        assertEquals(finalmap, eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 0), p2), cells, 5));
+        assertEquals(
+            finalmap,
+            eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 0), p2), cells, DEFAULT_BOARD_SIZE)
+        );
     }
 
     @Test
@@ -304,33 +326,38 @@ public class TestEaten {
         piecesPlayer2.put(new Position(2, 1), new BasicPiece(new Position(2, 1), p2));
         piecesPlayer2.put(new Position(1, 2), new BasicPiece(new Position(1, 2), p2));
 
-
         pieces.put(p1, piecesPlayer1);
         pieces.put(p2, piecesPlayer2);
-        for(int i=0; i<5; i++) {
-            for(int j=0; j<5; j++) {
-                cells.put(new Position(i,j), new ClassicCell());
-                cells.get(new Position(i,j)).setFree(true);
+
+        for (int i = 0; i < DEFAULT_BOARD_SIZE; i++) {
+            for (int j = 0; j < DEFAULT_BOARD_SIZE; j++) {
+                cells.put(new Position(i, j), new ClassicCell());
+                cells.get(new Position(i, j)).setFree(true);
             }
         } 
-        cells.get(new Position(1,1)).setFree(false);
-        cells.get(new Position(4,1)).setFree(false);
-        cells.get(new Position(1,3)).setFree(false);
-        cells.get(new Position(2,1)).setFree(false);
-        cells.get(new Position(1,2)).setFree(false);
+        cells.get(new Position(1, 1)).setFree(false);
+        cells.get(new Position(4, 1)).setFree(false);
+        cells.get(new Position(1, 3)).setFree(false);
+        cells.get(new Position(2, 1)).setFree(false);
+        cells.get(new Position(1, 2)).setFree(false);
 
-        
-        fourthBoard = new BoardImpl(pieces, cells, 5);
+        fourthBoard = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
         eat = new EatenImpl(fourthBoard);
 
-        Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, 5);
+        Set<Position> hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         List<Piece> enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 1), p1));
-        Map<Piece, Set<Piece>> finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 1), p1), cells, 5);
+        Map<Piece, Set<Piece>> finalmap = eat.checkAllies(
+                enemies,
+                pieces,
+                new BasicPiece(new Position(1, 1), p1),
+                cells,
+                DEFAULT_BOARD_SIZE
+            );
         eat.notifyAllThreatened(finalmap, new BasicPiece(new Position(1, 1), p1), cells, pieces, false);
-        assertTrue(cells.get(new Position(2,1)).isFree());
-        assertTrue(cells.get(new Position(1,2)).isFree());
-        assertFalse(pieces.get(p2).containsKey(new Position(2,1)));
-        assertFalse(pieces.get(p2).containsKey(new Position(1,2)));
+        assertTrue(cells.get(new Position(2, 1)).isFree());
+        assertTrue(cells.get(new Position(1, 2)).isFree());
+        assertFalse(pieces.get(p2).containsKey(new Position(2, 1)));
+        assertFalse(pieces.get(p2).containsKey(new Position(1, 2)));
 
         /*creating a new map*/
         /*king surrounde by 4 enemies, it dies*/
@@ -343,7 +370,7 @@ public class TestEaten {
         piecesPlayer1.put(new Position(3, 1), new BasicPiece(new Position(3, 1), p1));
         piecesPlayer1.put(new Position(2, 2), new BasicPiece(new Position(2, 2), p1));
 
-        piecesPlayer2.put(new Position(2,1), new King(new Position(2, 1)));
+        piecesPlayer2.put(new Position(2, 1), new King(new Position(2, 1)));
 
         pieces.clear();
         pieces.put(p1, piecesPlayer1);
@@ -351,12 +378,12 @@ public class TestEaten {
 
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 2), p1), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 2), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(2, 2), p1));
-        finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 2), p1), cells, 5);
+        finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 2), p1), cells, DEFAULT_BOARD_SIZE);
         eat.notifyAllThreatened(finalmap, new BasicPiece(new Position(2, 2), p1), cells, pieces, false);
-        assertTrue(cells.get(new Position(2,1)).isFree());
-        assertFalse(pieces.get(p2).containsKey(new Position(2,1)));
+        assertTrue(cells.get(new Position(2, 1)).isFree());
+        assertFalse(pieces.get(p2).containsKey(new Position(2, 1)));
 
         /*creating a new map*/
         /*king surrounde by 3 enemies*/
@@ -368,20 +395,20 @@ public class TestEaten {
         piecesPlayer1.put(new Position(1, 1), new BasicPiece(new Position(1, 1), p1));
         piecesPlayer1.put(new Position(3, 1), new BasicPiece(new Position(3, 1), p1));
 
-        piecesPlayer2.put(new Position(2,1), new King(new Position(2, 1)));
+        piecesPlayer2.put(new Position(2, 1), new King(new Position(2, 1)));
 
         pieces.clear();
         pieces.put(p1, piecesPlayer1);
         pieces.put(p2, piecesPlayer2);
-        
+
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 0), p1), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 0), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(2, 0), p1));
-        finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 0), p1), cells, 5);
+        finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 0), p1), cells, DEFAULT_BOARD_SIZE);
         eat.notifyAllThreatened(finalmap, new BasicPiece(new Position(2, 0), p1), cells, pieces, false);
-        assertTrue(pieces.get(p2).containsKey(new Position(2,1)));
-        assertFalse(cells.get(new Position(2,1)).isFree());
+        assertTrue(pieces.get(p2).containsKey(new Position(2, 1)));
+        assertFalse(cells.get(new Position(2, 1)).isFree());
 
         /*creating a new map*/
         /*king on the boarder of the map with 3 enemies around */
@@ -401,12 +428,12 @@ public class TestEaten {
 
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
-        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 1), p1), pieces, cells, 5);
+        hitbox = eat.trimHitbox(new BasicPiece(new Position(2, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(2, 1), p1));
-        finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 1), p1), cells, 5);
+        finalmap =  eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 1), p1), cells, DEFAULT_BOARD_SIZE);
         eat.notifyAllThreatened(finalmap, new BasicPiece(new Position(2, 1), p1), cells, pieces, false);
-        assertTrue(pieces.get(p2).containsKey(new Position(2,0)));
-        assertFalse(cells.get(new Position(2,0)).isFree());
+        assertTrue(pieces.get(p2).containsKey(new Position(2, 0)));
+        assertFalse(cells.get(new Position(2, 0)).isFree());
     }
 
     /**
@@ -422,8 +449,8 @@ public class TestEaten {
         final Position thronePos = new Position(2, 2);
         final Position exitPos = new Position(4, 4);
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < DEFAULT_BOARD_SIZE; i++) {
+            for (int j = 0; j < DEFAULT_BOARD_SIZE; j++) {
                 cells.put(new Position(i, j), new ClassicCell());
             }
         }
@@ -462,7 +489,7 @@ public class TestEaten {
         cells.get(defender1Pos).setFree(false);
         cells.get(defender2Pos).setFree(false);
 
-        fifthBoard = new BoardImpl(pieces, cells, 5);
+        fifthBoard = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
         fifthBoard.updatePiecePos(attackerStartingPosition, attackerEndingPosition, Player.ATTACKER);
         fifthBoard.eat();
 
@@ -471,5 +498,5 @@ public class TestEaten {
         assertFalse(cells.get(attackerEndingPosition).isFree());
 
     }
-    
+
 }
