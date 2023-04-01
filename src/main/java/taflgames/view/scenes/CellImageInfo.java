@@ -1,13 +1,14 @@
 package taflgames.view.scenes;
 
 import taflgames.common.Player;
+import taflgames.common.api.Vector;
 
 public class CellImageInfo implements ImageInfo{
     private final String name;
     private final Player player;
-    private final int rotation;
+    private final Vector rotation;
     //private final QUALCOSA
-    public CellImageInfo(String name, Player player, int rotation) {
+    public CellImageInfo(String name, Player player, Vector rotation) {
         this.name = name;
         this.player = player;
         this.rotation = rotation;
@@ -22,16 +23,17 @@ public class CellImageInfo implements ImageInfo{
         return this.player;
     }
 
-    public int getRotation() {
+    public Vector getRotation() {
         return rotation;
     }
 
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((player == null) ? 0 : player.hashCode());
-        result = prime * result + rotation;
+        result = prime * result + ((rotation == null) ? 0 : rotation.hashCode());
         return result;
     }
     @Override
@@ -50,7 +52,10 @@ public class CellImageInfo implements ImageInfo{
             return false;
         if (player != other.player)
             return false;
-        if (rotation != other.rotation)
+        if (rotation == null) {
+            if (other.rotation != null)
+                return false;
+        } else if (!rotation.equals(other.rotation))
             return false;
         return true;
     }

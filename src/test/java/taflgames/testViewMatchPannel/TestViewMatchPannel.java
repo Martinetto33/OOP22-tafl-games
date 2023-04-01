@@ -23,8 +23,10 @@ public class TestViewMatchPannel extends JFrame{
         EntitiesToDraw toDraw = new EntitiesToDrawImpl();
         toDraw.createPiecesAlive();
         toDraw.createBackgroundCells();
+        toDraw.createSpecialCells();
         a.drawAllPieces(toDraw.getPiecesAlive());
         a.drawBackgroundCells(toDraw.getBackgroundCells());
+        a.drawAllSpecialCells(toDraw.getSpecialCells());
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton();
         goBackButton.setText("INDIETRO");
