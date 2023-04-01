@@ -68,15 +68,6 @@ public abstract class AbstractCell implements Cell {
     }
 
     /**
-     * {@inheritDoc}
-     * //TODO
-     */
-    @Override
-    public CellComponentMemento saveComponentsState() {
-        return null;
-    }
-
-    /**
      * Only subclasses of this class should call this method.
      * @param source the {@link taflgames.common.code.Position} where the
      * event(s) occurred.

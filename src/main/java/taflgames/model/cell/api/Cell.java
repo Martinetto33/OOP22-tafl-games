@@ -90,11 +90,4 @@ public interface Cell {
      */
     Set<CellComponent> getComponents();
 
-    /**
-     * Saves the state of the CellComponent.
-     * @return the {@link taflgames.model.memento.api.CellComponentMemento}
-     * representing the saved state of this component.
-     */
-    CellComponentMemento saveComponentsState();
-
 }

@@ -75,14 +75,6 @@ public final class MatchImpl implements Match {
         this.board.eat();   // Performs the eatings caused by the move just made.
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isOver() {
-        return this.board.hasAPlayerWon().isPresent() || this.board.isDraw(activePlayer);
-    }
-
     @Override
     public Optional<Pair<MatchResult, MatchResult>> getMatchEndStatus() {
         if (this.board.hasAPlayerWon().isPresent()) {

@@ -17,7 +17,6 @@ import taflgames.model.memento.code.CaretakerImpl;
 public class GameLoopImpl implements GameLoop {
     private final Match match;
     private final Caretaker caretaker;
-    private boolean running;
 
     /**
      * Builds a new GameLoop.
@@ -25,7 +24,6 @@ public class GameLoopImpl implements GameLoop {
      */
     public GameLoopImpl(final Match match) {
         this.match = match;
-        this.running = false;
         this.caretaker = new CaretakerImpl(match);
         this.caretaker.updateHistory(); //register the beginning state of the Match.
     }
@@ -34,24 +32,7 @@ public class GameLoopImpl implements GameLoop {
      * {@inheritDoc}
      */
     @Override
-    public void startGameLoop() {
-        this.running = true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void endGameLoop() {
-        this.running = false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void makeMove(final Position starPosition, final Position endPosition) throws IllegalAccessException {
-        this.checkRunning();
+    public void makeMove(final Position starPosition, final Position endPosition) {
         this.match.makeMove(starPosition, endPosition);
     }
 
@@ -59,8 +40,7 @@ public class GameLoopImpl implements GameLoop {
      * {@inheritDoc}
      */
     @Override
-    public void undo() throws IllegalAccessException {
-        this.checkRunning();
+    public void undo() {
         this.caretaker.unlockHistory();
         this.caretaker.undo();
     }
@@ -69,8 +49,7 @@ public class GameLoopImpl implements GameLoop {
      * {@inheritDoc}
      */
     @Override
-    public void passTurn() throws IllegalAccessException {
-        this.checkRunning();
+    public void passTurn() {
         this.match.setNextActivePlayer();
         this.caretaker.updateHistory();
     }
@@ -80,7 +59,7 @@ public class GameLoopImpl implements GameLoop {
      */
     @Override
     public boolean isOver() {
-        return this.match.isOver();
+        return this.match.getMatchEndStatus().isPresent();
     }
 
     /**
@@ -89,15 +68,6 @@ public class GameLoopImpl implements GameLoop {
     @Override
     public Optional<Pair<MatchResult, MatchResult>> getMatchResult() {
         return this.match.getMatchEndStatus();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    private void checkRunning() throws IllegalAccessException {
-        if (!this.running) {
-            throw new IllegalAccessException("The GameLoop is not running!");
-        }
     }
 
 }
