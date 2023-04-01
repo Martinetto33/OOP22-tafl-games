@@ -1,5 +1,7 @@
 package taflgames.model.memento.api;
 
+import java.util.List;
+
 /**
  * An interface modelling the behaviour that the Inner Class of the Cell implementation
  * should provide in order to save a snapshot of the current state of a Cell. Said Inner
@@ -24,5 +26,7 @@ public interface CellMemento {
     /* PMD error regarding this method's name suppressed
      * because 'isCellStatus' makes no sense.
      */
+
+    List<CellComponentMemento> getComponentMementos();
 
 }

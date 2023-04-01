@@ -1,5 +1,6 @@
 package taflgames.model.cell.code;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
+import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
@@ -79,7 +81,16 @@ public class Tomb extends AbstractCell implements CellComponent {
         return "Tomb";
     }
 
+    @Deprecated
     public CellMemento save() {
+        return this.new TombMementoImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CellComponentMemento saveComponentState() {
         return this.new TombMementoImpl();
     }
 
@@ -88,7 +99,7 @@ public class Tomb extends AbstractCell implements CellComponent {
         super.restore(tm);
     }
 
-    public class TombMementoImpl implements CellMemento {
+    public class TombMementoImpl implements CellMemento, CellComponentMemento {
         private final Map<Player, Queue<Piece>> innerDeadPieces;
         private final boolean isFree;
 
@@ -120,6 +131,11 @@ public class Tomb extends AbstractCell implements CellComponent {
 
         public Map<Player, Queue<Piece>> getInnerDeadPieces() {
             return this.innerDeadPieces;
+        }
+
+        @Override
+        public List<CellComponentMemento> getComponentMementos() {
+            return Collections.emptyList();
         }
 
     }

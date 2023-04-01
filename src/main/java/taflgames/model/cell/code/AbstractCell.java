@@ -116,7 +116,13 @@ public abstract class AbstractCell implements Cell {
      */
     @Override
     public CellMemento save() {
-        return this.new CellMementoImpl();
+        if (!this.cellComponents.isEmpty()) {
+            return this.new CellMementoImpl(this.cellComponents.stream()
+                    .map(component -> component.saveComponentState())
+                    .toList());
+            
+        }
+        return this.new CellMementoImpl(null);
     }
 
     /**
@@ -137,13 +143,15 @@ public abstract class AbstractCell implements Cell {
     public class CellMementoImpl implements CellMemento {
 
         private final boolean innerCellStatus;
+        private final List<CellComponentMemento> componentMementos;
 
         /**
          * Builds a new CellMemento representing
          * the state of this cell.
          */
-        public CellMementoImpl() {
+        public CellMementoImpl(final List<CellComponentMemento> componentMementos) {
             this.innerCellStatus = AbstractCell.this.cellStatus;
+            this.componentMementos = componentMementos;
         }
 
         /**
@@ -152,6 +160,14 @@ public abstract class AbstractCell implements Cell {
         @Override
         public boolean getCellStatus() {
             return this.innerCellStatus;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<CellComponentMemento> getComponentMementos() {
+            return Collections.unmodifiableList(this.componentMementos);
         }
 
         /**
