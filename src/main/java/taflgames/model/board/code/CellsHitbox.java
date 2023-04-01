@@ -21,6 +21,9 @@ import taflgames.model.pieces.api.Piece;
  */
 public class CellsHitbox {
 
+    private static final String THRONE = "Throne";
+    private static final String EXIT = "Exit";
+
     private final Set<Position> throneAndExitsPositions;
 
     /**
@@ -29,10 +32,10 @@ public class CellsHitbox {
      * to take the positions of special cells.
      */
     public CellsHitbox(final Board inputBoard) {
-        Set<Position> relevantPositions = new HashSet<>();
+        final Set<Position> relevantPositions = new HashSet<>();
         inputBoard.getMapCells().entrySet().stream()
-            .filter(entry -> entry.getValue().getType().equals("Throne")
-                    || entry.getValue().getType().equals("Exit"))
+            .filter(entry -> THRONE.equals(entry.getValue().getType())
+                    || EXIT.equals(entry.getValue().getType()))
             .forEach(entry -> relevantPositions.add(entry.getKey()));
         this.throneAndExitsPositions = Collections.unmodifiableSet(relevantPositions);
     }

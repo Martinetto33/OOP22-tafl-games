@@ -18,7 +18,10 @@ import taflgames.model.cell.api.Slider;
  */
 public final class SliderImpl extends AbstractCell implements Slider {
 
-    private Vector orientation = new VectorImpl(0, 1); //un versore che indica la direzione in cui questo slider punta
+    // Un versore che indica la direzione in cui questo slider punta
+    private Vector orientation = new VectorImpl(0, 1);  // NOPMD
+    // The Vector class models a vector and provides features that a List does not support.
+
     private boolean triggered; //dice se è già stata attivata in questo turno
     private SliderMediator mediator;
     private final Position sliderPos;
@@ -57,29 +60,29 @@ public final class SliderImpl extends AbstractCell implements Slider {
         final Map<Player, Map<Position, Piece>> pieces, 
         final Map<Position, Cell> cells
     ) {
-        if (this.sliderPos.equals(source)) {
-            /* Non mi importa che tipo di pezzo sia arrivato, lo slider lo fa scivolare */
-            if (!this.triggered && this.active) {
-                this.triggered = true;
-                Position newPosition = this.mediator.requestMove(source, this.orientation);
-                /*Trovo la casella più lontana su cui ci si possa spostare seguendo la direzione del vettore orientamento */
-                this.mediator.updatePiecePos(this.sliderPos, newPosition, movedPiece.getPlayer());
+        /* Non importa che tipo di pezzo sia arrivato, lo slider lo fa scivolare */
+        if (this.sliderPos.equals(source) && !this.triggered && this.active) {
+            this.triggered = true;
+            final Position newPosition = this.mediator.requestMove(source, this.orientation);
+            /*Trovo la casella più lontana su cui ci si possa spostare seguendo la direzione del vettore orientamento */
+            this.mediator.updatePiecePos(this.sliderPos, newPosition, movedPiece.getPlayer());
 
-                if (movedPiece.getCurrentPosition().equals(this.sliderPos)) {
-                    /* If the piece is still here after requesting a move to the Mediator,
-                     * it means it is stuck by obstacles in its way and therefore any
-                     * CellComponents attached to this cell should be notified.
-                    */
-                    super.updateComponents(source, movedPiece, events, pieces, cells);
-                }
+            if (movedPiece.getCurrentPosition().equals(this.sliderPos)) {
+                /* If the piece is still here after requesting a move to the Mediator,
+                    * it means it is stuck by obstacles in its way and therefore any
+                    * CellComponents attached to this cell should be notified.
+                */
+                super.updateComponents(source, movedPiece, events, pieces, cells);
             }
         }
     }
 
+    @Override
     public void reset() {
         this.triggered = false;
     }
 
+    @Override
     public void notifyTurnHasEnded(final int turn) {
         if (turn - this.lastActivityTurn == SliderImpl.TURNS_FOR_REACTIVATION) {
             this.orientation = this.orientation.rotate(SliderImpl.ANGLE_ROTATION).get();
@@ -101,6 +104,7 @@ public final class SliderImpl extends AbstractCell implements Slider {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addMediator(final Board board) {
         this.mediator = new SliderMediatorImpl(board);
     }

@@ -117,7 +117,7 @@ public final class BoardImpl implements Board, TimedEntity {
         // Controllo se la cella di arrivo è libera per lo swapper,
         // poichè se la cella non fosse libera dovrei gestire lo swapper come viene fatto dopo questo if
         if (cells.get(dest).isFree()) {
-            for (final Vector vector : vectors) { // NO PMD
+            for (final Vector vector : vectors) { // NOPMD
                 // The Vector class models a vector and provides features that a List does not support.
                 for (int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {
                     if (vector.multiplyByScalar(numberOfBox).applyToPosition(start).equals(dest)) {
@@ -189,7 +189,7 @@ public final class BoardImpl implements Board, TimedEntity {
      * {@inheritDoc}
      */
     @Override
-    public Position getFurthestReachablePos(final Position startPos, final Vector direction) {  // NO PMD
+    public Position getFurthestReachablePos(final Position startPos, final Vector direction) {  // NOPMD
         // The Vector class models a vector and provides features that a List does not support.
         Position furthestReachable = startPos;
         for (int numberOfBox = 1; numberOfBox < this.size; numberOfBox++) {

@@ -19,10 +19,6 @@ public final class Tomb extends AbstractCell implements CellComponent {
 
     private Map<Player, Queue<Piece>> deadPieces = new HashMap<>();
 
-    public Tomb() {
-        super();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -59,7 +55,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
     ) {
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
         if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
-            Piece pieceToResume = deadPieces.get(player).poll();    // prende la prima pedina in coda
+            final Piece pieceToResume = deadPieces.get(player).poll();    // prende la prima pedina in coda
             pieceToResume.reanimate();	// ora è viva
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
             pieces.get(player).put(pieceToResume.getCurrentPosition(), pieceToResume);
@@ -68,7 +64,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
 
     public void addDeadPieces(final Player player, final Piece piece) {
         if (!deadPieces.containsKey(player)) {
-            Queue<Piece> list = new LinkedList<>();
+            final Queue<Piece> list = new LinkedList<>();
             list.add(piece);
             deadPieces.put(player, list);
         } else {
@@ -84,6 +80,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
         return "Tomb";
     }
 
+    @Override
     public CellMemento save() {
         return this.new TombMementoImpl();
     }

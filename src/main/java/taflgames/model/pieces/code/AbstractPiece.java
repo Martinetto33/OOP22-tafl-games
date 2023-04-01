@@ -68,18 +68,21 @@ public abstract class AbstractPiece implements Piece {
         /**
         * {@inheritDoc}
         */
+        @Override
         public int getBackupCurrNumbOfLives() {
             return this.backupCurrentNumbOfLives;
         }
         /**
         * {@inheritDoc}
         */
+        @Override
         public Position getBackupPosition() {
             return this.backupPosition;
         }
         /**
         * {@inheritDoc}
         */
+        @Override
         public boolean backupIsAlive() {
             return this.backupCurrentNumbOfLives > 0;
         }

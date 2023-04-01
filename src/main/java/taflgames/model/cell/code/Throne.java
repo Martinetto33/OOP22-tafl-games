@@ -10,9 +10,8 @@ import taflgames.model.pieces.api.Piece;
 
 public final class Throne extends AbstractCell {
 
-    public Throne() {
-        super();
-    }
+    private static final String THRONE_TYPE = "Throne";
+    private static final String KING = "KING";
 
     /**
      * {@inheritDoc}
@@ -33,7 +32,7 @@ public final class Throne extends AbstractCell {
      */
     @Override
     public boolean canAccept(final Piece piece) {
-        return (piece.getMyType().getTypeOfPiece().equals("KING") && super.isFree());
+        return KING.equals(piece.getMyType().getTypeOfPiece()) && super.isFree();
     }
 
     /**
@@ -41,6 +40,6 @@ public final class Throne extends AbstractCell {
      */
     @Override
     public String getType() {
-        return "Throne";
+        return THRONE_TYPE;
     }
 }

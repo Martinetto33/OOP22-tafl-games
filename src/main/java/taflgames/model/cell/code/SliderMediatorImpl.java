@@ -15,7 +15,8 @@ public final class SliderMediatorImpl implements SliderMediator {
     }
 
     @Override
-    public Position requestMove(final Position source, final Vector orientation) {
+    public Position requestMove(final Position source, final Vector orientation) {  // NOPMD
+        // The Vector class models a vector and provides features that a List does not support.
         return board.getFurthestReachablePos(source, orientation);
     }
 

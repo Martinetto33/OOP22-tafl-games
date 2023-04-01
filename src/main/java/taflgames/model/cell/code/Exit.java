@@ -10,9 +10,7 @@ import taflgames.model.pieces.api.Piece;
 
 public class Exit extends AbstractCell {
 
-    public Exit() {
-        super();
-    }
+    private static final String KING = "KING";
 
     /**
      * {@inheritDoc}
@@ -33,7 +31,7 @@ public class Exit extends AbstractCell {
      */
     @Override
     public boolean canAccept(final Piece piece) {
-        return (piece.getMyType().getTypeOfPiece().equals("KING") && super.isFree());
+        return KING.equals(piece.getMyType().getTypeOfPiece()) && super.isFree();
     }
 
     /**
