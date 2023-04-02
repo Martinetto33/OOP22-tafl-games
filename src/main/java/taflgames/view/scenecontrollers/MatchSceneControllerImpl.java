@@ -41,4 +41,14 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
         return this.getController().getPiecesDisposition();
     }
 
+    @Override
+    public boolean isSourceSelectionValid(Position pos) {
+        return this.getController().isStartingPointValid(pos);
+    }
+
+    @Override
+    public boolean moveIfLegal(Position source, Position destination) {
+        return this.getController().moveIfLegal(source, destination);
+    }
+
 }

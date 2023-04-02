@@ -19,4 +19,18 @@ public interface MatchSceneController extends BasicSceneController {
      */
     Map<Player, Map<Position, String>> getPiecesMapping();
 
+    /**
+     * @return if the selected source is valid or not
+     */
+    boolean isSourceSelectionValid(Position pos);
+
+    /**
+     * Tells the controller to make the move from {@code source} to {@code destination}
+     * if the move is legal.
+     * @param source the coordinates of the selected source cell
+     * @param destination the coordinates of the selected destination cell
+     * @return true if the move is legal and then performed, false otherwise
+     */
+    boolean moveIfLegal(Position source, Position destination);
+
 }
