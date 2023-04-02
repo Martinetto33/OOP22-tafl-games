@@ -20,11 +20,12 @@ public class MatchScene extends AbstractScene {
     private static final String GO_BACK = "Go Back";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final int NUMB_CELLS_SIDE = 11;
-    /**
-     * TO DO: controller = new ImplMatchSceneController;
-     */
+
     private MatchSceneController controller;
     private MatchPanelImpl a;
+
+    private Optional<Position> source = Optional.empty();
+    private Optional<Position> destination = Optional.empty();
 
     public MatchScene(final MatchSceneController controller) {
         super(MatchScene.MATCH, Optional.of("home-background.jpeg"));
@@ -57,6 +58,36 @@ public class MatchScene extends AbstractScene {
 
         // When the match starts, cells and pieces are drawn for the first time.
         this.update();
+    }
+
+    public void selectPosition(final Position pos) {
+        if (this.source.isEmpty() && this.controller.isSourceSelectionValid(pos)) {
+            // If the source position is empty and the selected one is a valid source,
+            // then the selected position is set as source
+            this.source = Optional.of(pos);
+        } else if (this.source.get().equals(pos)) {
+            // If the current source is equal to the selected position,
+            // this means that the source is deselected
+            this.source = Optional.empty();
+        } else {
+            // If the source is already set and it is not deselected,
+            // then the selected position is the destination
+            this.destination = Optional.of(pos);
+            // Once the destination is selected, the move is triggered;
+            // it will be performed if it is legal.
+            this.requestMove();
+        }
+    }
+
+    private void requestMove() {
+        if (this.source.isPresent() && this.destination.isPresent()) {
+            if (this.controller.moveIfLegal(this.source.get(), this.destination.get())) {
+                // If the move is performed, source is reset
+                this.source = Optional.empty();
+            }
+            // Destination is reset whether the move has been made or not
+            this.destination = Optional.empty();
+        }
     }
 
     @Override
