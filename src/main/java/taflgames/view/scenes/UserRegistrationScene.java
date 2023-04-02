@@ -6,13 +6,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -29,18 +24,14 @@ import taflgames.view.scenecontrollers.UserRegistrationController;
  * Implementation of the user registration scene.
  */
 public class UserRegistrationScene extends AbstractScene {
-
-    private static final String SEP = System.getProperty("file.separator");
-    private static final String ROOT = "taflgames" + SEP;
-
     private static final String USER_REGISTRATION = "User Registration";
     private static final String GO_BACK = "Go Back";
     private static final String SUBMIT = "Submit";
     private static final int SPACE = 10;
     private static final int CHARACTER_LIMIT = 20;
     private static final int CHARACTER_SIZE_FOR_LABELS = 20;
-    /* To make the text areas resizable but smaller than the frame, a constant
-     * ratio is needed.
+    /* a constant
+     * ratio is needed to make the text areas resizable but smaller than the frame.
      */
     private static final int HEIGHT_RATIO = 10;
     private static final int WIDTH_RATIO = 10;

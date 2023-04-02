@@ -10,7 +10,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.GameOverController;
 
 /**

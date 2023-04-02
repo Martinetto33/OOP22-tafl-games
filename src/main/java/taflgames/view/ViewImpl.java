@@ -10,10 +10,7 @@ import javax.swing.JFrame;
 
 import taflgames.controller.Controller;
 import taflgames.controller.ControllerImpl;
-import taflgames.view.scenecontrollers.GameChoiceControllerImpl;
-import taflgames.view.scenecontrollers.GameOverControllerImpl;
 import taflgames.view.scenecontrollers.HomeControllerImpl;
-import taflgames.view.scenes.GameOverScene;
 import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.Scene;
 

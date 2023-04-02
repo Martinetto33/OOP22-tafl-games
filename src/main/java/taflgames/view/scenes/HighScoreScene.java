@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -22,6 +21,9 @@ import javax.swing.JTable;
 import taflgames.common.code.Pair;
 import taflgames.view.scenecontrollers.HighScoreController;
 
+/**
+ * A View scene displaying the results of all past matches, if any.
+ */
 public class HighScoreScene extends AbstractScene {
     private static final String SCENE_NAME = "High Score";
     private static final int LABEL_WIDTH = 120;
@@ -30,6 +32,11 @@ public class HighScoreScene extends AbstractScene {
 
     private final HighScoreController controller;
 
+    /**
+     * Builds a new HighScoreScene.
+     * @param controller the {@link taflgames.view.scenecontrollers.HighScoreController}
+     * associated to this scene.
+     */
     public HighScoreScene(HighScoreController controller) {
         super(HighScoreScene.SCENE_NAME, Optional.of("home-background.jpeg"));
         this.controller = controller;
