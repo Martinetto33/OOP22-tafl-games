@@ -109,11 +109,21 @@ public final class ControllerImpl implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public void makeMove(final Position startPos, final Position endPos) {
-        if (this.match.selectSource(startPos) && this.match.selectDestination(startPos, endPos)) {
+    public boolean moveIfLegal(final Position startPos, final Position endPos) {
+        final boolean isMoveLegal = this.match.selectSource(startPos) && this.match.selectDestination(startPos, endPos);
+        if (isMoveLegal) {
             this.match.makeMove(startPos, endPos);
+            // The move hs been performed, so the board view must be updated.
             this.view.update();
+            if (this.isOver()) {
+                /*
+                 * TODO: cause the match scene to end
+                 */
+            } else {
+                this.passTurn();
+            }
         }
+        return isMoveLegal;
     }
 
     /**
@@ -122,7 +132,6 @@ public final class ControllerImpl implements Controller {
     @Override
     public void passTurn() {
         this.match.setNextActivePlayer();
-        //TODO: this.view.update();
     }
 
     /**
