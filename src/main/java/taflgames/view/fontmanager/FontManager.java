@@ -69,7 +69,6 @@ public class FontManager {
      * @return the button Font
      */
     public Font getButtonFont() {
-        final Font result = this.font.deriveFont(Font.PLAIN, Scene.BUTTON_FONT_SIZE);
-        return result;
+        return this.font.deriveFont(Font.PLAIN, Scene.BUTTON_FONT_SIZE);
     }
 }

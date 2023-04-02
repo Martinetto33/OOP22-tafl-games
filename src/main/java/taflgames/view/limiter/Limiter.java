@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Limiter extends PlainDocument {
     private static final Logger LOGGER = LoggerFactory.getLogger(Limiter.class);
+    private static final long serialVersionUID = 18263487L;
     private final int limit;
 
     /**

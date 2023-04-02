@@ -11,7 +11,7 @@ public final class SampleLeaderboardBuilder {
     /* Used to hide default constructor; needed to avoid checkstyle warnings. */
     private SampleLeaderboardBuilder() {
 
-    };
+    }
 
     /**
      * Creates a leaderboard, adds some results to it and modifies

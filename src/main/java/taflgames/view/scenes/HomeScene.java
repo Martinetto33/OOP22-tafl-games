@@ -38,8 +38,7 @@ public class HomeScene extends AbstractScene {
     private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
     private static final int WIDTH_RATIO = 200;
     private static final int HEIGHT_RATIO = 200;
-    
-    
+
     private final HomeController controller;
     private final Dimension buttonDimension;
 
