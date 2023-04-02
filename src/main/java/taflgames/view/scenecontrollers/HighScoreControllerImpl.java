@@ -1,0 +1,49 @@
+package taflgames.view.scenecontrollers;
+
+import taflgames.controller.Controller;
+import taflgames.controller.leaderboard.api.Leaderboard;
+import taflgames.view.View;
+import taflgames.view.scenes.HomeScene;
+
+/**
+ * A controller for the HighScore Scene, which displays players' results organised
+ * in a Leaderboard.
+ */
+public class HighScoreControllerImpl extends AbstractBasicSceneController implements HighScoreController {
+
+    /**
+     * Builds a new HighScoreControllerImpl.
+     * @param view the main {@link taflgames.view.View} of the application.
+     * @param controller the main {@link taflgames.controller.Controller} of the application.
+     */
+    public HighScoreControllerImpl(final View view, final Controller controller) {
+        super(view, controller);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Leaderboard requestLeaderboard() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'requestLeaderboard'");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void goToNextScene() {
+        // no next scene after HighScore scene
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void goToPreviousScene() {
+        this.getView().setScene(new HomeScene(
+            new HomeControllerImpl(this.getView(), this.getController())));
+    }
+    
+}
