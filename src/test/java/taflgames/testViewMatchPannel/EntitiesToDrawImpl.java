@@ -3,6 +3,7 @@ package taflgames.testViewMatchPannel;
 import java.util.*;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.common.code.VectorImpl;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
@@ -14,6 +15,7 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
 
     Map<Position,PieceImageInfo> piecesAlive = new HashMap<>();
     Map<Position, CellImageInfo> backgroundCells = new HashMap<>();
+    Map<Position, CellImageInfo> specialCells = new HashMap<>();
 
     public void createPiecesAlive() {
         this.piecesAlive.put(new Position(3, 2), new PieceImageInfo("BASIC_PIECE", Player.ATTACKER));
@@ -24,10 +26,17 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
     }
 
     public void createBackgroundCells() {
-       this.backgroundCells.put(new Position(3, 2), new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0));
-       this.backgroundCells.put(new Position(5, 7), new CellImageInfo("CELL_THRONE", Player.DEFENDER, 0));
-       this.backgroundCells.put(new Position(8, 8), new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0));
-       this.backgroundCells.put(new Position(1, 1), new CellImageInfo("CELL_BASIC", Player.DEFENDER, 0));
+       this.backgroundCells.put(new Position(3, 2), new CellImageInfo("CELL_BASIC", Player.DEFENDER,new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(5, 7), new CellImageInfo("CELL_THRONE", Player.DEFENDER, new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(8, 8), new CellImageInfo("CELL_BASIC", Player.DEFENDER, new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(1, 7), new CellImageInfo("CELL_BASIC", Player.DEFENDER, new VectorImpl(0, 0)));
+    }
+
+    public void createSpecialCells() {
+       this.specialCells.put(new Position(1, 8), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(-1, 0)));
+       this.specialCells.put(new Position(8, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, -1)));
+       this.specialCells.put(new Position(5, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(1, 0)));
+       this.specialCells.put(new Position(3, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, 1)));
     }
 
     public Map<Position,PieceImageInfo> getPiecesAlive() {
@@ -36,5 +45,9 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
 
     public Map<Position, CellImageInfo> getBackgroundCells() {
         return this.backgroundCells;
+    }
+
+    public Map<Position, CellImageInfo> getSpecialCells() {
+        return this.specialCells;
     }
 }
