@@ -54,6 +54,9 @@ public class MatchScene extends AbstractScene {
         */
         /*da usare drawBackgroundcell insieme alle info del controller */
         scene.setVisible(true);
+
+        // When the match starts, cells and pieces are drawn for the first time.
+        this.update();
     }
 
     @Override
