@@ -37,15 +37,15 @@ public class UserRegistrationScene extends AbstractScene {
     private static final String GO_BACK = "Go Back";
     private static final String SUBMIT = "Submit";
     private static final int SPACE = 10;
-    private static final int CHARACTER_LIMIT = 50;
+    private static final int CHARACTER_LIMIT = 40;
     private static final int CHARACTER_SIZE_FOR_LABELS = 20;
     /* To make the text areas resizable but smaller than the frame, a constant
      * ratio is needed.
      */
     private static final int HEIGHT_RATIO = 10;
-    private static final int WIDTH_RATIO = 6;
+    private static final int WIDTH_RATIO = 10;
 
-    private static final int LABEL_WIDTH = 100;
+    private static final int LABEL_WIDTH = 120;
     private static final int LABEL_HEIGHT = 60;
     
     private final UserRegistrationController controller;
@@ -69,8 +69,8 @@ public class UserRegistrationScene extends AbstractScene {
         this.attackerNameTextField = new JTextField(CHARACTER_LIMIT);
         this.defenderNameTextField = new JTextField(CHARACTER_LIMIT);
         
-        this.setDimensions(this.controller.getViewWidth() / HEIGHT_RATIO,
-            this.controller.getViewHeight() / WIDTH_RATIO);
+        this.setDimensions(this.controller.getViewWidth() / WIDTH_RATIO,
+            this.controller.getViewHeight() / HEIGHT_RATIO);
 
         final JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.PAGE_AXIS));
