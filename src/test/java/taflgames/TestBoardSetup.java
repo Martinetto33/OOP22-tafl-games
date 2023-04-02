@@ -315,8 +315,8 @@ class TestBoardSetup {
     }
 
     private Set<Position> generateAllPositions() {
-        return  Stream.iterate(0, row -> row+1).limit(BOARD_SIZE)
-                .map(row -> Stream.iterate(0, col -> col+1).limit(BOARD_SIZE)
+        return  Stream.iterate(0, row -> row + 1).limit(BOARD_SIZE)
+                .map(row -> Stream.iterate(0, col -> col + 1).limit(BOARD_SIZE)
                                 .map(col -> new Position(row, col))
                                 .collect(Collectors.toSet()))
                 .collect(HashSet::new, HashSet::addAll, HashSet::addAll);

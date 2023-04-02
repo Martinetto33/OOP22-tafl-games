@@ -1,50 +1,172 @@
 package taflgames.model.cell.code;
 
-import taflgames.model.cell.api.Cell;
-import taflgames.model.memento.api.CellMemento;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public abstract class AbstractCell implements Cell{
+import taflgames.common.Player;
+import taflgames.common.code.Position;
+import taflgames.model.cell.api.Cell;
+import taflgames.model.cell.api.CellComponent;
+import taflgames.model.memento.api.CellComponentMemento;
+import taflgames.model.memento.api.CellMemento;
+import taflgames.model.pieces.api.Piece;
+
+public abstract class AbstractCell implements Cell {
 
     private boolean cellStatus;
+    private final Set<CellComponent> cellComponents;
     /** 
      * 
     */
     public AbstractCell() {
         this.cellStatus = true;
+        this.cellComponents = new HashSet<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isFree() {
         return cellStatus;
     }
+
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
-    public void setFree(final boolean cellStatus) {        
+    public void setFree(final boolean cellStatus) {
         this.cellStatus = cellStatus;
     }
 
-    public CellMemento save() {
-        return this.new CellMementoImpl();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void attachComponent(final CellComponent cellComponent) {
+        this.cellComponents.add(cellComponent);
     }
 
-    public void restore(CellMemento cm) {
-        this.cellStatus = cm.getCellStatus();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void detachComponent(final CellComponent cellComponent) {
+        this.cellComponents.remove(cellComponent);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<CellComponent> getComponents() {
+        return Collections.unmodifiableSet(this.cellComponents);
+    }
+
+    /**
+     * Only subclasses of this class should call this method.
+     * @param source the {@link taflgames.common.code.Position} where the
+     * event(s) occurred.
+     * @param sender the {@link taflgames.model.pieces.api.Piece} that
+     * produced the event(s).
+     * @param events the List of occurred events.
+     * @param pieces the Map containing the {@link taflgames.model.pieces.api.Piece}
+     * elements.
+     * @param cells the Map containing the {@link taflgames.model.cell.api.Cell}
+     * elements.
+     */
+    protected void updateComponents(final Position source, final Piece sender, final List<String> events, 
+                                    final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells) {
+        if (!this.cellComponents.isEmpty()) {
+            this.cellComponents
+                .forEach(component -> component.notifyComponent(source, sender, events, pieces, cells));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void notifyCellThatTurnHasEnded() {
+        if (!this.cellComponents.isEmpty()) {
+            final Set<CellComponent> inactiveComponents = this.cellComponents.stream()
+                    .filter(component -> !component.isActive())
+                    .collect(Collectors.toSet());
+            if (!inactiveComponents.isEmpty()) {
+                inactiveComponents.forEach(component -> this.detachComponent(component));
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CellMemento save() {
+        if (!this.cellComponents.isEmpty()) {
+            return this.new CellMementoImpl(this.cellComponents.stream()
+                    .map(component -> component.saveComponentState())
+                    .toList());
+
+        }
+        return this.new CellMementoImpl(Collections.emptyList());
+    }
+
+    /**
+     * Only subclasses should be able to access this
+     * method. Restores this Cell's status to the snapshot
+     * saved in the given CellMemento parameter.
+     * @param cm the CellMemento containing the status
+     * to which this Cell will be reverted.
+     */
+    protected void restore(final CellMemento cm) {
+        this.cellStatus = cm.getCellStatus();
+        cm.getComponentMementos().forEach(component -> component.restore());
+    }
+
+    /**
+     * Represents the state of this Cell at a given turn
+     * in the match.
+     */
     public class CellMementoImpl implements CellMemento {
 
         private final boolean innerCellStatus;
+        private final List<CellComponentMemento> componentMementos;
 
-        public CellMementoImpl() {
+        /**
+         * Builds a new CellMemento representing
+         * the state of this cell.
+         * @param componentMementos the list of the mementos
+         * of the components of this cell.
+         */
+        public CellMementoImpl(final List<CellComponentMemento> componentMementos) {
             this.innerCellStatus = AbstractCell.this.cellStatus;
+            this.componentMementos = componentMementos;
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
         public boolean getCellStatus() {
             return this.innerCellStatus;
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<CellComponentMemento> getComponentMementos() {
+            return Collections.unmodifiableList(this.componentMementos);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void restore() {
             AbstractCell.this.restore(this);
@@ -52,4 +174,3 @@ public abstract class AbstractCell implements Cell{
 
     }
 }
-    

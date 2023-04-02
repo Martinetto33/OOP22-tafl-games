@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * the {@link taflgames.model.cell.code.Throne} cell have a correct
  * hitbox and participate as expected in pieces captures.
  */
-public class TestCellsHitbox {
+class TestCellsHitbox {
 
     @Test
     void testCellsHitbox() {

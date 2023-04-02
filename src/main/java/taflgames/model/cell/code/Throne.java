@@ -8,31 +8,38 @@ import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
-public class Throne extends AbstractCell{
-    
-    public Throne() {
-        super();
-    }
-    
+public final class Throne extends AbstractCell {
+
+    private static final String THRONE_TYPE = "Throne";
+    private static final String KING = "KING";
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void notify(Position source, Piece sender, List<String> events, Map<Player, Map<Position, Piece>> pieces,
-            Map<Position, Cell> cells) {
-    }
-    
-    @Override
-    public boolean canAccept(Piece piece) {
-        if(piece.getMyType().getTypeOfPiece().equals("KING") && super.isFree()) {
-            return true;
-        } else {
-            return false;
-        }
+    public void notify(
+        final Position source,
+        final Piece sender,
+        final List<String> events, 
+        final Map<Player, Map<Position, Piece>> pieces,
+        final Map<Position, Cell> cells
+    ) {
+        // Empty
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canAccept(final Piece piece) {
+        return KING.equals(piece.getMyType().getTypeOfPiece()) && super.isFree();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getType() {
-        return "Throne";
+        return THRONE_TYPE;
     }
-
-
-
 }
