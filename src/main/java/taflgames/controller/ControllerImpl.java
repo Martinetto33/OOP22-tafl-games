@@ -3,7 +3,6 @@ package taflgames.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
-import taflgames.controller.gameloop.api.GameLoop;
-import taflgames.controller.gameloop.code.GameLoopImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -33,7 +30,6 @@ public final class ControllerImpl implements Controller {
 
     private final View view;
     private Model match;
-    private GameLoop gameLoop;
 
     /**
      * Instantiates a controller for the application.
@@ -66,8 +62,6 @@ public final class ControllerImpl implements Controller {
             LOGGER.error(errorMsg);
             throw new IOException(errorMsg);
         }
-
-        this.createGameLoop();
     }
 
     @Override
@@ -93,13 +87,6 @@ public final class ControllerImpl implements Controller {
             LOGGER.error(errorMsg);
             throw new IOException(errorMsg);
         }
-
-        this.createGameLoop();
-    }
-
-    private void createGameLoop() {
-        Objects.requireNonNull(this.match);
-        this.gameLoop = new GameLoopImpl(this.match);
     }
 
     /**
@@ -124,26 +111,9 @@ public final class ControllerImpl implements Controller {
     @Override
     public void makeMove(final Position startPos, final Position endPos) {
         if (this.match.selectSource(startPos) && this.match.selectDestination(startPos, endPos)) {
-            this.gameLoop.makeMove(startPos, endPos);
+            this.match.makeMove(startPos, endPos);
+            this.view.update();
         }
-        //TODO: this.view.render();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isOver() {
-        return this.gameLoop.isOver();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void undo() {
-        this.gameLoop.undo();
-        //TODO: this.view.render();
     }
 
     /**
@@ -151,8 +121,24 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public void passTurn() {
-        this.gameLoop.passTurn();
-        //TODO: this.view.render();
+        this.match.setNextActivePlayer();
+        //TODO: this.view.update();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getCurrentPlayer() {
+        return this.match.getActivePlayer();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isOver() {
+        return this.match.getMatchEndStatus().isPresent();
     }
 
     /**
@@ -160,7 +146,7 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public Optional<Pair<MatchResult, MatchResult>> getMatchResult() {
-        return this.gameLoop.getMatchResult();
+        return this.match.getMatchEndStatus();
     }
 
     /**
@@ -183,7 +169,9 @@ public final class ControllerImpl implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public Player getCurrentPlayer() {
-        return this.match.getActivePlayer();
+    public void undo() {
+        // TODO: undo
+        // TODO: this.view.update();
     }
+
 }
