@@ -1,6 +1,7 @@
 package taflgames.view.scenes;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -39,15 +40,39 @@ public interface MatchPanel {
      * @param newPosition
      */
     void movePiece(Position originalPos, Position newPosition);
-
-    Map<JButton, Position> getMapBottoni();
-
-    Map<Position, JLabel> getMapPedine();
-
+    /**
+     * 
+     * @return the map of jbuttons with their position
+     */
+    Map<JButton, Position> getMapButtons();
+    /**
+     * 
+     * @return the map of jlabels that rappresents the pieces with their position
+     */
+    Map<Position, JLabel> getMapPieces();
+    /**
+     * 
+     * @return the map of jlabels that rappresents the pieces with their position
+     */
     Map<Position, JLabel> getMapSpecialCell();
-
+    /**
+     * 
+     * @return the map of jlabels that rappresents the pieces with their position
+     */
     Map<Position, JLabel> getMapBoard();
-
+    /**
+     * 
+     * @return size of MatchPanel
+     */
     int getMySize();
+    /**
+     * MAY CHANGE IN THE FUTURE DEPENDING ON CONTROLLER IMPLEMENTATION.
+     * this method sets the new set of position given by the controller
+     * which rappresents the positions in which the currently 
+     * selected piece can move.
+     * 
+     * @param positionsToColor 
+     */
+    void setPositionToColor(Set<Position> positionsToColor);
     
 }

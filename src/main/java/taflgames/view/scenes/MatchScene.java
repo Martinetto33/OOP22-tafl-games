@@ -5,21 +5,21 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Map;
 import java.util.Optional;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import taflgames.common.code.Position;
 import taflgames.view.scenecontrollers.MatchSceneController;
-
-
+/**
+ * TO DO: complete class
+ */
 public class MatchScene extends AbstractScene {
     private static final String MATCH = "BATTLE!";
     private static final String GO_BACK = "Go Back";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final int NUMB_CELLS_SIDE = 11;
-    //private MatchController = new ImplMatchController();
-    //TO DO: MODIFY BASICSCENECONTROLLER AS ABOVE
+    /**
+     * TO DO: controller = new ImplMatchSceneController;
+     */
     private MatchSceneController controller;
     private MatchPanelImpl a;
 
@@ -43,44 +43,73 @@ public class MatchScene extends AbstractScene {
         });
 
         scene.add(southPanel, FlowLayout.LEFT);
+        /*FORSE DA USARE ANCHE....
+         * drawAllPieces
+         * drawAllSpecialCells
+         * 
+         * ... per coerenza. DIPENDONO ENTRAMBI DA CONTROLLER.
+        */
         /*da usare drawBackgroundcell insieme alle info del controller */
         scene.setVisible(true);
     }
-
-    public void drawAllPieces(final Map<Position, PieceImageInfo> piecesAlive) {
-        a.drawAllPieces(piecesAlive);
-    }
-
-    public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
-        a.drawAllSpecialCells(cells);
-    }
-
-    public void drawBackgroundCells(Map<Position, CellImageInfo> cells) {
-        a.drawBackgroundCells(cells);
-    }
-
     /**
-     * Not used but useful for efficency for future versions of the game.
+     * draws all pieces currently alive.
+     * @param piecesAlive
+     */
+    public void drawAllPieces(final Map<Position, PieceImageInfo> piecesAlive) {
+        this.a.drawAllPieces(piecesAlive);
+    }
+    /**
+     * draws the special cells currently active.
+     * @param cells
+     */
+    public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
+        this.a.drawAllSpecialCells(cells);
+    }
+    /**
+     * draws the board in the background.
+     * @param cells
+     */
+    public void drawBackgroundCells(Map<Position, CellImageInfo> cells) {
+        this.a.drawBackgroundCells(cells);
+    }
+    /**
+     * Not used, but could turn out useful for more
+     * efficency in future versions of the game.
      * @param originalPos
      * @param newPosition
      */
     public void movePiece(Position originalPos, Position newPosition) {
-        a.movePiece(originalPos, newPosition);
+        this.a.movePiece(originalPos, newPosition);
     }
-
+    /**
+     * unsets the icons of all jLabel-pieces on the board.
+     */
     public void removeAllPiecesOnLayer() {
-        a.removeAllIconsOnLayer(a.getMapPedine());
+        this.a.removeAllIconsOnLayer(a.getMapPieces());
     }
-
+    /**
+     * unsets the icons of all jLabel-specialCells on the board.
+     */
     public void removeAllSpecialCellsOnLayer() {
-        a.removeAllIconsOnLayer(a.getMapSpecialCell());
+        this.a.removeAllIconsOnLayer(a.getMapSpecialCell());
     }
-
-    public void giveInfo() {
-        //utilizzato per dare le posizioni da colorare dal panel
+    /**
+     * gives the position of the selected piece's moveset the MatchPanel
+     * has to colour.
+     */
+    public void givePositionToColour() {
+        /*utilizzato per dare le posizioni (date dal controller) che il
+        MatchPanel deve colorare.*/
     }
-
-    public void updateMatchInstance(final Map<Position, PieceImageInfo> piecesAlive, final Map<Position, CellImageInfo> cells) {
+    /**
+     * updates the current state of the board by drawing only the pieces and
+     * special cells that are currently active given as arguments in this method
+     * by the controller.
+     * @param piecesAlive
+     * @param cells
+     */
+    public void updateBoardInstance(final Map<Position, PieceImageInfo> piecesAlive, final Map<Position, CellImageInfo> cells) {
         removeAllPiecesOnLayer();
         removeAllSpecialCellsOnLayer();
         drawAllSpecialCells(cells);
