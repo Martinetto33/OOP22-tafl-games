@@ -12,7 +12,7 @@ import taflgames.common.code.VectorImpl;
 import taflgames.model.pieces.api.BehaviourTypeOfPiece;
 import taflgames.model.pieces.api.FactoryBehaviourTypeOfPiece;
 import taflgames.model.pieces.api.Piece;
-import taflgames.model.pieces.api.PieceMemento;
+import taflgames.model.memento.api.PieceMemento;
 
 /**
 * {@inheritDoc}.
@@ -23,7 +23,7 @@ public abstract class AbstractPiece implements Piece {
     private BehaviourTypeOfPiece myType;
     private Player myPlayer;
     /**la factory sarà usata dal costruttore delle implementazioni per creare la type.*/
-    protected final FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
+    private final FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
     /**
      * {@inheritDoc}.
      */
@@ -33,6 +33,7 @@ public abstract class AbstractPiece implements Piece {
     /**
      * {@inheritDoc}.
      */
+    @Override
     public BehaviourTypeOfPiece getMyType() {
         return myType;
     }
@@ -48,8 +49,8 @@ public abstract class AbstractPiece implements Piece {
      */
     public class PieceMementoImpl implements PieceMemento {
 
-        private Position backupPosition;
-        private int backupCurrentNumbOfLives;
+        private final Position backupPosition;
+        private final int backupCurrentNumbOfLives;
         /**
          * creates an object of PieceMementoImpl.
          */
@@ -62,28 +63,26 @@ public abstract class AbstractPiece implements Piece {
         */
         @Override
         public void restore() {
-            /**
-             * da riguardare perchè forse causa problemi 
-             * nelle implementazioni per il fatto
-             * che è astratta 
-             */
             AbstractPiece.this.restore(this);
         }
         /**
         * {@inheritDoc}
         */
+        @Override
         public int getBackupCurrNumbOfLives() {
             return this.backupCurrentNumbOfLives;
         }
         /**
         * {@inheritDoc}
         */
+        @Override
         public Position getBackupPosition() {
             return this.backupPosition;
         }
         /**
         * {@inheritDoc}
         */
+        @Override
         public boolean backupIsAlive() {
             return this.backupCurrentNumbOfLives > 0;
         }
@@ -93,7 +92,7 @@ public abstract class AbstractPiece implements Piece {
      */
     @Override
     public boolean canSwap() {
-        return this.myType.getTypeOfPiece().equals("SWAPPER");
+        return "SWAPPER".equals(this.myType.getTypeOfPiece());
     }
     /**
      * {@inheritDoc}
@@ -116,7 +115,7 @@ public abstract class AbstractPiece implements Piece {
     @Override
     public Set<Vector> whereToMove() {
         /*I consider only the non-unit-vectors and I must adapt only the starting position*/
-        Set<Vector> a = new HashSet<>(this.myType.getMoveSet().stream()
+        final Set<Vector> a = new HashSet<>(this.myType.getMoveSet().stream()
                                         .filter(v -> !v.isUnitVector())
                                         .map(v -> new VectorImpl(this.currentPosition, v.getEndPos(), false))
                                         .collect(Collectors.toSet()));
@@ -156,7 +155,7 @@ public abstract class AbstractPiece implements Piece {
      * {@inheritDoc}
      */
     @Override
-    public void setCurrNumbOfLivesLimited(final int newNumOfLives) throws IllegalArgumentException {
+    public void setCurrNumbOfLivesLimited(final int newNumOfLives) {
         Objects.requireNonNull(newNumOfLives);
         if (newNumOfLives < 0) {
             throw new IllegalArgumentException("newNumOfLives is less than 0"); 
@@ -182,11 +181,10 @@ public abstract class AbstractPiece implements Piece {
     public PieceMemento save() {
         return this.new PieceMementoImpl();
     }
-    /**
-     * {@inheritDoc}
+    /* This method should only be called by the Inner Class,
+     * thus it is private.
      */
-    @Override
-    public void restore(final PieceMementoImpl pm) {
+    private void restore(final PieceMemento pm) {
         Objects.requireNonNull(pm);
         this.currentNumbOfLives = pm.getBackupCurrNumbOfLives();
         this.currentPosition = pm.getBackupPosition();
@@ -223,13 +221,13 @@ public abstract class AbstractPiece implements Piece {
                                     .append(currentPosition)
                                     .append(" with ")
                                     .append(currentNumbOfLives)
-                                    .append("/")
+                                    .append("out of")
                                     .append(this.myType.getTotalNumbOfLives())
                                     .append(" lives ")
                                     .append(this.getPlayer())
                                     .append(" hitbox: ")
                                     .append(this.myType.getHitbox())
-                                    .append(" ")
+                                    .append("------")
                                     .append("moveset: ")
                                     .append(this.myType.getMoveSet())
                                     .toString();
@@ -271,7 +269,7 @@ public abstract class AbstractPiece implements Piece {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        AbstractPiece other = (AbstractPiece) obj;
+        final AbstractPiece other = (AbstractPiece) obj;
         if (currentPosition == null) {
             if (other.currentPosition != null) {
                 return false;
@@ -288,8 +286,7 @@ public abstract class AbstractPiece implements Piece {
             }
         } else if (!myType.equals(other.myType)) {
             return false;
-        }
-        if (myPlayer != other.myPlayer) {
+        } else if (myPlayer != other.myPlayer) {
             return false;
         }
         return true;

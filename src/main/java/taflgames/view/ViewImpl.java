@@ -23,19 +23,20 @@ import taflgames.view.scenes.Scene;
 public final class ViewImpl implements View {
 
     private static final String FRAME_TITLE = "Tafl Games";
-
-    private final Controller controller;
+    private static final double DEFAULT_FRAME_WIDTH_PROP = 0.67;
+    private static final double DEFAULT_FRAME_HEIGHT_PROP = 0.67;
+    private static final double MIN_FRAME_WIDTH_PROP = 0.60;
+    private static final double MIN_FRAME_HEIGHT_PROP = 0.60;
 
     private final JFrame frame;
     private final CardLayout frameLayout;
     private final Set<String> addedScenes;
+    private final Dimension defaultFrameSize;
 
     /**
      * Sets up the view.
      */
     public ViewImpl() {
-
-        this.controller = new ControllerImpl(this);
 
         frame = new JFrame(FRAME_TITLE);
 
@@ -43,16 +44,26 @@ public final class ViewImpl implements View {
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         final int screenWidth = (int) screen.getWidth();
         final int screenHeight = (int) screen.getHeight();
-        frame.setSize((screenWidth * 2) / 3, (screenHeight * 2) / 3);
+        frame.setSize(new Dimension(
+            (int) (screenWidth * DEFAULT_FRAME_WIDTH_PROP),
+            (int) (screenHeight * DEFAULT_FRAME_HEIGHT_PROP)
+        ));
+        defaultFrameSize = frame.getSize();
+        frame.setMinimumSize(new Dimension(
+            (int) (screenWidth * MIN_FRAME_WIDTH_PROP),
+            (int) (screenHeight * MIN_FRAME_HEIGHT_PROP)
+        ));
 
         // Set frame layout as CardLayout to implement switching between different scenes
         frameLayout = new CardLayout();
         frame.setLayout(frameLayout);
 
         addedScenes = new HashSet<>();
-        //setScene(new HomeScene(new HomeControllerImpl(this, this.controller))); //TODO: delete this comment
-        setScene(new GameOverScene(new GameOverControllerImpl(this, this.controller)));
 
+        final Controller controller = new ControllerImpl(this);
+        setScene(new HomeScene(new HomeControllerImpl(this, controller)));
+
+        frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);  // Let the OS decide about the positioning of the frame
         frame.setVisible(true);
@@ -70,12 +81,12 @@ public final class ViewImpl implements View {
 
     @Override
     public int getHeight() {
-        return frame.getHeight();
+        return (int) defaultFrameSize.getHeight();
     }
 
     @Override
     public int getWidth() {
-        return frame.getWidth();
+        return (int) defaultFrameSize.getWidth();
     }
 
     @Override

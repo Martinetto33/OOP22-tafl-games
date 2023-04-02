@@ -1,5 +1,7 @@
 package taflgames.view.scenecontrollers;
 
+import java.io.IOException;
+
 import taflgames.controller.Controller;
 import taflgames.view.View;
 import taflgames.view.scenes.HomeScene;
@@ -42,12 +44,12 @@ public final class GameChoiceControllerImpl extends AbstractBasicSceneController
     }
 
     @Override
-    public void createClassicModeMatch() {
+    public void createClassicModeMatch() throws IOException {
         this.getController().createClassicModeMatch();
     }
 
     @Override
-    public void createVariantModeMatch() {
+    public void createVariantModeMatch() throws IOException {
         this.getController().createVariantModeMatch();
     }
 

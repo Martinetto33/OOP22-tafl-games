@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 /**
  * Tests the implementation of the leaderboard.
  */
-public class TestLeaderboard {
+class TestLeaderboard {
 
     private static final int MAP_SIZE = 6;
     private static final Map<String, Pair<Integer, Integer>> EXPECTED_RESULTS = new HashMap<>();
@@ -52,7 +52,7 @@ public class TestLeaderboard {
         TestLeaderboard.sampleLeaderboard = new LeaderBoardImpl();
 
         for (final var playerName : TestLeaderboard.EXPECTED_RESULTS.keySet()) {
-            List<MatchResult> a = new ArrayList<>();
+            final List<MatchResult> a = new ArrayList<>();
             /*In case the player has 0 victories and 0 losses, and they have never
              * been registered before, it is assumed that their first match or streak
              * of matches all resulted in a draw. In this case i added the 'continue'
@@ -86,14 +86,16 @@ public class TestLeaderboard {
      */
     @Test
     void testResultsRegistration() {
-        Leaderboard leaderboard = new LeaderBoardImpl();
-        leaderboard.addResult("Odin", MatchResult.VICTORY);
-        leaderboard.addResult("Odin", MatchResult.DEFEAT);
-        leaderboard.addResult("Odin", MatchResult.DRAW);
-        assertEquals(new Pair<>(1, 1), leaderboard.getScoreFromPlayer("Odin").get());
-        assertTrue(leaderboard.getScoreFromPlayer("Thor").isEmpty());
-        leaderboard.addResult("Thor", MatchResult.DRAW);
-        assertFalse(leaderboard.getScoreFromPlayer("Thor").isEmpty());
+        final Leaderboard leaderboard = new LeaderBoardImpl();
+        final String player1 = "Odin";
+        final String player2 = "Thor";
+        leaderboard.addResult(player1, MatchResult.VICTORY);
+        leaderboard.addResult(player1, MatchResult.DEFEAT);
+        leaderboard.addResult(player1, MatchResult.DRAW);
+        assertEquals(new Pair<>(1, 1), leaderboard.getScoreFromPlayer(player1).get());
+        assertTrue(leaderboard.getScoreFromPlayer(player2).isEmpty());
+        leaderboard.addResult(player2, MatchResult.DRAW);
+        assertFalse(leaderboard.getScoreFromPlayer(player2).isEmpty());
     }
 
     /**
@@ -118,7 +120,7 @@ public class TestLeaderboard {
         saver.setPath(saver.getTestPath()); //working directory of test classes differs from the one of the main classes
         saver.saveLeaderboard(TestLeaderboard.sampleLeaderboard);
         Leaderboard sixElementsLeaderboard = saver.retrieveFromSave();
-        assertTrue(sixElementsLeaderboard.getLeaderboard().size() == TestLeaderboard.MAP_SIZE);
+        assertEquals(TestLeaderboard.MAP_SIZE, sixElementsLeaderboard.getLeaderboard().size());
         sixElementsLeaderboard.addResult("Fenrir", MatchResult.DEFEAT);
         sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
@@ -129,10 +131,10 @@ public class TestLeaderboard {
          * an exception if the format doesn't match the requirements.
          */
         sixElementsLeaderboard.clearLeaderboard();
-        assertTrue(TestLeaderboard.EXPECTED_RESULTS.size() == TestLeaderboard.MAP_SIZE);
+        assertEquals(TestLeaderboard.MAP_SIZE, TestLeaderboard.EXPECTED_RESULTS.size());
         sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
-        assertTrue(sixElementsLeaderboard.getLeaderboard().size() == 0);
+        assertEquals(0, sixElementsLeaderboard.getLeaderboard().size());
     }
 
     /**
@@ -143,11 +145,9 @@ public class TestLeaderboard {
     @Test
     void testIfNoSaveFileExists() throws IOException {
         final LeaderboardSaver l = new LeaderboardSaverImpl();
-        File file = new File(l.getTestPath());
-        if (file.exists() && file.isFile()) {
-            if (!file.delete()) {
-                throw new IOException("The file at " + l.getTestPath() + " could not be deleted.");
-            }
+        final File file = new File(l.getTestPath());
+        if (file.exists() && file.isFile() && !file.delete()) {
+            throw new IOException("The file at " + l.getTestPath() + " could not be deleted.");
         }
         final Leaderboard lead = l.retrieveFromSave();
         assertTrue(lead.getLeaderboard().isEmpty());

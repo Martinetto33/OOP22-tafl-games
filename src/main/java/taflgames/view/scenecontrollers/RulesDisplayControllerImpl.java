@@ -10,7 +10,7 @@ import taflgames.view.scenes.GameChoiceScene;
 /**
  * This class implements a scene controller for a {@link taflgames.view.scenes.RulesScene}.
  */
-public class RulesDisplayControllerImpl extends AbstractBasicSceneController implements RulesDisplayController {
+public final class RulesDisplayControllerImpl extends AbstractBasicSceneController implements RulesDisplayController {
 
     private static final String SEP = System.getProperty("file.separator");
     private static final String FILE_NAME = "Rules.html"; 
@@ -18,6 +18,11 @@ public class RulesDisplayControllerImpl extends AbstractBasicSceneController imp
             + SEP + "rules"
             + SEP + FILE_NAME;
 
+    /**
+     * Creates a new rules scene controller.
+     * @param view the view of the application
+     * @param controller the main controller of the application
+     */
     public RulesDisplayControllerImpl(final View view, final Controller controller) {
         super(view, controller);
     }
@@ -39,10 +44,9 @@ public class RulesDisplayControllerImpl extends AbstractBasicSceneController imp
 
     @Override
     public InputStream getRulesFileStream() {
-        final InputStream stream = Objects.requireNonNull(
+        return Objects.requireNonNull(
             ClassLoader.getSystemResourceAsStream(FILE_PATH)
         );
-        return stream;
     }
-    
+
 }

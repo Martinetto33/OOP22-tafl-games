@@ -3,7 +3,7 @@ package taflgames.view.scenes;
 import javax.swing.JPanel;
 import java.awt.Color;
 
-import taflgames.view.fontManager.FontManager;
+import taflgames.view.fontmanager.FontManager;
 
 /**
  * This interface describes a scene to display.

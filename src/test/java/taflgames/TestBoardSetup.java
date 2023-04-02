@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,10 +23,11 @@ import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.CellsCollectionBuilderImpl;
 import taflgames.model.builders.PiecesCollectionBuilder;
 import taflgames.model.builders.PiecesCollectionBuilderImpl;
-import taflgames.model.cells.Cell;
-import taflgames.model.cells.Exit;
-import taflgames.model.cells.Slider;
-import taflgames.model.cells.Throne;
+import taflgames.model.cell.api.Cell;
+import taflgames.model.cell.code.ClassicCell;
+import taflgames.model.cell.code.Exit;
+import taflgames.model.cell.code.SliderImpl;
+import taflgames.model.cell.code.Throne;
 import taflgames.model.pieces.code.Archer;
 import taflgames.model.pieces.code.BasicPiece;
 import taflgames.model.pieces.code.King;
@@ -42,6 +45,7 @@ import taflgames.common.Player;
 class TestBoardSetup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestBoardSetup.class);
+    private static final int BOARD_SIZE = 11;
 
     private CellsCollectionBuilder cellsCollBuilder;
     private PiecesCollectionBuilder piecesCollBuilder;
@@ -92,6 +96,16 @@ class TestBoardSetup {
                 new Position(10, 0),
                 new Position(10, 10)
             )
+        );
+
+        // Check classic cells correct placement
+        assertEquals(
+            getPositions(cells, ClassicCell.class),
+            generateAllPositions()  // generates all the positions of the board
+                .stream()
+                .filter(pos -> !pos.equals(new Position(5, 5)))     // filter out throne position
+                .filter(pos -> !getPositions(cells, Exit.class).contains(pos))    // filter out exits positions
+                .collect(Collectors.toSet())
         );
 
         // Check attacker basic pieces correct placement
@@ -170,79 +184,88 @@ class TestBoardSetup {
 
         // Check king and throne correct placement
         assertEquals(
-            pieces.get(Player.DEFENDER).get(new Position(5, 5)).getClass(),
-            King.class
+            King.class,
+            pieces.get(Player.DEFENDER).get(new Position(5, 5)).getClass()
         );
         assertEquals(
-            cells.get(new Position(5, 5)).getClass(),
-            Throne.class
+            Throne.class,
+            cells.get(new Position(5, 5)).getClass()
         );
 
         // Check exits correct placement
         assertEquals(
-            getPositions(cells, Exit.class),
             Set.of(
                 new Position(0, 0),
                 new Position(0, 10),
                 new Position(10, 0),
                 new Position(10, 10)
-            )
+            ),
+            getPositions(cells, Exit.class)
         );
 
         // Check sliders correct placement
         assertEquals(
-            getPositions(cells, Slider.class),
             Set.of(
                 new Position(2, 2),
                 new Position(2, 8),
                 new Position(8, 2),
                 new Position(8, 8)
-            )
+            ),
+            getPositions(cells, SliderImpl.class)
+        );
+
+        // Check classic cells correct placement
+        assertEquals(
+            getPositions(cells, ClassicCell.class),
+            generateAllPositions().stream()
+                .filter(pos -> !pos.equals(new Position(5, 5)))     // filter out throne position
+                .filter(pos -> !getPositions(cells, Exit.class).contains(pos))    // filter out exits positions
+                .filter(pos -> !getPositions(cells, SliderImpl.class).contains(pos))    // filter out sliders psoitions
+                .collect(Collectors.toSet())
         );
 
         // Check queens correct placement
         assertEquals(
-            getPositions(pieces.get(Player.ATTACKER), Queen.class),
-            Set.of(new Position(0, 5))
+            Set.of(new Position(0, 5)),
+            getPositions(pieces.get(Player.ATTACKER), Queen.class)
         );
         assertEquals(
-            getPositions(pieces.get(Player.DEFENDER), Queen.class),
-            Set.of(new Position(6, 5))
+            Set.of(new Position(6, 5)),
+            getPositions(pieces.get(Player.DEFENDER), Queen.class)
         );
 
         // Check archers correct placement
         assertEquals(
-            getPositions(pieces.get(Player.ATTACKER), Archer.class),
-            Set.of(new Position(5, 0), new Position(5, 10))
+            Set.of(new Position(5, 0), new Position(5, 10)),
+            getPositions(pieces.get(Player.ATTACKER), Archer.class)
         );
         assertEquals(
-            getPositions(pieces.get(Player.DEFENDER), Archer.class),
-            Set.of(new Position(5, 4), new Position(5, 6))
+            Set.of(new Position(5, 4), new Position(5, 6)),
+            getPositions(pieces.get(Player.DEFENDER), Archer.class)
         );
 
         // Check shields correct placement
         assertEquals(
-            getPositions(pieces.get(Player.ATTACKER), Shield.class),
-            Set.of(new Position(1, 5), new Position(9, 5))
+            Set.of(new Position(1, 5), new Position(9, 5)),
+            getPositions(pieces.get(Player.ATTACKER), Shield.class)
         );
         assertEquals(
-            getPositions(pieces.get(Player.DEFENDER), Shield.class),
-            Set.of(new Position(5, 3), new Position(5, 7))
+            Set.of(new Position(5, 3), new Position(5, 7)),
+            getPositions(pieces.get(Player.DEFENDER), Shield.class)
         );
 
         // Check swappers correct placement
         assertEquals(
-            getPositions(pieces.get(Player.ATTACKER), Swapper.class),
-            Set.of(new Position(10, 5))
+            Set.of(new Position(10, 5)),
+            getPositions(pieces.get(Player.ATTACKER), Swapper.class)
         );
         assertEquals(
-            getPositions(pieces.get(Player.DEFENDER), Swapper.class),
-            Set.of(new Position(4, 5))
+            Set.of(new Position(4, 5)),
+            getPositions(pieces.get(Player.DEFENDER), Swapper.class)
         );
 
         // Check attacker basic pieces correct placement
         assertEquals(
-            getPositions(pieces.get(Player.ATTACKER), BasicPiece.class),
             Set.of(
                 new Position(0, 3),
                 new Position(0, 4),
@@ -262,12 +285,12 @@ class TestBoardSetup {
                 new Position(10, 4),
                 new Position(10, 6),
                 new Position(10, 7)
-            )
+            ),
+            getPositions(pieces.get(Player.ATTACKER), BasicPiece.class)
         );
 
         // Check defender basic pieces correct placement
         assertEquals(
-            getPositions(pieces.get(Player.DEFENDER), BasicPiece.class),
             Set.of(
                 new Position(3, 5),
                 new Position(4, 4),
@@ -275,7 +298,8 @@ class TestBoardSetup {
                 new Position(6, 4),
                 new Position(6, 6),
                 new Position(7, 5)
-            )
+            ),
+            getPositions(pieces.get(Player.DEFENDER), BasicPiece.class)
         );
 
         // CHECKSTYLE: MagicNumber ON
@@ -288,6 +312,14 @@ class TestBoardSetup {
                 .filter(entry -> entry.getValue().getClass() == targetClass)
                 .map(entry -> entry.getKey())   // get the positions of objects that are instances of the target class
                 .collect(Collectors.toSet());
+    }
+
+    private Set<Position> generateAllPositions() {
+        return  Stream.iterate(0, row -> row + 1).limit(BOARD_SIZE)
+                .map(row -> Stream.iterate(0, col -> col + 1).limit(BOARD_SIZE)
+                                .map(col -> new Position(row, col))
+                                .collect(Collectors.toSet()))
+                .collect(HashSet::new, HashSet::addAll, HashSet::addAll);
     }
 
 }

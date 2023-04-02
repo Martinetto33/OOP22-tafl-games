@@ -14,29 +14,28 @@ public class ImplFactoryHitbox implements FactoryHitbox {
      * {@inheritDoc}
      */
     @Override
-    public Set<Position> createBasicHitboxDistance(final int distance) throws IllegalArgumentException {
+    public Set<Position> createBasicHitboxDistance(final int distance) {
         final Integer t = Objects.requireNonNull(distance);
         if (t.intValue() < 0) {
             throw new IllegalArgumentException("distance was set as 0");
         }
-        Set<Position> s = new HashSet<>();
+        final Set<Position> s = new HashSet<>();
         s.add(new Position(t.intValue(), 0));
         s.add(new Position(0, t.intValue()));
         s.add(new Position(-t.intValue(), 0));
         s.add(new Position(0, -t.intValue()));
         return s;
     }
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public Set<Position> createArcherHitbox(final int range) throws IllegalArgumentException {
+    public Set<Position> createArcherHitbox(final int range) {
         final Integer t = Objects.requireNonNull(range);
         if (t.intValue() <= 0) {
             throw new IllegalArgumentException("range <=0");
         }
-        Set<Position> f = new HashSet<>();
+        final Set<Position> f = new HashSet<>();
         for (int i = 1; i <= t.intValue(); i++) {
             f.addAll(this.createBasicHitboxDistance(i));
         }

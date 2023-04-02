@@ -24,12 +24,14 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
     /**
      * {@inheritDoc}.
      */
+    @Override
     public void setMoveSet(final Set<Vector> moveSet) {
         this.moveSet = moveSet;
     }
     /**
      * {@inheritDoc}.
      */
+    @Override
     public void setHitbox(final Set<Position> hitbox) {
         this.hitbox = hitbox;
     }
@@ -86,7 +88,7 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
      * {@inheritDoc}.
      */
     @Override
-    public abstract boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved) throws IllegalArgumentException;
+    public abstract boolean wasHit(Set<Piece> enemies, Position lastEnemyMoved);
     /**
      * {@inheritDoc}.
      */
@@ -128,7 +130,7 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
         if (getClass() != obj.getClass()) {
             return false;
         }
-        AbstractBehaviourTypeOfPiece other = (AbstractBehaviourTypeOfPiece) obj;
+        final AbstractBehaviourTypeOfPiece other = (AbstractBehaviourTypeOfPiece) obj;
         if (typeName == null) {
             if (other.typeName != null) {
                 return false;

@@ -15,7 +15,7 @@ public class Swapper extends AbstractPiece {
     public Swapper(final Position startingPosition, final Player p) {
         this.setCurrentPosition(startingPosition);
         this.setMyPlayer(p);
-        this.setMyType(this.factory.createSwapperBehaviour());
+        this.setMyType(this.getFactory().createSwapperBehaviour());
         this.getMyType().generate();
         this.setCurrNumbOfLivesLimited(this.getMyType().getTotalNumbOfLives());
     }
