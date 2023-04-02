@@ -1,6 +1,8 @@
 package taflgames.view.scenecontrollers;
 
-import taflgames.controller.leaderboard.api.Leaderboard;
+import java.util.Map;
+
+import taflgames.common.code.Pair;
 
 /**
  * An interface to model a controller for the HighScore scene.
@@ -15,6 +17,6 @@ public interface HighScoreController extends BasicSceneController {
      * from the main {@link taflgames.controller.Controller}.
      * @return the Leaderboard to be displayed.
      */
-    Leaderboard requestLeaderboard();
+    Map<String, Pair<Integer, Integer>> requestLeaderboard();
 
 }

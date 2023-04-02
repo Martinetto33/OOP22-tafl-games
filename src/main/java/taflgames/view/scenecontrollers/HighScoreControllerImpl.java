@@ -1,7 +1,9 @@
 package taflgames.view.scenecontrollers;
 
+import java.util.Map;
+
+import taflgames.common.code.Pair;
 import taflgames.controller.Controller;
-import taflgames.controller.leaderboard.api.Leaderboard;
 import taflgames.view.View;
 import taflgames.view.scenes.HomeScene;
 
@@ -24,7 +26,7 @@ public class HighScoreControllerImpl extends AbstractBasicSceneController implem
      * {@inheritDoc}
      */
     @Override
-    public Leaderboard requestLeaderboard() {
+    public Map<String, Pair<Integer, Integer>> requestLeaderboard() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'requestLeaderboard'");
     }
