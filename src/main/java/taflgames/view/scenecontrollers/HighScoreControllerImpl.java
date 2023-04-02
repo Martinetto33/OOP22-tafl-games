@@ -27,8 +27,7 @@ public class HighScoreControllerImpl extends AbstractBasicSceneController implem
      */
     @Override
     public Map<String, Pair<Integer, Integer>> requestLeaderboard() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'requestLeaderboard'");
+        return this.getController().getLeaderboard();
     }
 
     /**

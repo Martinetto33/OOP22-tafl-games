@@ -32,13 +32,12 @@ public class UserRegistrationScene extends AbstractScene {
 
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP;
-    private static final String IMAGE_NAME = "wooden-plank.jpg";
 
     private static final String USER_REGISTRATION = "User Registration";
     private static final String GO_BACK = "Go Back";
     private static final String SUBMIT = "Submit";
     private static final int SPACE = 10;
-    private static final int CHARACTER_LIMIT = 40;
+    private static final int CHARACTER_LIMIT = 20;
     private static final int CHARACTER_SIZE_FOR_LABELS = 20;
     /* To make the text areas resizable but smaller than the frame, a constant
      * ratio is needed.
@@ -219,25 +218,7 @@ public class UserRegistrationScene extends AbstractScene {
         label.setFont(Scene.FONT_MANAGER.getModifiedFont(UserRegistrationScene.CHARACTER_SIZE_FOR_LABELS, Font.ITALIC));
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.paintPanel(panel, UserRegistrationScene.LABEL_WIDTH, UserRegistrationScene.LABEL_HEIGHT, label);
+        super.addComponentBackground(panel, UserRegistrationScene.LABEL_WIDTH, UserRegistrationScene.LABEL_HEIGHT, label);
     }
 
-    private void paintPanel(JPanel mainPanel, int width, int height, JLabel label) {
-        final JPanel paintedPanel = new JPanel() {
-            @Override
-            public void paintComponent(final Graphics g) {
-                super.paintComponent(g);
-                final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + IMAGE_NAME);
-                final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
-                customResize(image, width, height);
-                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        paintedPanel.add(label);
-        mainPanel.add(paintedPanel);
-    }
-
-    private void customResize(Image image, int width, int height) {
-        image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-    }
 }

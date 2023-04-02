@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -29,6 +31,7 @@ public class HomeScene extends AbstractScene {
     private static final int TITLE_SIZE = 100;
     private static final String PLAY = "Play";
     private static final String EXIT = "Exit";
+    private static final String HIGH_SCORE = "High Score";
     private static final double BTN_HEIGHT_PROP = 0.10;
     private static final double BTN_WIDTH_PROP = 0.45;
     private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
@@ -72,6 +75,8 @@ public class HomeScene extends AbstractScene {
         exitButton.setFont(AbstractScene.getDefaultFont());
         buttonsPanel.add(exitButton, gbc);
 
+        this.addHighScoreButton(buttonsPanel, gbc);
+
         playButton.addActionListener((e) -> {
             this.controller.goToNextScene();
         });
@@ -80,6 +85,20 @@ public class HomeScene extends AbstractScene {
 
         scene.add(titlePanel, BorderLayout.NORTH);
         scene.add(buttonsPanel, BorderLayout.CENTER);
+    }
+
+    private void addHighScoreButton(final JPanel buttonPanel, final GridBagConstraints gbc) {
+        final JButton highScoreButton = new JButton(HIGH_SCORE);
+        highScoreButton.setFont(Scene.FONT_MANAGER.getButtonFont());
+        highScoreButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                controller.goToHighScoreScene();
+            }
+            
+        });
+        buttonPanel.add(highScoreButton, gbc);
     }
 
 }

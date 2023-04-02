@@ -100,4 +100,10 @@ public interface Controller {
      * @return the player in turn.
      */
     Player getCurrentPlayer();
+
+    /**
+     * Returns a Map view of an existing {@link taflgames.controller.leaderboard.api.Leaderboard}.
+     * @return a Map containing the entries playerNickname-winsAndLosses.
+     */
+    Map<String, Pair<Integer, Integer>> getLeaderboard();
 }

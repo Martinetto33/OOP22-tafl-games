@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -20,6 +21,7 @@ public abstract class AbstractScene implements Scene {
     private static final int DEFAULT_FONT_SIZE = 15;
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP;
+    private static final String COMPONENT_BACKGROUND = "wooden-plank.jpg";
 
     /**
      * Initializes the scene state.
@@ -58,4 +60,35 @@ public abstract class AbstractScene implements Scene {
         return new Font(DEFAULT_FONT_NAME, Font.BOLD, DEFAULT_FONT_SIZE);
     }
 
+    /**
+     * Paints the background of a given Component and adds it to the main panel.
+     * @param mainPanel the Panel that will contain the painted component.
+     * @param width the width of the Component.
+     * @param height the height of the Component.
+     * @param component the Component to paint the background of.
+     */
+    public void addComponentBackground(JPanel mainPanel, int width, int height, Component component) {
+        final JPanel paintedPanel = new JPanel() {
+            @Override
+            public void paintComponent(final Graphics g) {
+                super.paintComponent(g);
+                final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + COMPONENT_BACKGROUND);
+                final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
+                customResize(image, width, height);
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        paintedPanel.add(component);
+        mainPanel.add(paintedPanel);
+    }
+
+    /**
+     * Resizes an Image object to specified dimensions.
+     * @param image the Image to be resized.
+     * @param width the new width of the Image.
+     * @param height the new height of the Image.
+     */
+    public void customResize(Image image, int width, int height) {
+        image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    }
 }

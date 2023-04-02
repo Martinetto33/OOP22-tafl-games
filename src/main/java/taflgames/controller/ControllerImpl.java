@@ -16,6 +16,8 @@ import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
 import taflgames.controller.gameloop.api.GameLoop;
 import taflgames.controller.gameloop.code.GameLoopImpl;
+import taflgames.controller.leaderboard.api.LeaderboardSaver;
+import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -185,5 +187,14 @@ public final class ControllerImpl implements Controller {
     @Override
     public Player getCurrentPlayer() {
         return this.match.getActivePlayer();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, Pair<Integer, Integer>> getLeaderboard() {
+        final LeaderboardSaver leaderboardManager = new LeaderboardSaverImpl();
+        return leaderboardManager.retrieveFromSave().getLeaderboard();
     }
 }
