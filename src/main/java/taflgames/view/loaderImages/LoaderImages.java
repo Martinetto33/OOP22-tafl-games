@@ -7,16 +7,35 @@ import javax.swing.ImageIcon;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * This inteface allows to load the images that are used to represent 
+ * the pieces and the cells of the game.
+ */
 public interface LoaderImages {
-    
+
+    /**
+     * Load the images of the game's cells into a map
+     * that can be used during the game to have the images of the cells.
+     * Thanks to that the images don't have to be loaded everytime they are needed.
+     */
     void loadCellsImages();
-    
+
+    /**
+     * Load the images of the game's pieces into a map
+     * that can be used during the game to have the images of the cells.
+     * Thanks to that the images don't have to be loaded everytime they are needed.
+     */
     void loadPiecesImages();
 
-    Map<CellImageInfo,ImageIcon> getCellImageMap();
+    /**
+     * Return the map that contains the cells'images.
+     * @return a Map of CellImageInfo and ImageIcon that contains the cells'images.
+     */
+    Map<CellImageInfo, ImageIcon> getCellImageMap();
 
-    Map<PieceImageInfo,ImageIcon> getPieceImageMap();
-
-    ImageIcon rotateImage(final ImageIcon originalImg, final int rotation);
-    
+    /**
+     * Return the map that contains the pieces'images.
+     * @return a Map of PieceImageInfo and ImageIcon that contains the pieces'images.
+     */
+    Map<PieceImageInfo, ImageIcon> getPieceImageMap();
 }

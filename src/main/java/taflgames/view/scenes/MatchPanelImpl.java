@@ -3,6 +3,7 @@ package taflgames.view.scenes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -29,12 +30,13 @@ import taflgames.view.loaderImages.LoaderImagesImpl;
 public class MatchPanelImpl extends JPanel implements MatchPanel{
 
     private LoaderImages loader;
-    /*used to make sure the entire board will be visible entirely on the screen.
+    /*
+     * used to make sure the entire board will be visible entirely on the screen.
      * Without it it may be covered by the application-bar of the pc.
      */
     private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
-    private final Map<JButton, Position> mapBottoni = new HashMap<>();
-    private final Map<Position,JLabel> mapPedine = new HashMap<>();
+    private final Map<JButton, Position> mapButtons = new HashMap<>();
+    private final Map<Position,JLabel> mapPieces = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
     private final Map<Position,JLabel> mapBoard = new HashMap<>();
     private final Map<PieceImageInfo,ImageIcon> mapPieceImageIcons = new HashMap<>();
@@ -47,15 +49,16 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
     private Position precPos;
+    private Set<Position> positionsToColor;
 
-    public MatchPanelImpl(final int numbCellsInGrid, final Double sizeOfSide) {
+    public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
         this.loader = new LoaderImagesImpl(sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR, 
                                             numbCellsInGrid);
         this.loader.loadCellsImages();
         this.loader.loadPiecesImages();
         mapPieceImageIcons.putAll(loader.getPieceImageMap());
         mapCellsImageIcons.putAll(loader.getCellImageMap());
-        this.mySize = sizeOfSide.intValue() - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR;
+        this.mySize = sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR;
         this.setLayout(new FlowLayout());
         this.buttonPanelSize = this.mySize;
         this.generalPanelSize = this.mySize;
@@ -94,16 +97,16 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         boardBackground.setBackground(Color.CYAN);
         generPanel.add(boardBackground);
         /*initializings panels*/
-        this.createButtonsForGrid(buttonPanel, this.mapBottoni, this.sizeOfGrid);
-        this.createUnitsForGridLayerPanel(piecePanel, this.mapPedine, this.sizeOfGrid);
+        this.createButtonsForGrid(buttonPanel, this.mapButtons, this.sizeOfGrid);
+        this.createUnitsForGridLayerPanel(piecePanel, this.mapPieces, this.sizeOfGrid);
         this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid);
         this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);
     }
     @Override
     public void drawAllPieces(Map<Position, PieceImageInfo> piecesAlive) {
         piecesAlive.forEach((a,b) -> {
-            this.mapPedine.get(a).setIcon(null);
-            this.mapPedine.get(a).setIcon(this.mapPieceImageIcons.get(b));
+            this.mapPieces.get(a).setIcon(null);
+            this.mapPieces.get(a).setIcon(this.mapPieceImageIcons.get(b));
         });
     }
     @Override
@@ -164,14 +167,14 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
      * WILL PROBABLY REMOVE
      */
     public void movePiece(Position originalPos, Position newPosition) {
-        if (!originalPos.equals(newPosition) && mapPedine.get(newPosition).getIcon() != null) {
+        if (!originalPos.equals(newPosition) && mapPieces.get(newPosition).getIcon() != null) {
             throw new IllegalArgumentException("CRITICAL ERROR: there's another piece in the way! problem with MODEL");
         }
-        if (!originalPos.equals(newPosition) && mapPedine.get(originalPos).getIcon() != null) {
-            mapPedine.get(newPosition).setIcon(null);
-            final Icon temp = mapPedine.get(originalPos).getIcon();
-            mapPedine.get(originalPos).setIcon(null);
-            mapPedine.get(newPosition).setIcon(temp);
+        if (!originalPos.equals(newPosition) && mapPieces.get(originalPos).getIcon() != null) {
+            mapPieces.get(newPosition).setIcon(null);
+            final Icon temp = mapPieces.get(originalPos).getIcon();
+            mapPieces.get(originalPos).setIcon(null);
+            mapPieces.get(newPosition).setIcon(temp);
         }
     }
     /**
@@ -187,20 +190,24 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         ActionListener al = new ActionListener(){
             public void actionPerformed(ActionEvent e){
         	    var button = (JButton)e.getSource();
-        	    var position = mapBottoni.get(button);
-                if(precPos != null) {
-                    mapPedine.get(precPos).setOpaque(false);
-                    mapPedine.get(precPos).setBackground(null);
-                }
-                try{
-                    if (mapPedine.get(position).getIcon() != null) {
-                        precPos = position;
-                        mapPedine.get(position).setBackground(new Color(255, 155, 155));
-                        mapPedine.get(position).setOpaque(true);
-                    }
+        	    var position = mapButtons.get(button);
+                /*mediator passa position al controller
+                 *controller passerà risultato delle sue analisi
+                 *al matchpanel tramite questo mediator
+                 */
+                try {
+                    /* you clicked the same piece or a cell of its moveset 
+                    (coloured) */
+                    if(precPos.equals(position) 
+                        || !mapPieces.get(position).getBackground().equals(null)) {
+                        deselectHighlightedMoves();
+                    } else if(positionsToColor != null) {
+                        updateHighlightedMoves();
+                    } 
                 } catch(NullPointerException n){
-                    /*no action necessary: just catching the exception for cleaner program.*/
-                }
+                    //no action necessary: just catching the exception for cleaner program.
+                } 
+                precPos = position;
             }
         };
         /**
@@ -218,18 +225,51 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             }
         }
     }
-    public Map<JButton, Position> getMapBottoni() {
-        return this.mapBottoni;
+    @Override
+    public void setPositionToColor(final Set<Position> positionsToColor) {
+        this.positionsToColor = positionsToColor;
     }
-    public Map<Position, JLabel> getMapPedine() {
-        return this.mapPedine;
+    /**
+     * this method will colour the backgrounds of ONLY 
+     * mapPieces's labels whose position is contained
+     * in positionsToColour. The rest will have background null
+     */
+    private void updateHighlightedMoves() {
+        mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
+            y.setOpaque(false);
+            y.setBackground(null);
+        }});
+        mapPieces.forEach((x,y) -> {if(positionsToColor.contains(x)){
+            y.setBackground(new Color(255, 155, 155));
+            y.setOpaque(true);
+        }});
     }
+    /**
+     * unsets the background of all labels in mapPieces
+     */
+    private void deselectHighlightedMoves() {
+        mapPieces.forEach((x,y) -> {
+            y.setOpaque(false);
+            y.setBackground(null);
+        });
+    }
+    @Override
+    public Map<JButton, Position> getMapButtons() {
+        return this.mapButtons;
+    }
+    @Override
+    public Map<Position, JLabel> getMapPieces() {
+        return this.mapPieces;
+    }
+    @Override
     public Map<Position, JLabel> getMapSpecialCell() {
         return this.mapSpecialCell;
     }
+    @Override
     public Map<Position, JLabel> getMapBoard() {
         return this.mapBoard;
     }
+    @Override
     public int getMySize() {
         return this.mySize;
     }

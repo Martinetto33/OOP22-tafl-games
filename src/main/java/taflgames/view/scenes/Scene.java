@@ -41,4 +41,10 @@ public interface Scene {
      * Font objects.
      */
     FontManager FONT_MANAGER = new FontManager();
+
+    /**
+     * Updates the scene.
+     */
+    void update();
+
 }

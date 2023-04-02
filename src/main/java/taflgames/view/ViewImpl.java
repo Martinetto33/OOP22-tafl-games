@@ -3,8 +3,6 @@ package taflgames.view;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.JFrame;
 
@@ -27,8 +25,8 @@ public final class ViewImpl implements View {
 
     private final JFrame frame;
     private final CardLayout frameLayout;
-    private final Set<String> addedScenes;
     private final Dimension defaultFrameSize;
+    private Scene currentScene;
 
     /**
      * Sets up the view.
@@ -55,8 +53,6 @@ public final class ViewImpl implements View {
         frameLayout = new CardLayout();
         frame.setLayout(frameLayout);
 
-        addedScenes = new HashSet<>();
-
         final Controller controller = new ControllerImpl(this);
         setScene(new HomeScene(new HomeControllerImpl(this, controller)));
 
@@ -69,11 +65,9 @@ public final class ViewImpl implements View {
     @Override
     public void setScene(final Scene scene) {
         final String sceneName = scene.getSceneName();
-        if (!addedScenes.contains(sceneName)) {
-            frame.getContentPane().add(scene.getScene(), sceneName);
-            addedScenes.add(sceneName);
-        }
+        frame.getContentPane().add(scene.getScene(), sceneName);
         frameLayout.show(frame.getContentPane(), sceneName);
+        this.currentScene = scene;
     }
 
     @Override
@@ -84,6 +78,11 @@ public final class ViewImpl implements View {
     @Override
     public int getWidth() {
         return (int) defaultFrameSize.getWidth();
+    }
+
+    @Override
+    public void update() {
+        this.currentScene.update();
     }
 
     @Override

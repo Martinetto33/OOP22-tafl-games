@@ -44,6 +44,9 @@ public abstract class AbstractScene implements Scene {
     }
 
     @Override
+    public abstract void update();
+
+    @Override
     public final String getSceneName() {
         return this.sceneName;
     }

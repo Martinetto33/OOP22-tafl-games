@@ -24,6 +24,11 @@ public interface View {
     int getWidth();
 
     /**
+     * Updates the view.
+     */
+    void update();
+
+    /**
      * Closes the application.
      */
     void close();
