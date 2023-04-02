@@ -12,7 +12,7 @@ public interface UserRegistrationController extends BasicSceneController {
      * Requests end match results from the main {@link taflgames.controller.Controller}. Throws
      * an IllegalStateException if there are no match results.
      */
-    public void getEndMatchResults();
+    void getEndMatchResults();
 
     /**
      * This method should be called by an external controller in order to register
@@ -28,10 +28,8 @@ public interface UserRegistrationController extends BasicSceneController {
     /**
      * Registers the match results into a {@link taflgames.model.leaderboard.api.Leaderboard},
      * once the players' names are received from a view element.
-     * @param player1 the name of the first player.
-     * @param player2 the name of the second player.
-     * @param player1Result the result obtained by the first player.
-     * @param player2Result the result obtained by the second player.
+     * @param attackerPlayer the name of the first player.
+     * @param defenderPlayer the name of the second player.
      */
     void registerMatchResult(String attackerPlayer, String defenderPlayer);
 

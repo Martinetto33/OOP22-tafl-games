@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import taflgames.view.scenecontrollers.GameOverController;
@@ -81,7 +82,14 @@ public class GameOverScene extends AbstractScene {
     }
 
     private void createMainMenuActionListener(final GameOverController controller) {
-        this.mainMenuButton.addActionListener(e -> controller.goToNextScene());
+        this.mainMenuButton.addActionListener(e -> {
+            final int answer = JOptionPane.showConfirmDialog(getScene(),
+            "Going back to main menu will cause unsaved match results to be lost. Are you sure you want to continue?",
+            "Warning", JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                controller.goToNextScene();
+            }
+        });
     }
 
     /*If we respect the plan made in the analysis phase, the result registration is optional

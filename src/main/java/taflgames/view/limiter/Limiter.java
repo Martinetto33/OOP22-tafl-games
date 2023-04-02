@@ -7,7 +7,8 @@ import javax.swing.text.PlainDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*The code was taken from:
+/**
+ * The code was taken from:
  * https://stackoverflow.com/questions/3519151/how-to-limit-the-number-of-characters-in-jtextfield
  * This class is used to limit the number of characters that can be inserted
  * in a particular field of the GUI.
@@ -20,20 +21,21 @@ public class Limiter extends PlainDocument {
      * Builds a new Limiter.
      * @param limit the maximum number of characters that can be written.
      */
-    public Limiter(int limit) {
+    public Limiter(final int limit) {
         super();
         this.limit = limit;
     }
 
     /**
-     * Inserts the string if the limit is not exceeded.
+     * {@inheritDoc}
      */
-    public void insertString(int offset, String str, AttributeSet attr) {
+    @Override
+    public void insertString(final int offset, final String str, final AttributeSet attr) {
         if (str == null) {
             return;
         }
 
-        if(this.getLength() + str.length() <= limit) {
+        if (this.getLength() + str.length() <= limit) {
             try {
                 super.insertString(offset, str, attr);
             } catch (BadLocationException e) {

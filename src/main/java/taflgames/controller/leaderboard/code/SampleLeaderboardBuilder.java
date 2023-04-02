@@ -4,8 +4,19 @@ import taflgames.common.code.MatchResult;
 import taflgames.controller.leaderboard.api.Leaderboard;
 import taflgames.controller.leaderboard.api.LeaderboardSaver;
 
-public class SampleLeaderboardBuilder {
-    
+/**
+ * A utility class for creating a quick leaderboard where needed.
+ */
+public final class SampleLeaderboardBuilder {
+    /* Used to hide default constructor; needed to avoid checkstyle warnings. */
+    private SampleLeaderboardBuilder() {
+
+    };
+
+    /**
+     * Creates a leaderboard, adds some results to it and modifies
+     * the leaderboard default file.
+     */
     public static void createSampleLeaderboard() {
         final LeaderboardSaver leaderboardManager = new LeaderboardSaverImpl();
         final Leaderboard leaderboard = leaderboardManager.retrieveFromSave();

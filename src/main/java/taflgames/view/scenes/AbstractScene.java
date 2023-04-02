@@ -67,7 +67,7 @@ public abstract class AbstractScene implements Scene {
      * @param height the height of the Component.
      * @param component the Component to paint the background of.
      */
-    public void addComponentBackground(JPanel mainPanel, int width, int height, Component component) {
+    public void addComponentBackground(final JPanel mainPanel, final int width, final int height, final Component component) {
         final JPanel paintedPanel = new JPanel() {
             @Override
             public void paintComponent(final Graphics g) {
@@ -82,13 +82,20 @@ public abstract class AbstractScene implements Scene {
         mainPanel.add(paintedPanel);
     }
 
+    // CHECKSTYLE: FinalParametersCheck OFF
+    /* The check was disabled because the parameter image
+     * is reassigned in the code and cannot be final for this
+     * to happen.
+     */
+
     /**
      * Resizes an Image object to specified dimensions.
      * @param image the Image to be resized.
      * @param width the new width of the Image.
      * @param height the new height of the Image.
      */
-    public void customResize(Image image, int width, int height) {
+    public void customResize(Image image, final int width, final int height) {
         image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     }
+    // CHECKSTYLE: FinalParametersCheck ON
 }

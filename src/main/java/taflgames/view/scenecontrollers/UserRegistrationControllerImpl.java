@@ -60,6 +60,10 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         ));
     }
 
+    /**
+     *{@inheritDoc}
+     */
+    @Override
     public void getEndMatchResults() {
         Optional<Pair<MatchResult, MatchResult>> matchRes = this.getController().getMatchResult();
         if (matchRes.isPresent()) {
@@ -73,19 +77,19 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
      * {@inheritDoc}
      */
     @Override
-    public void setEndMatchResults(MatchResult attackerResult, MatchResult defenderResult) {
+    public void setEndMatchResults(final MatchResult attackerResult, final MatchResult defenderResult) {
         if (this.result == null || !this.result.isEmpty()) {
             this.result = new HashMap<>();
         }
         this.result.put(Player.ATTACKER, attackerResult);
         this.result.put(Player.DEFENDER, defenderResult);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void registerMatchResult(String attackerPlayer, String defenderPlayer) {
+    public void registerMatchResult(final String attackerPlayer, final String defenderPlayer) {
         Objects.requireNonNull(this.result);
         if (this.result.size() != Player.values().length 
                    || !this.result.keySet().containsAll(List.of(Player.ATTACKER, Player.DEFENDER))) {

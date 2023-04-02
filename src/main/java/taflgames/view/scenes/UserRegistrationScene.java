@@ -30,6 +30,7 @@ public class UserRegistrationScene extends AbstractScene {
     private static final int SPACE = 10;
     private static final int CHARACTER_LIMIT = 20;
     private static final int CHARACTER_SIZE_FOR_LABELS = 20;
+    private static final int COLUMNS_NUMBER = 50;
     /* a constant
      * ratio is needed to make the text areas resizable but smaller than the frame.
      */
@@ -38,14 +39,14 @@ public class UserRegistrationScene extends AbstractScene {
 
     private static final int LABEL_WIDTH = 120;
     private static final int LABEL_HEIGHT = 60;
-    
+
     private final UserRegistrationController controller;
     private final JTextField attackerNameTextField;
     private final JTextField defenderNameTextField;
     private int verticalTextAreaSize;
     private int horizontalTextAreaSize;
 
-    /*
+    /**
      * Creates the user registration scene.
      * @param controller the scene controller
      */
@@ -59,7 +60,7 @@ public class UserRegistrationScene extends AbstractScene {
         final JPanel elementsPanel = new JPanel(new BorderLayout());
         this.attackerNameTextField = new JTextField(CHARACTER_LIMIT);
         this.defenderNameTextField = new JTextField(CHARACTER_LIMIT);
-        
+
         this.setDimensions(this.controller.getViewWidth() / WIDTH_RATIO,
             this.controller.getViewHeight() / HEIGHT_RATIO);
 
@@ -105,7 +106,7 @@ public class UserRegistrationScene extends AbstractScene {
     private void attachSubmitListener(final JButton submitButton) {
         submitButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 if (areUsernamesValid()) {
                     controller.registerMatchResult(attackerNameTextField.getText(),
                     defenderNameTextField.getText());
@@ -140,7 +141,7 @@ public class UserRegistrationScene extends AbstractScene {
         this.prepareTextArea(this.attackerNameTextField);
         this.prepareTextArea(this.defenderNameTextField);
 
-        
+
         this.createLabel(inputPanel, "Insert attacker's nickname: ");
         inputPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         inputPanel.add(attackerNameTextField);
@@ -152,8 +153,8 @@ public class UserRegistrationScene extends AbstractScene {
         scene.add(inputPanel, BorderLayout.SOUTH);
     }
 
-    private void prepareTextArea(JTextField text) {
-        text.setColumns(50);
+    private void prepareTextArea(final JTextField text) {
+        text.setColumns(COLUMNS_NUMBER);
         text.setPreferredSize(new Dimension(this.horizontalTextAreaSize, this.verticalTextAreaSize));
         text.setFont(Scene.FONT_MANAGER.getButtonFont());
         text.setHorizontalAlignment(SwingConstants.CENTER);
@@ -161,11 +162,11 @@ public class UserRegistrationScene extends AbstractScene {
     }
 
     /**
-     * Resizes the text areas
-     * @param x horizontal size
-     * @param y vertical size
+     * Resizes the text areas.
+     * @param x horizontal size.
+     * @param y vertical size.
      */
-    public void setDimensions(int x, int y) {
+    public void setDimensions(final int x, final int y) {
         this.horizontalTextAreaSize = x;
         this.verticalTextAreaSize = y;
     }
@@ -196,14 +197,14 @@ public class UserRegistrationScene extends AbstractScene {
                 defenderResult = possibleResults[rand.nextInt(3)];
                 controller.setEndMatchResults(attackerResult, defenderResult);
             }
-            
+
         });
         jb.setAlignmentX(SwingConstants.CENTER);
         jb.setFont(Scene.FONT_MANAGER.getButtonFont());
         panel.add(jb);
     } */
 
-    private void createLabel(JPanel panel, String labelContent) {
+    private void createLabel(final JPanel panel, final String labelContent) {
         final JLabel label = new JLabel();
         label.setText(labelContent);
         label.setFont(Scene.FONT_MANAGER.getModifiedFont(UserRegistrationScene.CHARACTER_SIZE_FOR_LABELS, Font.ITALIC));

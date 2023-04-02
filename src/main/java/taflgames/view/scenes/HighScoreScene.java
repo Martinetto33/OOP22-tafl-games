@@ -29,6 +29,8 @@ public class HighScoreScene extends AbstractScene {
     private static final int LABEL_WIDTH = 120;
     private static final int LABEL_HEIGHT = 60;
     private static final int ROW_HEIGHT = 40;
+    private static final int FONT_SIZE = 15;
+    private static final int LABEL_FONT_SIZE = 50;
 
     private final HighScoreController controller;
 
@@ -37,7 +39,7 @@ public class HighScoreScene extends AbstractScene {
      * @param controller the {@link taflgames.view.scenecontrollers.HighScoreController}
      * associated to this scene.
      */
-    public HighScoreScene(HighScoreController controller) {
+    public HighScoreScene(final HighScoreController controller) {
         super(HighScoreScene.SCENE_NAME, Optional.of("home-background.jpeg"));
         this.controller = controller;
 
@@ -66,10 +68,10 @@ public class HighScoreScene extends AbstractScene {
         button.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 controller.goToPreviousScene();
             }
-            
+
         });
         panel.add(button);
     }
@@ -97,7 +99,7 @@ public class HighScoreScene extends AbstractScene {
         table.getTableHeader().setFont(Scene.FONT_MANAGER.getButtonFont());
         table.getTableHeader().setBackground(Color.BLACK);
         table.getTableHeader().setForeground(Color.WHITE);
-        table.setFont(Scene.FONT_MANAGER.getModifiedFont(15, Font.ROMAN_BASELINE));
+        table.setFont(Scene.FONT_MANAGER.getModifiedFont(FONT_SIZE, Font.ROMAN_BASELINE));
         table.setRowHeight(ROW_HEIGHT);
         table.setEnabled(false); // the user should not be able to interact with the table.
 
@@ -110,7 +112,7 @@ public class HighScoreScene extends AbstractScene {
 
     private void emptyLeaderboard(final JPanel panel) {
         final JLabel label = new JLabel("No match results yet.");
-        label.setFont(Scene.FONT_MANAGER.getModifiedFont(50, Font.PLAIN));
+        label.setFont(Scene.FONT_MANAGER.getModifiedFont(LABEL_FONT_SIZE, Font.PLAIN));
         label.setForeground(Color.WHITE);
         super.addComponentBackground(panel, LABEL_WIDTH, LABEL_HEIGHT, label);
     }

@@ -2,6 +2,7 @@ package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -35,8 +36,12 @@ public class HomeScene extends AbstractScene {
     private static final double BTN_HEIGHT_PROP = 0.10;
     private static final double BTN_WIDTH_PROP = 0.45;
     private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
-
+    private static final int WIDTH_RATIO = 200;
+    private static final int HEIGHT_RATIO = 200;
+    
+    
     private final HomeController controller;
+    private final Dimension buttonDimension;
 
     /**
      * Creates the home scene.
@@ -47,6 +52,8 @@ public class HomeScene extends AbstractScene {
         super(HOME, Optional.of(BG_FILENAME));
 
         this.controller = controller;
+        this.buttonDimension = new Dimension((int) (this.controller.getViewWidth() / WIDTH_RATIO),
+                                            (int) (this.controller.getViewHeight() / HEIGHT_RATIO));
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
@@ -70,9 +77,11 @@ public class HomeScene extends AbstractScene {
         gbc.ipady = (int) (this.controller.getViewHeight() * BTN_HEIGHT_PROP);
         final JButton playButton = new JButton(PLAY);
         playButton.setFont(AbstractScene.getDefaultFont());
+        this.setButtonFixedDimension(playButton);
         buttonsPanel.add(playButton, gbc);
         final JButton exitButton = new JButton(EXIT);
         exitButton.setFont(AbstractScene.getDefaultFont());
+        this.setButtonFixedDimension(exitButton);
         buttonsPanel.add(exitButton, gbc);
 
         this.addHighScoreButton(buttonsPanel, gbc);
@@ -93,12 +102,17 @@ public class HomeScene extends AbstractScene {
         highScoreButton.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 controller.goToHighScoreScene();
             }
-            
+
         });
+        this.setButtonFixedDimension(highScoreButton);
         buttonPanel.add(highScoreButton, gbc);
+    }
+
+    private void setButtonFixedDimension(final JButton button) {
+        button.setPreferredSize(this.buttonDimension);
     }
 
 }

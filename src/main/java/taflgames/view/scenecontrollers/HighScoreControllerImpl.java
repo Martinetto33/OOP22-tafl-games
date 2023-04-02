@@ -11,7 +11,7 @@ import taflgames.view.scenes.HomeScene;
  * A controller for the HighScore Scene, which displays players' results organised
  * in a Leaderboard.
  */
-public class HighScoreControllerImpl extends AbstractBasicSceneController implements HighScoreController {
+public final class HighScoreControllerImpl extends AbstractBasicSceneController implements HighScoreController {
 
     /**
      * Builds a new HighScoreControllerImpl.
@@ -46,5 +46,5 @@ public class HighScoreControllerImpl extends AbstractBasicSceneController implem
         this.getView().setScene(new HomeScene(
             new HomeControllerImpl(this.getView(), this.getController())));
     }
-    
+
 }

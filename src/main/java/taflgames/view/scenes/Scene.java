@@ -20,8 +20,25 @@ public interface Scene {
      */
     JPanel getScene();
 
-    static final int BUTTON_FONT_SIZE = 18;
-    static final Color TRANSPARENT = new Color(0, 0, 0, 0);
-    static final Color LABEL_FOREGROUND_COLOR = Color.WHITE;
-    static final FontManager FONT_MANAGER = new FontManager();
+    /**
+     * The size of the font of a Button.
+     */
+    int BUTTON_FONT_SIZE = 18;
+
+    /**
+     * A transparent color, useful for components backgrounds.
+     */
+    Color TRANSPARENT = new Color(0, 0, 0, 0);
+
+    /**
+     * A color for the text on some labels.
+     */
+    Color LABEL_FOREGROUND_COLOR = Color.WHITE;
+
+    /**
+     * A {@link taflgames.view.fontmanager.FontManager} used
+     * to manage a custom viking font, that can provide
+     * Font objects.
+     */
+    FontManager FONT_MANAGER = new FontManager();
 }

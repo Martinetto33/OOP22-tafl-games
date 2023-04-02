@@ -8,6 +8,6 @@ public interface GameOverController extends BasicSceneController {
     /**
      * Sets the scene to a {@link taflgames.view.scenes.UserRegistrationScene}.
      */
-    public void goToRegistrationScene();
+    void goToRegistrationScene();
 
 }
