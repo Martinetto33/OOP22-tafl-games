@@ -7,7 +7,13 @@ import taflgames.common.code.MatchResult;
  * to add specific functions for a {@link taflgames.view.scenes.UserRegistrationScene}.
  */
 public interface UserRegistrationController extends BasicSceneController {
-    
+
+    /**
+     * Requests end match results from the main Controller. Throws
+     * an IllegalStateException if there are no match results.
+     */
+    public void getEndMatchResults();
+
     /**
      * This method should be called by an external controller in order to register
      * the results of a completed match. No binding between username and player role
@@ -28,5 +34,5 @@ public interface UserRegistrationController extends BasicSceneController {
      * @param player2Result the result obtained by the second player.
      */
     void registerMatchResult(String attackerPlayer, String defenderPlayer);
-    
+
 }

@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
+import taflgames.common.code.Pair;
 import taflgames.controller.Controller;
 import taflgames.controller.leaderboard.api.Leaderboard;
 import taflgames.controller.leaderboard.api.LeaderboardSaver;
@@ -56,6 +58,15 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         this.getView().setScene(new GameOverScene(
             new GameOverControllerImpl(this.getView(), this.getController())
         ));
+    }
+
+    public void getEndMatchResults() {
+        Optional<Pair<MatchResult, MatchResult>> matchRes = this.getController().getMatchResult();
+        if (matchRes.isPresent()) {
+            this.setEndMatchResults(matchRes.get().getX(), matchRes.get().getY());
+            return;
+        }
+        throw new IllegalStateException("Match result is not present!");
     }
 
     /**
