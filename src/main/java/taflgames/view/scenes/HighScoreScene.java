@@ -116,4 +116,9 @@ public class HighScoreScene extends AbstractScene {
         label.setForeground(Color.WHITE);
         super.addComponentBackground(panel, LABEL_WIDTH, LABEL_HEIGHT, label);
     }
+
+    @Override
+    public void update() {
+        // There is no scene update for the HighScore scene currently (other than the scene switching).
+    }
 }
