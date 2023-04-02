@@ -85,4 +85,9 @@ public class GameOverScene extends AbstractScene {
         // TODO
         //this.registerResultButton.addActionListener(e -> controller.registerResult());
     }
+
+    @Override
+    public void update() {
+        // There is no scene update for the game over scene currently (other than the scene switching).
+    }
 }

@@ -82,4 +82,9 @@ public class HomeScene extends AbstractScene {
         scene.add(buttonsPanel, BorderLayout.CENTER);
     }
 
+    @Override
+    public void update() {
+        // There is no scene update for the home scene currently (other than the scene switching).
+    }
+
 }

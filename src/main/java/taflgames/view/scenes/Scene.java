@@ -17,4 +17,9 @@ public interface Scene {
      */
     JPanel getScene();
 
+    /**
+     * Updates the scene.
+     */
+    void update();
+
 }

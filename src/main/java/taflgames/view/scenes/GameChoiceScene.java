@@ -122,4 +122,9 @@ public class GameChoiceScene extends AbstractScene {
         scene.add(southPanel, BorderLayout.SOUTH);
     }
 
+    @Override
+    public void update() {
+        // There is no scene update for the game choice scene currently (other than the scene switching).
+    }
+
 }
