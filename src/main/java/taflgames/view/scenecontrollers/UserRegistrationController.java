@@ -9,7 +9,7 @@ import taflgames.common.code.MatchResult;
 public interface UserRegistrationController extends BasicSceneController {
 
     /**
-     * Requests end match results from the main Controller. Throws
+     * Requests end match results from the main {@link taflgames.controller.Controller}. Throws
      * an IllegalStateException if there are no match results.
      */
     public void getEndMatchResults();

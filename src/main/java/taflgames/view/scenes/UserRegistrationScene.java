@@ -17,6 +17,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -120,7 +121,8 @@ public class UserRegistrationScene extends AbstractScene {
                     defenderNameTextField.getText());
                     controller.goToNextScene();
                 } else {
-                    //JDialog con messaggio d'errore. TODO
+                    JOptionPane.showMessageDialog(getScene(),
+                    "Players' nicknames cannot be blank.", "Whoops", JOptionPane.OK_OPTION);
                 }
             }
         });
