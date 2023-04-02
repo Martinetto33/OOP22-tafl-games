@@ -13,6 +13,8 @@ import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
+import taflgames.controller.leaderboard.api.LeaderboardSaver;
+import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -183,4 +185,12 @@ public final class ControllerImpl implements Controller {
         // TODO: this.view.update();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, Pair<Integer, Integer>> getLeaderboard() {
+        final LeaderboardSaver leaderboardManager = new LeaderboardSaverImpl();
+        return leaderboardManager.retrieveFromSave().getLeaderboard();
+    }
 }
