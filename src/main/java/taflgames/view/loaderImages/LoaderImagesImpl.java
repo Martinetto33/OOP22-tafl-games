@@ -42,7 +42,7 @@ public class LoaderImagesImpl implements LoaderImages {
 
     private static final int ANGLE_90 = 90;
     private static final int ANGLE_180 = 180;
-    private static final int ANGLE_270 = 90;
+    private static final int ANGLE_270 = 270;
     
 
     /* private int panelSize;

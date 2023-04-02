@@ -37,8 +37,6 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
        this.specialCells.put(new Position(8, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, -1)));
        this.specialCells.put(new Position(5, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(1, 0)));
        this.specialCells.put(new Position(3, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, 1)));
-
-        
     }
 
     public Map<Position,PieceImageInfo> getPiecesAlive() {

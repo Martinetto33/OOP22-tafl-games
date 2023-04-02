@@ -34,7 +34,7 @@ public interface MatchPanel {
     void removeAllIconsOnLayer(Map<Position,JLabel> mapLabel);
     /**
      * moves the piece from the original position to the new position
-     * if the new position isn't occupied by other pieces
+     * if the new position isn't occupied by other pieces.
      * @param originalPos
      * @param newPosition
      */

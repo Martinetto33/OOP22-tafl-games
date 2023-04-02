@@ -3,6 +3,7 @@ package taflgames.view.scenes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -47,6 +48,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
     private Position precPos;
+    private Set<Position> positionToColor;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
         this.loader = new LoaderImagesImpl(sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR, 
@@ -188,19 +190,31 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             public void actionPerformed(ActionEvent e){
         	    var button = (JButton)e.getSource();
         	    var position = mapBottoni.get(button);
-                if(precPos != null) {
-                    mapPedine.get(precPos).setOpaque(false);
-                    mapPedine.get(precPos).setBackground(null);
-                }
-                try{
+                /*mediator passa position al controller
+                 *controller passerà risultato delle sue analisi
+                 *al matchpanel tramite questo mediator
+                 */
+                try {
+                    if(precPos.equals(position) 
+                        || !mapPedine.get(position).getBackground().equals(null)) {
+                        deselectHighlightedMoves();
+                    } else if(positionToColor != null) {
+                        updateHighlightedMoves();
+                    } 
+                } catch(NullPointerException n){
+                    //no action necessary: just catching the exception for cleaner program.
+                } 
+                precPos = position;
+                
+                /* try{
                     if (mapPedine.get(position).getIcon() != null) {
                         precPos = position;
                         mapPedine.get(position).setBackground(new Color(255, 155, 155));
                         mapPedine.get(position).setOpaque(true);
                     }
                 } catch(NullPointerException n){
-                    /*no action necessary: just catching the exception for cleaner program.*/
-                }
+                    //no action necessary: just catching the exception for cleaner program.
+                }  */
             }
         };
         /**
@@ -218,6 +232,29 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             }
         }
     }
+
+    public void getInfo(final Set<Position> positionToColor) {
+        this.positionToColor = positionToColor;
+    }
+
+    public void updateHighlightedMoves() {
+        mapPedine.forEach((x,y) -> {if(!positionToColor.contains(x)){
+            y.setOpaque(false);
+            y.setBackground(null);
+        }});
+        mapPedine.forEach((x,y) -> {if(positionToColor.contains(x)){
+            y.setBackground(new Color(255, 155, 155));
+            y.setOpaque(true);
+        }});
+    }
+
+    public void deselectHighlightedMoves() {
+        mapPedine.forEach((x,y) -> {
+            y.setOpaque(false);
+            y.setBackground(null);
+        });
+    }
+
     public Map<JButton, Position> getMapBottoni() {
         return this.mapBottoni;
     }
