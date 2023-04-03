@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Map;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import taflgames.common.code.Position;
+import taflgames.common.Player;
 import taflgames.view.scenecontrollers.MatchSceneController;
 /**
  * TO DO: complete class
@@ -17,11 +20,12 @@ public class MatchScene extends AbstractScene {
     private static final String GO_BACK = "Go Back";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final int NUMB_CELLS_SIDE = 11;
-    /**
-     * TO DO: controller = new ImplMatchSceneController;
-     */
+
     private MatchSceneController controller;
     private MatchPanelImpl a;
+
+    private Optional<Position> source = Optional.empty();
+    private Optional<Position> destination = Optional.empty();
 
     public MatchScene(final MatchSceneController controller) {
         super(MatchScene.MATCH, Optional.of("home-background.jpeg"));
@@ -51,7 +55,60 @@ public class MatchScene extends AbstractScene {
         */
         /*da usare drawBackgroundcell insieme alle info del controller */
         scene.setVisible(true);
+
+        // When the match starts, cells and pieces are drawn for the first time.
+        this.update();
     }
+
+    public void selectPosition(final Position pos) {
+        if (this.source.isEmpty() && this.controller.isSourceSelectionValid(pos)) {
+            // If the source position is empty and the selected one is a valid source,
+            // then the selected position is set as source
+            this.source = Optional.of(pos);
+        } else if (this.source.get().equals(pos)) {
+            // If the current source is equal to the selected position,
+            // this means that the source is deselected
+            this.source = Optional.empty();
+        } else {
+            // If the source is already set and it is not deselected,
+            // then the selected position is the destination
+            this.destination = Optional.of(pos);
+            // Once the destination is selected, the move is triggered;
+            // it will be performed if it is legal.
+            this.requestMove();
+        }
+    }
+
+    private void requestMove() {
+        if (this.source.isPresent() && this.destination.isPresent()) {
+            if (this.controller.moveIfLegal(this.source.get(), this.destination.get())) {
+                // If the move is performed, source is reset
+                this.source = Optional.empty();
+            }
+            // Destination is reset whether the move has been made or not
+            this.destination = Optional.empty();
+        }
+    }
+
+    @Override
+    public void update() {
+        /*
+         * The board shown in the match scene must reflect the current state of the model.
+         * All cells and pieces must be drawn in the correct position and using the correct
+         * sprite according to their type.
+         */
+        final Map<Position, List<String>> cellsMapping = this.controller.getCellsMapping();
+        final Map<Player, Map<Position, String>> piecesMapping = this.controller.getPiecesMapping();
+        /*
+         * These two collections will be used to redraw cells and pieces in the MatchPanel.
+         * The Strings in these two maps represent the type of cells and pieces at each position.
+         * I suppose that the redrawing will follow these steps.
+         * - The Strings will be used somehow to create CellImageInfo and PieceImageInfo objects.
+         * - The methods drawBackgroundCells(), drawAllSpecialCells and drawAllPieces() of the MatchPanel will be called,
+         *   passing the maps of positions and CellImageInfo/PieceImageInfo.
+         */
+    }
+
     /**
      * draws all pieces currently alive.
      * @param piecesAlive

@@ -48,8 +48,9 @@ public interface Controller {
      * Makes a move, only if starting point and ending point represent a legal move.
      * @param startPos the starting {@link taflgames.common.code.Position}.
      * @param endPos the ending {@link taflgames.common.code.Position}.
+     * @return true if the move is legal and then performed, false otherwise
      */
-    void makeMove(Position startPos, Position endPos);
+    boolean moveIfLegal(Position startPos, Position endPos);
 
     /**
      * @return true if the match is over.
@@ -100,4 +101,10 @@ public interface Controller {
      * @return the player in turn.
      */
     Player getCurrentPlayer();
+
+    /**
+     * Returns a Map view of an existing {@link taflgames.controller.leaderboard.api.Leaderboard}.
+     * @return a Map containing the entries playerNickname-winsAndLosses.
+     */
+    Map<String, Pair<Integer, Integer>> getLeaderboard();
 }

@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import taflgames.controller.Controller;
 import taflgames.view.View;
+import taflgames.view.scenes.GameOverScene;
 import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.RulesScene;
-import taflgames.view.scenes.UserRegistrationScene;
 
 /**
  * This class implements a scene controller for a {@link taflgames.view.scenes.GameChoiceScene}.
@@ -24,8 +24,8 @@ public final class GameChoiceControllerImpl extends AbstractBasicSceneController
 
     @Override
     public void goToNextScene() {
-        this.getView().setScene(new UserRegistrationScene(
-            new UserRegistrationControllerImpl(this.getView(), this.getController())
+        this.getView().setScene(new GameOverScene(
+            new GameOverControllerImpl(this.getView(), this.getController())
         ));
     }
 

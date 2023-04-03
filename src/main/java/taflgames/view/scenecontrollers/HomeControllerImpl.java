@@ -3,6 +3,7 @@ package taflgames.view.scenecontrollers;
 import taflgames.controller.Controller;
 import taflgames.view.View;
 import taflgames.view.scenes.GameChoiceScene;
+import taflgames.view.scenes.HighScoreScene;
 
 /**
  * This class implements a scene controller for a {@link taflgames.view.scenes.HomeScene}.
@@ -33,6 +34,16 @@ public final class HomeControllerImpl extends AbstractBasicSceneController imple
     @Override
     public void close() {
         this.getView().close();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void goToHighScoreScene() {
+        this.getView().setScene(new HighScoreScene(
+            new HighScoreControllerImpl(this.getView(), this.getController())
+        ));
     }
 
 }

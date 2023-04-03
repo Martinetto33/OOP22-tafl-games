@@ -8,6 +8,8 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import taflgames.view.scenes.Scene;
+
 /**
  * This class can use a custom font located in the resources packages.
  * Any .ttf file can be potentially used. A rune-like font was chosen to fit
@@ -60,5 +62,13 @@ public class FontManager {
      */
     public Font getModifiedFont(final float size, final int type) {
         return this.font.deriveFont(type, size);
+    }
+
+    /**
+     * A {@link java.awt.Font} adapted for the buttons.
+     * @return the button Font
+     */
+    public Font getButtonFont() {
+        return this.font.deriveFont(Font.PLAIN, Scene.BUTTON_FONT_SIZE);
     }
 }

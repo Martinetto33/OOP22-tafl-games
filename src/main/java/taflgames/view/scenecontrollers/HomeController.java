@@ -11,4 +11,9 @@ public interface HomeController extends BasicSceneController {
      */
     void close();
 
+    /**
+     * Moves to the High Score scene.
+     */
+    void goToHighScoreScene();
+
 }
