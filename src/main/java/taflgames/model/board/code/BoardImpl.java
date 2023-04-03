@@ -12,16 +12,22 @@ import java.util.stream.Collectors;
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
+import taflgames.controller.entitystate.CellState;
+import taflgames.controller.entitystate.CellStateImpl;
+import taflgames.controller.entitystate.PieceState;
+import taflgames.controller.entitystate.PieceStateImpl;
 import taflgames.model.board.api.Board;
 import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.Slider;
 import taflgames.model.cell.api.TimedEntity;
+import taflgames.model.cell.code.Tomb;
 import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.memento.api.PieceMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.code.AbstractPiece;
+import taflgames.view.scenes.PieceImageInfo;
 
 /**
  * This class models a Board {@link taflgames.model.board.api.Board}.
@@ -378,33 +384,27 @@ public final class BoardImpl implements Board, TimedEntity {
     }
 
     @Override
-    public Map<Position, List<String>> getCellsTagsMapping() {
+    public Map<Position, CellState> getCellsTagsMapping() {
         return this.cells.entrySet().stream()
                 .map(entry -> {
-                    final List<String> cellTypes = new ArrayList<>();
-                    cellTypes.add(0, entry.getValue().getType());
-                    /* 
-                    * Mixes cell types with component types; the sprites corresponding
-                    * to each of these elements should be drawn. In position 0 there
-                    * will be the Cell type, in the others there will optionally
-                    * be the types of the CellComponents (such as Tombs).
-                    */
-                    entry.getValue().getComponents().forEach(e -> cellTypes.add(e.getComponentType()));
-                    return Map.entry(entry.getKey(), cellTypes);
+                    if (entry.getValue().getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb"))) {
+                        /* TODO: non ho idea di come fare altrimenti a ottenere il colore della tomba da disegnare :( */
+                        Tomb t = (Tomb) entry.getValue().getComponents().stream()
+                                        .filter(cell -> cell instanceof Tomb)
+                                        .findAny()
+                                        .get();
+                        return Map.entry(entry.getKey(), new CellStateImpl("Tomb", Vector.UP_VECTOR, t.peekTeamOfTheTomb()));
+                    }
+                    return Map.entry(entry.getKey(), new CellStateImpl(entry.getValue().getType(), Vector.UP_VECTOR, null));
                 })
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
-    public Map<Player, Map<Position, String>> getPiecesTagsMapping() {
+    public Map<Position, PieceState> getPiecesTagsMapping() {
         return this.pieces.entrySet().stream()
-                .map(entry -> {
-                    final Map<Position, String> pieceTypes = entry.getValue().entrySet().stream()
-                            .collect(Collectors.toUnmodifiableMap(
-                                    Map.Entry::getKey, elem -> elem.getValue().getMyType().getTypeOfPiece()
-                            ));
-                    return Map.entry(entry.getKey(), pieceTypes);
-                })
+                .flatMap(bigEntry -> bigEntry.getValue().entrySet().stream())
+                .map(entry -> Map.entry(entry.getKey(), new PieceStateImpl(entry.getValue().getMyType().getTypeOfPiece(), entry.getValue().getPlayer())))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

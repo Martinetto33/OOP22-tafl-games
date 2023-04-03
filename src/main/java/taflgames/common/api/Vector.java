@@ -3,6 +3,7 @@ package taflgames.common.api;
 import java.util.Optional;
 
 import taflgames.common.code.Position;
+import taflgames.common.code.VectorImpl;
 
 /**
  * This interface will model a mathematic Vector, allowing basic operations
@@ -21,6 +22,27 @@ import taflgames.common.code.Position;
 @SuppressWarnings("PMD.ReplaceVectorWithList") /*suppressed as the design requires
 some specific methods and Lists wouldn't come in handy in this case */
 public interface Vector {
+
+    /**
+     * A vector of module = 1 and pointing upwards.
+     */
+    Vector UP_VECTOR = new VectorImpl(0, 1);
+
+    /**
+     * A vector of module = 1 and pointing downards.
+     */
+    Vector DOWN_VECTOR = new VectorImpl(0, -1);
+
+    /**
+     * A vector of module = 1 and pointing right.
+     */
+    Vector RIGHT_VECTOR = new VectorImpl(1, 0);
+
+    /**
+     * A vector of module = 1 and pointing left.
+     */
+    Vector LEFT_VECTOR = new VectorImpl(-1, 0);
+
     /**
      * Returns the starting position.
      * @return the Position to which the Vector is applied.

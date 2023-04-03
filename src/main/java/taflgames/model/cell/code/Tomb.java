@@ -75,6 +75,28 @@ public final class Tomb extends AbstractCell implements CellComponent {
     }
 
     /**
+     * Used for view purposes. If the tomb only contains pieces of the same team,
+     * it returns the name of that team; otherwise it returns null.
+     * @return a {@link taflgames.common.Player} if the dead pieces are all of the
+     * same team, or null otherwise.
+     */
+    public Player peekTeamOfTheTomb() {
+        if (this.deadPieces.isEmpty()) {
+            return null;
+        }
+        if (this.deadPieces.values().stream()
+                .flatMap(queue -> queue.stream())
+                .allMatch(piece -> piece.getPlayer().equals(Player.ATTACKER))) {
+            return Player.ATTACKER;
+        } else if (this.deadPieces.values().stream()
+                       .flatMap(queue -> queue.stream())
+                       .allMatch(piece -> piece.getPlayer().equals(Player.DEFENDER))) {
+                    return Player.DEFENDER;
+                }
+        return null;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

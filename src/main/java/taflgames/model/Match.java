@@ -10,6 +10,8 @@ import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
+import taflgames.controller.entitystate.CellState;
+import taflgames.controller.entitystate.PieceState;
 import taflgames.model.board.api.Board;
 import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.memento.api.MatchMemento;
@@ -85,12 +87,12 @@ public final class Match implements Model {
     }
 
     @Override
-    public Map<Position, List<String>> getCellsMapping() {
+    public Map<Position, CellState> getCellsMapping() {
         return this.board.getCellsTagsMapping();
     }
 
     @Override
-    public Map<Player, Map<Position, String>> getPiecesMapping() {
+    public Map<Position, PieceState> getPiecesMapping() {
         return this.board.getPiecesTagsMapping();
     }
 
