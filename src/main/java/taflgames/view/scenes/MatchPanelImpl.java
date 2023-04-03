@@ -266,6 +266,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             y.setBackground(null);
         });
     }
+
     @Override
     public Map<JButton, Position> getMapButtons() {
         return this.mapButtons;
@@ -286,11 +287,12 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     public int getMySize() {
         return this.mySize;
     }
+    @Override
     public Position getStartingPosition() {
         return this.startingPosition;
     }
+    @Override
     public Position getDestination() {
         return this.destination;
     }
-
 }
