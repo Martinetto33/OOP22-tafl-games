@@ -34,6 +34,10 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
      * used to make sure the entire board will be visible entirely on the screen.
      * Without it it may be covered by the application-bar of the pc.
      */
+
+    
+    private static final int LIMIT = 2;
+    private static final int START_CONT = 1;
     private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position,JLabel> mapPieces = new HashMap<>();
@@ -48,7 +52,9 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int piecePanelSize;
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
-    private Position precPos;
+    private Position startingPosition;
+    private Position destination;
+    private int cont = MatchPanelImpl.START_CONT;
     private Set<Position> positionsToColor;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
@@ -195,11 +201,18 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                  *controller passerà risultato delle sue analisi
                  *al matchpanel tramite questo mediator
                  */
+                if (cont < MatchPanelImpl.LIMIT) {
+                    startingPosition = position;
+                    cont += 1;
+                } else {
+                    destination = position;
+                    cont = MatchPanelImpl.START_CONT;
+                }
                 try {
                     /* you clicked the same piece or a cell of its moveset 
                     (coloured) */
-                    if(precPos.equals(position) 
-                        || !mapPieces.get(position).getBackground().equals(null)) {
+                    if(startingPosition.equals(position) 
+                        || cont >= MatchPanelImpl.LIMIT) {
                         deselectHighlightedMoves();
                     } else if(positionsToColor != null) {
                         updateHighlightedMoves();
@@ -207,7 +220,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                 } catch(NullPointerException n){
                     //no action necessary: just catching the exception for cleaner program.
                 } 
-                precPos = position;
+                startingPosition = position;
             }
         };
         /**
@@ -273,4 +286,11 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     public int getMySize() {
         return this.mySize;
     }
+    public Position getStartingPosition() {
+        return this.startingPosition;
+    }
+    public Position getDestination() {
+        return this.destination;
+    }
+
 }

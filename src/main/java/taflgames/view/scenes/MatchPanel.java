@@ -74,5 +74,14 @@ public interface MatchPanel {
      * @param positionsToColor 
      */
     void setPositionToColor(Set<Position> positionsToColor);
-    
+    /**
+     * 
+     * @return first cell selected 
+     */
+    Position getStartingPosition();
+    /**
+     * 
+     * @return second and last cell selected
+     */
+    Position getDestination();
 }
