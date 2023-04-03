@@ -8,8 +8,6 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import taflgames.view.scenes.Scene;
-
 /**
  * This class can use a custom font located in the resources packages.
  * Any .ttf file can be potentially used. A rune-like font was chosen to fit
@@ -20,6 +18,7 @@ public class FontManager {
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "font" + SEP;
     private static final String FONT_FILE_NAME = "latin_runes_v20.ttf";
+    private static final int DEFAULT_BUTTON_TEXT_SIZE = 18;
     private static final Logger LOGGER = LoggerFactory.getLogger(FontManager.class);
 
     private Font font;
@@ -69,6 +68,13 @@ public class FontManager {
      * @return the button Font
      */
     public Font getButtonFont() {
-        return this.font.deriveFont(Font.PLAIN, Scene.BUTTON_FONT_SIZE);
+        return this.font.deriveFont(Font.PLAIN, DEFAULT_BUTTON_TEXT_SIZE);
+    }
+
+    /**
+     * @return the default size of the text of a button
+     */
+    public int getDefaultButtonTextSize() {
+        return DEFAULT_BUTTON_TEXT_SIZE;
     }
 }

@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import taflgames.view.fontmanager.FontManager;
 import taflgames.view.limiter.Limiter;
 import taflgames.view.scenecontrollers.UserRegistrationController;
 
@@ -41,6 +42,7 @@ public class UserRegistrationScene extends AbstractScene {
     private static final int LABEL_HEIGHT = 60;
 
     private final UserRegistrationController controller;
+    private final FontManager fontManager = AbstractScene.getFontManager();
     private final JTextField attackerNameTextField;
     private final JTextField defenderNameTextField;
     private int verticalTextAreaSize;
@@ -68,8 +70,8 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.PAGE_AXIS));
         final JButton goBackButton = new JButton(UserRegistrationScene.GO_BACK);
         final JButton submitButton = new JButton(UserRegistrationScene.SUBMIT);
-        submitButton.setFont(Scene.FONT_MANAGER.getButtonFont());
-        goBackButton.setFont(Scene.FONT_MANAGER.getButtonFont());
+        submitButton.setFont(fontManager.getButtonFont());
+        goBackButton.setFont(fontManager.getButtonFont());
         goBackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -87,8 +89,8 @@ public class UserRegistrationScene extends AbstractScene {
 
         this.attachSubmitListener(submitButton);
 
-        southPanel.setBackground(Scene.TRANSPARENT);
-        elementsPanel.setBackground(Scene.TRANSPARENT);
+        southPanel.setBackground(AbstractScene.getTransparency());
+        elementsPanel.setBackground(AbstractScene.getTransparency());
 
         elementsPanel.add(southPanel);
 
@@ -136,7 +138,7 @@ public class UserRegistrationScene extends AbstractScene {
     private void constructInputLabels(final JPanel scene) {
         final JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
-        inputPanel.setBackground(Scene.TRANSPARENT);
+        inputPanel.setBackground(AbstractScene.getTransparency());
 
         this.prepareTextArea(this.attackerNameTextField);
         this.prepareTextArea(this.defenderNameTextField);
@@ -156,7 +158,7 @@ public class UserRegistrationScene extends AbstractScene {
     private void prepareTextArea(final JTextField text) {
         text.setColumns(COLUMNS_NUMBER);
         text.setPreferredSize(new Dimension(this.horizontalTextAreaSize, this.verticalTextAreaSize));
-        text.setFont(Scene.FONT_MANAGER.getButtonFont());
+        text.setFont(fontManager.getButtonFont());
         text.setHorizontalAlignment(SwingConstants.CENTER);
         text.setDocument(new Limiter(CHARACTER_LIMIT));
     }
@@ -207,7 +209,7 @@ public class UserRegistrationScene extends AbstractScene {
     private void createLabel(final JPanel panel, final String labelContent) {
         final JLabel label = new JLabel();
         label.setText(labelContent);
-        label.setFont(Scene.FONT_MANAGER.getModifiedFont(UserRegistrationScene.CHARACTER_SIZE_FOR_LABELS, Font.ITALIC));
+        label.setFont(fontManager.getModifiedFont(UserRegistrationScene.CHARACTER_SIZE_FOR_LABELS, Font.ITALIC));
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         super.addComponentBackground(panel, UserRegistrationScene.LABEL_WIDTH, UserRegistrationScene.LABEL_HEIGHT, label);

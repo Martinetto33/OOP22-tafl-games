@@ -2,10 +2,12 @@ package taflgames.view.scenes;
 
 import javax.swing.JPanel;
 
+import taflgames.view.fontmanager.FontManager;
+
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.Optional;
@@ -17,11 +19,12 @@ public abstract class AbstractScene implements Scene {
 
     private final String sceneName;
     private final JPanel scene;
-    private static final String DEFAULT_FONT_NAME = "";
-    private static final int DEFAULT_FONT_SIZE = 15;
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP;
     private static final String COMPONENT_BACKGROUND = "wooden-plank.jpg";
+    private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+    private static final Color LABEL_TEXT_COLOR = Color.WHITE;
+    private static final FontManager FONT_MANAGER = new FontManager();
 
     /**
      * Initializes the scene state.
@@ -57,10 +60,24 @@ public abstract class AbstractScene implements Scene {
     }
 
     /**
-     * @return the default font used for the text of the scene
+     * @return the default font manager for the scene.
      */
-    public static Font getDefaultFont() {
-        return new Font(DEFAULT_FONT_NAME, Font.BOLD, DEFAULT_FONT_SIZE);
+    protected static FontManager getFontManager() {
+        return FONT_MANAGER;
+    }
+
+    /**
+     * @return the transparency setting for the components.
+     */
+    protected static Color getTransparency() {
+        return TRANSPARENT;
+    }
+
+    /**
+     * @return the default color for the labels text.
+     */
+    protected static Color getLabelTextColor() {
+        return LABEL_TEXT_COLOR;
     }
 
     /**

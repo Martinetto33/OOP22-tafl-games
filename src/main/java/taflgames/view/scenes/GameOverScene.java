@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.GameOverController;
 
 /**
@@ -24,6 +25,8 @@ public class GameOverScene extends AbstractScene {
     private static final int MAIN_FONT_SIZE = 60;
     private final JButton mainMenuButton;
     private final JButton registerResultButton;
+
+    private final FontManager fontManager = AbstractScene.getFontManager();
 
     private GameOverController controller;
 
@@ -49,15 +52,17 @@ public class GameOverScene extends AbstractScene {
          * was modified in a way that provides a common Font which all components could use.
          */
 
-        gameOverLabel.setFont(Scene.FONT_MANAGER.getModifiedFont(GameOverScene.MAIN_FONT_SIZE, Font.PLAIN));
-        gameOverLabel.setForeground(Scene.LABEL_FOREGROUND_COLOR);
+        gameOverLabel.setFont(fontManager.getModifiedFont(GameOverScene.MAIN_FONT_SIZE, Font.PLAIN));
+        gameOverLabel.setForeground(AbstractScene.getLabelTextColor());
         gameOverPanel.add(gameOverLabel);
 
         final JPanel buttonsPanel = new JPanel();
         this.mainMenuButton = new JButton(GameOverScene.MAIN_MENU);
-        this.mainMenuButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        this.mainMenuButton.setFont(fontManager.getModifiedFont(fontManager.getDefaultButtonTextSize(), Font.PLAIN));
         this.registerResultButton = new JButton(GameOverScene.REGISTER_RESULT);
-        this.registerResultButton.setFont(Scene.FONT_MANAGER.getModifiedFont(Scene.BUTTON_FONT_SIZE, Font.PLAIN));
+        this.registerResultButton.setFont(
+            fontManager.getModifiedFont(fontManager.getDefaultButtonTextSize(), Font.PLAIN)
+        );
 
         /*Adding listeners */
         this.createMainMenuActionListener(this.controller);
@@ -67,9 +72,9 @@ public class GameOverScene extends AbstractScene {
         buttonsPanel.add(this.registerResultButton);
 
         /*In order to have a transparent panel, all panels have to have the same background colour */
-        buttonsPanel.setBackground(Scene.TRANSPARENT);
-        gameOverPanel.setBackground(Scene.TRANSPARENT);
-        elementsPanel.setBackground(Scene.TRANSPARENT);
+        buttonsPanel.setBackground(AbstractScene.getTransparency());
+        gameOverPanel.setBackground(AbstractScene.getTransparency());
+        elementsPanel.setBackground(AbstractScene.getTransparency());
 
         elementsPanel.add(gameOverPanel, BorderLayout.NORTH);
         elementsPanel.add(buttonsPanel, BorderLayout.CENTER);

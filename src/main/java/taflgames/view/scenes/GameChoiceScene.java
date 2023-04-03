@@ -12,6 +12,7 @@ import java.util.Optional;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.GameChoiceController;
 
 import javax.swing.JButton;
@@ -38,6 +39,8 @@ public class GameChoiceScene extends AbstractScene {
     private static final double MINOR_BTN_WIDTH_PROP = 0.10;
     private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
 
+    private final FontManager fontManager = AbstractScene.getFontManager();
+
     private final GameChoiceController controller;
 
     /**
@@ -58,7 +61,7 @@ public class GameChoiceScene extends AbstractScene {
 
         final JPanel headerPanel = new JPanel();
         final JLabel headerLabel = new JLabel(HEADER);
-        final Font headerFont = AbstractScene.getDefaultFont().deriveFont(HEADER_FONT_SIZE);
+        final Font headerFont = fontManager.getModifiedFont(HEADER_FONT_SIZE, Font.PLAIN);
         headerLabel.setFont(headerFont);
         headerLabel.setForeground(Color.WHITE);
         headerPanel.setBackground(TRANSPARENT);
@@ -74,14 +77,14 @@ public class GameChoiceScene extends AbstractScene {
         gbc.ipadx = (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP);
         final JButton playClassicButton = new JButton(PLAY_CLASSIC_MODE);
-        playClassicButton.setFont(AbstractScene.getDefaultFont());
+        playClassicButton.setFont(fontManager.getButtonFont());
         buttonsPanel.add(playClassicButton, gbc);
         final JButton playVariantButton = new JButton(PLAY_VARIANT_MODE);
-        playVariantButton.setFont(AbstractScene.getDefaultFont());
+        playVariantButton.setFont(fontManager.getButtonFont());
         buttonsPanel.add(playVariantButton, gbc);
 
         final JButton seeRulesButton = new JButton(SEE_RULES);
-        seeRulesButton.setFont(AbstractScene.getDefaultFont());
+        seeRulesButton.setFont(fontManager.getButtonFont());
         gbc.ipadx = (int) (this.controller.getViewWidth() * MINOR_BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * MINOR_BTN_HEIGHT_PROP);
         buttonsPanel.add(seeRulesButton, gbc);
@@ -112,6 +115,7 @@ public class GameChoiceScene extends AbstractScene {
 
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
+        goBackButton.setFont(fontManager.getButtonFont());
         southPanel.add(goBackButton);
         southPanel.setBackground(TRANSPARENT);
 

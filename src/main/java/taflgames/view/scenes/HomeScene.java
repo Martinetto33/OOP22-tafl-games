@@ -7,8 +7,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -39,8 +37,10 @@ public class HomeScene extends AbstractScene {
     private static final int WIDTH_RATIO = 200;
     private static final int HEIGHT_RATIO = 200;
 
-    private final HomeController controller;
+    private final FontManager fontManager = AbstractScene.getFontManager();
     private final Dimension buttonDimension;
+
+    private final HomeController controller;
 
     /**
      * Creates the home scene.
@@ -59,7 +59,6 @@ public class HomeScene extends AbstractScene {
         scene.setBorder(new EmptyBorder(DEFAULT_INSETS));
 
         final GridBagConstraints gbc = new GridBagConstraints();
-        final FontManager fontManager = new FontManager();
 
         final JPanel titlePanel = new JPanel();
         final JLabel titleLabel = new JLabel(GAME_TITLE);
@@ -75,39 +74,28 @@ public class HomeScene extends AbstractScene {
         gbc.ipadx = (int) (this.controller.getViewWidth() * BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * BTN_HEIGHT_PROP);
         final JButton playButton = new JButton(PLAY);
-        playButton.setFont(AbstractScene.getDefaultFont());
+        playButton.setFont(fontManager.getButtonFont());
         this.setButtonFixedDimension(playButton);
         buttonsPanel.add(playButton, gbc);
+        final JButton highScoreButton = new JButton(HIGH_SCORE);
+        highScoreButton.setFont(fontManager.getButtonFont());
+        this.setButtonFixedDimension(highScoreButton);
+        buttonsPanel.add(highScoreButton, gbc);
         final JButton exitButton = new JButton(EXIT);
-        exitButton.setFont(AbstractScene.getDefaultFont());
+        exitButton.setFont(fontManager.getButtonFont());
         this.setButtonFixedDimension(exitButton);
         buttonsPanel.add(exitButton, gbc);
-
-        this.addHighScoreButton(buttonsPanel, gbc);
 
         playButton.addActionListener((e) -> {
             this.controller.goToNextScene();
         });
 
+        highScoreButton.addActionListener((e) -> this.controller.goToHighScoreScene());
+
         exitButton.addActionListener((e) -> this.controller.close());
 
         scene.add(titlePanel, BorderLayout.NORTH);
         scene.add(buttonsPanel, BorderLayout.CENTER);
-    }
-
-    private void addHighScoreButton(final JPanel buttonPanel, final GridBagConstraints gbc) {
-        final JButton highScoreButton = new JButton(HIGH_SCORE);
-        highScoreButton.setFont(Scene.FONT_MANAGER.getButtonFont());
-        highScoreButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(final ActionEvent arg0) {
-                controller.goToHighScoreScene();
-            }
-
-        });
-        this.setButtonFixedDimension(highScoreButton);
-        buttonPanel.add(highScoreButton, gbc);
     }
 
     private void setButtonFixedDimension(final JButton button) {
