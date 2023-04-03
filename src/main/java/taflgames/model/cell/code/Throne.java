@@ -8,6 +8,10 @@ import taflgames.common.code.Position;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * This class models a throne, a special cell
+ * that accepts only the king.
+ */
 public final class Throne extends AbstractCell {
 
     private static final String THRONE_TYPE = "Throne";

@@ -59,10 +59,10 @@ public interface Board {
     void movePlaceholder(Position oldPos, Position newPos, Player currentPlayer);
 
     /**
-     * Calculate the furthest postion that can be reached from a stating position on a certain direction. 
-     * @param startPos the starting position from which calculate the furthest reacheable position.
-     * @param direction the direction along which to find the furthest reacheable position.
-     * @return the furthest reacheable position.
+     * Calculate the furthest position that can be reached from a stating position on a certain direction. 
+     * @param startPos the starting position from which calculate the furthest reachable position.
+     * @param direction the direction along which to find the furthest reachable position.
+     * @return the furthest reachable position.
      */
     Position getFurthestReachablePos(Position startPos, Vector direction);  // NOPMD 
     // The Vector class models a vector and provides features that a List does not support

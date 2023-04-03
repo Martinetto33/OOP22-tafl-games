@@ -16,7 +16,11 @@ import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
-
+/**
+ * This class models a Tomb, a special cell that appears when a piece dies.
+ * When a Queen is adjacent to this cell she resurrect 
+ * the last piece of the Player in turn that died on the tomb.
+ */
 public final class Tomb extends AbstractCell implements CellComponent {
 
     private Map<Player, Queue<Piece>> deadPieces = new HashMap<>();
@@ -50,20 +54,33 @@ public final class Tomb extends AbstractCell implements CellComponent {
         return super.isFree();
     }
 
+    /**
+     * Resume the last Piece of the given Player that died on the tomb.
+     * @param player the Player in turn.
+     * @param cells the Map of Position and Cell that associate
+     * to each Position of the Board the type of Cell that is placed there.
+     * @param pieces the Map that associate to each Player it's own map of Piece and Position.
+     */
     private void resumePiece(
         final Player player,
         final Map<Player, Map<Position, Piece>> pieces,
         final Map<Position, Cell> cells
     ) {
-        // Se sulla tomba ci sono pedine mangiate del giocatore corrente
+        /* Controls if on the tomb there are any dead pieces of the current player */
         if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
-            final Piece pieceToResume = deadPieces.get(player).poll();    // prende la prima pedina in coda
-            pieceToResume.reanimate();	// ora è viva
+            final Piece pieceToResume = deadPieces.get(player).poll();    // get the first piece in the queue
+            pieceToResume.reanimate();	// resurrect the piece, now it's alive
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
             pieces.get(player).put(pieceToResume.getCurrentPosition(), pieceToResume);
         }
     }
 
+    /**
+     * When a piece dies on the tomb it's added to {@link #deadPieces}.
+     * This map associate to each player his pieces that died on the tomb.
+     * @param player the Player in turn.
+     * @param piece the dead Piece.
+     */
     public void addDeadPieces(final Player player, final Piece piece) {
         if (!deadPieces.containsKey(player)) {
             final Queue<Piece> list = new LinkedList<>();

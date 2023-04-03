@@ -15,13 +15,19 @@ import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * This class implements the state of a cell regardless of its type
+ * and the basic functionalities which are implemented in the same way 
+ * for all the cells.
+ */
 public abstract class AbstractCell implements Cell {
 
     private boolean cellStatus;
     private final Set<CellComponent> cellComponents;
-    /** 
-     * 
-    */
+
+    /*
+     * Initializes the state of a generic cell.
+     */
     public AbstractCell() {
         this.cellStatus = true;
         this.cellComponents = new HashSet<>();

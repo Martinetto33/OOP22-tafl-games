@@ -77,6 +77,9 @@ public final class SliderImpl extends AbstractCell implements Slider {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         this.triggered = false;
