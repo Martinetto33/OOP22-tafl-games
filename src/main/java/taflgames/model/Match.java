@@ -1,10 +1,8 @@
 package taflgames.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.iterators.LoopingIterator;
 
@@ -88,33 +86,12 @@ public final class Match implements Model {
 
     @Override
     public Map<Position, List<String>> getCellsMapping() {
-        return this.board.getMapCells().entrySet().stream()
-                .map(entry -> {
-                    final List<String> cellTypes = new ArrayList<>();
-                    cellTypes.add(0, entry.getValue().getType());
-                    /* 
-                     * Mixes cell types with component types; the sprites corresponding
-                     * to each of these elements should be drawn. In position 0 there
-                     * will be the Cell type, in the others there will optionally
-                     * be the types of the CellComponents (such as Tombs).
-                    */
-                    entry.getValue().getComponents().forEach(e -> cellTypes.add(e.getComponentType()));
-                    return Map.entry(entry.getKey(), cellTypes);
-                })
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+        return this.board.getCellsTagsMapping();
     }
 
     @Override
     public Map<Player, Map<Position, String>> getPiecesMapping() {
-        return this.board.getMapPieces().entrySet().stream()
-                .map(entry -> {
-                    final Map<Position, String> pieceTypes = entry.getValue().entrySet().stream()
-                            .collect(Collectors.toUnmodifiableMap(
-                                    Map.Entry::getKey, elem -> elem.getValue().getMyType().getTypeOfPiece()
-                            ));
-                    return Map.entry(entry.getKey(), pieceTypes);
-                })
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+        return this.board.getPiecesTagsMapping();
     }
 
     /**

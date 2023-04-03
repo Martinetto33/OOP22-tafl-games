@@ -1,5 +1,6 @@
 package taflgames.model.board.code;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -374,6 +375,37 @@ public final class BoardImpl implements Board, TimedEntity {
                 return Optional.empty();
             }
         } 
+    }
+
+    @Override
+    public Map<Position, List<String>> getCellsTagsMapping() {
+        return this.cells.entrySet().stream()
+                .map(entry -> {
+                    final List<String> cellTypes = new ArrayList<>();
+                    cellTypes.add(0, entry.getValue().getType());
+                    /* 
+                    * Mixes cell types with component types; the sprites corresponding
+                    * to each of these elements should be drawn. In position 0 there
+                    * will be the Cell type, in the others there will optionally
+                    * be the types of the CellComponents (such as Tombs).
+                    */
+                    entry.getValue().getComponents().forEach(e -> cellTypes.add(e.getComponentType()));
+                    return Map.entry(entry.getKey(), cellTypes);
+                })
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public Map<Player, Map<Position, String>> getPiecesTagsMapping() {
+        return this.pieces.entrySet().stream()
+                .map(entry -> {
+                    final Map<Position, String> pieceTypes = entry.getValue().entrySet().stream()
+                            .collect(Collectors.toUnmodifiableMap(
+                                    Map.Entry::getKey, elem -> elem.getValue().getMyType().getTypeOfPiece()
+                            ));
+                    return Map.entry(entry.getKey(), pieceTypes);
+                })
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**

@@ -6,6 +6,7 @@ import taflgames.model.cell.api.Cell;
 import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.pieces.api.Piece;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -111,6 +112,22 @@ public interface Board {
      */
     Map<Player, Map<Position, Piece>> getMapPieces();
 
+    /**
+     * @return a collection that maps each position of the grid to a list of labels
+     * that indicate the cell and (if present) the cells components located at that position.
+     */
+    Map<Position, List<String>> getCellsTagsMapping();
+
+    /**
+     * @return a collection that, for each player, contains the mapping of the player's
+     * pieces positions to the type of pieces located at each position.
+     */
+    Map<Player, Map<Position, String>> getPiecesTagsMapping();
+
+    /**
+     * Saves a snapshot of the current board state.
+     * @return a {@link BoardMemento} that holds the snapshot
+     */
     BoardMemento save();
 
 }
