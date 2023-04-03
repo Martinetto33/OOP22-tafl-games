@@ -393,7 +393,8 @@ public final class BoardImpl implements Board, TimedEntity {
                                         .filter(cell -> cell instanceof Tomb)
                                         .findAny()
                                         .get();
-                        return Map.entry(entry.getKey(), new CellStateImpl("Tomb", Vector.UP_VECTOR, t.peekTeamOfTheTomb()));
+                        return Map.entry(entry.getKey(), 
+                            new CellStateImpl("Tomb", Vector.UP_VECTOR, t.peekTeamOfTheTomb()));
                     }
                     return Map.entry(entry.getKey(), new CellStateImpl(entry.getValue().getType(), Vector.UP_VECTOR, null));
                 })
@@ -404,7 +405,8 @@ public final class BoardImpl implements Board, TimedEntity {
     public Map<Position, PieceState> getPiecesTagsMapping() {
         return this.pieces.entrySet().stream()
                 .flatMap(bigEntry -> bigEntry.getValue().entrySet().stream())
-                .map(entry -> Map.entry(entry.getKey(), new PieceStateImpl(entry.getValue().getMyType().getTypeOfPiece(), entry.getValue().getPlayer())))
+                .map(entry -> Map.entry(entry.getKey(),
+                    new PieceStateImpl(entry.getValue().getMyType().getTypeOfPiece(), entry.getValue().getPlayer())))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
