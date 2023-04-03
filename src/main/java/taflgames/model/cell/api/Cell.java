@@ -10,7 +10,7 @@ import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
 /**
- * This interface models the cells of the board.
+ * This interface models the cells of the Board.
  * Allows to know if a cell is free, 
  * if it can accept a certain type of piece and
  * the type of the cell.
@@ -88,5 +88,4 @@ public interface Cell {
      * @return the Set of CellComponents.
      */
     Set<CellComponent> getComponents();
-
 }

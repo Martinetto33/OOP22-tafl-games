@@ -13,7 +13,7 @@ import taflgames.common.code.Position;
 public interface SliderMediator {
 
     /**
-     * Calls the method getFurthestReachablePos of Board 
+     * Calls the method getFurthestReachablePos of Board {@link taflgames.model.board.api.Board}
      * to know the furthest Position reachable by a Piece starting from a given Position.
      * @param source the Position where the Piece is located.
      * @param orientation the direction along which to find the furthest position.
@@ -23,7 +23,7 @@ public interface SliderMediator {
     // The Vector class models a vector and provides features that a List does not support.
 
     /**
-     * Calss method movePlaceholder of Board {@link taflgames.model.board.api.Board}
+     * Calls method movePlaceholder of Board {@link taflgames.model.board.api.Board}
      * to update the position of a Piece.
      * @param startPos the starting Position.
      * @param destPos the new Position which the Piece will be updated to.

@@ -60,7 +60,6 @@ public final class SliderImpl extends AbstractCell implements Slider {
         final Map<Player, Map<Position, Piece>> pieces, 
         final Map<Position, Cell> cells
     ) {
-        /* Non importa che tipo di pezzo sia arrivato, lo slider lo fa scivolare */
         if (this.sliderPos.equals(source) && !this.triggered && this.active) {
             this.triggered = true;
             final Position newPosition = this.mediator.requestMove(source, this.orientation);
@@ -85,6 +84,9 @@ public final class SliderImpl extends AbstractCell implements Slider {
         this.triggered = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyTurnHasEnded(final int turn) {
         if (turn - this.lastActivityTurn == SliderImpl.TURNS_FOR_REACTIVATION) {
@@ -111,5 +113,4 @@ public final class SliderImpl extends AbstractCell implements Slider {
     public void addMediator(final Board board) {
         this.mediator = new SliderMediatorImpl(board);
     }
-
 }

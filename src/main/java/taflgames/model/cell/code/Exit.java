@@ -15,6 +15,7 @@ import taflgames.model.pieces.api.Piece;
 public class Exit extends AbstractCell {
 
     private static final String KING = "KING";
+    private static final String EXIT_TYPE = "Exit";
 
     /**
      * {@inheritDoc}
@@ -43,9 +44,6 @@ public class Exit extends AbstractCell {
      */
     @Override
     public String getType() {
-        return "Exit";
+        return EXIT_TYPE;
     }
-
-
-
 }

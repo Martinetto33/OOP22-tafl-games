@@ -24,6 +24,7 @@ import taflgames.common.Player;
 public final class Tomb extends AbstractCell implements CellComponent {
 
     private Map<Player, Queue<Piece>> deadPieces = new HashMap<>();
+    private static final String TOMB_TYPE = "Tomb";
 
     /**
      * {@inheritDoc}
@@ -81,7 +82,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
      * @param player the Player in turn.
      * @param piece the dead Piece.
      */
-    public void addDeadPieces(final Player player, final Piece piece) {
+    private void addDeadPieces(final Player player, final Piece piece) {
         if (!deadPieces.containsKey(player)) {
             final Queue<Piece> list = new LinkedList<>();
             list.add(piece);
@@ -96,7 +97,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
      */
     @Override
     public String getType() {
-        return "Tomb";
+        return TOMB_TYPE;
     }
 
     @Override

@@ -83,7 +83,7 @@ public final class BoardImpl implements Board, TimedEntity {
     public boolean isDestinationValid(final Position start, final Position dest, final Player player) {
         final Piece piece = pieces.get(player).get(start);
         /*
-         * For the pieces that aren't a Swapper it's controlled that the Position of destination is free and can accept them.
+         * For the pieces that aren't a Swapper it's controlled that the destination's Position is free and can accept them.
          * Otherwise if the Piece is a Swapper it's controlled that the destination cell can accept it.
          */
         if (!piece.canSwap()) {
@@ -130,7 +130,7 @@ public final class BoardImpl implements Board, TimedEntity {
             }
         }
 
-        /* SUPPONIAMO di non averne trovato nessuno. Allora si procede a verificare se è comunque uno spostamento valido secondo
+        /*SUPPONIAMO di non averne trovato nessuno. Allora si procede a verificare se è comunque uno spostamento valido secondo
         * altre proprietà della pedina.
         * QUINDI, per trattare il caso dello Swapper (che nel nostro caso è l'unico con una mossa speciale), possiamo dotare
         * qualsiasi pedina di un metodo canSwap(), che chiaramente ritorna true nel caso sia uno Swapper e false altrimenti.

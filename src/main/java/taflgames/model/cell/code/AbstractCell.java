@@ -177,6 +177,5 @@ public abstract class AbstractCell implements Cell {
         public void restore() {
             AbstractCell.this.restore(this);
         }
-
     }
 }
