@@ -3,6 +3,7 @@ package taflgames.view.scenes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.swing.Icon;
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import taflgames.common.code.Position;
 import taflgames.view.loaderImages.LoaderImages;
 import taflgames.view.loaderImages.LoaderImagesImpl;
+import taflgames.view.scenecontrollers.MatchSceneController;
 
 /**
  * implementation of MatchPanel.
@@ -36,8 +38,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
      */
 
     
-    private static final int LIMIT = 2;
-    private static final int START_CONT = 1;
     private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position,JLabel> mapPieces = new HashMap<>();
@@ -52,10 +52,10 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int piecePanelSize;
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
-    private Position startingPosition;
-    private Position destination;
-    private int cont = MatchPanelImpl.START_CONT;
+    private Optional<Position> startingPosition;
+    private Optional<Position> destination;
     private Set<Position> positionsToColor;
+    private MatchSceneController controller;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
         this.loader = new LoaderImagesImpl(sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR, 
@@ -201,26 +201,15 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
                  *controller passerà risultato delle sue analisi
                  *al matchpanel tramite questo mediator
                  */
-                if (cont < MatchPanelImpl.LIMIT) {
-                    startingPosition = position;
-                    cont += 1;
-                } else {
-                    destination = position;
-                    cont = MatchPanelImpl.START_CONT;
+                selectPosition(position);
+                /* you clicked the same piece or a cell of its moveset 
+                (coloured) */
+                if ((startingPosition.isPresent() && destination.isPresent())
+                    || startingPosition.isEmpty()) {
+                    deselectHighlightedMoves();
+                } else if (startingPosition.isPresent() && destination.isEmpty()) {
+                    updateHighlightedMoves();
                 }
-                try {
-                    /* you clicked the same piece or a cell of its moveset 
-                    (coloured) */
-                    if(startingPosition.equals(position) 
-                        || cont >= MatchPanelImpl.LIMIT) {
-                        deselectHighlightedMoves();
-                    } else if(positionsToColor != null) {
-                        updateHighlightedMoves();
-                    } 
-                } catch(NullPointerException n){
-                    //no action necessary: just catching the exception for cleaner program.
-                } 
-                startingPosition = position;
             }
         };
         /**
@@ -238,8 +227,15 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             }
         }
     }
-    @Override
-    public void setPositionToColor(final Set<Position> positionsToColor) {
+    /**
+     * MAY CHANGE IN THE FUTURE DEPENDING ON CONTROLLER IMPLEMENTATION.
+     * this method sets the new set of position given by the controller
+     * which rappresents the positions in which the currently 
+     * selected piece can move.
+     * 
+     * @param positionsToColor 
+     */
+    private void setPositionToColor(final Set<Position> positionsToColor) {
         this.positionsToColor = positionsToColor;
     }
     /**
@@ -248,6 +244,9 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
      * in positionsToColour. The rest will have background null
      */
     private void updateHighlightedMoves() {
+        /*instead of positionsToColor it will be used a method of controller
+        * after this change setPositionToColor must be deleted.
+        */
         mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
             y.setOpaque(false);
             y.setBackground(null);
@@ -265,6 +264,36 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             y.setOpaque(false);
             y.setBackground(null);
         });
+    }
+
+    private void selectPosition(final Position pos) {
+        if (this.startingPosition.isEmpty() && this.controller.isSourceSelectionValid(pos)) {
+            // If the source position is empty and the selected one is a valid source,
+            // then the selected position is set as source
+            this.startingPosition = Optional.of(pos);
+        } else if (this.startingPosition.get().equals(pos)) {
+            // If the current source is equal to the selected position,
+            // this means that the source is deselected
+            this.startingPosition = Optional.empty();
+        } else {
+            // If the source is already set and it is not deselected,
+            // then the selected position is the destination
+            this.destination = Optional.of(pos);
+            // Once the destination is selected, the move is triggered;
+            // it will be performed if it is legal.
+            this.requestMove();
+        }
+    }
+
+    private void requestMove() {
+        if (this.startingPosition.isPresent() && this.destination.isPresent()) {
+            if (this.controller.moveIfLegal(this.startingPosition.get(), this.destination.get())) {
+                // If the move is performed, startingPosition is reset
+                this.startingPosition = Optional.empty();
+            }
+            // Destination is reset whether the move has been made or not
+            this.destination = Optional.empty();
+        }
     }
 
     @Override
@@ -287,12 +316,17 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     public int getMySize() {
         return this.mySize;
     }
+
     @Override
-    public Position getStartingPosition() {
+    public Optional<Position> getStartingPosition() {
         return this.startingPosition;
     }
     @Override
-    public Position getDestination() {
+    public Optional<Position> getDestination() {
         return this.destination;
+    }
+    @Override
+    public void setMatchController(final MatchSceneController controller) {
+        this.controller = controller;
     }
 }

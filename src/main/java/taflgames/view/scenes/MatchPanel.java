@@ -1,11 +1,12 @@
 package taflgames.view.scenes;
 
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import taflgames.common.code.Position;
+import taflgames.view.scenecontrollers.MatchSceneController;
 /**
  * the panel in wich the match will take place
  */
@@ -65,23 +66,21 @@ public interface MatchPanel {
      * @return size of MatchPanel
      */
     int getMySize();
-    /**
-     * MAY CHANGE IN THE FUTURE DEPENDING ON CONTROLLER IMPLEMENTATION.
-     * this method sets the new set of position given by the controller
-     * which rappresents the positions in which the currently 
-     * selected piece can move.
-     * 
-     * @param positionsToColor 
-     */
-    void setPositionToColor(Set<Position> positionsToColor);
+
     /**
      * 
      * @return first cell selected 
      */
-    Position getStartingPosition();
+    Optional<Position> getStartingPosition();
     /**
      * 
      * @return second and last cell selected
      */
-    Position getDestination();
+    Optional<Position> getDestination();
+
+    /**
+     * Set the controller of the match scene in MatchPanel.
+     * @param controller
+     */
+    void setMatchController(final MatchSceneController controller);
 }

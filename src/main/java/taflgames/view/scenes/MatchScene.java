@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Map;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,7 +21,7 @@ public class MatchScene extends AbstractScene {
     private static final int NUMB_CELLS_SIDE = 11;
 
     private MatchSceneController controller;
-    private MatchPanelImpl a;
+    private MatchPanelImpl matchState;
 
     private Optional<Position> source = Optional.empty();
     private Optional<Position> destination = Optional.empty();
@@ -35,8 +34,9 @@ public class MatchScene extends AbstractScene {
         Dimension screenSize = new Dimension(controller.getViewHeight(), controller.getViewWidth());
         scene.setSize(screenSize);
         scene.setLayout(new FlowLayout());
-        a = new MatchPanelImpl(MatchScene.NUMB_CELLS_SIDE, controller.getViewHeight());
-        scene.add(a);
+        matchState = new MatchPanelImpl(MatchScene.NUMB_CELLS_SIDE, controller.getViewHeight());
+        matchState.setMatchController(this.controller);
+        scene.add(matchState);
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
         southPanel.add(goBackButton);
@@ -52,14 +52,14 @@ public class MatchScene extends AbstractScene {
          * drawAllSpecialCells
          * 
          * ... per coerenza. DIPENDONO ENTRAMBI DA CONTROLLER.
-        */
+         */
         /*da usare drawBackgroundcell insieme alle info del controller */
-        scene.setVisible(true);
 
         // When the match starts, cells and pieces are drawn for the first time.
         this.update();
     }
 
+    /*It will not be used since this method is already present in MatchPanelImpl*/
     public void selectPosition(final Position pos) {
         if (this.source.isEmpty() && this.controller.isSourceSelectionValid(pos)) {
             // If the source position is empty and the selected one is a valid source,
@@ -79,6 +79,7 @@ public class MatchScene extends AbstractScene {
         }
     }
 
+    /*It will not be used since this method is already present in MatchPanelImpl*/
     private void requestMove() {
         if (this.source.isPresent() && this.destination.isPresent()) {
             if (this.controller.moveIfLegal(this.source.get(), this.destination.get())) {
@@ -107,6 +108,11 @@ public class MatchScene extends AbstractScene {
          * - The methods drawBackgroundCells(), drawAllSpecialCells and drawAllPieces() of the MatchPanel will be called,
          *   passing the maps of positions and CellImageInfo/PieceImageInfo.
          */
+        /*
+         * When you need to use updateBoardInstance you can't use the maps above, you must trasform them
+         * according to this method's documentation.
+         * Se metti updateBoardInstance qui non serve metterlo nel costruttore.
+         */
     }
 
     /**
@@ -114,21 +120,21 @@ public class MatchScene extends AbstractScene {
      * @param piecesAlive
      */
     public void drawAllPieces(final Map<Position, PieceImageInfo> piecesAlive) {
-        this.a.drawAllPieces(piecesAlive);
+        this.matchState.drawAllPieces(piecesAlive);
     }
     /**
      * draws the special cells currently active.
      * @param cells
      */
     public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
-        this.a.drawAllSpecialCells(cells);
+        this.matchState.drawAllSpecialCells(cells);
     }
     /**
      * draws the board in the background.
      * @param cells
      */
     public void drawBackgroundCells(Map<Position, CellImageInfo> cells) {
-        this.a.drawBackgroundCells(cells);
+        this.matchState.drawBackgroundCells(cells);
     }
     /**
      * Not used, but could turn out useful for more
@@ -137,19 +143,19 @@ public class MatchScene extends AbstractScene {
      * @param newPosition
      */
     public void movePiece(Position originalPos, Position newPosition) {
-        this.a.movePiece(originalPos, newPosition);
+        this.matchState.movePiece(originalPos, newPosition);
     }
     /**
      * unsets the icons of all jLabel-pieces on the board.
      */
     public void removeAllPiecesOnLayer() {
-        this.a.removeAllIconsOnLayer(a.getMapPieces());
+        this.matchState.removeAllIconsOnLayer(matchState.getMapPieces());
     }
     /**
      * unsets the icons of all jLabel-specialCells on the board.
      */
     public void removeAllSpecialCellsOnLayer() {
-        this.a.removeAllIconsOnLayer(a.getMapSpecialCell());
+        this.matchState.removeAllIconsOnLayer(matchState.getMapSpecialCell());
     }
     /**
      * gives the position of the selected piece's moveset the MatchPanel
