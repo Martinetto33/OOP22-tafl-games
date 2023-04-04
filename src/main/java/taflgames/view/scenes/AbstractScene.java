@@ -49,7 +49,12 @@ public abstract class AbstractScene implements Scene {
     }
 
     @Override
-    public abstract void update();
+    public void update() {
+        /*
+         * By default, the scene has no particular behavior after user input (apert from scene switching).
+         * If the scene does, instead, this method has to be overridden in its implementation.
+         */
+    }
 
     @Override
     public final String getSceneName() {
