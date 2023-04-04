@@ -199,16 +199,16 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         	    var position = mapButtons.get(button);
                 try {
                     selectPosition(position);
-                    /* you clicked the same piece or a cell of its moveset 
-                    (coloured) */
-                    if ((startingPosition.isPresent() && destination.isPresent())
-                        || startingPosition.isEmpty()) {
-                        deselectHighlightedMoves();
-                    } else if (startingPosition.isPresent() && destination.isEmpty()) {
-                        updateHighlightedMoves();
-                    }
                 } catch (Exception except) {
                     // no exception to detect
+                }
+                /* you clicked the same piece or a cell of its moveset 
+                    (coloured) */
+                if ((startingPosition.isPresent() && destination.isPresent())
+                    || startingPosition.isEmpty()) {
+                    deselectHighlightedMoves();
+                } else if (startingPosition.isPresent() && destination.isEmpty()) {
+                    updateHighlightedMoves();
                 }
             }
         };
