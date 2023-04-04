@@ -151,10 +151,8 @@ public class MatchScene extends AbstractScene {
         drawAllPieces(piecesAlive);
     }
 
-    /* RIDONDANZA DI METODI; bisogna vedere come risolvere. */
     @Override
     public void update() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        this.updateBoardInstance(this.controller.getPiecesMapping(), this.controller.getCellsMapping());
     }
 }

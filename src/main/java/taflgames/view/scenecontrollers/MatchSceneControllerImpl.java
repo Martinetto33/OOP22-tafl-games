@@ -22,14 +22,14 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
      * the game state is updated.
     */
     private final MatchScene matchScene;
-    private final PieceImageMapper pieceMapper;
-    private final CellImageMapper cellMapper;
+    private final PieceImageMapper pieceMapper = new PieceTypeMapper();
+    private final CellImageMapper cellMapper = new CellTypeMapper();
     
     protected MatchSceneControllerImpl(final View view, final Controller controller) {
         super(view, controller);
         this.matchScene = new MatchScene(this);
-        this.pieceMapper = new PieceTypeMapper();
-        this.cellMapper = new CellTypeMapper();
+        //this.pieceMapper = new PieceTypeMapper();
+        //this.cellMapper = new CellTypeMapper();
     }
 
     @Override

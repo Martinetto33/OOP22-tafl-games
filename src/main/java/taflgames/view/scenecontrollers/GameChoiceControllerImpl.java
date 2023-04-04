@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import taflgames.controller.Controller;
 import taflgames.view.View;
-import taflgames.view.scenes.GameOverScene;
 import taflgames.view.scenes.HomeScene;
+import taflgames.view.scenes.MatchScene;
 import taflgames.view.scenes.RulesScene;
 
 /**
@@ -24,8 +24,8 @@ public final class GameChoiceControllerImpl extends AbstractBasicSceneController
 
     @Override
     public void goToNextScene() {
-        this.getView().setScene(new GameOverScene(
-            new GameOverControllerImpl(this.getView(), this.getController())
+        this.getView().setScene(new MatchScene(
+            new MatchSceneControllerImpl(this.getView(), this.getController())
         ));
     }
 
