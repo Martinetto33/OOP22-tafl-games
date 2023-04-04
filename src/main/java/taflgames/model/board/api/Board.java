@@ -8,7 +8,6 @@ import taflgames.model.cell.api.Cell;
 import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.pieces.api.Piece;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 

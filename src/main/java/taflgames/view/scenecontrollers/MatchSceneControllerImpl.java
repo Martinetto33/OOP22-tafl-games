@@ -1,11 +1,14 @@
 package taflgames.view.scenecontrollers;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
-import taflgames.common.code.VectorImpl;
 import taflgames.controller.Controller;
+import taflgames.controller.mapper.CellImageMapper;
+import taflgames.controller.mapper.CellTypeMapper;
+import taflgames.controller.mapper.PieceImageMapper;
+import taflgames.controller.mapper.PieceTypeMapper;
 import taflgames.view.View;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.GameOverScene;
@@ -19,10 +22,14 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
      * the game state is updated.
     */
     private final MatchScene matchScene;
+    private final PieceImageMapper pieceMapper;
+    private final CellImageMapper cellMapper;
     
     protected MatchSceneControllerImpl(final View view, final Controller controller) {
         super(view, controller);
         this.matchScene = new MatchScene(this);
+        this.pieceMapper = new PieceTypeMapper();
+        this.cellMapper = new CellTypeMapper();
     }
 
     @Override
@@ -42,24 +49,16 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
 
     @Override
     public Map<Position, CellImageInfo> getCellsMapping() {
-        // this.getController().getCellsDisposition().entrySet().stream()
-        //         .map(entry -> {
-        //             if (entry.getValue().contains("Tomb")) {
-        //                 /* Devo trovare un modo di ottenere il colore dell'ultimo pezzo morto. */
-        //                 return Map.entry(entry.getKey(), new CellImageInfo("CELL_TOMB", null, UP_VECTOR));
-        //             }
-        //             if (entry.getValue().contains("Slider")) {
-        //                 return Map.entry(entry.getKey(), new CellImageInfo("CELL_SLIDER", null, null));
-        //             }
-        //             return null;
-        //         });
-        return null;
+        return this.getController().getCellsDisposition().entrySet().stream()
+                .collect(Collectors.toUnmodifiableMap(
+                    Map.Entry::getKey, elem -> this.cellMapper.mapToImage(elem.getValue())));
     }
 
     @Override
     public Map<Position, PieceImageInfo> getPiecesMapping() {
-        //return this.getController().getPiecesDisposition();
-        return null;
+        return this.getController().getPiecesDisposition().entrySet().stream()
+                .collect(Collectors.toUnmodifiableMap(
+                    Map.Entry::getKey, elem -> this.pieceMapper.mapToImage(elem.getValue())));
     }
 
     @Override

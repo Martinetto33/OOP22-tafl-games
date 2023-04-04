@@ -9,6 +9,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import taflgames.common.code.Position;
+import taflgames.controller.entitystate.CellState;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
 import taflgames.model.memento.api.CellComponentMemento;
@@ -201,5 +202,13 @@ public final class Tomb extends AbstractCell implements CellComponent {
     @Override
     public String getComponentType() {
         return this.getType();
+    }
+
+    /**
+     * The case of the Tomb is managed directly in the AbstractCell.
+     */
+    @Override
+    public final CellState getSubclassCellState() {
+        return null;
     }
 }

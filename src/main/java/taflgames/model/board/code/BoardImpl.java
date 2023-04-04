@@ -1,6 +1,5 @@
 package taflgames.model.board.code;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +12,6 @@ import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.controller.entitystate.CellState;
-import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.controller.entitystate.PieceState;
 import taflgames.controller.entitystate.PieceStateImpl;
 import taflgames.model.board.api.Board;
@@ -21,13 +19,11 @@ import taflgames.model.board.api.Eaten;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.Slider;
 import taflgames.model.cell.api.TimedEntity;
-import taflgames.model.cell.code.Tomb;
 import taflgames.model.memento.api.BoardMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.memento.api.PieceMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.pieces.code.AbstractPiece;
-import taflgames.view.scenes.PieceImageInfo;
 
 /**
  * This class models a Board {@link taflgames.model.board.api.Board}.
@@ -386,18 +382,7 @@ public final class BoardImpl implements Board, TimedEntity {
     @Override
     public Map<Position, CellState> getCellsTagsMapping() {
         return this.cells.entrySet().stream()
-                .map(entry -> {
-                    if (entry.getValue().getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb"))) {
-                        /* TODO: non ho idea di come fare altrimenti a ottenere il colore della tomba da disegnare :( */
-                        Tomb t = (Tomb) entry.getValue().getComponents().stream()
-                                        .filter(cell -> cell instanceof Tomb)
-                                        .findAny()
-                                        .get();
-                        return Map.entry(entry.getKey(), 
-                            new CellStateImpl("Tomb", Vector.UP_VECTOR, t.peekTeamOfTheTomb()));
-                    }
-                    return Map.entry(entry.getKey(), new CellStateImpl(entry.getValue().getType(), Vector.UP_VECTOR, null));
-                })
+                .map(entry -> Map.entry(entry.getKey(), entry.getValue().getCellState()))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

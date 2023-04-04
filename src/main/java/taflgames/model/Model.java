@@ -6,7 +6,6 @@ import taflgames.controller.entitystate.CellState;
 import taflgames.controller.entitystate.PieceState;
 import taflgames.model.memento.api.MatchMemento;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
