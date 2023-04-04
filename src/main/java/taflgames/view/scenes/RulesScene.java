@@ -1,8 +1,6 @@
 package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -24,11 +22,9 @@ import taflgames.view.scenecontrollers.RulesDisplayController;
 public class RulesScene extends AbstractScene {
 
     private static final String RULES = "Rules";
-    private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final String BG_FILENAME = "home-background.jpeg";
     private static final String BASE_LOCATION = "taflgames/rules/";
     private static final String GO_BACK = "Go Back";
-    private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
 
     private final FontManager fontManager = AbstractScene.getFontManager();
 
@@ -46,7 +42,7 @@ public class RulesScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(DEFAULT_INSETS));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
 
         final JEditorPane editor = new JEditorPane();
         final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
@@ -69,7 +65,7 @@ public class RulesScene extends AbstractScene {
         final JButton goBackButton = new JButton(GO_BACK);
         goBackButton.setFont(fontManager.getButtonFont());
         southPanel.add(goBackButton);
-        southPanel.setBackground(TRANSPARENT);
+        southPanel.setBackground(AbstractScene.getTransparency());
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();

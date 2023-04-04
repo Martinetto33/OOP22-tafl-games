@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
 public class GameChoiceScene extends AbstractScene {
 
     private static final String GAME_CHOICE = "Game Choice";
-    private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final String BG_FILENAME = "home-background.jpeg";
     private static final String HEADER = "Choose the game mode";
     private static final float HEADER_FONT_SIZE = 30.0f;
@@ -37,7 +36,6 @@ public class GameChoiceScene extends AbstractScene {
     private static final double MAIN_BTN_WIDTH_PROP = 0.33;
     private static final double MINOR_BTN_HEIGHT_PROP = 0.025;
     private static final double MINOR_BTN_WIDTH_PROP = 0.10;
-    private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
 
     private final FontManager fontManager = AbstractScene.getFontManager();
 
@@ -55,7 +53,7 @@ public class GameChoiceScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(DEFAULT_INSETS));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
 
         final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -64,16 +62,16 @@ public class GameChoiceScene extends AbstractScene {
         final Font headerFont = fontManager.getModifiedFont(HEADER_FONT_SIZE, Font.PLAIN);
         headerLabel.setFont(headerFont);
         headerLabel.setForeground(Color.WHITE);
-        headerPanel.setBackground(TRANSPARENT);
+        headerPanel.setBackground(AbstractScene.getTransparency());
         headerPanel.add(headerLabel);
         scene.add(headerPanel, BorderLayout.NORTH);
 
         final JPanel buttonsPanel = new JPanel(new GridBagLayout());
-        buttonsPanel.setBackground(TRANSPARENT);
+        buttonsPanel.setBackground(AbstractScene.getTransparency());
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = DEFAULT_INSETS;
+        gbc.insets = new Insets(20, 20, 20, 20);
         gbc.ipadx = (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP);
         final JButton playClassicButton = new JButton(PLAY_CLASSIC_MODE);
@@ -117,7 +115,7 @@ public class GameChoiceScene extends AbstractScene {
         final JButton goBackButton = new JButton(GO_BACK);
         goBackButton.setFont(fontManager.getButtonFont());
         southPanel.add(goBackButton);
-        southPanel.setBackground(TRANSPARENT);
+        southPanel.setBackground(AbstractScene.getTransparency());
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();

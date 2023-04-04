@@ -24,7 +24,6 @@ import javax.swing.JLabel;
 public class HomeScene extends AbstractScene {
 
     private static final String HOME = "Home";
-    private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final String BG_FILENAME = "home-background.jpeg";
     private static final String GAME_TITLE = "TAFL GAMES";
     private static final int TITLE_SIZE = 100;
@@ -33,7 +32,6 @@ public class HomeScene extends AbstractScene {
     private static final String HIGH_SCORE = "High Score";
     private static final double BTN_HEIGHT_PROP = 0.10;
     private static final double BTN_WIDTH_PROP = 0.45;
-    private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
     private static final int WIDTH_RATIO = 200;
     private static final int HEIGHT_RATIO = 200;
 
@@ -56,7 +54,7 @@ public class HomeScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(DEFAULT_INSETS));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
 
         final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -64,13 +62,13 @@ public class HomeScene extends AbstractScene {
         final JLabel titleLabel = new JLabel(GAME_TITLE);
         titleLabel.setFont(fontManager.getModifiedFont(TITLE_SIZE, Font.PLAIN));
         titleLabel.setForeground(Color.WHITE);
-        titlePanel.setBackground(TRANSPARENT);
+        titlePanel.setBackground(AbstractScene.getTransparency());
         titlePanel.add(titleLabel);
 
         final JPanel buttonsPanel = new JPanel(new GridBagLayout());
-        buttonsPanel.setBackground(TRANSPARENT);
+        buttonsPanel.setBackground(AbstractScene.getTransparency());
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = DEFAULT_INSETS;
+        gbc.insets = new Insets(20, 20, 20, 20);
         gbc.ipadx = (int) (this.controller.getViewWidth() * BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * BTN_HEIGHT_PROP);
         final JButton playButton = new JButton(PLAY);
