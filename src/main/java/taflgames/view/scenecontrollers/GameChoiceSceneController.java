@@ -6,7 +6,7 @@ import java.io.IOException;
  * This interface extends a generic {@link BasicSceneController}
  * to add specific functions for a {@link taflgames.view.scenes.GameChoiceScene}.
  */
-public interface GameChoiceController extends BasicSceneController {
+public interface GameChoiceSceneController extends BasicSceneController {
 
     /**
      * Switches to the scene that shows the rules of the game modes.

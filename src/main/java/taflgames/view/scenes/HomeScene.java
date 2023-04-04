@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import taflgames.view.fontmanager.FontManager;
-import taflgames.view.scenecontrollers.HomeController;
+import taflgames.view.scenecontrollers.HomeSceneController;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -38,13 +38,13 @@ public class HomeScene extends AbstractScene {
     private final FontManager fontManager = AbstractScene.getFontManager();
     private final Dimension buttonDimension;
 
-    private final HomeController controller;
+    private final HomeSceneController controller;
 
     /**
      * Creates the home scene.
      * @param controller the scene controller
      */
-    public HomeScene(final HomeController controller) {
+    public HomeScene(final HomeSceneController controller) {
 
         super(HOME, Optional.of(BG_FILENAME));
 

@@ -14,7 +14,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import java.util.Optional;
 
 import taflgames.view.fontmanager.FontManager;
-import taflgames.view.scenecontrollers.RulesDisplayController;
+import taflgames.view.scenecontrollers.RulesSceneController;
 
 /**
  * Implementation of the scene that shows the rules of the game modes.
@@ -28,13 +28,13 @@ public class RulesScene extends AbstractScene {
 
     private final FontManager fontManager = AbstractScene.getFontManager();
 
-    private final RulesDisplayController controller;
+    private final RulesSceneController controller;
 
     /**
      * Creates the rules scene.
      * @param controller the scene controller
      */
-    public RulesScene(final RulesDisplayController controller) {
+    public RulesScene(final RulesSceneController controller) {
 
         super(RULES, Optional.of(BG_FILENAME));
 
