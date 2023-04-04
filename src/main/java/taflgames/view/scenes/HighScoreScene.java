@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import taflgames.common.code.Pair;
+import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.HighScoreController;
 
 /**
@@ -31,6 +32,8 @@ public class HighScoreScene extends AbstractScene {
     private static final int ROW_HEIGHT = 40;
     private static final int FONT_SIZE = 15;
     private static final int LABEL_FONT_SIZE = 50;
+
+    private final FontManager fontManager = AbstractScene.getFontManager();
 
     private final HighScoreController controller;
 
@@ -59,12 +62,12 @@ public class HighScoreScene extends AbstractScene {
     }
 
     private void makePanelTransparent(final JPanel panel) {
-        panel.setBackground(Scene.TRANSPARENT);
+        panel.setBackground(AbstractScene.getTransparency());
     }
 
     private void addGoBackButton(final JPanel panel) {
         final JButton button = new JButton("Go Back");
-        button.setFont(Scene.FONT_MANAGER.getButtonFont());
+        button.setFont(fontManager.getButtonFont());
         button.addActionListener(new ActionListener() {
 
             @Override
@@ -96,10 +99,10 @@ public class HighScoreScene extends AbstractScene {
 
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        table.getTableHeader().setFont(Scene.FONT_MANAGER.getButtonFont());
+        table.getTableHeader().setFont(fontManager.getButtonFont());
         table.getTableHeader().setBackground(Color.BLACK);
         table.getTableHeader().setForeground(Color.WHITE);
-        table.setFont(Scene.FONT_MANAGER.getModifiedFont(FONT_SIZE, Font.ROMAN_BASELINE));
+        table.setFont(fontManager.getModifiedFont(FONT_SIZE, Font.ROMAN_BASELINE));
         table.setRowHeight(ROW_HEIGHT);
         table.setEnabled(false); // the user should not be able to interact with the table.
 
@@ -112,13 +115,9 @@ public class HighScoreScene extends AbstractScene {
 
     private void emptyLeaderboard(final JPanel panel) {
         final JLabel label = new JLabel("No match results yet.");
-        label.setFont(Scene.FONT_MANAGER.getModifiedFont(LABEL_FONT_SIZE, Font.PLAIN));
+        label.setFont(fontManager.getModifiedFont(LABEL_FONT_SIZE, Font.PLAIN));
         label.setForeground(Color.WHITE);
         super.addComponentBackground(panel, LABEL_WIDTH, LABEL_HEIGHT, label);
     }
 
-    @Override
-    public void update() {
-        // There is no scene update for the HighScore scene currently (other than the scene switching).
-    }
 }
