@@ -54,7 +54,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int sizeOfGrid;
     private Optional<Position> startingPosition = Optional.empty();
     private Optional<Position> destination = Optional.empty();
-    private Set<Position> positionsToColor;
+    private Set<Position> positionsToColor; 
     private MatchSceneController controller;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
@@ -197,14 +197,18 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             public void actionPerformed(ActionEvent e){
         	    var button = (JButton)e.getSource();
         	    var position = mapButtons.get(button);
-                selectPosition(position);
-                /* you clicked the same piece or a cell of its moveset 
-                (coloured) */
-                if ((startingPosition.isPresent() && destination.isPresent())
-                    || startingPosition.isEmpty()) {
-                    deselectHighlightedMoves();
-                } else if (startingPosition.isPresent() && destination.isEmpty()) {
-                    updateHighlightedMoves();
+                try {
+                    selectPosition(position);
+                    /* you clicked the same piece or a cell of its moveset 
+                    (coloured) */
+                    if ((startingPosition.isPresent() && destination.isPresent())
+                        || startingPosition.isEmpty()) {
+                        deselectHighlightedMoves();
+                    } else if (startingPosition.isPresent() && destination.isEmpty()) {
+                        updateHighlightedMoves();
+                    }
+                } catch (Exception except) {
+                    // no exception to detect
                 }
             }
         };
