@@ -6,6 +6,7 @@ import taflgames.view.fontmanager.FontManager;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -25,6 +26,7 @@ public abstract class AbstractScene implements Scene {
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final Color LABEL_TEXT_COLOR = Color.WHITE;
     private static final FontManager FONT_MANAGER = new FontManager();
+    private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
 
     /**
      * Initializes the scene state.
@@ -78,6 +80,13 @@ public abstract class AbstractScene implements Scene {
      */
     protected static Color getLabelTextColor() {
         return LABEL_TEXT_COLOR;
+    }
+
+    /**
+     * @return the default insets for the container border
+     */
+    protected static Insets getDefaultBorderInsets() {
+        return DEFAULT_INSETS;
     }
 
     /**
