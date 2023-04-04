@@ -26,17 +26,17 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
     }
 
     public void createBackgroundCells() {
-       this.backgroundCells.put(new Position(3, 2), new CellImageInfo("CELL_BASIC", Player.DEFENDER,new VectorImpl(0, 0)));
-       this.backgroundCells.put(new Position(5, 7), new CellImageInfo("CELL_THRONE", Player.DEFENDER, new VectorImpl(0, 0)));
-       this.backgroundCells.put(new Position(8, 8), new CellImageInfo("CELL_BASIC", Player.DEFENDER, new VectorImpl(0, 0)));
-       this.backgroundCells.put(new Position(1, 7), new CellImageInfo("CELL_BASIC", Player.DEFENDER, new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(3, 2), new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(5, 7), new CellImageInfo("CELL_THRONE", null, new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(8, 8), new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(1, 7), new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)));
     }
 
     public void createSpecialCells() {
-       this.specialCells.put(new Position(1, 8), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(-1, 0)));
-       this.specialCells.put(new Position(8, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, -1)));
-       this.specialCells.put(new Position(5, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(1, 0)));
-       this.specialCells.put(new Position(3, 7), new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, 1)));
+       this.specialCells.put(new Position(1, 8), new CellImageInfo("CELL_SLIDER", null, new VectorImpl(-1, 0)));
+       this.specialCells.put(new Position(8, 7), new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, -1)));
+       this.specialCells.put(new Position(5, 7), new CellImageInfo("CELL_SLIDER", null, new VectorImpl(1, 0)));
+       this.specialCells.put(new Position(3, 7), new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, 1)));
     }
 
     public Map<Position,PieceImageInfo> getPiecesAlive() {

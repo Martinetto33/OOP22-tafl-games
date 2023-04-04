@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 import taflgames.controller.Controller;
 import taflgames.controller.ControllerImpl;
-import taflgames.view.scenecontrollers.HomeControllerImpl;
+import taflgames.view.scenecontrollers.HomeSceneControllerImpl;
 import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.Scene;
 
@@ -54,7 +54,7 @@ public final class ViewImpl implements View {
         frame.setLayout(frameLayout);
 
         final Controller controller = new ControllerImpl(this);
-        setScene(new HomeScene(new HomeControllerImpl(this, controller)));
+        setScene(new HomeScene(new HomeSceneControllerImpl(this, controller)));
 
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

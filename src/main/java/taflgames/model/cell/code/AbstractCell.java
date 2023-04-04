@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.common.code.VectorImpl;
+import taflgames.controller.entitystate.CellState;
+import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
 import taflgames.model.memento.api.CellComponentMemento;
@@ -178,4 +181,23 @@ public abstract class AbstractCell implements Cell {
             AbstractCell.this.restore(this);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CellState getCellState() {
+        if (this.getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb"))) {
+            /* TODO: non ho idea di come fare altrimenti a ottenere il colore della tomba da disegnare :( */
+            Tomb t = (Tomb) this.getComponents().stream()
+                            .filter(cell -> cell instanceof Tomb)
+                            .findAny()
+                            .get();
+            return new CellStateImpl("Tomb", new VectorImpl(0, 0), t.peekTeamOfTheTomb());
+        }
+        return this.getSubclassCellState();
+    }
+
+    protected abstract CellState getSubclassCellState();
 }
+

@@ -35,6 +35,7 @@ public class LoaderImagesImpl implements LoaderImages {
     public static final String CELL_EXIT = "CELL_EXIT.png";
     public static final String CELL_SLIDER = "CELL_SLIDER.png";
     public static final String CELL_THRONE = "CELL_THRONE.png";
+    public static final String CELL_TOMB_NEUTRAL = "CELL_TOMB_NEUTRAL.png";
     public static final String CELL_TOMB_ATTACKERS = "CELL_TOMB_ATTACKERS.png";
     public static final String CELL_TOMB_DEFENDERS = "CELL_TOMB_DEFENDERS.png";
     private static final String SEP = System.getProperty("file.separator");
@@ -62,13 +63,14 @@ public class LoaderImagesImpl implements LoaderImages {
      */
     @Override
     public void loadCellsImages() {
-        this.cellImages.put(new CellImageInfo("CELL_BASIC", Player.DEFENDER, new VectorImpl(0, 0)), getImage(CELL_BASIC));
-        this.cellImages.put(new CellImageInfo("CELL_EXIT", Player.DEFENDER, new VectorImpl(0, 0)), getImage(CELL_EXIT));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(-1, 0)), getImage(CELL_SLIDER));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, -1)), rotateImage(getImage(CELL_SLIDER), ANGLE_90));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_180));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", Player.DEFENDER, new VectorImpl(0, 1)), rotateImage(getImage(CELL_SLIDER), ANGLE_270));
-        this.cellImages.put(new CellImageInfo("CELL_THRONE", Player.DEFENDER, new VectorImpl(0, 0)), getImage(CELL_THRONE));
+        this.cellImages.put(new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)), getImage(CELL_BASIC));
+        this.cellImages.put(new CellImageInfo("CELL_EXIT", null, new VectorImpl(0, 0)), getImage(CELL_EXIT));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, -1)), getImage(CELL_SLIDER));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(-1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_90));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, 1)), rotateImage(getImage(CELL_SLIDER), ANGLE_180));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_270));
+        this.cellImages.put(new CellImageInfo("CELL_THRONE", null, new VectorImpl(0, 0)), getImage(CELL_THRONE));
+        this.cellImages.put(new CellImageInfo("CELL_TOMB", null, new VectorImpl(0, 0)), getImage(CELL_TOMB_NEUTRAL));
         this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.ATTACKER, new VectorImpl(0, 0)), getImage(CELL_TOMB_ATTACKERS));
         this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.DEFENDER, new VectorImpl(0, 0)), getImage(CELL_TOMB_DEFENDERS));
     }

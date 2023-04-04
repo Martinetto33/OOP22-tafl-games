@@ -44,7 +44,7 @@ public final class HighScoreControllerImpl extends AbstractBasicSceneController 
     @Override
     public void goToPreviousScene() {
         this.getView().setScene(new HomeScene(
-            new HomeControllerImpl(this.getView(), this.getController())));
+            new HomeSceneControllerImpl(this.getView(), this.getController())));
     }
 
 }

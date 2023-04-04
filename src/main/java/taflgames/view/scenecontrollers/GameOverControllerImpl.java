@@ -26,7 +26,7 @@ public final class GameOverControllerImpl extends AbstractBasicSceneController i
     @Override
     public void goToNextScene() {
         this.getView().setScene(new HomeScene(
-            new HomeControllerImpl(this.getView(), this.getController())));
+            new HomeSceneControllerImpl(this.getView(), this.getController())));
     }
 
     /**

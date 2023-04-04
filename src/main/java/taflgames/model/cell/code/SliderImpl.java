@@ -7,6 +7,8 @@ import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
+import taflgames.controller.entitystate.CellState;
+import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.SliderMediator;
@@ -112,5 +114,15 @@ public final class SliderImpl extends AbstractCell implements Slider {
     @Override
     public void addMediator(final Board board) {
         this.mediator = new SliderMediatorImpl(board);
+    }
+
+    @Override
+    public Vector getOrientation() {
+        return this.orientation;
+    }
+
+    @Override
+    public final CellState getSubclassCellState() {
+        return new CellStateImpl(this.getType(), this.getOrientation(), null);
     }
 }

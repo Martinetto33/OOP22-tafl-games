@@ -1,5 +1,6 @@
 package taflgames.model.cell.api;
 
+import taflgames.common.api.Vector;
 import taflgames.model.board.api.Board;
 
 /**
@@ -13,4 +14,6 @@ public interface Slider extends Cell, Resettable, TimedEntity {
      * @param board the Board of the game.
      */
     void addMediator(Board board);
+
+    Vector getOrientation();
 }
