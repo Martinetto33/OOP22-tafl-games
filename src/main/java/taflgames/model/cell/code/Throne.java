@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import taflgames.common.Player;
-import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
+import taflgames.common.code.VectorImpl;
 import taflgames.controller.entitystate.CellState;
 import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
@@ -48,7 +48,7 @@ public final class Throne extends AbstractCell {
 
     @Override
     public final CellState getSubclassCellState() {
-        return new CellStateImpl(this.getType(), Vector.UP_VECTOR, null);
+        return new CellStateImpl(this.getType(), new VectorImpl(0, 0), null);
     }
     
 }

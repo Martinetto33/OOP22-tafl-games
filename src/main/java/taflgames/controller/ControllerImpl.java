@@ -135,6 +135,8 @@ public final class ControllerImpl implements Controller {
     @Override
     public void passTurn() {
         this.match.setNextActivePlayer();
+        /* To see if sliders are correctly updated at the beginning of a turn */
+        this.view.update();
     }
 
     /**

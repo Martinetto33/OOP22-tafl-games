@@ -38,7 +38,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
      */
 
     
-    private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
+    //private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position,JLabel> mapPieces = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
@@ -52,19 +52,19 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int piecePanelSize;
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
-    private Optional<Position> startingPosition;
-    private Optional<Position> destination;
+    private Optional<Position> startingPosition = Optional.empty();
+    private Optional<Position> destination = Optional.empty();
     private Set<Position> positionsToColor;
     private MatchSceneController controller;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
-        this.loader = new LoaderImagesImpl(sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR, 
+        this.loader = new LoaderImagesImpl(sizeOfSide , 
                                             numbCellsInGrid);
         this.loader.loadCellsImages();
         this.loader.loadPiecesImages();
         mapPieceImageIcons.putAll(loader.getPieceImageMap());
         mapCellsImageIcons.putAll(loader.getCellImageMap());
-        this.mySize = sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR;
+        this.mySize = sizeOfSide ;
         this.setLayout(new FlowLayout());
         this.buttonPanelSize = this.mySize;
         this.generalPanelSize = this.mySize;
@@ -197,10 +197,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             public void actionPerformed(ActionEvent e){
         	    var button = (JButton)e.getSource();
         	    var position = mapButtons.get(button);
-                /*mediator passa position al controller
-                 *controller passerà risultato delle sue analisi
-                 *al matchpanel tramite questo mediator
-                 */
                 selectPosition(position);
                 /* you clicked the same piece or a cell of its moveset 
                 (coloured) */
@@ -247,23 +243,31 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         /*instead of positionsToColor it will be used a method of controller
         * after this change setPositionToColor must be deleted.
         */
-        mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
+        mapPieces.forEach((x,y) -> {if(! x.equals(startingPosition.get())){
+            y.setOpaque(false);
+            y.setBackground(null);
+        }});
+        mapPieces.get(startingPosition.get()).setBackground(Color.BLACK);
+        mapPieces.get(startingPosition.get()).setOpaque(true);
+        /* mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
             y.setOpaque(false);
             y.setBackground(null);
         }});
         mapPieces.forEach((x,y) -> {if(positionsToColor.contains(x)){
             y.setBackground(new Color(255, 155, 155));
             y.setOpaque(true);
-        }});
+        }}); */
     }
     /**
      * unsets the background of all labels in mapPieces
      */
     private void deselectHighlightedMoves() {
-        mapPieces.forEach((x,y) -> {
+        mapPieces.get(startingPosition.get()).setOpaque(false);
+        mapPieces.get(startingPosition.get()).setBackground(null);
+        /* mapPieces.forEach((x,y) -> {
             y.setOpaque(false);
             y.setBackground(null);
-        });
+        }); */
     }
 
     private void selectPosition(final Position pos) {

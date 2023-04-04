@@ -8,8 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import taflgames.common.Player;
-import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
+import taflgames.common.code.VectorImpl;
 import taflgames.controller.entitystate.CellState;
 import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
@@ -188,7 +188,7 @@ public abstract class AbstractCell implements Cell {
                             .filter(cell -> cell instanceof Tomb)
                             .findAny()
                             .get();
-            return new CellStateImpl("Tomb", Vector.UP_VECTOR, t.peekTeamOfTheTomb());
+            return new CellStateImpl("Tomb", new VectorImpl(0, 0), t.peekTeamOfTheTomb());
         }
         return this.getSubclassCellState();
     }

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -150,6 +149,7 @@ public class MatchScene extends AbstractScene {
     public void updateBoardInstance(final Map<Position, PieceImageInfo> piecesAlive, final Map<Position, CellImageInfo> cells) {
         removeAllPiecesOnLayer();
         removeAllSpecialCellsOnLayer();
+        drawBackgroundCells(this.controller.getCellsMapping());
         drawAllSpecialCells(cells);
         drawAllPieces(piecesAlive);
     }

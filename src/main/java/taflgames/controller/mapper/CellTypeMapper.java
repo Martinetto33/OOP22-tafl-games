@@ -8,7 +8,7 @@ import taflgames.view.scenes.CellImageInfo;
 public class CellTypeMapper implements CellImageMapper {
 
     @Override
-    public CellImageInfo mapToImage(CellState state) {
+    public CellImageInfo mapToImage(final CellState state) {
         final String name = state.getPrimaryName();
         final Player player = state.getPlayer();
         final Vector orientation = state.getOrientation();
@@ -22,12 +22,7 @@ public class CellTypeMapper implements CellImageMapper {
             case "Slider":
                 return new CellImageInfo("CELL_SLIDER", player, orientation);
             case "Tomb":
-                if (player.equals(Player.ATTACKER)) {
-                    return new CellImageInfo("CELL_TOMB_ATTACKERS", player, orientation);
-                } else if (player.equals(Player.DEFENDER)) {
-                    return new CellImageInfo("CELL_TOMB_DEFENDERS", player, orientation);
-                }
-                return new CellImageInfo("CELL_TOMB_NEUTRAL", player, orientation);
+                return new CellImageInfo("CELL_TOMB", player, orientation);
             default:
                 return null;
         }
