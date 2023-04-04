@@ -215,9 +215,4 @@ public class UserRegistrationScene extends AbstractScene {
         super.addComponentBackground(panel, UserRegistrationScene.LABEL_WIDTH, UserRegistrationScene.LABEL_HEIGHT, label);
     }
 
-    @Override
-    public void update() {
-        // There is no scene update for the user registration scene currently (other than the scene switching).
-    }
-
 }

@@ -100,9 +100,4 @@ public class HomeScene extends AbstractScene {
         button.setPreferredSize(this.buttonDimension);
     }
 
-    @Override
-    public void update() {
-        // There is no scene update for the home scene currently (other than the scene switching).
-    }
-
 }

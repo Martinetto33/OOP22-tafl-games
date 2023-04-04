@@ -74,9 +74,4 @@ public class RulesScene extends AbstractScene {
         scene.add(southPanel, BorderLayout.SOUTH);
     }
 
-    @Override
-    public void update() {
-        // There is no scene update for the rules scene currently (other than the scene switching).
-    }
-
 }
