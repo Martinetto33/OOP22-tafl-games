@@ -64,10 +64,10 @@ public class LoaderImagesImpl implements LoaderImages {
     public void loadCellsImages() {
         this.cellImages.put(new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)), getImage(CELL_BASIC));
         this.cellImages.put(new CellImageInfo("CELL_EXIT", null, new VectorImpl(0, 0)), getImage(CELL_EXIT));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(-1, 0)), getImage(CELL_SLIDER));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, -1)), rotateImage(getImage(CELL_SLIDER), ANGLE_90));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_180));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, 1)), rotateImage(getImage(CELL_SLIDER), ANGLE_270));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, -1)), getImage(CELL_SLIDER));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(-1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_90));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, 1)), rotateImage(getImage(CELL_SLIDER), ANGLE_180));
+        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_270));
         this.cellImages.put(new CellImageInfo("CELL_THRONE", null, new VectorImpl(0, 0)), getImage(CELL_THRONE));
         this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.ATTACKER, new VectorImpl(0, 0)), getImage(CELL_TOMB_ATTACKERS));
         this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.DEFENDER, new VectorImpl(0, 0)), getImage(CELL_TOMB_DEFENDERS));

@@ -52,8 +52,8 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private final int piecePanelSize;
     private final int cellsPanelsSize;
     private final int sizeOfGrid;
-    private Optional<Position> startingPosition;
-    private Optional<Position> destination;
+    private Optional<Position> startingPosition = Optional.empty();
+    private Optional<Position> destination = Optional.empty();
     private Set<Position> positionsToColor;
     private MatchSceneController controller;
 
@@ -197,10 +197,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
             public void actionPerformed(ActionEvent e){
         	    var button = (JButton)e.getSource();
         	    var position = mapButtons.get(button);
-                /*mediator passa position al controller
-                 *controller passerà risultato delle sue analisi
-                 *al matchpanel tramite questo mediator
-                 */
                 selectPosition(position);
                 /* you clicked the same piece or a cell of its moveset 
                 (coloured) */
@@ -247,14 +243,24 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         /*instead of positionsToColor it will be used a method of controller
         * after this change setPositionToColor must be deleted.
         */
-        mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
+        mapPieces.forEach((x,y) -> {if(!x.equals(startingPosition.get())){
+            y.setOpaque(false);
+            y.setBackground(null);
+        }});
+        mapPieces.get(startingPosition.get()).setBackground(new Color(255, 155, 155));
+        mapPieces.get(startingPosition.get()).setOpaque(true);
+        if(destination.isPresent()) {
+            mapPieces.get(destination.get()).setBackground(new Color(255, 155, 155));
+            mapPieces.get(destination.get()).setOpaque(true);
+        }
+        /* mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
             y.setOpaque(false);
             y.setBackground(null);
         }});
         mapPieces.forEach((x,y) -> {if(positionsToColor.contains(x)){
             y.setBackground(new Color(255, 155, 155));
             y.setOpaque(true);
-        }});
+        }}); */
     }
     /**
      * unsets the background of all labels in mapPieces
@@ -263,7 +269,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         mapPieces.forEach((x,y) -> {
             y.setOpaque(false);
             y.setBackground(null);
-        });
+        }); 
     }
 
     private void selectPosition(final Position pos) {
