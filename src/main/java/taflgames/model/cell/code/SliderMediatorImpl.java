@@ -7,12 +7,17 @@ import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.SliderMediator;
 
 /**
- * This class models a SliderMediator {@link taflgames.model.cell.api.SliderMediator}
+ * This class models a SliderMediator {@link taflgames.model.cell.api.SliderMediator}.
  */
 public final class SliderMediatorImpl implements SliderMediator {
 
     private final Board board;
 
+    /**
+     * Create a new SliderMediatorImpl. 
+     * It will have a reference to the Board of the game.
+     * @param board the current Board of the game.
+     */
     public SliderMediatorImpl(final Board board) {
         this.board = board;
     }

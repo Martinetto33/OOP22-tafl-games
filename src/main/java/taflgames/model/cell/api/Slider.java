@@ -15,5 +15,9 @@ public interface Slider extends Cell, Resettable, TimedEntity {
      */
     void addMediator(Board board);
 
+    /**
+     * Return the current orientation of the Slider.
+     * @return a Vector that represent the orientation of the Slider.
+     */
     Vector getOrientation();
 }

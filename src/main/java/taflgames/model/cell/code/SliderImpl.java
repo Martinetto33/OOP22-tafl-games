@@ -116,6 +116,9 @@ public final class SliderImpl extends AbstractCell implements Slider {
         this.mediator = new SliderMediatorImpl(board);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector getOrientation() {
         return this.orientation;

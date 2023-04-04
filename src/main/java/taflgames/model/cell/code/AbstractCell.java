@@ -28,7 +28,7 @@ public abstract class AbstractCell implements Cell {
     private boolean cellStatus;
     private final Set<CellComponent> cellComponents;
 
-    /*
+    /**
      * Initializes the state of a generic cell.
      */
     public AbstractCell() {
