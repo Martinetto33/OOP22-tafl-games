@@ -43,7 +43,7 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     public void goToPreviousScene() {
         // Exiting the match brings the view back to the home scene.
         this.getView().setScene(new HomeScene(
-            new HomeControllerImpl(this.getView(), this.getController())
+            new HomeSceneControllerImpl(this.getView(), this.getController())
         ));
     }
 

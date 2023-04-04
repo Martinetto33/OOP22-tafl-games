@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import taflgames.view.fontmanager.FontManager;
-import taflgames.view.scenecontrollers.GameChoiceController;
+import taflgames.view.scenecontrollers.GameChoiceSceneController;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -39,13 +39,13 @@ public class GameChoiceScene extends AbstractScene {
 
     private final FontManager fontManager = AbstractScene.getFontManager();
 
-    private final GameChoiceController controller;
+    private final GameChoiceSceneController controller;
 
     /**
      * Creates the game choice scene.
      * @param controller the scene controller
      */
-    public GameChoiceScene(final GameChoiceController controller) {
+    public GameChoiceScene(final GameChoiceSceneController controller) {
 
         super(GAME_CHOICE, Optional.of(BG_FILENAME));
 

@@ -45,7 +45,7 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
     @Override
     public void goToNextScene() {
         this.getView().setScene(new HomeScene(
-            new HomeControllerImpl(this.getView(), this.getController())
+            new HomeSceneControllerImpl(this.getView(), this.getController())
         ));
     }
 
