@@ -15,6 +15,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import java.util.Optional;
 
+import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.RulesDisplayController;
 
 /**
@@ -28,6 +29,8 @@ public class RulesScene extends AbstractScene {
     private static final String BASE_LOCATION = "taflgames/rules/";
     private static final String GO_BACK = "Go Back";
     private static final Insets DEFAULT_INSETS = new Insets(20, 20, 20, 20);
+
+    private final FontManager fontManager = AbstractScene.getFontManager();
 
     private final RulesDisplayController controller;
 
@@ -64,6 +67,7 @@ public class RulesScene extends AbstractScene {
 
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
+        goBackButton.setFont(fontManager.getButtonFont());
         southPanel.add(goBackButton);
         southPanel.setBackground(TRANSPARENT);
 
