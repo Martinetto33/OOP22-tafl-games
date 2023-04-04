@@ -243,21 +243,23 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         /*instead of positionsToColor it will be used a method of controller
         * after this change setPositionToColor must be deleted.
         */
-        mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
+        mapPieces.forEach((x,y) -> {if(!x.equals(startingPosition.get())){
             y.setOpaque(false);
             y.setBackground(null);
         }});
-        mapPieces.forEach((x,y) -> {if(positionsToColor.contains(x)){
-            y.setBackground(new Color(255, 155, 155));
-            y.setOpaque(true);
-        }}); 
+        mapPieces.get(startingPosition.get()).setBackground(new Color(255, 155, 155));
+        mapPieces.get(startingPosition.get()).setOpaque(true);
+        if(destination.isPresent()) {
+            mapPieces.get(destination.get()).setBackground(new Color(255, 155, 155));
+            mapPieces.get(destination.get()).setOpaque(true);
+            mapPieces.get(startingPosition.get()).setOpaque(false);
+            mapPieces.get(startingPosition.get()).setBackground(null);
+        } 
     }
     /**
      * unsets the background of all labels in mapPieces
      */
     private void deselectHighlightedMoves() {
-        mapPieces.get(startingPosition.get()).setOpaque(false);
-        mapPieces.get(startingPosition.get()).setBackground(null);
         mapPieces.forEach((x,y) -> {
             y.setOpaque(false);
             y.setBackground(null);
