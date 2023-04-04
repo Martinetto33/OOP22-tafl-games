@@ -4,12 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import taflgames.common.code.Position;
-import taflgames.common.Player;
 import taflgames.view.scenecontrollers.MatchSceneController;
 /**
  * TO DO: complete class
@@ -91,30 +89,6 @@ public class MatchScene extends AbstractScene {
         }
     }
 
-    @Override
-    public void update() {
-        /*
-         * The board shown in the match scene must reflect the current state of the model.
-         * All cells and pieces must be drawn in the correct position and using the correct
-         * sprite according to their type.
-         */
-        final Map<Position, List<String>> cellsMapping = this.controller.getCellsMapping();
-        final Map<Player, Map<Position, String>> piecesMapping = this.controller.getPiecesMapping();
-        /*
-         * These two collections will be used to redraw cells and pieces in the MatchPanel.
-         * The Strings in these two maps represent the type of cells and pieces at each position.
-         * I suppose that the redrawing will follow these steps.
-         * - The Strings will be used somehow to create CellImageInfo and PieceImageInfo objects.
-         * - The methods drawBackgroundCells(), drawAllSpecialCells and drawAllPieces() of the MatchPanel will be called,
-         *   passing the maps of positions and CellImageInfo/PieceImageInfo.
-         */
-        /*
-         * When you need to use updateBoardInstance you can't use the maps above, you must trasform them
-         * according to this method's documentation.
-         * Se metti updateBoardInstance qui non serve metterlo nel costruttore.
-         */
-    }
-
     /**
      * draws all pieces currently alive.
      * @param piecesAlive
@@ -175,7 +149,13 @@ public class MatchScene extends AbstractScene {
     public void updateBoardInstance(final Map<Position, PieceImageInfo> piecesAlive, final Map<Position, CellImageInfo> cells) {
         removeAllPiecesOnLayer();
         removeAllSpecialCellsOnLayer();
+        drawBackgroundCells(this.controller.getCellsMapping());
         drawAllSpecialCells(cells);
         drawAllPieces(piecesAlive);
+    }
+
+    @Override
+    public void update() {
+        this.updateBoardInstance(this.controller.getPiecesMapping(), this.controller.getCellsMapping());
     }
 }

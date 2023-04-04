@@ -38,7 +38,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
      */
 
     
-    private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
+    //private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position,JLabel> mapPieces = new HashMap<>();
     private final Map<Position,JLabel> mapSpecialCell = new HashMap<>();
@@ -58,13 +58,13 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
     private MatchSceneController controller;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
-        this.loader = new LoaderImagesImpl(sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR, 
+        this.loader = new LoaderImagesImpl(sizeOfSide , 
                                             numbCellsInGrid);
         this.loader.loadCellsImages();
         this.loader.loadPiecesImages();
         mapPieceImageIcons.putAll(loader.getPieceImageMap());
         mapCellsImageIcons.putAll(loader.getCellImageMap());
-        this.mySize = sizeOfSide - MatchPanelImpl.HIGHT_OF_PC_APPLICATION_BAR;
+        this.mySize = sizeOfSide ;
         this.setLayout(new FlowLayout());
         this.buttonPanelSize = this.mySize;
         this.generalPanelSize = this.mySize;
@@ -243,29 +243,21 @@ public class MatchPanelImpl extends JPanel implements MatchPanel{
         /*instead of positionsToColor it will be used a method of controller
         * after this change setPositionToColor must be deleted.
         */
-        mapPieces.forEach((x,y) -> {if(!x.equals(startingPosition.get())){
-            y.setOpaque(false);
-            y.setBackground(null);
-        }});
-        mapPieces.get(startingPosition.get()).setBackground(new Color(255, 155, 155));
-        mapPieces.get(startingPosition.get()).setOpaque(true);
-        if(destination.isPresent()) {
-            mapPieces.get(destination.get()).setBackground(new Color(255, 155, 155));
-            mapPieces.get(destination.get()).setOpaque(true);
-        }
-        /* mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
+        mapPieces.forEach((x,y) -> {if(!positionsToColor.contains(x)){
             y.setOpaque(false);
             y.setBackground(null);
         }});
         mapPieces.forEach((x,y) -> {if(positionsToColor.contains(x)){
             y.setBackground(new Color(255, 155, 155));
             y.setOpaque(true);
-        }}); */
+        }}); 
     }
     /**
      * unsets the background of all labels in mapPieces
      */
     private void deselectHighlightedMoves() {
+        mapPieces.get(startingPosition.get()).setOpaque(false);
+        mapPieces.get(startingPosition.get()).setBackground(null);
         mapPieces.forEach((x,y) -> {
             y.setOpaque(false);
             y.setBackground(null);

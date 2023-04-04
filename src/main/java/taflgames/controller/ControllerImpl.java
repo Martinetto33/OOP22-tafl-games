@@ -1,7 +1,6 @@
 package taflgames.controller;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -13,6 +12,8 @@ import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
+import taflgames.controller.entitystate.CellState;
+import taflgames.controller.entitystate.PieceState;
 import taflgames.controller.leaderboard.api.LeaderboardSaver;
 import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
 import taflgames.model.Model;
@@ -134,6 +135,8 @@ public final class ControllerImpl implements Controller {
     @Override
     public void passTurn() {
         this.match.setNextActivePlayer();
+        /* To see if sliders are correctly updated at the beginning of a turn */
+        this.view.update();
     }
 
     /**
@@ -164,7 +167,7 @@ public final class ControllerImpl implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public Map<Position, List<String>> getCellsDisposition() {
+    public Map<Position, CellState> getCellsDisposition() {
         return this.match.getCellsMapping();
     }
 
@@ -172,7 +175,7 @@ public final class ControllerImpl implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public Map<Player, Map<Position, String>> getPiecesDisposition() {
+    public Map<Position, PieceState> getPiecesDisposition() {
         return this.match.getPiecesMapping();
     }
 

@@ -1,7 +1,6 @@
 package taflgames.controller;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,6 +8,8 @@ import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
 import taflgames.common.code.Position;
+import taflgames.controller.entitystate.CellState;
+import taflgames.controller.entitystate.PieceState;
 
 /**
  * This interface describes the controller of the application.
@@ -88,14 +89,14 @@ public interface Controller {
      * other components are present, their types will follow at the successive
      * indexes.
      */
-    Map<Position, List<String>> getCellsDisposition();
+    Map<Position, CellState> getCellsDisposition();
 
     /**
      * Returns a map that might be useful for the purpose of the View, which
      * describes the current state of the pieces on the Board.
      * @return a Map describing the current state of the Pieces.
      */
-    Map<Player, Map<Position, String>> getPiecesDisposition();
+    Map<Position, PieceState> getPiecesDisposition();
 
     /**
      * @return the player in turn.

@@ -9,6 +9,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import taflgames.common.code.Position;
+import taflgames.controller.entitystate.CellState;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.CellComponent;
 import taflgames.model.memento.api.CellComponentMemento;
@@ -72,6 +73,28 @@ public final class Tomb extends AbstractCell implements CellComponent {
         } else {
             deadPieces.get(player).add(piece);
         }
+    }
+
+    /**
+     * Used for view purposes. If the tomb only contains pieces of the same team,
+     * it returns the name of that team; otherwise it returns null.
+     * @return a {@link taflgames.common.Player} if the dead pieces are all of the
+     * same team, or null otherwise.
+     */
+    public Player peekTeamOfTheTomb() {
+        if (this.deadPieces.isEmpty()) {
+            return null;
+        }
+        if (this.deadPieces.values().stream()
+                .flatMap(queue -> queue.stream())
+                .allMatch(piece -> piece.getPlayer().equals(Player.ATTACKER))) {
+            return Player.ATTACKER;
+        } else if (this.deadPieces.values().stream()
+                       .flatMap(queue -> queue.stream())
+                       .allMatch(piece -> piece.getPlayer().equals(Player.DEFENDER))) {
+                    return Player.DEFENDER;
+                }
+        return null;
     }
 
     /**
@@ -179,5 +202,13 @@ public final class Tomb extends AbstractCell implements CellComponent {
     @Override
     public String getComponentType() {
         return this.getType();
+    }
+
+    /**
+     * The case of the Tomb is managed directly in the AbstractCell.
+     */
+    @Override
+    public final CellState getSubclassCellState() {
+        return null;
     }
 }

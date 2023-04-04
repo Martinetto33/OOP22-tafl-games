@@ -5,6 +5,9 @@ import java.util.Map;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.common.code.VectorImpl;
+import taflgames.controller.entitystate.CellState;
+import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
@@ -38,5 +41,10 @@ public class ClassicCell extends AbstractCell {
     @Override
     public String getType() {
         return "ClassicCell";
+    }
+
+    @Override
+    public final CellState getSubclassCellState() {
+        return new CellStateImpl(this.getType(), new VectorImpl(0, 0), null);
     }
 }

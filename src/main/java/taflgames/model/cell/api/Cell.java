@@ -6,6 +6,7 @@ import java.util.Set;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.controller.entitystate.CellState;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
@@ -89,4 +90,10 @@ public interface Cell {
      */
     Set<CellComponent> getComponents();
 
+    /**
+     * This is a Template Method that gets the CellState of this cell.
+     * @return a {@link taflgames.controller.entitystate.CellState}
+     * describing the current state of this Cell.
+     */
+    public CellState getCellState();
 }

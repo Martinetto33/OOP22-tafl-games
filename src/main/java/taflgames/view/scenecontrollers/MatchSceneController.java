@@ -1,10 +1,10 @@
 package taflgames.view.scenecontrollers;
 
-import java.util.List;
 import java.util.Map;
 
-import taflgames.common.Player;
 import taflgames.common.code.Position;
+import taflgames.view.scenes.CellImageInfo;
+import taflgames.view.scenes.PieceImageInfo;
 
 public interface MatchSceneController extends BasicSceneController {
     
@@ -12,12 +12,18 @@ public interface MatchSceneController extends BasicSceneController {
      * @return the mapping of each position to the type of cell
      * (and the cells components if present) at that position.
      */
-    Map<Position, List<String>> getCellsMapping();
+    Map<Position, CellImageInfo> getCellsMapping();
 
     /**
      * @return the mapping of the positions 
      */
-    Map<Player, Map<Position, String>> getPiecesMapping();
+    Map<Position, PieceImageInfo> getPiecesMapping();
+
+    /**
+     * Updates the view with the information it needs to redraw correctly the
+     * current state of the match.
+     */
+    void updateView();
 
     /**
      * @return if the selected source is valid or not

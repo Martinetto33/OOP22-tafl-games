@@ -26,7 +26,7 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
     }
 
     public void createBackgroundCells() {
-       this.backgroundCells.put(new Position(3, 2), new CellImageInfo("CELL_BASIC", null,new VectorImpl(0, 0)));
+       this.backgroundCells.put(new Position(3, 2), new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)));
        this.backgroundCells.put(new Position(5, 7), new CellImageInfo("CELL_THRONE", null, new VectorImpl(0, 0)));
        this.backgroundCells.put(new Position(8, 8), new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)));
        this.backgroundCells.put(new Position(1, 7), new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)));
