@@ -116,13 +116,9 @@ public final class ControllerImpl implements Controller {
         final boolean isMoveLegal = this.match.selectSource(startPos) && this.match.selectDestination(startPos, endPos);
         if (isMoveLegal) {
             this.match.makeMove(startPos, endPos);
-            // The move hs been performed, so the board view must be updated.
+            // The move has been performed, so the board view must be updated.
             this.view.update();
-            if (this.isOver()) {
-                /*
-                 * TODO: cause the match scene to end
-                 */
-            } else {
+            if (!this.isOver()) {
                 this.passTurn();
             }
         }
@@ -135,8 +131,6 @@ public final class ControllerImpl implements Controller {
     @Override
     public void passTurn() {
         this.match.setNextActivePlayer();
-        /* To see if sliders are correctly updated at the beginning of a turn */
-        this.view.update();
     }
 
     /**
