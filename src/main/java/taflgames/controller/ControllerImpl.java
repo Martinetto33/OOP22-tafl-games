@@ -15,6 +15,7 @@ import taflgames.common.code.Position;
 import taflgames.controller.entitystate.CellState;
 import taflgames.controller.entitystate.PieceState;
 import taflgames.controller.leaderboard.api.LeaderboardSaver;
+import taflgames.controller.leaderboard.code.LeaderBoardImpl;
 import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
@@ -203,6 +204,6 @@ public final class ControllerImpl implements Controller {
     @Override
     public void clearLeaderboard() {
         final LeaderboardSaver l = new LeaderboardSaverImpl();
-        //TODO
+        l.saveLeaderboard(new LeaderBoardImpl());
     }
 }
