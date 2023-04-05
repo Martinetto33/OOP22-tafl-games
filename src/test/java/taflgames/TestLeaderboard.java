@@ -140,8 +140,9 @@ class TestLeaderboard {
      * is actually called.
      */
     @Test
-    void testIfNoSaveFileExists() {
+    void testIfNoLeaderboardExists() {
         final LeaderboardSaver l = new LeaderboardSaverImpl();
+        l.saveLeaderboard(new LeaderBoardImpl());
         final Leaderboard lead = l.retrieveFromSave();
         assertTrue(lead.getLeaderboard().isEmpty());
     }
