@@ -1,8 +1,5 @@
 package taflgames.view.scenecontrollers;
 
-import java.util.Optional;
-
-import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 
 /**
@@ -36,10 +33,4 @@ public interface UserRegistrationController extends BasicSceneController {
      */
     void registerMatchResult(String attackerPlayer, String defenderPlayer);
 
-    /**
-     * Returns the winner player or an empty Optional if last match resulted in a Draw.
-     * @return the winner {@link taflgames.common.Player} if there is a winner,
-     * an empty Optional otherwise.
-     */
-    Optional<Player> getWinner();
 }

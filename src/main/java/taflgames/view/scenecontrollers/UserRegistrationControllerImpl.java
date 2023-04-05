@@ -101,15 +101,4 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         this.saver.saveLeaderboard(this.leaderboard);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Optional<Player> getWinner() {
-        final List<Player> playerList = this.result.entrySet().stream()
-                .filter(entry -> entry.getValue().equals(MatchResult.VICTORY))
-                .map(entry -> entry.getKey())
-                .toList();
-        return result.isEmpty() ? Optional.empty() : Optional.of(playerList.get(0));
-    }
 }

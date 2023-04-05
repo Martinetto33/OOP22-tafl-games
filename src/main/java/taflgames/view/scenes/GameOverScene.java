@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import taflgames.common.Player;
 import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.GameOverController;
 
@@ -84,6 +85,7 @@ public class GameOverScene extends AbstractScene {
          */
         //scene.add(Box.createRigidArea(new Dimension(0, controller.getViewHeight() / 2)));
         scene.add(elementsPanel, BorderLayout.CENTER);
+        this.displayWinnerRole();
     }
 
     private void createMainMenuActionListener(final GameOverController controller) {
@@ -102,6 +104,15 @@ public class GameOverScene extends AbstractScene {
      */
     private void createRegisterResultActionListener(final GameOverController controller) {
         this.registerResultButton.addActionListener(e -> controller.goToRegistrationScene());
+    }
+
+    private void displayWinnerRole() {
+        Optional<Player> possibleWinner = this.controller.getWinner();
+        if (possibleWinner.isPresent()) {
+            JOptionPane.showMessageDialog(getScene(), possibleWinner.get().toString() + " WINS!", "Game Over", JOptionPane.OK_OPTION);
+        } else {
+            JOptionPane.showMessageDialog(getScene(), "Draw!", "Game Over", JOptionPane.OK_OPTION);
+        }
     }
 
 }
