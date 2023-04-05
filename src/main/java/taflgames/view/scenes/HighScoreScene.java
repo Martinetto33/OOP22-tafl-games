@@ -2,7 +2,6 @@ package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,7 +46,7 @@ public class HighScoreScene extends AbstractScene {
         this.controller = controller;
 
         final JPanel scene = this.getScene();
-        scene.setLayout(new FlowLayout());
+        scene.setLayout(new BorderLayout());
         final JPanel buttonPanel = new JPanel();
         final JPanel tablePanel = new JPanel();
 
@@ -57,8 +56,8 @@ public class HighScoreScene extends AbstractScene {
         this.makePanelTransparent(tablePanel);
         this.makePanelTransparent(buttonPanel);
 
-        scene.add(tablePanel);
-        scene.add(buttonPanel);
+        scene.add(tablePanel, BorderLayout.NORTH);
+        scene.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private void makePanelTransparent(final JPanel panel) {
