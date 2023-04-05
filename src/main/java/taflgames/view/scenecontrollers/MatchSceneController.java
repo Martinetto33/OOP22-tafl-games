@@ -39,4 +39,10 @@ public interface MatchSceneController extends BasicSceneController {
      */
     boolean moveIfLegal(Position source, Position destination);
 
+    /**
+     * Asks to the controller of the application if the match is over.
+     * @return true if the match is over, false otherwise
+     */
+    boolean isMatchOver();
+
 }
