@@ -47,4 +47,11 @@ public final class HighScoreControllerImpl extends AbstractBasicSceneController 
             new HomeSceneControllerImpl(this.getView(), this.getController())));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearLeaderboard() {
+        this.getController().clearLeaderboard();
+    }
 }

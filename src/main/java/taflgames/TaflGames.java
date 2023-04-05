@@ -1,5 +1,6 @@
 package taflgames;
 
+import taflgames.controller.leaderboard.code.SampleLeaderboardBuilder;
 import taflgames.view.ViewImpl;
 
 /**
@@ -15,6 +16,7 @@ public final class TaflGames {
      * @param args unused
      */
     public static void main(final String... args) {
+        SampleLeaderboardBuilder.createSampleLeaderboard();
         new ViewImpl();
     }
 
