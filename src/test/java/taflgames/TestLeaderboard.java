@@ -2,8 +2,6 @@ package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,12 +115,12 @@ class TestLeaderboard {
     @Test
     void testSave() {
         final LeaderboardSaver saver = new LeaderboardSaverImpl();
-        saver.setPath(saver.getTestPath()); //working directory of test classes differs from the one of the main classes
+        //saver.setPath(saver.getTestPath()); //working directory of test classes differs from the one of the main classes
         saver.saveLeaderboard(TestLeaderboard.sampleLeaderboard);
         Leaderboard sixElementsLeaderboard = saver.retrieveFromSave();
         assertEquals(TestLeaderboard.MAP_SIZE, sixElementsLeaderboard.getLeaderboard().size());
         sixElementsLeaderboard.addResult("Fenrir", MatchResult.DEFEAT);
-        sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
+        sixElementsLeaderboard.saveToFile(saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
         assertTrue(sixElementsLeaderboard.getLeaderboard().containsKey("Fenrir"));
         /* The clear method empties the results map, so an empty map will be saved to file.
@@ -132,7 +130,7 @@ class TestLeaderboard {
          */
         sixElementsLeaderboard.clearLeaderboard();
         assertEquals(TestLeaderboard.MAP_SIZE, TestLeaderboard.EXPECTED_RESULTS.size());
-        sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
+        sixElementsLeaderboard.saveToFile(saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
         assertEquals(0, sixElementsLeaderboard.getLeaderboard().size());
     }
@@ -140,15 +138,10 @@ class TestLeaderboard {
     /**
      * Tests the behaviour of the application if no save file is found and "retrieveFromSave()"
      * is actually called.
-     * @throws IOException
      */
     @Test
-    void testIfNoSaveFileExists() throws IOException {
+    void testIfNoSaveFileExists() {
         final LeaderboardSaver l = new LeaderboardSaverImpl();
-        final File file = new File(l.getTestPath());
-        if (file.exists() && file.isFile() && !file.delete()) {
-            throw new IOException("The file at " + l.getTestPath() + " could not be deleted.");
-        }
         final Leaderboard lead = l.retrieveFromSave();
         assertTrue(lead.getLeaderboard().isEmpty());
     }

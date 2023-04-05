@@ -1,6 +1,5 @@
 package taflgames.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
@@ -204,17 +203,6 @@ public final class ControllerImpl implements Controller {
     @Override
     public void clearLeaderboard() {
         final LeaderboardSaver l = new LeaderboardSaverImpl();
-        final File file = new File(l.getDefaultPath());
-        if (file.exists() && file.isFile()) {
-            try {
-                if (!file.delete()) {
-                    throw new IOException("The file at " + l.getTestPath() + " could not be deleted.");
-                } else {
-                    LOGGER.info("File deleted successfully");
-                }
-            } catch (IOException e) {
-                LOGGER.error("Error in the deletion of the leaderboard in the main Controller!", e);
-            }
-        }
+        //TODO
     }
 }

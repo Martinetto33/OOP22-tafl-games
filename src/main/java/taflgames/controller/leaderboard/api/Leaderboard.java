@@ -48,10 +48,9 @@ public interface Leaderboard {
 
     /**
      * Saves the results of this session to a file.
-     * @param path the path to the save file.
      * @param saver a LeaderboardSaver which will be in charge of saving the leaderboard.
      */
-    void saveToFile(String path, LeaderboardSaver saver);
+    void saveToFile(LeaderboardSaver saver);
 
     /**
      * Returns a String representation of the player's score, if present.
