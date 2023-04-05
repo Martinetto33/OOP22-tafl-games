@@ -81,4 +81,12 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
         return this.getController().isOver();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void undo() {
+        this.getController().undo();
+    }
+
 }

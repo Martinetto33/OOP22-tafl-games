@@ -23,6 +23,8 @@ import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.CellsCollectionBuilderImpl;
 import taflgames.model.builders.PiecesCollectionBuilder;
 import taflgames.model.builders.PiecesCollectionBuilderImpl;
+import taflgames.model.memento.api.Caretaker;
+import taflgames.model.memento.code.CaretakerImpl;
 import taflgames.view.View;
 
 /**
@@ -34,6 +36,7 @@ public final class ControllerImpl implements Controller {
 
     private final View view;
     private Model match;
+    private Caretaker caretaker;
 
     /**
      * Instantiates a controller for the application.
@@ -56,6 +59,8 @@ public final class ControllerImpl implements Controller {
             this.match = new Match(
                 new BoardImpl(pieces, cells, size)
             );
+            this.caretaker = new CaretakerImpl(this.match);
+            this.caretaker.updateHistory();
             LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
@@ -81,6 +86,8 @@ public final class ControllerImpl implements Controller {
             this.match = new Match(
                 new BoardImpl(pieces, cells, size)
             );
+            this.caretaker = new CaretakerImpl(this.match);
+            this.caretaker.updateHistory();
             LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
@@ -132,6 +139,7 @@ public final class ControllerImpl implements Controller {
     @Override
     public void passTurn() {
         this.match.setNextActivePlayer();
+        this.caretaker.updateHistory();
     }
 
     /**
@@ -179,8 +187,14 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public void undo() {
-        // TODO: undo
-        // TODO: this.view.update();
+        /* If history was not updated, this
+         * method should do nothing.
+         */
+        if (this.caretaker.isLocked()) {
+            this.caretaker.unlockHistory();
+            this.caretaker.undo();
+            this.view.update();
+        }
     }
 
     /**

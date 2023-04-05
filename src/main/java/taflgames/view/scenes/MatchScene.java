@@ -15,6 +15,7 @@ import taflgames.view.scenecontrollers.MatchSceneController;
 public class MatchScene extends AbstractScene {
     private static final String MATCH = "BATTLE!";
     private static final String GO_BACK = "Go Back";
+    private static final String UNDO = "Undo move";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final int NUMB_CELLS_SIDE = 11;
 
@@ -37,11 +38,18 @@ public class MatchScene extends AbstractScene {
         scene.add(matchState);
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
+        
+        final JButton undoButton = new JButton(UNDO);
+
         southPanel.add(goBackButton);
+        southPanel.add(undoButton);
         southPanel.setBackground(TRANSPARENT);
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();
+        });
+        undoButton.addActionListener(e -> {
+            //this.controller.undo();
         });
 
         scene.add(southPanel, FlowLayout.LEFT);

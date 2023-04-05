@@ -45,4 +45,8 @@ public interface MatchSceneController extends BasicSceneController {
      */
     boolean isMatchOver();
 
+    /**
+     * Undoes the last move, if any.
+     */
+    void undo();
 }
