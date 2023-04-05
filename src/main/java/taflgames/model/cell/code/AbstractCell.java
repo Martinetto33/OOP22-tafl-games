@@ -214,5 +214,13 @@ public abstract class AbstractCell implements Cell {
     }
 
     protected abstract CellState getSubclassCellState();
+
+    protected Set<CellComponent> getCellComponents() {
+        return Collections.unmodifiableSet(this.cellComponents);
+    }
+
+    protected Set<CellComponent> getJustAddedComponents() {
+        return Collections.unmodifiableSet(this.justAddedComponents);
+    }
 }
 

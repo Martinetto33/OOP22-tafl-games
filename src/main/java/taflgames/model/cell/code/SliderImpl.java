@@ -12,6 +12,8 @@ import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.SliderMediator;
+import taflgames.model.memento.api.CellComponentMemento;
+import taflgames.model.memento.api.CellMemento;
 import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Slider;
 
@@ -119,5 +121,40 @@ public final class SliderImpl extends AbstractCell implements Slider {
     @Override
     public final CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), this.getOrientation(), null);
+    }
+
+    //TODO
+    @Override
+    public CellMemento save() {
+        return null;
+    }
+
+    //TODO
+    @Override
+    public void restore(final CellMemento cm) {
+
+    }
+
+    //TODO
+    public class SliderMementoImpl implements CellMemento {
+
+        @Override
+        public void restore() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'restore'");
+        }
+
+        @Override
+        public boolean getCellStatus() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getCellStatus'");
+        }
+
+        @Override
+        public List<CellComponentMemento> getComponentMementos() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getComponentMementos'");
+        }
+
     }
 }
