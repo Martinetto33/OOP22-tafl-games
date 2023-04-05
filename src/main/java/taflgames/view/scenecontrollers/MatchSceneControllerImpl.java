@@ -76,4 +76,9 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
         this.matchScene.updateBoardInstance(this.getPiecesMapping(), this.getCellsMapping());
     }
 
+    @Override
+    public boolean isMatchOver() {
+        return this.getController().isOver();
+    }
+
 }
