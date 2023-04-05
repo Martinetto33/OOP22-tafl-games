@@ -126,9 +126,6 @@ public final class ControllerImpl implements Controller {
             this.match.makeMove(startPos, endPos);
             // The move has been performed, so the board view must be updated.
             this.view.update();
-            if (!this.isOver()) {
-                this.passTurn();
-            }
         }
         return isMoveLegal;
     }
@@ -138,8 +135,10 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public void passTurn() {
-        this.match.setNextActivePlayer();
-        this.caretaker.updateHistory();
+        if (!this.isOver()) {
+            this.match.setNextActivePlayer();
+            this.caretaker.updateHistory();
+        }
     }
 
     /**

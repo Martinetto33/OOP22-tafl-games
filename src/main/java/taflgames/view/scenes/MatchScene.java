@@ -16,6 +16,7 @@ public class MatchScene extends AbstractScene {
     private static final String MATCH = "BATTLE!";
     private static final String GO_BACK = "Go Back";
     private static final String UNDO = "Undo move";
+    private static final String PASS = "Pass turn";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final int NUMB_CELLS_SIDE = 11;
 
@@ -38,18 +39,26 @@ public class MatchScene extends AbstractScene {
         scene.add(matchState);
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
-        
+
+        /* Code added for the memento */
         final JButton undoButton = new JButton(UNDO);
+        final JButton passTurnButton = new JButton(PASS);
 
         southPanel.add(goBackButton);
         southPanel.add(undoButton);
+        southPanel.add(passTurnButton);
         southPanel.setBackground(TRANSPARENT);
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();
         });
+
         undoButton.addActionListener(e -> {
-            //this.controller.undo();
+            this.controller.undo();
+        });
+
+        passTurnButton.addActionListener(e -> {
+            this.controller.passTurn();
         });
 
         scene.add(southPanel, FlowLayout.LEFT);

@@ -119,7 +119,17 @@ public final class Tomb extends AbstractCell implements CellComponent {
     }
 
     public void restore(final TombMementoImpl tm) {
-        this.deadPieces = tm.getInnerDeadPieces();
+        this.deadPieces = tm.getInnerDeadPieces().entrySet().stream()
+            .map(entry -> {
+                /* This longer lambda creates a deep copy of the Queues, to
+                * ensure that modifications of the state of the match do not
+                * affect this snapshot of the queued dead pieces.
+                */
+                final Queue<Piece> queue = new LinkedList<>();
+                entry.getValue().stream().forEachOrdered(piece -> queue.add(piece));
+                return Map.entry(entry.getKey(), queue);
+            })
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         super.restore(tm);
     }
 

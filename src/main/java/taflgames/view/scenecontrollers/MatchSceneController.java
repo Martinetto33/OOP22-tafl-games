@@ -49,4 +49,10 @@ public interface MatchSceneController extends BasicSceneController {
      * Undoes the last move, if any.
      */
     void undo();
+
+    /**
+     * Used to confirm that the player in turn is sure
+     * about his move and doesn't want to undo it.
+     */
+    void passTurn();
 }
