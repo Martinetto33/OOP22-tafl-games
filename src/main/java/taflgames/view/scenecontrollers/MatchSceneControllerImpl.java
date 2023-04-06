@@ -3,6 +3,7 @@ package taflgames.view.scenecontrollers;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.controller.Controller;
 import taflgames.controller.mapper.CellImageMapper;
@@ -24,6 +25,7 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     private final MatchScene matchScene;
     private final PieceImageMapper pieceMapper = new PieceTypeMapper();
     private final CellImageMapper cellMapper = new CellTypeMapper();
+    private boolean wasMoveDone = false;
     
     protected MatchSceneControllerImpl(final View view, final Controller controller) {
         super(view, controller);
@@ -68,7 +70,11 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
 
     @Override
     public boolean moveIfLegal(Position source, Position destination) {
-        return this.getController().moveIfLegal(source, destination);
+        boolean wasMoveLegal = this.getController().moveIfLegal(source, destination);
+        if (wasMoveLegal) {
+            this.wasMoveDone = true;
+        }
+        return wasMoveLegal;
     }
 
     @Override
@@ -87,14 +93,30 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     @Override
     public void undo() {
         this.getController().undo();
+        this.wasMoveDone = false;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void passTurn() {
+    public boolean passTurn() {
+        if (!this.wasMoveDone) {
+            /* Cannot pass before a move was done. */
+            System.out.println("Don't pass before a move is done!");
+            return false;
+        }
         this.getController().passTurn();
+        this.wasMoveDone = false;
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getPlayerInTurn() {
+        return this.getController().getCurrentPlayer();
     }
 
 }

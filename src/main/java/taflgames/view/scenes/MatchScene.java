@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.util.Map;
 import java.util.Optional;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import taflgames.common.code.Position;
 import taflgames.view.scenecontrollers.MatchSceneController;
@@ -58,7 +59,13 @@ public class MatchScene extends AbstractScene {
         });
 
         passTurnButton.addActionListener(e -> {
-            this.controller.passTurn();
+            if (!this.controller.passTurn()) {
+                JOptionPane.showMessageDialog(getScene(), "Cannot pass turn because "
+                    + this.controller.getPlayerInTurn().toString()
+                    + " has not made a move yet.",
+                    "No move made by current player",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         scene.add(southPanel, FlowLayout.LEFT);

@@ -2,6 +2,7 @@ package taflgames.view.scenecontrollers;
 
 import java.util.Map;
 
+import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
@@ -53,6 +54,15 @@ public interface MatchSceneController extends BasicSceneController {
     /**
      * Used to confirm that the player in turn is sure
      * about his move and doesn't want to undo it.
+     * @return true if the turn was correctly passed, false
+     * if the current player still needs to make a move
+     * before being able to pass the turn.
      */
-    void passTurn();
+    boolean passTurn();
+
+    /**
+     * Returns the {@link taflgames.common.Player} in turn.
+     * @return the Player in turn.
+     */
+    Player getPlayerInTurn();
 }
