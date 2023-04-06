@@ -35,7 +35,6 @@ public class GameChoiceScene extends AbstractScene {
     private static final double MAIN_BTN_WIDTH_PROP = 0.33;
     private static final double MINOR_BTN_HEIGHT_PROP = 0.025;
     private static final double MINOR_BTN_WIDTH_PROP = 0.10;
-    private static final int INSETS_CONSTANT = 20;
 
     private final FontManager fontManager = AbstractScene.getFontManager();
 

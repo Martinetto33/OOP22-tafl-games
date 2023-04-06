@@ -33,7 +33,6 @@ public class HomeScene extends AbstractScene {
     private static final double BTN_WIDTH_PROP = 0.45;
     private static final int WIDTH_RATIO = 200;
     private static final int HEIGHT_RATIO = 200;
-    private static final int INSETS_CONSTANT = 20;
 
     private final FontManager fontManager = AbstractScene.getFontManager();
     private final Dimension buttonDimension;
