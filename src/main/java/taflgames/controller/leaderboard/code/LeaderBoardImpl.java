@@ -110,7 +110,7 @@ public class LeaderBoardImpl implements Leaderboard {
      * @param map the map from which to take the entries
      */
     public void fromMapWithListValues(final Map<String, List<Integer>> map) {
-        if (map.isEmpty()) {
+        if (map == null || map.isEmpty()) {
             this.results = new HashMap<>();
             return;
         }
