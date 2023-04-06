@@ -94,7 +94,7 @@ public final class BoardImpl implements Board, TimedEntity {
             }
         } else if (THRONE.equals(cells.get(dest).getType()) 
                 || EXIT.equals(cells.get(dest).getType())
-                || SLIDER.equals(cells.get(start).getType()) && !cells.get(dest).isFree()
+                //|| SLIDER.equals(cells.get(start).getType()) && !cells.get(dest).isFree()
                 || !cells.get(dest).isFree() && getPieceAtPosition(dest).getPlayer().equals(player)) {
                 return false;
         }
@@ -146,7 +146,10 @@ public final class BoardImpl implements Board, TimedEntity {
             // trovo la tipologia di pedina nella casella di destinazione dopodichè controllo
             // che non sia un re poichè lo swapper non può scambiare posizione con un re
             final Piece destPiece = getPieceAtPosition(dest);
-            return !(destPiece != null && KING.equals(destPiece.getMyType().getTypeOfPiece()));
+            if(destPiece != null && !KING.equals(destPiece.getMyType().getTypeOfPiece())) {
+                return true;
+            }
+            //return !(destPiece != null && KING.equals(destPiece.getMyType().getTypeOfPiece()));
         }
 
         return false;
