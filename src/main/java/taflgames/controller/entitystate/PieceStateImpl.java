@@ -6,7 +6,7 @@ import taflgames.common.Player;
  * A representation of the state of a {@link taflgames.model.pieces.api.Piece}.
  * This class provides only getters, and it is used for view purposes.
  */
-public class PieceStateImpl implements PieceState {
+public final class PieceStateImpl implements PieceState {
 
     private final String name;
     private final Player player;

@@ -12,13 +12,13 @@ import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
 /**
- * The {@link taflgames.model.cell.api.Cell} that a {@link taflgames.model.pieces.code.King}
- * needs to reach for the Defender player to win.
- * The Exit has a hitbox, thus can be used as an "ally" when capturing pieces by both players.
+ * This class models an exit.
+ * Exits can only accept the king.
  */
-public final class Exit extends AbstractCell {
+public class Exit extends AbstractCell {
 
     private static final String KING = "KING";
+    private static final String EXIT_TYPE = "Exit";
 
     /**
      * {@inheritDoc}
@@ -47,7 +47,7 @@ public final class Exit extends AbstractCell {
      */
     @Override
     public String getType() {
-        return "Exit";
+        return EXIT_TYPE;
     }
 
     /**

@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -54,7 +53,7 @@ public class GameChoiceScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultInsets()));
 
         final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -72,7 +71,7 @@ public class GameChoiceScene extends AbstractScene {
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(INSETS_CONSTANT, INSETS_CONSTANT, INSETS_CONSTANT, INSETS_CONSTANT);
+        gbc.insets = AbstractScene.getDefaultInsets();
         gbc.ipadx = (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP);
         final JButton playClassicButton = new JButton(PLAY_CLASSIC_MODE);

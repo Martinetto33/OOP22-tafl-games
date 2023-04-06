@@ -8,8 +8,8 @@ import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
 /**
- * A controller responsible for the interaction between the Match scene and the
- * main {@link taflgames.controller.Controller}.
+ * This interface extends a generic {@link BasicSceneController}
+ * to add specific functions for a {@link taflgames.view.scenes.MatchScene}.
  */
 public interface MatchSceneController extends BasicSceneController {
 
@@ -31,7 +31,7 @@ public interface MatchSceneController extends BasicSceneController {
     void updateView();
 
     /**
-     * @param pos the position that was selected.
+     * @param pos the position selected as source
      * @return if the selected source is valid or not
      */
     boolean isSourceSelectionValid(Position pos);

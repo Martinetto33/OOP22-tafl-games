@@ -1,14 +1,13 @@
 package taflgames.model.cell.api;
-
 /**
- * An interface modelling an entity that needs to know about
- * turns passing.
+ * This interface allows entities whose state change at each turn
+ * to know that the current turn has ended.
  */
 public interface TimedEntity {
 
     /**
-     * Notify this entity that the current turn has ended.
-     * @param turn the turn that has just ended.
+     * Notify that the turn has ended.
+     * @param turn the turn of the game that has just eneded.
      */
     void notifyTurnHasEnded(int turn);
 

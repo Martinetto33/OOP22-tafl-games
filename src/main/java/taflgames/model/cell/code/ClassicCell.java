@@ -12,10 +12,9 @@ import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
 /**
- * A basic Cell that can accept any Piece and does not have any special
- * influences on the Match.
+ * This class models a classic cell.
  */
-public final class ClassicCell extends AbstractCell {
+public class ClassicCell extends AbstractCell {
 
     /**
      * {@inheritDoc}

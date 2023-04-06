@@ -4,10 +4,9 @@ import taflgames.common.api.Vector;
 import taflgames.model.board.api.Board;
 
 /**
- * An interface modelling a Slider, a particular type of Cell that pushes
- * Pieces that land onto it if it is active. The Slider periodically
- * deactivates itself and when it is reactivated, it changes its orientation
- * by rotating by a 90 degrees angle.
+ * This interface will model a special cell called slider. 
+ * When a pice ends up on it the slider moves the piece 
+ * to the furthest reacheble Position along a certain direction.
  */
 public interface Slider extends Cell, Resettable, TimedEntity {
 
@@ -18,9 +17,8 @@ public interface Slider extends Cell, Resettable, TimedEntity {
     void addMediator(Board board);
 
     /**
-     * Returns the direction that this Slider currently points towards.
-     * @return a {@link taflgames.common.api.Vector} describing the current
-     * orientation of this Slider.
+     * Return the current orientation of the Slider.
+     * @return a Vector that represent the orientation of the Slider.
      */
     Vector getOrientation();
 

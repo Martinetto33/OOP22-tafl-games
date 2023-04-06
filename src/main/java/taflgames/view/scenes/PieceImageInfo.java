@@ -2,21 +2,26 @@ package taflgames.view.scenes;
 
 import taflgames.common.Player;
 
-public class PieceImageInfo implements ImageInfo {
+public final class PieceImageInfo implements ImageInfo {
+
     private final String name;
     private final Player player;
+
     public PieceImageInfo(final String name, final Player player) {
         this.name = name;
         this.player = player;
     }
+
     @Override
     public String getName() {
         return this.name;
     }
+
     @Override
     public Player getPlayer() {
         return this.player;
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -25,6 +30,7 @@ public class PieceImageInfo implements ImageInfo {
         result = prime * result + ((player == null) ? 0 : player.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -33,16 +39,17 @@ public class PieceImageInfo implements ImageInfo {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         final PieceImageInfo other = (PieceImageInfo) obj;
         if (name == null) {
-            if (other.name != null)
+            if (other.name != null) {
                 return false;
-        } else if (!name.equals(other.name))
+            }
+        } else if (!name.equals(other.name)) {
             return false;
-        if (player != other.player)
-            return false;
-        return true;
+        }
+        return player == other.player;
     }
 }

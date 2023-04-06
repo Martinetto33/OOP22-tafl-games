@@ -12,9 +12,8 @@ import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
 /**
- * The Throne is a praticular kind of Cell that only the King is able to cross or land onto.
- * It is also the starting point of the King.
- * The Throne has a hitbox, thus can be used as an "ally" when capturing pieces by both players.
+ * This class models a throne, a special cell
+ * that accepts only the king.
  */
 public final class Throne extends AbstractCell {
 

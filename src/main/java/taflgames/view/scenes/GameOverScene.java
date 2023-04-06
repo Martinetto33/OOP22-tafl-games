@@ -29,7 +29,7 @@ public class GameOverScene extends AbstractScene {
 
     private final FontManager fontManager = AbstractScene.getFontManager();
 
-    private GameOverController controller;
+    private final GameOverController controller;
 
     /**
      * Builds a new GameOverScene.

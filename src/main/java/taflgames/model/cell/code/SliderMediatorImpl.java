@@ -7,21 +7,16 @@ import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.SliderMediator;
 
 /**
- * A class made using the Mediator pattern, to allow communication
- * between a {@link taflgames.model.cell.api.Slider} and a
- * {@link taflgames.model.board.api.Board}. This is needed because Sliders
- * are a special kind of Cell that push the pieces that arrive onto them
- * to the furthest reachable position in the direction pointed by them.
+ * This class models a SliderMediator {@link taflgames.model.cell.api.SliderMediator}.
  */
 public final class SliderMediatorImpl implements SliderMediator {
 
     private final Board board;
 
     /**
-     * Builds a new SliderMediatorImpl, and couples it with a given
-     * parameter Board.
-     * @param board the board which will be asked for additional
-     * movements.
+     * Create a new SliderMediatorImpl. 
+     * It will have a reference to the Board of the game.
+     * @param board the current Board of the game.
      */
     public SliderMediatorImpl(final Board board) {
         this.board = board;

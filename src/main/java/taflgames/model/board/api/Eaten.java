@@ -24,7 +24,7 @@ public interface Eaten {
      * and all the positions that come after that.
      * @param currentPiece the Piece of whose hitbox is being modified.
      * @param pieces the Map that associate to each Player it's own Map of Piece and Position.
-     * @param cells the Map of Position and Cell that that associate
+     * @param cells the Map of Position and Cell that associate
      * to each Position of the Board the type of Cell that is placed there.
      * @param size the size of the board.
      * @return the modified hitbox.
@@ -56,8 +56,9 @@ public interface Eaten {
      * @param enemies the pieces that represent the enemies that are in the hitbox of the piece that wants to eat
      * @param pieces the Map that associate to each Player it's own map of Piece and Position.
      * @param lastMovedPiece the last moved Piece, that is the one trying to eat.
-     * @param cells
-     * @param size
+     * @param cells the Map of Position and Cell that associate
+     * to each Position of the Board the type of Cell that is placed there.
+     * @param size the size of the board.
      * @return a Map that associates each menaced enemy to all the allies that are threatening it.
      */
     Map<Piece, Set<Piece>> checkAllies(
@@ -73,7 +74,7 @@ public interface Eaten {
      * notify these enemies that the other player's pieces are trying to eat them.
      * @param enemiesAndAllies the Map that associates each menaced enemy to all the allies that are threatening it
      * @param lastMovedPiece the last moved Piece, that is the one trying to eat 
-     * @param cells the Map of Position and Cell that that associate
+     * @param cells the Map of Position and Cell that associate
      * to each Position of the Board the type of Cell that is placed there.
      * @param pieces the Map that associate to each Player it's own map of Piece and Position.
      * @param doTombsSpawn true if Tombs can spawn, false otherwise.

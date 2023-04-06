@@ -10,17 +10,20 @@ import javax.swing.JPanel;
 
 import taflgames.view.scenes.MatchPanelImpl;
 
-public class TestViewMatchPannel extends JFrame{
-    private static final long serialVersionUID = -6218820567019985015L;
-    public TestViewMatchPannel(int sizeFrame) {
+public class TestViewMatchPannel extends JFrame {
+
+    private static final int BOARD_SIZE = 11;
+
+    public TestViewMatchPannel() {
+
         this.setLayout(new FlowLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(screenSize);
-        Double scrensizeHight = screenSize.getHeight();
-        MatchPanelImpl a = new MatchPanelImpl(11, scrensizeHight.intValue());
+        final Double scrensizeHight = screenSize.getHeight();
+        final MatchPanelImpl a = new MatchPanelImpl(BOARD_SIZE, scrensizeHight.intValue());
         this.add(a);
-        EntitiesToDraw toDraw = new EntitiesToDrawImpl();
+        final EntitiesToDraw toDraw = new EntitiesToDrawImpl();
         toDraw.createPiecesAlive();
         toDraw.createBackgroundCells();
         toDraw.createSpecialCells();
@@ -33,8 +36,11 @@ public class TestViewMatchPannel extends JFrame{
         southPanel.add(goBackButton);
         this.add(southPanel, FlowLayout.LEFT);
         this.setVisible(true);
+
     }
-    public static void main(String[] args) throws java.io.IOException {
-        new TestViewMatchPannel(11); 
+
+    public static void main(final String[] args) throws java.io.IOException {
+        new TestViewMatchPannel(); 
     }
+
 }

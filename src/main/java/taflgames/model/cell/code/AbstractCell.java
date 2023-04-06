@@ -19,21 +19,18 @@ import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
 /**
- * A class modelling any type of Cell. Cells can have (potentially) multiple
- * {@link taflgames.model.cell.api.CellComponent} attached to them. This class
- * is responsible for their management, which includes 1) attachment, 2) detachment,
- * 3) save of the component states and 4) restoration of the component states.
- * <br><br>
- * Attachment of new components is achieved through the {@link #attachComponent(CellComponent)}
- * method.
- * <br>
- * Detachment of a component is achieved through the {@link #detachComponent(CellComponent)}
- * method.
+ * This class implements the state of a cell regardless of its type
+ * and the basic functionalities which are implemented in the same way 
+ * for all the cells.
  */
 public abstract class AbstractCell implements Cell {
 
     private boolean cellStatus;
     private final Set<CellComponent> cellComponents;
+
+    /**
+     * Initializes the state of a generic cell.
+     */
     private Set<CellComponent> justAddedComponents;
 
     /** 
@@ -207,7 +204,6 @@ public abstract class AbstractCell implements Cell {
         public void restore() {
             AbstractCell.this.restore(this);
         }
-
     }
 
     /**

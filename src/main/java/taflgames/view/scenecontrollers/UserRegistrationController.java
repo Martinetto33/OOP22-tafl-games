@@ -12,7 +12,7 @@ public interface UserRegistrationController extends BasicSceneController {
      * Requests end match results from the main {@link taflgames.controller.Controller}. Throws
      * an IllegalStateException if there are no match results.
      */
-    void getEndMatchResults();
+    void requestEndMatchResults();
 
     /**
      * This method should be called by an external controller in order to register

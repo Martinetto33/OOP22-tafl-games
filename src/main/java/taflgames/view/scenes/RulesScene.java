@@ -44,7 +44,7 @@ public class RulesScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultInsets()));
 
         final JEditorPane editor = new JEditorPane();
         final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();

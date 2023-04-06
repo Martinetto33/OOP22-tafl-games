@@ -90,7 +90,7 @@ public abstract class AbstractScene implements Scene {
     /**
      * @return the default insets for the container border
      */
-    protected static Insets getDefaultBorderInsets() {
+    protected static Insets getDefaultInsets() {
         return DEFAULT_INSETS;
     }
 

@@ -5,29 +5,29 @@ import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
 
 /**
- * An interface modelling a Slider Mediator. Following the pattern Mediator,
- * this object allows communication between a {@link taflgames.model.cell.api.Slider}
- * and a {@link taflgames.model.board.api.Board}.
+ * This interface allows entities to comunicate with 
+ * the Board and use a few of its methods.
+ * In our version of the game Slider is the only entity 
+ * that needs to use Board's methods.
  */
 public interface SliderMediator {
 
     /**
-     * Requests the Board linked to this Mediator to return the furthest reachable position
-     * in the direction pointed by the linked Slider.
-     * @param source the {@link taflgames.common.code.Position} of the Slider.
-     * @param orientation a {@link taflgames.common.api.Vector} describing the
-     * orientation of the Slider.
-     * @return the furthest reachable Position.
+     * Calls the method getFurthestReachablePos of Board {@link taflgames.model.board.api.Board}
+     * to know the furthest Position reachable by a Piece starting from a given Position.
+     * @param source the Position where the Piece is located.
+     * @param orientation the direction along which to find the furthest position.
+     * @return The furthest Position reachable.
      */
     Position requestMove(Position source, Vector orientation);  // NOPMD
     // The Vector class models a vector and provides features that a List does not support.
 
     /**
-     * Moves the Piece that landed onto the linked Slider to the
-     * furthest reachable position returned by the Board.
-     * @param startPos the Slider position.
-     * @param destPos the furthest reachable position.
-     * @param currentPlayer the player in turn.
+     * Calls method movePlaceholder of Board {@link taflgames.model.board.api.Board}
+     * to update the position of a Piece.
+     * @param startPos the starting Position.
+     * @param destPos the new Position which the Piece will be updated to.
+     * @param currentPlayer the Player in turn.
      */
     void updatePiecePos(Position startPos, Position destPos, Player currentPlayer);
 }

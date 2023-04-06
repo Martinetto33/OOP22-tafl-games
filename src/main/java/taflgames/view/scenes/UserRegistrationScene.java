@@ -127,11 +127,8 @@ public class UserRegistrationScene extends AbstractScene {
      * @returns true if the usernames are valid, false otherwise.
      */
     private boolean areUsernamesValid() {
-        if (this.attackerNameTextField.getText().length() <= 0
-            || this.defenderNameTextField.getText().length() <= 0) {
-                return false;
-            }
-        return true;
+        return this.attackerNameTextField.getText().length() > 0
+            && this.defenderNameTextField.getText().length() > 0;
     }
 
     /* Builds the area in which the user can insert player names. */
@@ -168,7 +165,7 @@ public class UserRegistrationScene extends AbstractScene {
      * @param x horizontal size.
      * @param y vertical size.
      */
-    public void setDimensions(final int x, final int y) {
+    public final void setDimensions(final int x, final int y) {
         this.horizontalTextAreaSize = x;
         this.verticalTextAreaSize = y;
     }
