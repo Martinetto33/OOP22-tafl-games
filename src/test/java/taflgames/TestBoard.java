@@ -26,6 +26,9 @@ import taflgames.model.cell.code.ClassicCell;
 import taflgames.model.cell.code.SliderImpl;
 import taflgames.model.cell.code.Throne;
 
+/**
+ * JUnit tests for {@link Board}.
+ */
 class TestBoard {
 
     private static final int DEFAULT_BOARD_SIZE = 5;
