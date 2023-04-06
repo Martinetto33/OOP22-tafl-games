@@ -37,7 +37,7 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         super(view, controller);
         this.saver = new LeaderboardSaverImpl();
         this.leaderboard = this.saver.retrieveFromSave();
-        this.getEndMatchResults();
+        this.requestEndMatchResults();
     }
 
     /**
