@@ -95,5 +95,5 @@ public interface Cell {
      * @return a {@link taflgames.controller.entitystate.CellState}
      * describing the current state of this Cell.
      */
-    public CellState getCellState();
+    CellState getCellState();
 }

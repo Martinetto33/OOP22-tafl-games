@@ -36,6 +36,7 @@ public class GameChoiceScene extends AbstractScene {
     private static final double MAIN_BTN_WIDTH_PROP = 0.33;
     private static final double MINOR_BTN_HEIGHT_PROP = 0.025;
     private static final double MINOR_BTN_WIDTH_PROP = 0.10;
+    private static final int INSETS_CONSTANT = 20;
 
     private final FontManager fontManager = AbstractScene.getFontManager();
 
@@ -71,7 +72,7 @@ public class GameChoiceScene extends AbstractScene {
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(INSETS_CONSTANT, INSETS_CONSTANT, INSETS_CONSTANT, INSETS_CONSTANT);
         gbc.ipadx = (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP);
         final JButton playClassicButton = new JButton(PLAY_CLASSIC_MODE);

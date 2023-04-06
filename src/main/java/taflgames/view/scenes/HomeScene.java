@@ -34,6 +34,7 @@ public class HomeScene extends AbstractScene {
     private static final double BTN_WIDTH_PROP = 0.45;
     private static final int WIDTH_RATIO = 200;
     private static final int HEIGHT_RATIO = 200;
+    private static final int INSETS_CONSTANT = 20;
 
     private final FontManager fontManager = AbstractScene.getFontManager();
     private final Dimension buttonDimension;
@@ -68,7 +69,7 @@ public class HomeScene extends AbstractScene {
         final JPanel buttonsPanel = new JPanel(new GridBagLayout());
         buttonsPanel.setBackground(AbstractScene.getTransparency());
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(INSETS_CONSTANT, INSETS_CONSTANT, INSETS_CONSTANT, INSETS_CONSTANT);
         gbc.ipadx = (int) (this.controller.getViewWidth() * BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * BTN_HEIGHT_PROP);
         final JButton playButton = new JButton(PLAY);

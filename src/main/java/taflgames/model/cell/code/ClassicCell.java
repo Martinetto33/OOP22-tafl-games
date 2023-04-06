@@ -11,7 +11,11 @@ import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
-public class ClassicCell extends AbstractCell {
+/**
+ * A basic Cell that can accept any Piece and does not have any special
+ * influences on the Match.
+ */
+public final class ClassicCell extends AbstractCell {
 
     /**
      * {@inheritDoc}
@@ -43,8 +47,11 @@ public class ClassicCell extends AbstractCell {
         return "ClassicCell";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), new VectorImpl(0, 0), null);
     }
 }

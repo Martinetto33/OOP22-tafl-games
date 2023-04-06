@@ -2,12 +2,17 @@ package taflgames.view.scenecontrollers;
 
 import java.util.Map;
 
+import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * A controller responsible for the interaction between the Match scene and the
+ * main {@link taflgames.controller.Controller}.
+ */
 public interface MatchSceneController extends BasicSceneController {
-    
+
     /**
      * @return the mapping of each position to the type of cell
      * (and the cells components if present) at that position.
@@ -26,6 +31,7 @@ public interface MatchSceneController extends BasicSceneController {
     void updateView();
 
     /**
+     * @param pos the position that was selected.
      * @return if the selected source is valid or not
      */
     boolean isSourceSelectionValid(Position pos);
@@ -53,6 +59,15 @@ public interface MatchSceneController extends BasicSceneController {
     /**
      * Used to confirm that the player in turn is sure
      * about his move and doesn't want to undo it.
+     * @return true if the turn was correctly passed, false
+     * if the current player still needs to make a move
+     * before being able to pass the turn.
      */
-    void passTurn();
+    boolean passTurn();
+
+    /**
+     * Returns the {@link taflgames.common.Player} in turn.
+     * @return the Player in turn.
+     */
+    Player getPlayerInTurn();
 }
