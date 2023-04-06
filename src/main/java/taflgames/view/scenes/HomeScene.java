@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -54,7 +53,7 @@ public class HomeScene extends AbstractScene {
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultInsets()));
 
         final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -68,7 +67,7 @@ public class HomeScene extends AbstractScene {
         final JPanel buttonsPanel = new JPanel(new GridBagLayout());
         buttonsPanel.setBackground(AbstractScene.getTransparency());
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = AbstractScene.getDefaultInsets();
         gbc.ipadx = (int) (this.controller.getViewWidth() * BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * BTN_HEIGHT_PROP);
         final JButton playButton = new JButton(PLAY);
