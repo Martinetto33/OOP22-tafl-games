@@ -17,6 +17,9 @@ import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.MatchScene;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * A scene controller for a {@link taflgames.view.scenes.MatchScene}.
+ */
 public final class MatchSceneControllerImpl extends AbstractBasicSceneController implements MatchSceneController {
 
     /* The controller has a reference to a Match Scene in order to update it when
@@ -26,8 +29,13 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     private final PieceImageMapper pieceMapper = new PieceTypeMapper();
     private final CellImageMapper cellMapper = new CellTypeMapper();
     private boolean wasMoveDone = false;
-    
-    protected MatchSceneControllerImpl(final View view, final Controller controller) {
+
+    /**
+     * Builds a new MatchSceneController.
+     * @param view
+     * @param controller
+     */
+    public MatchSceneControllerImpl(final View view, final Controller controller) {
         super(view, controller);
         this.matchScene = new MatchScene(this);
         //this.pieceMapper = new PieceTypeMapper();
@@ -103,7 +111,6 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     public boolean passTurn() {
         if (!this.wasMoveDone) {
             /* Cannot pass before a move was done. */
-            System.out.println("Don't pass before a move is done!");
             return false;
         }
         this.getController().passTurn();
