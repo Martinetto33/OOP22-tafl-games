@@ -14,7 +14,7 @@ public interface EntitiesToDraw {
 
     void createSpecialCells();
 
-    Map<Position,PieceImageInfo> getPiecesAlive();
+    Map<Position, PieceImageInfo> getPiecesAlive();
 
     Map<Position, CellImageInfo> getBackgroundCells();
 

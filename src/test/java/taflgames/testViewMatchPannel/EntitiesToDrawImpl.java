@@ -1,21 +1,25 @@
 package taflgames.testViewMatchPannel;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
-
-public class EntitiesToDrawImpl implements EntitiesToDraw{
+public final class EntitiesToDrawImpl implements EntitiesToDraw {
 
     public EntitiesToDrawImpl() {
     }
 
-    Map<Position,PieceImageInfo> piecesAlive = new HashMap<>();
-    Map<Position, CellImageInfo> backgroundCells = new HashMap<>();
-    Map<Position, CellImageInfo> specialCells = new HashMap<>();
+    private Map<Position, PieceImageInfo> piecesAlive = new HashMap<>();
+    private Map<Position, CellImageInfo> backgroundCells = new HashMap<>();
+    private Map<Position, CellImageInfo> specialCells = new HashMap<>();
+
+    // CHECKSTYLE: MagicNumber OFF
+    // MagicNumber rule disabled because the numbers in the following code represent coordinates
 
     public void createPiecesAlive() {
         this.piecesAlive.put(new Position(3, 2), new PieceImageInfo("BASIC_PIECE", Player.ATTACKER));
@@ -39,7 +43,9 @@ public class EntitiesToDrawImpl implements EntitiesToDraw{
        this.specialCells.put(new Position(3, 7), new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, 1)));
     }
 
-    public Map<Position,PieceImageInfo> getPiecesAlive() {
+    // CHECKSTYLE: MagicNumber ON
+
+    public Map<Position, PieceImageInfo> getPiecesAlive() {
         return this.piecesAlive;
     }
 
