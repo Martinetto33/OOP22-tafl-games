@@ -11,6 +11,9 @@ import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * This class models a classic cell.
+ */
 public class ClassicCell extends AbstractCell {
 
     /**

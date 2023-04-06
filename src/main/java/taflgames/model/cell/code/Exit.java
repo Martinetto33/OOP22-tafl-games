@@ -11,9 +11,14 @@ import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * This class models an exit.
+ * Exits can only accept the king.
+ */
 public class Exit extends AbstractCell {
 
     private static final String KING = "KING";
+    private static final String EXIT_TYPE = "Exit";
 
     /**
      * {@inheritDoc}
@@ -42,7 +47,7 @@ public class Exit extends AbstractCell {
      */
     @Override
     public String getType() {
-        return "Exit";
+        return EXIT_TYPE;
     }
 
     @Override

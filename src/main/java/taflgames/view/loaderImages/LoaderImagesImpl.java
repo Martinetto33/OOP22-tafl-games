@@ -51,9 +51,13 @@ public class LoaderImagesImpl implements LoaderImages {
     private Map<CellImageInfo, ImageIcon> cellImages = new HashMap<>();
     private Map<PieceImageInfo, ImageIcon> pieceImages = new HashMap<>();
 
+    /**
+     * Create a new LoaderImagesImpl to load the images used in the game.
+     * Calculate the size each image should have to fit the panel properly.
+     * @param panelSize the size of the panel of the view.
+     * @param numberOfCells the number of cell of the games' board.
+     */
     public LoaderImagesImpl(final int panelSize, final int numberOfCells) {
-        /* this.panelSize = panelSize;
-        this.numberOfCells = numberOfCells; */
         unitToScale = panelSize / numberOfCells;
     }
 
