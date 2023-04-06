@@ -57,38 +57,6 @@ public class MatchScene extends AbstractScene {
         this.update();
     }
 
-    /*It will not be used since this method is already present in MatchPanelImpl*/
-    public void selectPosition(final Position pos) {
-        if (this.source.isEmpty() && this.controller.isSourceSelectionValid(pos)) {
-            // If the source position is empty and the selected one is a valid source,
-            // then the selected position is set as source
-            this.source = Optional.of(pos);
-        } else if (this.source.get().equals(pos)) {
-            // If the current source is equal to the selected position,
-            // this means that the source is deselected
-            this.source = Optional.empty();
-        } else {
-            // If the source is already set and it is not deselected,
-            // then the selected position is the destination
-            this.destination = Optional.of(pos);
-            // Once the destination is selected, the move is triggered;
-            // it will be performed if it is legal.
-            this.requestMove();
-        }
-    }
-
-    /*It will not be used since this method is already present in MatchPanelImpl*/
-    private void requestMove() {
-        if (this.source.isPresent() && this.destination.isPresent()) {
-            if (this.controller.moveIfLegal(this.source.get(), this.destination.get())) {
-                // If the move is performed, source is reset
-                this.source = Optional.empty();
-            }
-            // Destination is reset whether the move has been made or not
-            this.destination = Optional.empty();
-        }
-    }
-
     /**
      * draws all pieces currently alive.
      * @param piecesAlive
@@ -157,5 +125,9 @@ public class MatchScene extends AbstractScene {
     @Override
     public void update() {
         this.updateBoardInstance(this.controller.getPiecesMapping(), this.controller.getCellsMapping());
+        // Check if the match is over; if it is, then the view switches to the game over scene
+        if (this.controller.isMatchOver()) {
+            this.controller.goToNextScene();
+        }
     }
 }

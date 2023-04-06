@@ -1,12 +1,14 @@
 package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -59,6 +61,8 @@ public class RulesScene extends AbstractScene {
         }
         editor.setEditable(false);
         final JScrollPane scrollPane = new JScrollPane(editor);
+        // Place the scroll bar at the top of the pane
+        SwingUtilities.invokeLater(() -> scrollPane.getViewport().setViewPosition(new Point(0, 0)));
         scene.add(scrollPane, BorderLayout.CENTER);
 
         final JPanel southPanel = new JPanel();
