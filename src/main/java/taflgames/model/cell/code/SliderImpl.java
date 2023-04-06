@@ -133,7 +133,7 @@ public final class SliderImpl extends AbstractCell implements Slider {
      * {@inheritDoc}
      */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), this.getOrientation(), null);
     }
 

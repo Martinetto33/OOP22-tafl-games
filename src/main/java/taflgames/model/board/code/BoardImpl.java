@@ -116,7 +116,7 @@ public final class BoardImpl implements Board, TimedEntity {
         * che porta la pedina da start a dest siano libere.
         * Se lo sono, allora la mossa è valida, altrimenti non lo è e si deve continuare la ricerca.
         */
-        
+
         // Controllo se la cella di arrivo è libera per lo swapper,
         // poichè se la cella non fosse libera dovrei gestire lo swapper come viene fatto dopo questo if
         if (cells.get(dest).isFree()) {
@@ -171,7 +171,8 @@ public final class BoardImpl implements Board, TimedEntity {
             pieces.get(currentPlayer).put(newPos, pieceInTurn);
             pieceInTurn.setCurrentPosition(newPos);
 
-            final Piece pieceToSwap = pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).get(newPos);
+            final Piece pieceToSwap = pieces.get(
+                Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).get(newPos);
             pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).remove(newPos);
             pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).put(oldPos, pieceToSwap);
             pieceToSwap.setCurrentPosition(oldPos);
@@ -316,7 +317,8 @@ public final class BoardImpl implements Board, TimedEntity {
         if (!updatedHitbox.isEmpty()) {
             final List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
             if (!enemies.isEmpty()) {
-                final Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(enemies, pieces, currPiece, cells, size);
+                final Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(
+                    enemies, pieces, currPiece, cells, size);
                 eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces, this.doTombsSpawn());
             }
         }

@@ -11,6 +11,11 @@ import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * The Throne is a praticular kind of Cell that only the King is able to cross or land onto.
+ * It is also the starting point of the King.
+ * The Throne has a hitbox, thus can be used as an "ally" when capturing pieces by both players.
+ */
 public final class Throne extends AbstractCell {
 
     private static final String THRONE_TYPE = "Throne";
@@ -46,9 +51,12 @@ public final class Throne extends AbstractCell {
         return THRONE_TYPE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), new VectorImpl(0, 0), null);
     }
-    
+
 }

@@ -22,5 +22,5 @@ public interface HighScoreController extends BasicSceneController {
     /**
      * Asks the main controller to delete the file of the current Leaderboard.
      */
-    public void clearLeaderboard();
+    void clearLeaderboard();
 }

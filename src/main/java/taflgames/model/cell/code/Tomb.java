@@ -17,7 +17,11 @@ import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
-
+/**
+ * The Tomb is a particular entity that can contain dead pieces of both teams.
+ * Only Queens can interact with them, spawning back an allied Piece if they
+ * land to a cell adjacent to the Tomb.
+ */
 public final class Tomb extends AbstractCell implements CellComponent {
 
     private Map<Player, Queue<Piece>> deadPieces = new HashMap<>();
@@ -58,14 +62,14 @@ public final class Tomb extends AbstractCell implements CellComponent {
     ) {
         // Se sulla tomba ci sono pedine mangiate del giocatore corrente
         if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
-            final Piece pieceToResume = deadPieces.get(player).poll();    // prende la prima pedina in coda
-            pieceToResume.reanimate();	// ora è viva
+            final Piece pieceToResume = deadPieces.get(player).poll();  // prende la prima pedina in coda
+            pieceToResume.reanimate(); // ora è viva
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
             pieces.get(player).put(pieceToResume.getCurrentPosition(), pieceToResume);
         }
     }
 
-    public void addDeadPieces(final Player player, final Piece piece) {
+    private void addDeadPieces(final Player player, final Piece piece) {
         if (!deadPieces.containsKey(player)) {
             final Queue<Piece> list = new LinkedList<>();
             list.add(piece);
@@ -105,6 +109,9 @@ public final class Tomb extends AbstractCell implements CellComponent {
         return "Tomb";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CellMemento save() {
         return this.new TombMementoImpl();
@@ -118,6 +125,11 @@ public final class Tomb extends AbstractCell implements CellComponent {
         return this.new TombMementoImpl();
     }
 
+    /**
+     * Restores the state of this Tomb.
+     * @param tm the {@link taflgames.model.cell.code.Tomb.TombMementoImpl}
+     * containing the information about the previous state of this Tomb.
+     */
     public void restore(final TombMementoImpl tm) {
         this.deadPieces = tm.getInnerDeadPieces().entrySet().stream()
             .map(entry -> {
@@ -133,10 +145,16 @@ public final class Tomb extends AbstractCell implements CellComponent {
         super.restore(tm);
     }
 
+    /**
+     * A class modelling a Memento for a Tomb.
+     */
     public final class TombMementoImpl implements CellMemento, CellComponentMemento {
         private final Map<Player, Queue<Piece>> innerDeadPieces;
         private final boolean isFree;
 
+        /**
+         * Builds a new TombMementoImpl that stores the state of a Tomb.
+         */
         public TombMementoImpl() {
             /* This way of copying maps should create a deep copy. */
             this.innerDeadPieces = Tomb.this.deadPieces.entrySet().stream()
@@ -153,20 +171,33 @@ public final class Tomb extends AbstractCell implements CellComponent {
             this.isFree = Tomb.this.isFree();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void restore() {
             Tomb.this.restore(this);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean getCellStatus() {
             return this.isFree;
         }
 
+        /**
+         * Returns the dead pieces as they were at the moment of the save.
+         * @return a Map of dead pieces associated to their teams.
+         */
         public Map<Player, Queue<Piece>> getInnerDeadPieces() {
             return this.innerDeadPieces;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public List<CellComponentMemento> getComponentMementos() {
             return Collections.emptyList();
@@ -218,7 +249,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
      * The case of the Tomb is managed directly in the AbstractCell.
      */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return null;
     }
 }

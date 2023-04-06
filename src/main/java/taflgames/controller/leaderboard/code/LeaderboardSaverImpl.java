@@ -59,7 +59,9 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
      */
     @Override
     public Leaderboard retrieveFromSave() {
-        try (InputStream inputStream = Objects.requireNonNull(ClassLoader.getSystemResourceAsStream(PATH + LEADERBOARD_SAVE_FILE_NAME))) {
+        try (InputStream inputStream = Objects.requireNonNull(
+                ClassLoader.getSystemResourceAsStream(PATH + LEADERBOARD_SAVE_FILE_NAME)
+            )) {
             final Yaml yaml = new Yaml();
             final LeaderBoardImpl leaderboard = new LeaderBoardImpl();
             leaderboard.fromMapWithListValues(yaml.load(inputStream));

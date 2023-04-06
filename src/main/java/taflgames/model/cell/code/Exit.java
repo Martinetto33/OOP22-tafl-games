@@ -11,7 +11,12 @@ import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.pieces.api.Piece;
 
-public class Exit extends AbstractCell {
+/**
+ * The {@link taflgames.model.cell.api.Cell} that a {@link taflgames.model.pieces.code.King}
+ * needs to reach for the Defender player to win.
+ * The Exit has a hitbox, thus can be used as an "ally" when capturing pieces by both players.
+ */
+public final class Exit extends AbstractCell {
 
     private static final String KING = "KING";
 
@@ -45,8 +50,11 @@ public class Exit extends AbstractCell {
         return "Exit";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), new VectorImpl(0, 0), null);
     }
 

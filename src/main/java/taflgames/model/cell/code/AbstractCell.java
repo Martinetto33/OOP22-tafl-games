@@ -18,13 +18,26 @@ import taflgames.model.memento.api.CellComponentMemento;
 import taflgames.model.memento.api.CellMemento;
 import taflgames.model.pieces.api.Piece;
 
+/**
+ * A class modelling any type of Cell. Cells can have (potentially) multiple
+ * {@link taflgames.model.cell.api.CellComponent} attached to them. This class
+ * is responsible for their management, which includes 1) attachment, 2) detachment,
+ * 3) save of the component states and 4) restoration of the component states.
+ * <br><br>
+ * Attachment of new components is achieved through the {@link #attachComponent(CellComponent)}
+ * method.
+ * <br>
+ * Detachment of a component is achieved through the {@link #detachComponent(CellComponent)}
+ * method.
+ */
 public abstract class AbstractCell implements Cell {
 
     private boolean cellStatus;
     private final Set<CellComponent> cellComponents;
     private Set<CellComponent> justAddedComponents;
+
     /** 
-     * 
+     * Builds a new AbstractCell and sets its status to 'free' (true).
     */
     public AbstractCell() {
         this.cellStatus = true;
@@ -202,8 +215,8 @@ public abstract class AbstractCell implements Cell {
      */
     @Override
     public CellState getCellState() {
-        if (this.getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb") && component.isActive())) {
-            /* TODO: non ho idea di come fare altrimenti a ottenere il colore della tomba da disegnare :( */
+        if (this.getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb") 
+            && component.isActive())) {
             Tomb t = (Tomb) this.getComponents().stream()
                             .filter(cell -> cell instanceof Tomb)
                             .findAny()
@@ -213,12 +226,27 @@ public abstract class AbstractCell implements Cell {
         return this.getSubclassCellState();
     }
 
+    /**
+     * Returns the {@link taflgames.controller.entitystate.CellState}
+     * of the subclass.
+     * @return a CellState describing the Cell of the subclass.
+     */
     protected abstract CellState getSubclassCellState();
 
+    /**
+     * Returns the CellComponents of this Cell; this is required if subclasses
+     * need to store additional information in their CellMementos.
+     * @return the {@link taflgames.model.cell.api.CellComponent} of this Cell.
+     */
     protected Set<CellComponent> getCellComponents() {
         return Collections.unmodifiableSet(this.cellComponents);
     }
 
+    /**
+     * Returns the CellComponents that have just been added to this Cell; 
+     * this is required if subclasses need to store additional information in their CellMementos.
+     * @return the {@link taflgames.model.cell.api.CellComponent} of this Cell.
+     */
     protected Set<CellComponent> getJustAddedComponents() {
         return Collections.unmodifiableSet(this.justAddedComponents);
     }
