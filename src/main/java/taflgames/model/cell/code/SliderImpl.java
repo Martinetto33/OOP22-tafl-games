@@ -2,6 +2,8 @@ package taflgames.model.cell.code;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
@@ -81,11 +83,17 @@ public final class SliderImpl extends AbstractCell implements Slider {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         this.triggered = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyTurnHasEnded(final int turn) {
         if (turn - this.lastActivityTurn == SliderImpl.TURNS_FOR_REACTIVATION) {
@@ -113,48 +121,104 @@ public final class SliderImpl extends AbstractCell implements Slider {
         this.mediator = new SliderMediatorImpl(board);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector getOrientation() {
         return this.orientation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), this.getOrientation(), null);
     }
 
-    //TODO
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CellMemento save() {
-        return null;
+        return this.new SliderMementoImpl(super.getCellComponents().stream()
+                    .map(component -> component.saveComponentState())
+                    .collect(Collectors.toUnmodifiableSet()),
+                super.getJustAddedComponents().stream()
+                    .map(component -> component.saveComponentState())
+                    .collect(Collectors.toUnmodifiableSet()),
+                super.isFree());
     }
 
-    //TODO
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void restore(final CellMemento cm) {
-
+        super.restore(cm);
     }
 
-    //TODO
+    /**
+     * A class modelling a CellMemento for a Slider. Its methods override the
+     * onews of Abstract Cell, since Sliders have additional fields
+     * that need to be restored and saved. 
+     */
     public class SliderMementoImpl implements CellMemento {
 
+        private final boolean innerTriggered; //dice se è già stata attivata in questo turno
+        private final int innerLastActivityTurn;
+        private final boolean innerActive;
+        private final boolean innerCellStatus;
+        private final Set<CellComponentMemento> innerComponents;
+        private final Set<CellComponentMemento> innerJustAddedComponents;
+
+        /**
+         * Builds a new SliderMementoImpl.
+         * @param components the Set of all the {@link taflgames.model.cell.api.CellComponent} attached
+         * to this Cell.
+         * @param justAddedComponents the Set of all the {@link taflgames.model.cell.api.CellComponent}
+         * that were attached this turn.
+         * @param cellStatus the status of this Cell (true if this Cell is free, false if it is occupied).
+         */
+        public SliderMementoImpl(final Set<CellComponentMemento> components,
+                                 final Set<CellComponentMemento> justAddedComponents, final boolean cellStatus) {
+            this.innerTriggered = SliderImpl.this.triggered;
+            this.innerLastActivityTurn = SliderImpl.this.lastActivityTurn;
+            this.innerActive = SliderImpl.this.active;
+            this.innerComponents = components.stream().collect(Collectors.toUnmodifiableSet());
+            this.innerJustAddedComponents = justAddedComponents.stream().collect(Collectors.toUnmodifiableSet());
+            this.innerCellStatus = cellStatus;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void restore() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'restore'");
+            SliderImpl.this.restore(this);
+            SliderImpl.this.active = this.innerActive;
+            SliderImpl.this.lastActivityTurn = this.innerLastActivityTurn;
+            SliderImpl.this.triggered = this.innerTriggered;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean getCellStatus() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getCellStatus'");
+            return this.innerCellStatus;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public List<CellComponentMemento> getComponentMementos() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getComponentMementos'");
+            if (!this.innerJustAddedComponents.isEmpty()) {
+                this.innerComponents.removeAll(this.innerJustAddedComponents);
+            }
+            return this.innerComponents.stream().toList();
         }
-
     }
 }
