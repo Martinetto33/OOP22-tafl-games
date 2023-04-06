@@ -16,6 +16,9 @@ import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.MatchScene;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * This class implements a scene controller for a {@link taflgames.view.scenes.MatchScene}.
+ */
 public final class MatchSceneControllerImpl extends AbstractBasicSceneController implements MatchSceneController {
 
     /* The controller has a reference to a Match Scene in order to update it when
@@ -24,12 +27,15 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     private final MatchScene matchScene;
     private final PieceImageMapper pieceMapper = new PieceTypeMapper();
     private final CellImageMapper cellMapper = new CellTypeMapper();
-    
+
+    /**
+     * Creates a new match scene controller.
+     * @param view the view of the application
+     * @param controller the main controller of the application
+     */
     protected MatchSceneControllerImpl(final View view, final Controller controller) {
         super(view, controller);
         this.matchScene = new MatchScene(this);
-        //this.pieceMapper = new PieceTypeMapper();
-        //this.cellMapper = new CellTypeMapper();
     }
 
     @Override
@@ -62,12 +68,12 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     }
 
     @Override
-    public boolean isSourceSelectionValid(Position pos) {
+    public boolean isSourceSelectionValid(final Position pos) {
         return this.getController().isStartingPointValid(pos);
     }
 
     @Override
-    public boolean moveIfLegal(Position source, Position destination) {
+    public boolean moveIfLegal(final Position source, final Position destination) {
         return this.getController().moveIfLegal(source, destination);
     }
 

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,8 +25,7 @@ import taflgames.view.loaderImages.LoaderImagesImpl;
 import taflgames.view.scenecontrollers.MatchSceneController;
 
 /**
- * implementation of MatchPanel.
- * MAY NEED IMPROOVEMENTS.
+ * Implementation of MatchPanel.
  */
 public class MatchPanelImpl extends JPanel implements MatchPanel {
 
@@ -37,7 +35,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      * Without it it may be covered by the application-bar of the pc.
      */
 
-    //private static final int HIGHT_OF_PC_APPLICATION_BAR = 100;
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position, JLabel> mapPieces = new HashMap<>();
     private final Map<Position, JLabel> mapSpecialCell = new HashMap<>();
@@ -53,7 +50,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     private final int sizeOfGrid;
     private Optional<Position> startingPosition = Optional.empty();
     private Optional<Position> destination = Optional.empty();
-    private Set<Position> positionsToColor; 
     private MatchSceneController controller;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
@@ -106,6 +102,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
         this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid);
         this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -116,6 +113,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
             this.mapPieces.get(a).setIcon(this.mapPieceImageIcons.get(b));
         });
     }
+
     /**
      * {@inheritDoc}
      */
@@ -130,6 +128,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
                         });
     }
+
     /**
      * {@inheritDoc}
      */
@@ -144,13 +143,15 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
                         });
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeAllIconsOnLayer(Map<Position, JLabel> mapLabel) {
+    public void removeAllIconsOnLayer(final Map<Position, JLabel> mapLabel) {
         mapLabel.forEach((a, b) -> b.setIcon(null));
     }
+
     /**
      * initializes a generic squared-gridlayered JPanel that contains a series of JLabels, 
      * which are then added to the map of JLabel.
@@ -183,9 +184,6 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      * {@inheritDoc}
      */
     @Override
-    /*
-     * WILL PROBABLY REMOVE
-     */
     public void movePiece(final Position originalPos, final Position newPosition) {
         if (!originalPos.equals(newPosition) && mapPieces.get(newPosition).getIcon() != null) {
             throw new IllegalArgumentException("CRITICAL ERROR: there's another piece in the way! problem with MODEL");
@@ -197,6 +195,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
             mapPieces.get(newPosition).setIcon(temp);
         }
     }
+
     /**
      * @param me Jpannel of buttons.
      * @param myMapButtons map of Buttons.
@@ -207,9 +206,9 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
          * TO DO: this listener must be changed after the creation of controller
          */
         ActionListener al = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-        	    var button = (JButton)e.getSource();
-        	    var position = mapButtons.get(button);
+            public void actionPerformed(final ActionEvent e) {
+                var button = (JButton) e.getSource();
+                var position = mapButtons.get(button);
                 try {
                     selectPosition(position);
                 } catch (Exception except) {
@@ -240,41 +239,30 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
             }
         }
     }
+
     /**
-     * MAY CHANGE IN THE FUTURE DEPENDING ON CONTROLLER IMPLEMENTATION.
-     * this method sets the new set of position given by the controller
-     * which rappresents the positions in which the currently 
-     * selected piece can move.
-     * 
-     * @param positionsToColor 
-     */
-    private void setPositionToColor(final Set<Position> positionsToColor) {
-        this.positionsToColor = positionsToColor;
-    }
-    /**
-     * this method will colour the backgrounds of ONLY 
-     * mapPieces's labels whose position is contained
-     * in positionsToColour. The rest will have background null
+     * This method will colour the backgrounds of selected positions.
      */
     private void updateHighlightedMoves() {
-        /*instead of positionsToColor it will be used a method of controller
-        * after this change setPositionToColor must be deleted.
-        */
-        mapPieces.forEach((x,y) -> {if(!x.equals(startingPosition.get())){
-            y.setOpaque(false);
-            y.setBackground(null);
-        }});
-        mapPieces.get(startingPosition.get()).setBackground(new Color(255, 155, 155));
+        final Color highlightColor = new Color(255, 155, 155);
+        mapPieces.forEach((x, y) -> {
+            if (!x.equals(startingPosition.get())) {
+                y.setOpaque(false);
+                y.setBackground(null);
+            }
+        });
+        mapPieces.get(startingPosition.get()).setBackground(highlightColor);
         mapPieces.get(startingPosition.get()).setOpaque(true);
         if (destination.isPresent()) {
-            mapPieces.get(destination.get()).setBackground(new Color(255, 155, 155));
+            mapPieces.get(destination.get()).setBackground(highlightColor);
             mapPieces.get(destination.get()).setOpaque(true);
             mapPieces.get(startingPosition.get()).setOpaque(false);
             mapPieces.get(startingPosition.get()).setBackground(null);
-        } 
+        }
     }
+
     /**
-     * unsets the background of all labels in mapPieces
+     * Unsets the background of all labels in mapPieces.
      */
     private void deselectHighlightedMoves() {
         mapPieces.forEach((x, y) -> {
@@ -320,6 +308,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     public Map<JButton, Position> getMapButtons() {
         return this.mapButtons;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -327,6 +316,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     public Map<Position, JLabel> getMapPieces() {
         return this.mapPieces;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -334,6 +324,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     public Map<Position, JLabel> getMapSpecialCell() {
         return this.mapSpecialCell;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -341,6 +332,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     public Map<Position, JLabel> getMapBoard() {
         return this.mapBoard;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -356,6 +348,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     public Optional<Position> getStartingPosition() {
         return this.startingPosition;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -363,6 +356,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     public Optional<Position> getDestination() {
         return this.destination;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -370,4 +364,5 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     public void setMatchController(final MatchSceneController controller) {
         this.controller = controller;
     }
+
 }

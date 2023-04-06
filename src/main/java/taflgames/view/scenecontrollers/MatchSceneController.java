@@ -6,8 +6,12 @@ import taflgames.common.code.Position;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * This interface extends a generic {@link BasicSceneController}
+ * to add specific functions for a {@link taflgames.view.scenes.MatchScene}.
+ */
 public interface MatchSceneController extends BasicSceneController {
-    
+
     /**
      * @return the mapping of each position to the type of cell
      * (and the cells components if present) at that position.
@@ -26,6 +30,7 @@ public interface MatchSceneController extends BasicSceneController {
     void updateView();
 
     /**
+     * @param pos the position selected as source
      * @return if the selected source is valid or not
      */
     boolean isSourceSelectionValid(Position pos);

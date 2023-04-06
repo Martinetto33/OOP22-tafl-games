@@ -52,8 +52,9 @@ public final class CellImageInfo implements ImageInfo {
         }
         CellImageInfo other = (CellImageInfo) obj;
         if (name == null) {
-            if (other.name != null)
+            if (other.name != null) {
                 return false;
+            }
         } else if (!name.equals(other.name)) {
             return false;
         }

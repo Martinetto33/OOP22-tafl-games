@@ -79,7 +79,6 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         southPanel.add(goBackButton);
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
-        //this.testDoNotUse(southPanel); //TODO: delete;
         southPanel.setVisible(true);
 
         goBackButton.addActionListener((e) -> {
@@ -180,31 +179,6 @@ public class UserRegistrationScene extends AbstractScene {
         this.attackerNameTextField.setText("");
         this.defenderNameTextField.setText("");
     }
-
-    /* This method only simulates the end of the match and communicates the results
-     * to the controller; this entire method and the JButton related to it MUST BE REMOVED
-     * before considering this class complete.
-     * TODO: see above
-     */
-    /* private void testDoNotUse(final JPanel panel) {
-        final JButton jb = new JButton("Add fake result");
-        jb.addActionListener(new ActionListener() {
-            private Random rand = new Random();
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                MatchResult attackerResult;
-                MatchResult defenderResult;
-                MatchResult[] possibleResults = MatchResult.values();
-                attackerResult = possibleResults[rand.nextInt(3)];
-                defenderResult = possibleResults[rand.nextInt(3)];
-                controller.setEndMatchResults(attackerResult, defenderResult);
-            }
-
-        });
-        jb.setAlignmentX(SwingConstants.CENTER);
-        jb.setFont(Scene.FONT_MANAGER.getButtonFont());
-        panel.add(jb);
-    } */
 
     private void createLabel(final JPanel panel, final String labelContent) {
         final JLabel label = new JLabel();

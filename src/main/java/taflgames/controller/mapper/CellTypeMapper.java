@@ -5,14 +5,14 @@ import taflgames.common.api.Vector;
 import taflgames.controller.entitystate.CellState;
 import taflgames.view.scenes.CellImageInfo;
 
-public class CellTypeMapper implements CellImageMapper {
+public final class CellTypeMapper implements CellImageMapper {
 
     @Override
     public CellImageInfo mapToImage(final CellState state) {
         final String name = state.getPrimaryName();
         final Player player = state.getPlayer();
         final Vector orientation = state.getOrientation();
-        switch(name) {
+        switch (name) {
             case "ClassicCell":
                 return new CellImageInfo("CELL_BASIC", player, orientation);
             case "Exit":
@@ -27,5 +27,5 @@ public class CellTypeMapper implements CellImageMapper {
                 return null;
         }
     }
-    
+
 }

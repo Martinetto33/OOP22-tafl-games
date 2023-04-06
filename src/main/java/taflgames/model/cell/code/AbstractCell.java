@@ -188,7 +188,6 @@ public abstract class AbstractCell implements Cell {
     @Override
     public CellState getCellState() {
         if (this.getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb"))) {
-            /* TODO: non ho idea di come fare altrimenti a ottenere il colore della tomba da disegnare :( */
             Tomb t = (Tomb) this.getComponents().stream()
                             .filter(cell -> cell instanceof Tomb)
                             .findAny()

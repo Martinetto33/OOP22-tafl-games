@@ -3,7 +3,8 @@ package taflgames.controller.entitystate;
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
 
-public class CellStateImpl implements CellState {
+public final class CellStateImpl implements CellState {
+
     private final String primaryName;
     private final Vector orientation;
     private final Player player;
@@ -28,5 +29,5 @@ public class CellStateImpl implements CellState {
     public Player getPlayer() {
         return this.player;
     }
-    
+
 }

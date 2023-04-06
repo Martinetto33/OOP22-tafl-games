@@ -2,7 +2,7 @@ package taflgames.controller.entitystate;
 
 import taflgames.common.Player;
 
-public class PieceStateImpl implements PieceState {
+public final class PieceStateImpl implements PieceState {
 
     private final String name;
     private final Player player;
@@ -21,5 +21,5 @@ public class PieceStateImpl implements PieceState {
     public Player getPlayer() {
         return this.player;
     }
-    
+
 }
