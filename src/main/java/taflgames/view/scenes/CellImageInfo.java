@@ -7,9 +7,11 @@ public final class CellImageInfo implements ImageInfo {
 
     private final String name;
     private final Player player;
-    private final Vector rotation;
+    private final Vector rotation; // NOPMD
+    // The Vector class models a vector and provides features that a List does not support.
 
-    public CellImageInfo(final String name, final Player player, final Vector rotation) {
+    public CellImageInfo(final String name, final Player player, final Vector rotation) { // NOPMD
+        // The Vector class models a vector and provides features that a List does not support.
         this.name = name;
         this.player = player;
         this.rotation = rotation;
@@ -25,7 +27,8 @@ public final class CellImageInfo implements ImageInfo {
         return this.player;
     }
 
-    public Vector getRotation() {
+    public Vector getRotation() { // NOPMD
+        // The Vector class models a vector and provides features that a List does not support.
         return rotation;
     }
 
@@ -50,7 +53,7 @@ public final class CellImageInfo implements ImageInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CellImageInfo other = (CellImageInfo) obj;
+        final CellImageInfo other = (CellImageInfo) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;

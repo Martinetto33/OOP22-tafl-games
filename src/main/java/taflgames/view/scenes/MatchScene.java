@@ -20,8 +20,8 @@ public final class MatchScene extends AbstractScene {
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final int NUMB_CELLS_SIDE = 11;
 
-    private MatchSceneController controller;
-    private MatchPanelImpl matchState;
+    private final MatchSceneController controller;
+    private final MatchPanelImpl matchState;
 
     /**
      * Creates the match scene.
@@ -32,7 +32,7 @@ public final class MatchScene extends AbstractScene {
         this.controller = controller;
         final JPanel scene = super.getScene();
         //this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Dimension screenSize = new Dimension(controller.getViewHeight(), controller.getViewWidth());
+        final Dimension screenSize = new Dimension(controller.getViewHeight(), controller.getViewWidth());
         scene.setSize(screenSize);
         scene.setLayout(new FlowLayout());
         matchState = new MatchPanelImpl(MatchScene.NUMB_CELLS_SIDE, controller.getViewHeight());

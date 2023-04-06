@@ -14,16 +14,16 @@ public class TestViewMatchPannel extends JFrame {
 
     private static final int BOARD_SIZE = 11;
 
-    public TestViewMatchPannel(final int sizeFrame) {
+    public TestViewMatchPannel() {
 
         this.setLayout(new FlowLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(screenSize);
-        Double scrensizeHight = screenSize.getHeight();
-        MatchPanelImpl a = new MatchPanelImpl(BOARD_SIZE, scrensizeHight.intValue());
+        final Double scrensizeHight = screenSize.getHeight();
+        final MatchPanelImpl a = new MatchPanelImpl(BOARD_SIZE, scrensizeHight.intValue());
         this.add(a);
-        EntitiesToDraw toDraw = new EntitiesToDrawImpl();
+        final EntitiesToDraw toDraw = new EntitiesToDrawImpl();
         toDraw.createPiecesAlive();
         toDraw.createBackgroundCells();
         toDraw.createSpecialCells();
@@ -40,7 +40,7 @@ public class TestViewMatchPannel extends JFrame {
     }
 
     public static void main(final String[] args) throws java.io.IOException {
-        new TestViewMatchPannel(BOARD_SIZE); 
+        new TestViewMatchPannel(); 
     }
 
 }

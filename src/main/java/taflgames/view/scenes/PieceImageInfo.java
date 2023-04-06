@@ -50,9 +50,6 @@ public final class PieceImageInfo implements ImageInfo {
         } else if (!name.equals(other.name)) {
             return false;
         }
-        if (player != other.player) {
-            return false;
-        }
-        return true;
+        return player == other.player;
     }
 }

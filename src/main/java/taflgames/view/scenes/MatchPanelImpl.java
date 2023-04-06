@@ -29,12 +29,6 @@ import taflgames.view.scenecontrollers.MatchSceneController;
  */
 public class MatchPanelImpl extends JPanel implements MatchPanel {
 
-    private LoaderImages loader;
-    /*
-     * used to make sure the entire board will be visible entirely on the screen.
-     * Without it it may be covered by the application-bar of the pc.
-     */
-
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position, JLabel> mapPieces = new HashMap<>();
     private final Map<Position, JLabel> mapSpecialCell = new HashMap<>();
@@ -43,64 +37,59 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     private final Map<CellImageInfo, ImageIcon> mapCellsImageIcons = new HashMap<>();
 
     private final int mySize;
-    private final int buttonPanelSize;
-    private final int generalPanelSize;
-    private final int piecePanelSize;
-    private final int cellsPanelsSize;
-    private final int sizeOfGrid;
     private Optional<Position> startingPosition = Optional.empty();
     private Optional<Position> destination = Optional.empty();
     private MatchSceneController controller;
 
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
-        this.loader = new LoaderImagesImpl(sizeOfSide, numbCellsInGrid);
-        this.loader.loadCellsImages();
-        this.loader.loadPiecesImages();
+        final LoaderImages loader = new LoaderImagesImpl(sizeOfSide, numbCellsInGrid);
+        loader.loadCellsImages();
+        loader.loadPiecesImages();
         mapPieceImageIcons.putAll(loader.getPieceImageMap());
         mapCellsImageIcons.putAll(loader.getCellImageMap());
         this.mySize = sizeOfSide;
         this.setLayout(new FlowLayout());
-        this.buttonPanelSize = this.mySize;
-        this.generalPanelSize = this.mySize;
-        this.piecePanelSize = this.mySize;
-        this.cellsPanelsSize = this.mySize;
-        this.sizeOfGrid = numbCellsInGrid;
+        final int buttonPanelSize = this.mySize;
+        final int generalPanelSize = this.mySize;
+        final int piecePanelSize = this.mySize;
+        final int cellsPanelsSize = this.mySize;
+        final int sizeOfGrid = numbCellsInGrid;
 
-        JPanel generPanel = new JPanel();
+        final JPanel generPanel = new JPanel();
         generPanel.setLayout(new OverlayLayout(generPanel));
         generPanel.setSize(new Dimension(generalPanelSize, generalPanelSize));
         generPanel.setOpaque(false);
         this.add(generPanel);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
+        final JPanel buttonPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
         buttonPanel.setSize(new Dimension(buttonPanelSize, buttonPanelSize));
         buttonPanel.setOpaque(false);
         generPanel.add(buttonPanel);
 
-        JPanel piecePanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
+        final JPanel piecePanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
         piecePanel.setSize(new Dimension(piecePanelSize, piecePanelSize));
         piecePanel.setOpaque(false);
         generPanel.add(piecePanel);
 
-        JPanel selectionPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
+        final JPanel selectionPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
         selectionPanel.setSize(new Dimension(piecePanelSize, piecePanelSize));
         selectionPanel.setOpaque(false);
         generPanel.add(selectionPanel);
 
-        JPanel specialCellsPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
+        final JPanel specialCellsPanel = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
         specialCellsPanel.setSize(new Dimension(cellsPanelsSize, cellsPanelsSize));
         specialCellsPanel.setOpaque(false);
         generPanel.add(specialCellsPanel);
 
-        JPanel boardBackground = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
+        final JPanel boardBackground = new JPanel(new GridLayout(sizeOfGrid, sizeOfGrid));
         boardBackground.setSize(new Dimension(cellsPanelsSize, cellsPanelsSize));
         boardBackground.setBackground(Color.CYAN);
         generPanel.add(boardBackground);
         /*initializings panels*/
-        this.createButtonsForGrid(buttonPanel, this.mapButtons, this.sizeOfGrid);
-        this.createUnitsForGridLayerPanel(piecePanel, this.mapPieces, this.sizeOfGrid);
-        this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, this.sizeOfGrid);
-        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, this.sizeOfGrid);
+        this.createButtonsForGrid(buttonPanel, this.mapButtons, sizeOfGrid);
+        this.createUnitsForGridLayerPanel(piecePanel, this.mapPieces, sizeOfGrid);
+        this.createUnitsForGridLayerPanel(specialCellsPanel, this.mapSpecialCell, sizeOfGrid);
+        this.createUnitsForGridLayerPanel(boardBackground, this.mapBoard, sizeOfGrid);
     }
 
     /**
@@ -160,7 +149,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      * @param mySizeGrid number of cells on the side of gridlayered JPanel
      */
     private void createUnitsForGridLayerPanel(final JPanel me, final Map<Position, JLabel> myMapLabel, final int mySizeGrid) {
-        if (me.getLayout().getClass() != new GridLayout().getClass()) {
+        if (me.getLayout().getClass() != GridLayout.class) {
             throw new IllegalArgumentException("i'm not a gridLayout");
         }
         if (mySizeGrid <= 0) {
@@ -202,21 +191,15 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      * @param mySizeGrid number of cells on the side of gridlayered JPanel.
      */
     private void createButtonsForGrid(final JPanel me, final Map<JButton, Position> myMapButtons, final int mySizeGrid) {
-        /**
-         * TO DO: this listener must be changed after the creation of controller
-         */
-        ActionListener al = new ActionListener() {
+        final ActionListener al = new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
-                var button = (JButton) e.getSource();
-                var position = mapButtons.get(button);
-                try {
-                    selectPosition(position);
-                } catch (Exception except) {
-                    // no exception to detect
-                }
+                final var button = (JButton) e.getSource();
+                final var position = mapButtons.get(button);
+                selectPosition(position);
                 /* you clicked the same piece or a cell of its moveset 
                     (coloured) */
-                if ((startingPosition.isPresent() && destination.isPresent())
+                if (startingPosition.isPresent() && destination.isPresent()
                     || startingPosition.isEmpty()) {
                     deselectHighlightedMoves();
                 } else if (startingPosition.isPresent() && destination.isEmpty()) {

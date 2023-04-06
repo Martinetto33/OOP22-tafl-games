@@ -11,7 +11,8 @@ public final class CellTypeMapper implements CellImageMapper {
     public CellImageInfo mapToImage(final CellState state) {
         final String name = state.getPrimaryName();
         final Player player = state.getPlayer();
-        final Vector orientation = state.getOrientation();
+        final Vector orientation = state.getOrientation(); // NOPMD
+        // The Vector class models a vector and provides features that a List does not support.
         switch (name) {
             case "ClassicCell":
                 return new CellImageInfo("CELL_BASIC", player, orientation);
