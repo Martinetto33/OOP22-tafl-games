@@ -109,7 +109,8 @@ public class GameOverScene extends AbstractScene {
     private void displayWinnerRole() {
         Optional<Player> possibleWinner = this.controller.getWinner();
         if (possibleWinner.isPresent()) {
-            JOptionPane.showMessageDialog(getScene(), possibleWinner.get().toString() + " WINS!", "Game Over", JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(getScene(), possibleWinner.get().toString()
+                + " WINS!", "Game Over", JOptionPane.OK_OPTION);
         } else {
             JOptionPane.showMessageDialog(getScene(), "Draw!", "Game Over", JOptionPane.OK_OPTION);
         }
