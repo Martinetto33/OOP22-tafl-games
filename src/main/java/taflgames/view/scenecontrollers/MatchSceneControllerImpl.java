@@ -108,6 +108,7 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
         }
         this.getController().passTurn();
         this.wasMoveDone = false;
+        this.updateView();
         return true;
     }
 

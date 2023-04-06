@@ -138,6 +138,7 @@ public final class ControllerImpl implements Controller {
         if (!this.isOver()) {
             this.match.setNextActivePlayer();
             this.caretaker.updateHistory();
+            this.view.update();
         }
     }
 
