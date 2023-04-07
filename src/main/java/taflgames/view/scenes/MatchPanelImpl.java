@@ -20,8 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import taflgames.common.code.Position;
-import taflgames.view.loaderImages.LoaderImages;
-import taflgames.view.loaderImages.LoaderImagesImpl;
+import taflgames.view.imagesloader.LoaderImages;
+import taflgames.view.imagesloader.LoaderImagesImpl;
 import taflgames.view.scenecontrollers.MatchSceneController;
 
 /**
