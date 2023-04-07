@@ -17,6 +17,8 @@ import taflgames.common.code.Position;
 import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.PiecesCollectionBuilder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,6 +29,8 @@ import org.xml.sax.SAXException;
  * from configuration files.
  */
 public final class SettingsLoaderImpl implements SettingsLoader {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettingsLoaderImpl.class);
 
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "config" + SEP;
@@ -76,8 +80,11 @@ public final class SettingsLoaderImpl implements SettingsLoader {
             document.getDocumentElement().normalize();
             final NodeList nodeList = document.getElementsByTagName("Settings");
             return (Element) nodeList.item(0);
-        } catch (final IOException | ParserConfigurationException | SAXException e) {
-            throw new IOException("An error occurred while trying to get or parse the configuration file.");
+        } catch (final IOException | ParserConfigurationException | SAXException exception) {
+            final String errorMsg = "An error occurred while trying to get or parse the configuration file.";
+            LOGGER.error(errorMsg, exception);
+            throw new IOException(errorMsg);    // NOPMD
+            // Original stack trace is already shown using the logger.
         }
     }
 
