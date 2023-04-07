@@ -141,7 +141,7 @@ public final class SliderImpl extends AbstractCell implements Slider {
      */
     @Override
     public CellMemento save() {
-        return this.new SliderMementoImpl(super.getCellComponents().stream()
+        return this.new SliderMementoImpl(super.getComponents().stream()
                     .map(component -> component.saveComponentState())
                     .collect(Collectors.toUnmodifiableSet()),
                 super.getJustAddedComponents().stream()
@@ -160,7 +160,7 @@ public final class SliderImpl extends AbstractCell implements Slider {
 
     /**
      * A class modelling a CellMemento for a Slider. Its methods override the
-     * onews of Abstract Cell, since Sliders have additional fields
+     * ones of Abstract Cell, since Sliders have additional fields
      * that need to be restored and saved. 
      */
     public class SliderMementoImpl implements CellMemento {

@@ -229,14 +229,6 @@ public abstract class AbstractCell implements Cell {
      */
     protected abstract CellState getSubclassCellState();
 
-    /**
-     * Returns the CellComponents of this Cell; this is required if subclasses
-     * need to store additional information in their CellMementos.
-     * @return the {@link taflgames.model.cell.api.CellComponent} of this Cell.
-     */
-    protected Set<CellComponent> getCellComponents() {
-        return Collections.unmodifiableSet(this.cellComponents);
-    }
 
     /**
      * Returns the CellComponents that have just been added to this Cell; 
