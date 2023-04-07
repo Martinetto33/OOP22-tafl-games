@@ -118,6 +118,7 @@ public abstract class AbstractScene implements Scene {
      * @param image the Image to be resized.
      * @param width the new width of the Image.
      * @param height the new height of the Image.
+     * @return the resized image
      */
     public Image customResize(final Image image, final int width, final int height) {
         return image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
