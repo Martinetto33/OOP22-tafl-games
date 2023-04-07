@@ -1,4 +1,4 @@
-package taflgames.view.loaderImages;
+package taflgames.view.loaderimages;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -15,7 +15,7 @@ import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
 /**
- * This class models a LoaderImages {@link taflgames.view.loaderImages.LoaderImages}.
+ * This class models a LoaderImages {@link taflgames.view.loaderimages.LoaderImages}.
  */
 public class LoaderImagesImpl implements LoaderImages {
 

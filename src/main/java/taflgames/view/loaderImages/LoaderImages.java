@@ -1,4 +1,4 @@
-package taflgames.view.loaderImages;
+package taflgames.view.loaderimages;
 
 import java.util.Map;
 
