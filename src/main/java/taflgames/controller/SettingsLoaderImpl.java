@@ -82,6 +82,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     }
 
     private void loadBoardSize(final CellsCollectionBuilder cellsCollBuilder) {
+        Objects.requireNonNull(settings);
         final int boardSize = Integer.parseInt(
             settings.getElementsByTagName("BoardSize").item(0).getTextContent()
         );
@@ -92,6 +93,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
         final CellsCollectionBuilder cellsCollBuilder,
         final PiecesCollectionBuilder piecesCollBuilder
     ) {
+        Objects.requireNonNull(settings);
         final Element kingPosElem = (Element) settings.getElementsByTagName("KingPosition").item(0);
         final Element posElem = (Element) kingPosElem.getElementsByTagName("Position").item(0);
         final Position kingPos = new Position(
@@ -180,6 +182,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     }
 
     private Set<Position> getPositionsByTagName(final String tagName) {
+        Objects.requireNonNull(settings);
         final Set<Position> positions = new HashSet<>();
         final Element positionsElement = (Element) settings.getElementsByTagName(tagName).item(0);
         final int length = positionsElement.getElementsByTagName("Position").getLength();

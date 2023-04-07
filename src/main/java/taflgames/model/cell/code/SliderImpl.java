@@ -2,6 +2,7 @@ package taflgames.model.cell.code;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,11 +25,11 @@ import taflgames.model.cell.api.Slider;
  */
 public final class SliderImpl extends AbstractCell implements Slider {
 
-    // Un versore che indica la direzione in cui questo slider punta
+    // A versor that indicates the direction of the sliding
     private Vector orientation = new VectorImpl(0, 1);  // NOPMD
     // The Vector class models a vector and provides features that a List does not support.
 
-    private boolean triggered; //dice se è già stata attivata in questo turno
+    private boolean triggered; // indicates if the slider has already been activated in this turn
     private SliderMediator mediator;
     private final Position sliderPos;
     private int lastActivityTurn;
@@ -68,8 +69,9 @@ public final class SliderImpl extends AbstractCell implements Slider {
     ) {
         if (this.sliderPos.equals(source) && !this.triggered && this.active) {
             this.triggered = true;
+            Objects.requireNonNull(this.mediator);
             final Position newPosition = this.mediator.requestMove(source, this.orientation);
-            /*Trovo la casella più lontana su cui ci si possa spostare seguendo la direzione del vettore orientamento */
+            // Find the furthest reachable cell in the direction defined by the orrientation of the slider
             this.mediator.updatePiecePos(this.sliderPos, newPosition, movedPiece.getPlayer());
 
             if (movedPiece.getCurrentPosition().equals(this.sliderPos)) {

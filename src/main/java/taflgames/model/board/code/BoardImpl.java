@@ -53,8 +53,16 @@ public final class BoardImpl implements Board, TimedEntity {
      * @param size the size of the board.
      */
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
-        this.pieces = pieces;
-        this.cells = cells;
+        if (pieces != null) {
+            this.pieces = new HashMap<>(pieces);
+        } else {
+            this.pieces = new HashMap<>();
+        }
+        if (cells != null) {
+            this.cells = new HashMap<>(cells);
+        } else {
+            this.cells = new HashMap<>();
+        }
         this.size = size;
         this.eatingManager = new EatenImpl(this);
         for (final Slider slider : cells.values().stream()
@@ -342,7 +350,7 @@ public final class BoardImpl implements Board, TimedEntity {
         /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
 
         if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
-                || king.getCurrentPosition().getX() == this.size - 1 || king.getCurrentPosition().getX() == this.size - 1) {
+                || king.getCurrentPosition().getX() == this.size - 1 || king.getCurrentPosition().getY() == this.size - 1) {
 
                 if (getAdjacentPositions(king.getCurrentPosition()).stream()
                     .filter(pos -> !cells.get(pos).isFree())

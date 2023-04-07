@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,9 +45,11 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
         try {
             final URL leaderboardFileURL = ClassLoader.getSystemResource(PATH + LEADERBOARD_SAVE_FILE_NAME);
             final File leaderboardFile = new File(leaderboardFileURL.toURI());
-            final FileWriter writer = new FileWriter(leaderboardFile, false);
+            final FileWriter writer = new FileWriter(leaderboardFile, Charset.forName("UTF-8"));
             final Yaml yaml = new Yaml();
             yaml.dump(otherMap, writer);
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             LOGGER.error("Error while trying to access the save file for the leaderboard.", e);
         } catch (URISyntaxException e) {

@@ -31,7 +31,6 @@ public abstract class AbstractScene implements Scene {
     /**
      * Initializes the scene state.
      * @param sceneName the name of the scene
-     * @param bgFileName the name of the file of the background image
      */
     protected AbstractScene(final String sceneName) {
         this.sceneName = sceneName;
