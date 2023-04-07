@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
 
 import javax.swing.JButton;
@@ -43,7 +42,7 @@ public class HighScoreScene extends AbstractScene {
      * associated to this scene.
      */
     public HighScoreScene(final HighScoreController controller) {
-        super(HighScoreScene.SCENE_NAME, Optional.of("home-background.jpeg"));
+        super(HighScoreScene.SCENE_NAME);
         this.controller = controller;
 
         final JPanel scene = this.getScene();

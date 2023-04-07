@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Map;
-import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,7 +30,7 @@ public final class MatchScene extends AbstractScene {
      * @param controller the controller of the scene
      */
     public MatchScene(final MatchSceneController controller) {
-        super(MatchScene.MATCH, Optional.of("home-background.jpeg"));
+        super(MatchScene.MATCH);
         this.controller = controller;
         final JPanel scene = super.getScene();
         //this.setDefaultCloseOperation(EXIT_ON_CLOSE);

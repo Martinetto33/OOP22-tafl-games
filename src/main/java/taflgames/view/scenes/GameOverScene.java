@@ -37,7 +37,7 @@ public class GameOverScene extends AbstractScene {
      */
     public GameOverScene(final GameOverController controller) {
 
-        super(GameOverScene.GAME_OVER, Optional.of("home-background.jpeg"));
+        super(GameOverScene.GAME_OVER);
 
         this.controller = controller;
 

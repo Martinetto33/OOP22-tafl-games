@@ -11,7 +11,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.net.URL;
-import java.util.Optional;
 
 /**
  * This abstract class defines the abstract model of a {@link Scene}.
@@ -22,6 +21,7 @@ public abstract class AbstractScene implements Scene {
     private final JPanel scene;
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP;
+    private static final String BG_FILE_NAME = "background.jpeg";
     private static final String COMPONENT_BACKGROUND = "wooden-plank.jpg";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final Color LABEL_TEXT_COLOR = Color.WHITE;
@@ -33,17 +33,15 @@ public abstract class AbstractScene implements Scene {
      * @param sceneName the name of the scene
      * @param bgFileName the name of the file of the background image
      */
-    protected AbstractScene(final String sceneName, final Optional<String> bgFileName) {
+    protected AbstractScene(final String sceneName) {
         this.sceneName = sceneName;
         this.scene = new JPanel() {
             @Override
             public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
-                if (bgFileName.isPresent()) {
-                    final URL imgURL = ClassLoader.getSystemResource(ROOT + "images" + SEP + bgFileName.get());
-                    final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
-                    g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-                }
+                final URL imgURL = ClassLoader.getSystemResource(ROOT + "images" + SEP + BG_FILE_NAME);
+                final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
     }

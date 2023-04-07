@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.Optional;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -23,7 +22,6 @@ import javax.swing.JLabel;
 public class HomeScene extends AbstractScene {
 
     private static final String HOME = "Home";
-    private static final String BG_FILENAME = "home-background.jpeg";
     private static final String GAME_TITLE = "TAFL GAMES";
     private static final int TITLE_SIZE = 100;
     private static final String PLAY = "Play";
@@ -45,7 +43,7 @@ public class HomeScene extends AbstractScene {
      */
     public HomeScene(final HomeSceneController controller) {
 
-        super(HOME, Optional.of(BG_FILENAME));
+        super(HOME);
 
         this.controller = controller;
         this.buttonDimension = new Dimension((int) (this.controller.getViewWidth() / WIDTH_RATIO),
