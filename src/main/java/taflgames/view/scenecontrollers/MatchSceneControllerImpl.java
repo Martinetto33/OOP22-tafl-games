@@ -75,12 +75,16 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     }
 
     @Override
-    public boolean moveIfLegal(Position source, Position destination) {
-        boolean wasMoveLegal = this.getController().moveIfLegal(source, destination);
-        if (wasMoveLegal) {
-            this.wasMoveDone = true;
+    public boolean moveIfLegal(final Position source, final Position destination) {
+        if (this.wasMoveDone) {
+            return false;
+        } else {
+            final boolean isMoveLegal = this.getController().moveIfLegal(source, destination);
+            if (isMoveLegal) {
+                this.wasMoveDone = true;
+            }
+            return isMoveLegal;
         }
-        return wasMoveLegal;
     }
 
     @Override
