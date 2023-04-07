@@ -171,7 +171,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
          */
         public TombMementoImpl() {
             /* This way of copying maps should create a deep copy. */
-            this.innerDeadPieces = Tomb.this.deadPieces.entrySet().stream()
+            this.innerDeadPieces = Map.copyOf(Tomb.this.deadPieces).entrySet().stream()
                 .map(entry -> {
                     /* This longer lambda creates a deep copy of the Queues, to
                      * ensure that modifications of the state of the match do not
@@ -206,7 +206,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
          * @return a Map of dead pieces associated to their teams.
          */
         public Map<Player, Queue<Piece>> getInnerDeadPieces() {
-            return this.innerDeadPieces;
+            return Map.copyOf(this.innerDeadPieces);
         }
 
         /**

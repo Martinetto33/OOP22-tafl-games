@@ -49,7 +49,8 @@ class TestLeaderboard {
         assertEquals(TestLeaderboard.MAP_SIZE, TestLeaderboard.EXPECTED_RESULTS.size());
         TestLeaderboard.sampleLeaderboard = new LeaderBoardImpl();
 
-        for (final var playerName : TestLeaderboard.EXPECTED_RESULTS.keySet()) {
+        for (final var result : TestLeaderboard.EXPECTED_RESULTS.entrySet()) {
+            final String playerName = result.getKey();
             final List<MatchResult> a = new ArrayList<>();
             /*In case the player has 0 victories and 0 losses, and they have never
              * been registered before, it is assumed that their first match or streak

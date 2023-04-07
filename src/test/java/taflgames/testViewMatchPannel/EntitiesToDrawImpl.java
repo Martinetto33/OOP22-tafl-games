@@ -54,16 +54,16 @@ public final class EntitiesToDrawImpl implements EntitiesToDraw {
 
     @Override
     public Map<Position, PieceImageInfo> getPiecesAlive() {
-        return this.piecesAlive;
+        return Map.copyOf(this.piecesAlive);
     }
 
     @Override
     public Map<Position, CellImageInfo> getBackgroundCells() {
-        return this.backgroundCells;
+        return Map.copyOf(this.backgroundCells);
     }
 
     @Override
     public Map<Position, CellImageInfo> getSpecialCells() {
-        return this.specialCells;
+        return Map.copyOf(this.specialCells);
     }
 }
