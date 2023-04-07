@@ -20,6 +20,7 @@ public interface Slider extends Cell, Resettable, TimedEntity {
      * Return the current orientation of the Slider.
      * @return a Vector that represent the orientation of the Slider.
      */
-    Vector getOrientation();
+    Vector getOrientation();    // NOPMD
+    // The Vector class models a vector and provides features that a List does not support.
 
 }

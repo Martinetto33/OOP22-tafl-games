@@ -103,7 +103,6 @@ public final class BoardImpl implements Board, TimedEntity {
             }
         } else if (THRONE.equals(cells.get(dest).getType()) 
                 || EXIT.equals(cells.get(dest).getType())
-                //|| SLIDER.equals(cells.get(start).getType()) && !cells.get(dest).isFree()
                 || !cells.get(dest).isFree() && getPieceAtPosition(dest).getPlayer().equals(player)) {
                 return false;
         }
@@ -444,7 +443,7 @@ public final class BoardImpl implements Board, TimedEntity {
         private final Position innerCurrentPos;
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
-        private Set<Slider> innerSlidersEntities;
+        private final Set<Slider> innerSlidersEntities;
 
         /**
          * Creates a BoardMemento from which the board will be able to restore its previous state.
@@ -462,6 +461,8 @@ public final class BoardImpl implements Board, TimedEntity {
             if (BoardImpl.this.slidersEntities != null) {
                 this.innerSlidersEntities = new HashSet<>(BoardImpl.this.slidersEntities).stream()
                     .collect(Collectors.toSet());
+            } else {
+                this.innerSlidersEntities = null;
             }
 
             this.piecesMemento = List.copyOf(piecesMemento);

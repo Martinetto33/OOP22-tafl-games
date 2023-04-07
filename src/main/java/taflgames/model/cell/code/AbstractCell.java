@@ -211,13 +211,13 @@ public abstract class AbstractCell implements Cell {
      */
     @Override
     public CellState getCellState() {
-        if (this.getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb") 
+        if (this.getComponents().stream().anyMatch(component -> "Tomb".equals(component.getComponentType()) 
             && component.isActive())) {
-            Tomb t = (Tomb) this.getComponents().stream()
+            final Tomb tomb = (Tomb) this.getComponents().stream()
                             .filter(cell -> cell instanceof Tomb)
                             .findAny()
                             .get();
-            return new CellStateImpl("Tomb", new VectorImpl(0, 0), t.peekTeamOfTheTomb());
+            return new CellStateImpl("Tomb", new VectorImpl(0, 0), tomb.peekTeamOfTheTomb());
         }
         return this.getSubclassCellState();
     }

@@ -16,6 +16,8 @@ import taflgames.view.scenes.MatchPanelImpl;
  */
 public class TestViewMatchPannel extends JFrame {
 
+    public static final long serialVersionUID = 2L;
+
     private static final int BOARD_SIZE = 11;
 
     /**

@@ -126,7 +126,8 @@ public final class SliderImpl extends AbstractCell implements Slider {
      * {@inheritDoc}
      */
     @Override
-    public Vector getOrientation() {
+    public Vector getOrientation() {    // NOPMD
+        // The Vector class models a vector and provides features that a List does not support.
         return this.orientation;
     }
 
