@@ -259,7 +259,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
             // If the source position is empty and the selected one is a valid source,
             // then the selected position is set as source
             this.startingPosition = Optional.of(pos);
-        } else if (this.startingPosition.get().equals(pos)) {
+        } else if (this.startingPosition.isPresent() && this.startingPosition.get().equals(pos)) {
             // If the current source is equal to the selected position,
             // this means that the source is deselected
             this.startingPosition = Optional.empty();
