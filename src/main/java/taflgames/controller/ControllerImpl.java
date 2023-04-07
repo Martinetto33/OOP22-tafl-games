@@ -61,14 +61,10 @@ public final class ControllerImpl implements Controller {
             );
             this.caretaker = new CaretakerImpl(this.match);
             this.caretaker.updateHistory();
-        } catch (final IOException ex) {
-            /*
-             * The view has to know that an error occurred, in order to display an error message
-             * and prevent the match from starting without being initialized.
-             */
-            final String errorMsg = "Error: cannot initialize a new match. " + ex.getMessage();
-            LOGGER.error(errorMsg);
-            throw new IOException(errorMsg);
+        } catch (final IOException exception) {
+            final String errorMsg = "Error: cannot initialize a new match.";
+            LOGGER.error(errorMsg, exception);
+            throw exception;
         }
     }
 
@@ -87,14 +83,10 @@ public final class ControllerImpl implements Controller {
             );
             this.caretaker = new CaretakerImpl(this.match);
             this.caretaker.updateHistory();
-        } catch (final IOException ex) {
-            /*
-             * The view has to know that an error occurred, in order to display an error message
-             * and prevent the match from starting without being initialized.
-             */
-            final String errorMsg = "Error: cannot initialize a new match. " + ex.getMessage();
-            LOGGER.error(errorMsg);
-            throw new IOException(errorMsg);
+        } catch (final IOException exception) {
+            final String errorMsg = "Error: cannot initialize a new match. " + exception.getMessage();
+            LOGGER.error(errorMsg, exception);
+            throw exception;
         }
     }
 
