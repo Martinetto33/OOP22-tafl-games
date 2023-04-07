@@ -178,7 +178,7 @@ public abstract class AbstractCell implements Cell {
          */
         public CellMementoImpl(final List<CellComponentMemento> componentMementos) {
             this.innerCellStatus = AbstractCell.this.cellStatus;
-            this.componentMementos = componentMementos;
+            this.componentMementos = List.copyOf(componentMementos);
         }
 
         /**

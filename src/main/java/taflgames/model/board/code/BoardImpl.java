@@ -1,6 +1,7 @@
 package taflgames.model.board.code;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -443,20 +444,20 @@ public final class BoardImpl implements Board, TimedEntity {
          * @param cellsMemento a List of the saved states of the cells.
          */
         public BoardMementoImpl(final List<PieceMemento> piecesMemento, final List<CellMemento> cellsMemento) {
-            this.innerCells = BoardImpl.this.cells.entrySet().stream()
+            this.innerCells = new HashMap<>(BoardImpl.this.cells).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER).entrySet().stream()
+            this.innerAttackerPieces = new HashMap<>(BoardImpl.this.pieces).get(Player.ATTACKER).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER).entrySet().stream()
+            this.innerDefenderPieces = new HashMap<>(BoardImpl.this.pieces).get(Player.DEFENDER).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerCurrentPos = BoardImpl.this.currentPos;
             if (BoardImpl.this.slidersEntities != null) {
-                this.innerSlidersEntities = BoardImpl.this.slidersEntities.stream()
+                this.innerSlidersEntities = new HashSet<>(BoardImpl.this.slidersEntities).stream()
                     .collect(Collectors.toSet());
             }
 
-            this.piecesMemento = piecesMemento;
-            this.cellsMemento = cellsMemento;
+            this.piecesMemento = List.copyOf(piecesMemento);
+            this.cellsMemento = List.copyOf(cellsMemento);
         }
 
         /**
@@ -464,7 +465,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public List<PieceMemento> getPiecesMemento() {
-            return this.piecesMemento;
+            return List.copyOf(this.piecesMemento);
         }
 
         /**
@@ -472,7 +473,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public List<CellMemento> getCellsMemento() {
-            return this.cellsMemento;
+            return List.copyOf(this.cellsMemento);
         }
 
         /**
@@ -480,7 +481,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Map<Position, Cell> getInnerCells() {
-            return this.innerCells;
+            return new HashMap<>(this.innerCells);
         }
 
         /**
@@ -488,7 +489,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Map<Position, Piece> getInnerAttackerPieces() {
-            return this.innerAttackerPieces;
+            return new HashMap<>(this.innerAttackerPieces);
         }
 
         /**
@@ -496,7 +497,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Map<Position, Piece> getInnerDefenderPieces() {
-            return this.innerDefenderPieces;
+            return new HashMap<>(this.innerDefenderPieces);
         }
 
         /**
@@ -512,7 +513,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Set<Slider> getInnerSlidersEntities() {
-            return this.innerSlidersEntities != null ? this.innerSlidersEntities : null;
+            return this.innerSlidersEntities != null ? new HashSet<>(this.innerSlidersEntities) : null;
         }
 
         /**
