@@ -9,6 +9,10 @@ import taflgames.common.code.VectorImpl;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * This class creates and provides on request the mapping of the positions
+ * on the grid to the information about cells and pieces at each position.
+ */
 public final class EntitiesToDrawImpl implements EntitiesToDraw {
 
     private static final String BASIC_PIECE_NAME = "BASIC_PIECE";

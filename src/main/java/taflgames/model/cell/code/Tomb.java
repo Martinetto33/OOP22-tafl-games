@@ -71,7 +71,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
         /* Controls if on the tomb there are any dead pieces of the current player */
         if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
             final Piece pieceToResume = deadPieces.get(player).poll();    // get the first piece in the queue
-            pieceToResume.reanimate();	// resurrect the piece, now it's alive
+            pieceToResume.reanimate();  // resurrect the piece, now it's alive
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
             pieces.get(player).put(pieceToResume.getCurrentPosition(), pieceToResume);
         }

@@ -2,11 +2,19 @@ package taflgames.view.scenes;
 
 import taflgames.common.Player;
 
+/**
+ * This class contains and gives information about the image of a piece.
+ */
 public final class PieceImageInfo implements ImageInfo {
 
     private final String name;
     private final Player player;
 
+    /**
+     * Creates a new object that contains information about the image of a piece.
+     * @param name the name of the piece represented by the image
+     * @param player the player that owns the piece
+     */
     public PieceImageInfo(final String name, final Player player) {
         this.name = name;
         this.player = player;

@@ -3,6 +3,9 @@ package taflgames.view.scenes;
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
 
+/**
+ * This class contains and gives information about the image of a cell.
+ */
 public final class CellImageInfo implements ImageInfo {
 
     private final String name;
@@ -10,6 +13,13 @@ public final class CellImageInfo implements ImageInfo {
     private final Vector rotation; // NOPMD
     // The Vector class models a vector and provides features that a List does not support.
 
+    /**
+     * Creates a new object that contains information about the image of a cell.
+     * @param name the name of the cell represented by the image
+     * @param player the player related to the image
+     *      (for example, it is the attacker if the cell is the tomb of an attacker's piece)
+     * @param rotation a vector representing the rotation of the cell image
+     */
     public CellImageInfo(final String name, final Player player, final Vector rotation) { // NOPMD
         // The Vector class models a vector and provides features that a List does not support.
         this.name = name;
@@ -27,6 +37,9 @@ public final class CellImageInfo implements ImageInfo {
         return this.player;
     }
 
+    /**
+     * @return a vector representing the rotation of the cell image
+     */
     public Vector getRotation() { // NOPMD
         // The Vector class models a vector and provides features that a List does not support.
         return rotation;

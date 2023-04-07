@@ -41,6 +41,11 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     private Optional<Position> destination = Optional.empty();
     private MatchSceneController controller;
 
+    /**
+     * Creates the panel that shows the board.
+     * @param numbCellsInGrid the number of cells of the grid
+     * @param sizeOfSide the dimension of the grid (expressed in number of cells on one side)
+     */
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
         final LoaderImages loader = new LoaderImagesImpl(sizeOfSide, numbCellsInGrid);
         loader.loadCellsImages();
