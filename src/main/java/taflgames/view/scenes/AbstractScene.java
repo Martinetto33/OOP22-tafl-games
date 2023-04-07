@@ -105,19 +105,13 @@ public abstract class AbstractScene implements Scene {
                 super.paintComponent(g);
                 final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + COMPONENT_BACKGROUND);
                 final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
-                customResize(image, width, height);
-                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                final Image resizedImage = customResize(image, width, height);
+                g.drawImage(resizedImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
         paintedPanel.add(component);
         mainPanel.add(paintedPanel);
     }
-
-    // CHECKSTYLE: FinalParametersCheck OFF
-    /* The check was disabled because the parameter image
-     * is reassigned in the code and cannot be final for this
-     * to happen.
-     */
 
     /**
      * Resizes an Image object to specified dimensions.
@@ -125,8 +119,8 @@ public abstract class AbstractScene implements Scene {
      * @param width the new width of the Image.
      * @param height the new height of the Image.
      */
-    public void customResize(Image image, final int width, final int height) {
-        image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    public Image customResize(final Image image, final int width, final int height) {
+        return image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     }
-    // CHECKSTYLE: FinalParametersCheck ON
+
 }
