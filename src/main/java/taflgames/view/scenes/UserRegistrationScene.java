@@ -79,6 +79,7 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         southPanel.add(goBackButton);
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
+
         southPanel.setVisible(true);
 
         goBackButton.addActionListener((e) -> {

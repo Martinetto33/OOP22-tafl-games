@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.util.Map;
 import java.util.Optional;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import taflgames.common.code.Position;
 import taflgames.view.scenecontrollers.MatchSceneController;
@@ -17,6 +18,8 @@ public final class MatchScene extends AbstractScene {
 
     private static final String MATCH = "BATTLE!";
     private static final String GO_BACK = "Go Back";
+    private static final String UNDO = "Undo move";
+    private static final String PASS = "Pass turn";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final int NUMB_CELLS_SIDE = 11;
 
@@ -40,11 +43,32 @@ public final class MatchScene extends AbstractScene {
         scene.add(matchState);
         final JPanel southPanel = new JPanel();
         final JButton goBackButton = new JButton(GO_BACK);
+
+        /* Code added for the memento */
+        final JButton undoButton = new JButton(UNDO);
+        final JButton passTurnButton = new JButton(PASS);
+
         southPanel.add(goBackButton);
+        southPanel.add(undoButton);
+        southPanel.add(passTurnButton);
         southPanel.setBackground(TRANSPARENT);
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();
+        });
+
+        undoButton.addActionListener(e -> {
+            this.controller.undo();
+        });
+
+        passTurnButton.addActionListener(e -> {
+            if (!this.controller.passTurn()) {
+                JOptionPane.showMessageDialog(getScene(), "Cannot pass turn because "
+                    + this.controller.getPlayerInTurn().toString()
+                    + " has not made a move yet.",
+                    "No move made by current player",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         scene.add(southPanel, FlowLayout.LEFT);

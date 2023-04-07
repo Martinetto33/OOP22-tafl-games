@@ -9,8 +9,9 @@ import taflgames.model.board.api.Board;
  * to the furthest reacheble Position along a certain direction.
  */
 public interface Slider extends Cell, Resettable, TimedEntity {
+
     /**
-     * Add a Mediator to the Slider, this allows the Slider to comunicate with the Board.
+     * Adds a Mediator to the Slider, this allows the Slider to comunicate with the Board.
      * @param board the Board of the game.
      */
     void addMediator(Board board);
@@ -20,4 +21,5 @@ public interface Slider extends Cell, Resettable, TimedEntity {
      * @return a Vector that represent the orientation of the Slider.
      */
     Vector getOrientation();
+
 }

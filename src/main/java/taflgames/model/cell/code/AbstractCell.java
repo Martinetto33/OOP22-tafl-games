@@ -31,9 +31,20 @@ public abstract class AbstractCell implements Cell {
     /**
      * Initializes the state of a generic cell.
      */
+    private Set<CellComponent> justAddedComponents;
+
+    /** 
+     * Builds a new AbstractCell and sets its status to 'free' (true).
+    */
     public AbstractCell() {
         this.cellStatus = true;
         this.cellComponents = new HashSet<>();
+        /* If a component has just been created and anybody
+         * calls "undo", there is no previous state for the
+         * component to go back to; this is why components
+         * require additional handling.
+         */
+        this.justAddedComponents = new HashSet<>();
     }
 
     /**
@@ -58,6 +69,7 @@ public abstract class AbstractCell implements Cell {
     @Override
     public void attachComponent(final CellComponent cellComponent) {
         this.cellComponents.add(cellComponent);
+        this.justAddedComponents.add(cellComponent);
     }
 
     /**
@@ -66,6 +78,7 @@ public abstract class AbstractCell implements Cell {
     @Override
     public void detachComponent(final CellComponent cellComponent) {
         this.cellComponents.remove(cellComponent);
+        this.justAddedComponents.remove(cellComponent);
     }
 
     /**
@@ -109,6 +122,9 @@ public abstract class AbstractCell implements Cell {
                 inactiveComponents.forEach(component -> this.detachComponent(component));
             }
         }
+        if (!this.justAddedComponents.isEmpty()) {
+            this.justAddedComponents = new HashSet<>();
+        }
     }
 
     /**
@@ -134,6 +150,14 @@ public abstract class AbstractCell implements Cell {
      */
     protected void restore(final CellMemento cm) {
         this.cellStatus = cm.getCellStatus();
+        if (!this.justAddedComponents.isEmpty()) {
+            /* The just added components need to be removed before
+             * any call to their 'restore' method, because they simply
+             * did not exist before the move that is being undone.
+             */
+            this.cellComponents.removeAll(this.justAddedComponents);
+            this.justAddedComponents = new HashSet<>();
+        }
         cm.getComponentMementos().forEach(component -> component.restore());
     }
 
@@ -187,7 +211,8 @@ public abstract class AbstractCell implements Cell {
      */
     @Override
     public CellState getCellState() {
-        if (this.getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb"))) {
+        if (this.getComponents().stream().anyMatch(component -> component.getComponentType().equals("Tomb") 
+            && component.isActive())) {
             Tomb t = (Tomb) this.getComponents().stream()
                             .filter(cell -> cell instanceof Tomb)
                             .findAny()
@@ -197,6 +222,29 @@ public abstract class AbstractCell implements Cell {
         return this.getSubclassCellState();
     }
 
+    /**
+     * Returns the {@link taflgames.controller.entitystate.CellState}
+     * of the subclass.
+     * @return a CellState describing the Cell of the subclass.
+     */
     protected abstract CellState getSubclassCellState();
+
+    /**
+     * Returns the CellComponents of this Cell; this is required if subclasses
+     * need to store additional information in their CellMementos.
+     * @return the {@link taflgames.model.cell.api.CellComponent} of this Cell.
+     */
+    protected Set<CellComponent> getCellComponents() {
+        return Collections.unmodifiableSet(this.cellComponents);
+    }
+
+    /**
+     * Returns the CellComponents that have just been added to this Cell; 
+     * this is required if subclasses need to store additional information in their CellMementos.
+     * @return the {@link taflgames.model.cell.api.CellComponent} of this Cell.
+     */
+    protected Set<CellComponent> getJustAddedComponents() {
+        return Collections.unmodifiableSet(this.justAddedComponents);
+    }
 }
 

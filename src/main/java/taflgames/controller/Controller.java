@@ -108,4 +108,9 @@ public interface Controller {
      * @return a Map containing the entries playerNickname-winsAndLosses.
      */
     Map<String, Pair<Integer, Integer>> getLeaderboard();
+
+    /**
+     * Clears any current leaderboard.
+     */
+    void clearLeaderboard();
 }

@@ -37,6 +37,7 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         super(view, controller);
         this.saver = new LeaderboardSaverImpl();
         this.leaderboard = this.saver.retrieveFromSave();
+        this.requestEndMatchResults();
     }
 
     /**
@@ -99,4 +100,5 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         this.leaderboard.addResult(defenderPlayer, this.result.get(Player.DEFENDER));
         this.saver.saveLeaderboard(this.leaderboard);
     }
+
 }

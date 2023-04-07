@@ -2,7 +2,6 @@ package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +14,7 @@ import java.util.Map.Entry;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -47,18 +47,19 @@ public class HighScoreScene extends AbstractScene {
         this.controller = controller;
 
         final JPanel scene = this.getScene();
-        scene.setLayout(new FlowLayout());
+        scene.setLayout(new BorderLayout());
         final JPanel buttonPanel = new JPanel();
         final JPanel tablePanel = new JPanel();
 
         this.addGoBackButton(buttonPanel);
+        this.addClearLeaderboardButton(buttonPanel, tablePanel);
         this.constructTableFromLeaderboard(this.requestLeaderboard(), tablePanel);
 
         this.makePanelTransparent(tablePanel);
         this.makePanelTransparent(buttonPanel);
 
-        scene.add(tablePanel);
-        scene.add(buttonPanel);
+        scene.add(tablePanel, BorderLayout.NORTH);
+        scene.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private void makePanelTransparent(final JPanel panel) {
@@ -77,6 +78,27 @@ public class HighScoreScene extends AbstractScene {
 
         });
         panel.add(button);
+    }
+
+    private void addClearLeaderboardButton(final JPanel buttonPanel, final JPanel tablePanel) {
+        final JButton button = new JButton("Clear Leaderboard");
+        button.setFont(fontManager.getButtonFont());
+        button.addActionListener(e -> {
+            final int answer = JOptionPane.showConfirmDialog(getScene(),
+            "Clearing the leaderboard will eliminate all registered results. Are you sure you want to continue?",
+            "Warning", JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                this.controller.clearLeaderboard();
+                this.getScene().remove(tablePanel);
+                final JPanel newTablePanel = new JPanel();
+                this.makePanelTransparent(newTablePanel);
+                this.emptyLeaderboard(newTablePanel);
+                this.getScene().add(newTablePanel, BorderLayout.NORTH);
+                this.getScene().revalidate();
+                this.getScene().repaint();
+            }
+        });
+        buttonPanel.add(button);
     }
 
     private void constructTableFromLeaderboard(final Map<String, Pair<Integer, Integer>> leaderboard, final JPanel panel) {

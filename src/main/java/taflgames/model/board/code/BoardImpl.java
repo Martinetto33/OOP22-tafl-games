@@ -94,7 +94,7 @@ public final class BoardImpl implements Board, TimedEntity {
             }
         } else if (THRONE.equals(cells.get(dest).getType()) 
                 || EXIT.equals(cells.get(dest).getType())
-                || SLIDER.equals(cells.get(start).getType()) && !cells.get(dest).isFree()
+                //|| SLIDER.equals(cells.get(start).getType()) && !cells.get(dest).isFree()
                 || !cells.get(dest).isFree() && getPieceAtPosition(dest).getPlayer().equals(player)) {
                 return false;
         }
@@ -145,6 +145,9 @@ public final class BoardImpl implements Board, TimedEntity {
             // trovo la tipologia di pedina nella casella di destinazione dopodichè controllo
             // che non sia un re poichè lo swapper non può scambiare posizione con un re
             final Piece destPiece = getPieceAtPosition(dest);
+            /* if(destPiece != null && !KING.equals(destPiece.getMyType().getTypeOfPiece())) {
+                return true;
+            } */
             return !(destPiece != null && KING.equals(destPiece.getMyType().getTypeOfPiece()));
         }
 
@@ -170,8 +173,8 @@ public final class BoardImpl implements Board, TimedEntity {
             pieces.get(currentPlayer).put(newPos, pieceInTurn);
             pieceInTurn.setCurrentPosition(newPos);
 
-            final Piece pieceToSwap = pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length])
-                                            .get(newPos);
+            final Piece pieceToSwap = pieces.get(
+                Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).get(newPos);
             pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).remove(newPos);
             pieces.get(Player.values()[(currentPlayer.ordinal() + 1) % Player.values().length]).put(oldPos, pieceToSwap);
             pieceToSwap.setCurrentPosition(oldPos);
@@ -200,7 +203,7 @@ public final class BoardImpl implements Board, TimedEntity {
             if (reachablePos.getX() == this.size || reachablePos.getY() == this.size
                 || reachablePos.getX() < 0 || reachablePos.getY() < 0 
                 || !cells.get(reachablePos).canAccept(getPieceAtPosition(startPos))) {
-                    if (getPieceAtPosition(startPos).canSwap()) {
+                    /* if (getPieceAtPosition(startPos).canSwap()) {
                         if (!cells.get(reachablePos).isFree()
                             && (!THRONE.equals(cells.get(reachablePos).getType()) 
                                     || !EXIT.equals(cells.get(reachablePos).getType()))
@@ -208,24 +211,25 @@ public final class BoardImpl implements Board, TimedEntity {
                             && getPieceAtPosition(reachablePos).getPlayer().equals(getPieceAtPosition(startPos).getPlayer())) {
                             furthestReachable = reachablePos;
                         }
-                    }
+                    } */
                 break;
             } else {
                 furthestReachable = reachablePos;
             }
-        } 
+        }
         return furthestReachable;
     }
 
     /**
-     * This method is callid by {@link #updatePiecePos(Position, Position, Player)}.
+     * This method is called by {@link #updatePiecePos(Position, Position, Player)}.
      * It notify a Cell that a Piece is moved there, the cells adjacents to the piece are notified too.
      * This method is fundamental for special cells like sliders and tombs.
      * @param source the Position where the Piece moved to.
      * @param movedPiece the Piece that was moved.
      */
     private void signalOnMove(final Position source, final Piece movedPiece) {
-        if (SLIDER.equals(cells.get(source).getType())) {
+        if (SLIDER.equals(cells.get(source).getType()) 
+            /*&& !movedPiece.getMyType().getTypeOfPiece().equals("SWAPPER")*/) {
             cells.get(source).notify(source, movedPiece, List.of(movedPiece.sendSignalMove()), pieces, cells);
         }
         // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
@@ -316,8 +320,8 @@ public final class BoardImpl implements Board, TimedEntity {
         if (!updatedHitbox.isEmpty()) {
             final List<Piece> enemies = eatingManager.getThreatenedPos(updatedHitbox, pieces, currPiece);
             if (!enemies.isEmpty()) {
-                final Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager
-                                                                .checkAllies(enemies, pieces, currPiece, cells, size);
+                final Map<Piece, Set<Piece>> enemiesAndAllies = eatingManager.checkAllies(
+                    enemies, pieces, currPiece, cells, size);
                 eatingManager.notifyAllThreatened(enemiesAndAllies, currPiece, cells, pieces, this.doTombsSpawn());
             }
         }

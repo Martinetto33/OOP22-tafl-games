@@ -89,8 +89,7 @@ public class LeaderBoardImpl implements Leaderboard {
      * {@inheritDoc}
      */
     @Override
-    public void saveToFile(final String path, final LeaderboardSaver saver) {
-        saver.setPath(path);
+    public void saveToFile(final LeaderboardSaver saver) {
         saver.saveLeaderboard(this);
     }
 
@@ -111,7 +110,7 @@ public class LeaderBoardImpl implements Leaderboard {
      * @param map the map from which to take the entries
      */
     public void fromMapWithListValues(final Map<String, List<Integer>> map) {
-        if (map.isEmpty()) {
+        if (map == null || map.isEmpty()) {
             this.results = new HashMap<>();
             return;
         }

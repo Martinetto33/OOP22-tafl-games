@@ -3,6 +3,7 @@ package taflgames.view.scenecontrollers;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.controller.Controller;
 import taflgames.controller.mapper.CellImageMapper;
@@ -27,13 +28,14 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     private final MatchScene matchScene;
     private final PieceImageMapper pieceMapper = new PieceTypeMapper();
     private final CellImageMapper cellMapper = new CellTypeMapper();
+    private boolean wasMoveDone = false;
 
     /**
      * Creates a new match scene controller.
      * @param view the view of the application
      * @param controller the main controller of the application
      */
-    protected MatchSceneControllerImpl(final View view, final Controller controller) {
+    public MatchSceneControllerImpl(final View view, final Controller controller) {
         super(view, controller);
         this.matchScene = new MatchScene(this);
     }
@@ -73,8 +75,12 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     }
 
     @Override
-    public boolean moveIfLegal(final Position source, final Position destination) {
-        return this.getController().moveIfLegal(source, destination);
+    public boolean moveIfLegal(Position source, Position destination) {
+        boolean wasMoveLegal = this.getController().moveIfLegal(source, destination);
+        if (wasMoveLegal) {
+            this.wasMoveDone = true;
+        }
+        return wasMoveLegal;
     }
 
     @Override
@@ -85,6 +91,38 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     @Override
     public boolean isMatchOver() {
         return this.getController().isOver();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void undo() {
+        this.getController().undo();
+        this.wasMoveDone = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean passTurn() {
+        if (!this.wasMoveDone) {
+            /* Cannot pass before a move was done. */
+            return false;
+        }
+        this.getController().passTurn();
+        this.wasMoveDone = false;
+        this.updateView();
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getPlayerInTurn() {
+        return this.getController().getCurrentPlayer();
     }
 
 }

@@ -15,6 +15,7 @@ import taflgames.common.code.Position;
 import taflgames.controller.entitystate.CellState;
 import taflgames.controller.entitystate.PieceState;
 import taflgames.controller.leaderboard.api.LeaderboardSaver;
+import taflgames.controller.leaderboard.code.LeaderBoardImpl;
 import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
@@ -22,6 +23,8 @@ import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.CellsCollectionBuilderImpl;
 import taflgames.model.builders.PiecesCollectionBuilder;
 import taflgames.model.builders.PiecesCollectionBuilderImpl;
+import taflgames.model.memento.api.Caretaker;
+import taflgames.model.memento.code.CaretakerImpl;
 import taflgames.view.View;
 
 /**
@@ -33,6 +36,7 @@ public final class ControllerImpl implements Controller {
 
     private final View view;
     private Model match;
+    private Caretaker caretaker;
 
     /**
      * Instantiates a controller for the application.
@@ -55,6 +59,8 @@ public final class ControllerImpl implements Controller {
             this.match = new Match(
                 new BoardImpl(pieces, cells, size)
             );
+            this.caretaker = new CaretakerImpl(this.match);
+            this.caretaker.updateHistory();
             LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
@@ -80,6 +86,8 @@ public final class ControllerImpl implements Controller {
             this.match = new Match(
                 new BoardImpl(pieces, cells, size)
             );
+            this.caretaker = new CaretakerImpl(this.match);
+            this.caretaker.updateHistory();
             LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
@@ -118,9 +126,6 @@ public final class ControllerImpl implements Controller {
             this.match.makeMove(startPos, endPos);
             // The move has been performed, so the board view must be updated.
             this.view.update();
-            if (!this.isOver()) {
-                this.passTurn();
-            }
         }
         return isMoveLegal;
     }
@@ -130,7 +135,11 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public void passTurn() {
-        this.match.setNextActivePlayer();
+        if (!this.isOver()) {
+            this.match.setNextActivePlayer();
+            this.caretaker.updateHistory();
+            this.view.update();
+        }
     }
 
     /**
@@ -178,8 +187,14 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public void undo() {
-        // TODO: undo
-        // TODO: this.view.update();
+        /* If history was not updated, this
+         * method should do nothing.
+         */
+        if (this.caretaker.isLocked()) {
+            this.caretaker.unlockHistory();
+            this.caretaker.undo();
+            this.view.update();
+        }
     }
 
     /**
@@ -189,5 +204,14 @@ public final class ControllerImpl implements Controller {
     public Map<String, Pair<Integer, Integer>> getLeaderboard() {
         final LeaderboardSaver leaderboardManager = new LeaderboardSaverImpl();
         return leaderboardManager.retrieveFromSave().getLeaderboard();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearLeaderboard() {
+        final LeaderboardSaver l = new LeaderboardSaverImpl();
+        l.saveLeaderboard(new LeaderBoardImpl());
     }
 }

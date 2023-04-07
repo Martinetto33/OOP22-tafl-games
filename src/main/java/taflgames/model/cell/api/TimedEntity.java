@@ -10,4 +10,5 @@ public interface TimedEntity {
      * @param turn the turn of the game that has just eneded.
      */
     void notifyTurnHasEnded(int turn);
+
 }

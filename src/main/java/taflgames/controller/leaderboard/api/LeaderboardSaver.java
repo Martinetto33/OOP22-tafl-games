@@ -23,28 +23,4 @@ public interface LeaderboardSaver {
      * saved leaderboard is found.
      */
     Leaderboard retrieveFromSave();
-
-    /**
-     * Sets a path to which saves and from which retrievals will be attempted. There are
-     * only two acceptable paths, the default one executed at runtime and the test one
-     * executed at test time. In order to get those, the method {@link #getTestPath()}
-     * or the method {@link #getDefaultPath()} can be called. If no path is specified,
-     * the default one will be used.
-     * @param path the path of the file to and from which saves and retrievals will be
-     * attempted.
-     */
-    void setPath(String path);
-
-    /**
-     * Returns the path to file that should be used in testing instances.
-     * @return the test path.
-     */
-    String getTestPath();
-
-    /**
-     * Returns the default path to which the application will attempt to
-     * manage the save files.
-     * @return the default path.
-     */
-    String getDefaultPath();
 }
