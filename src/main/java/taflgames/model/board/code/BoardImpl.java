@@ -65,7 +65,7 @@ public final class BoardImpl implements Board, TimedEntity {
         }
         this.size = size;
         this.eatingManager = new EatenImpl(this);
-        for (final Slider slider : cells.values().stream()
+        for (final Slider slider : this.cells.values().stream()
                             .filter(cell -> SLIDER.equals(cell.getType()))
                             .map(slider -> (Slider) slider)
                             .collect(Collectors.toSet())) {

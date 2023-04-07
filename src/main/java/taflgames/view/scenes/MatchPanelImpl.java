@@ -29,6 +29,8 @@ import taflgames.view.scenecontrollers.MatchSceneController;
  */
 public class MatchPanelImpl extends JPanel implements MatchPanel {
 
+    public static final long serialVersionUID = 1L;
+
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position, JLabel> mapPieces = new HashMap<>();
     private final Map<Position, JLabel> mapSpecialCell = new HashMap<>();
