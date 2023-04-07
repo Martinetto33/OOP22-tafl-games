@@ -126,15 +126,6 @@ public final class MatchScene extends AbstractScene {
     }
 
     /**
-     * gives the position of the selected piece's moveset the MatchPanel
-     * has to colour.
-     */
-    public void givePositionToColour() {
-        /*utilizzato per dare le posizioni (date dal controller) che il
-        MatchPanel deve colorare.*/
-    }
-
-    /**
      * updates the current state of the board by drawing only the pieces and
      * special cells that are currently active given as arguments in this method
      * by the controller.
