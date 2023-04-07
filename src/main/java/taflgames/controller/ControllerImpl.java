@@ -61,7 +61,6 @@ public final class ControllerImpl implements Controller {
             );
             this.caretaker = new CaretakerImpl(this.match);
             this.caretaker.updateHistory();
-            LOGGER.info("The classic mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
              * The view has to know that an error occurred, in order to display an error message
@@ -88,7 +87,6 @@ public final class ControllerImpl implements Controller {
             );
             this.caretaker = new CaretakerImpl(this.match);
             this.caretaker.updateHistory();
-            LOGGER.info("The variant mode match has been initialized successfully.");
         } catch (final IOException ex) {
             /*
              * The view has to know that an error occurred, in order to display an error message
