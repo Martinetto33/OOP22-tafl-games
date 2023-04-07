@@ -673,6 +673,14 @@ class TestMatch {
         assertTrue(match.selectSource(source));
     }
 
+
+    @SuppressWarnings("CPD-START")
+    /*
+     * The CPD warnings about the two following test methods (testAttackerWin() and testDefenderWin())
+     * will be suppressed, since the cause of the warnings is a sequence of similar moves in the two tests
+     * and the problem is not solved even after applying some changes to the moves performed.
+     */
+
     /**
      * Test that the match ends and that the correct result is returned when the conditions for
      * the conditions for the attacker victory are verified.
@@ -827,55 +835,47 @@ class TestMatch {
     void testDefenderWin() {
 
         /*
-         * Move the king to the exit in the uppper-left corner of the board. Before doing so,
+         * Move the king to the exit in the upper-left corner of the board. Before doing so,
          * it is necessary to move some other pieces to make the path free for the king.
          */
 
         match.setNextActivePlayer();
         assertEquals(Player.DEFENDER, match.getActivePlayer());
 
-        // Move piece (shield) from (5, 3) to (5, 2)
+        // Move piece (shield) from (5, 3) to (6, 3)
         Position source = new Position(5, 3);
-        Position dest = new Position(5, 2);
+        Position dest = new Position(6, 3);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
-        // Move piece (archer) from (5, 4) to (5, 3)
+        // Move piece (archer) from (5, 4) to (5, 2)
         source = new Position(5, 4);
+        dest = new Position(5, 2);
+        assertTrue(match.selectSource(source));
+        assertTrue(match.selectDestination(source, dest));
+        match.makeMove(source, dest);
+        assertTrue(match.selectSource(dest));
+
+        // Move king from (5, 5) to (5, 3)
+        source = new Position(5, 5);
         dest = new Position(5, 3);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
-        // Move piece (basic) from (4, 4) to (4, 3)
-        source = new Position(4, 4);
-        dest = new Position(4, 3);
+        // Move king from (5, 3) to (1, 3)
+        source = new Position(5, 3);
+        dest = new Position(1, 3);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
         match.makeMove(source, dest);
         assertTrue(match.selectSource(dest));
 
-        // Move king from (5, 5) to (5, 4)
-        source = new Position(5, 5);
-        dest = new Position(5, 4);
-        assertTrue(match.selectSource(source));
-        assertTrue(match.selectDestination(source, dest));
-        match.makeMove(source, dest);
-        assertTrue(match.selectSource(dest));
-
-        // Move king from (5, 4) to (1, 4)
-        source = new Position(5, 4);
-        dest = new Position(1, 4);
-        assertTrue(match.selectSource(source));
-        assertTrue(match.selectDestination(source, dest));
-        match.makeMove(source, dest);
-        assertTrue(match.selectSource(dest));
-
-        // Move king from (1, 4) to (1, 0)
-        source = new Position(1, 4);
+        // Move king from (1, 3) to (1, 0)
+        source = new Position(1, 3);
         dest = new Position(1, 0);
         assertTrue(match.selectSource(source));
         assertTrue(match.selectDestination(source, dest));
@@ -903,6 +903,8 @@ class TestMatch {
             match.getMatchEndStatus().get().getY()
         );
     }
+
+    @SuppressWarnings("CPD-END")
 
     /**
      * Test that the match ends and that the correct result is returned when the conditions for
