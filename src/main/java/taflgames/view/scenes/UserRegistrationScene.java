@@ -1,6 +1,5 @@
 package taflgames.view.scenes;
 
-import java.util.Optional;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -54,7 +53,7 @@ public class UserRegistrationScene extends AbstractScene {
      */
     public UserRegistrationScene(final UserRegistrationController controller) {
 
-        super(USER_REGISTRATION, Optional.of("home-background.jpeg"));
+        super(USER_REGISTRATION);
 
         this.controller = controller;
 
@@ -79,7 +78,7 @@ public class UserRegistrationScene extends AbstractScene {
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
         southPanel.add(goBackButton);
         southPanel.add(Box.createRigidArea(new Dimension(0, UserRegistrationScene.SPACE)));
-        //this.testDoNotUse(southPanel); //TODO: delete;
+
         southPanel.setVisible(true);
 
         goBackButton.addActionListener((e) -> {
@@ -127,11 +126,8 @@ public class UserRegistrationScene extends AbstractScene {
      * @returns true if the usernames are valid, false otherwise.
      */
     private boolean areUsernamesValid() {
-        if (this.attackerNameTextField.getText().length() <= 0
-            || this.defenderNameTextField.getText().length() <= 0) {
-                return false;
-            }
-        return true;
+        return this.attackerNameTextField.getText().length() > 0
+            && this.defenderNameTextField.getText().length() > 0;
     }
 
     /* Builds the area in which the user can insert player names. */
@@ -168,7 +164,7 @@ public class UserRegistrationScene extends AbstractScene {
      * @param x horizontal size.
      * @param y vertical size.
      */
-    public void setDimensions(final int x, final int y) {
+    public final void setDimensions(final int x, final int y) {
         this.horizontalTextAreaSize = x;
         this.verticalTextAreaSize = y;
     }
@@ -180,31 +176,6 @@ public class UserRegistrationScene extends AbstractScene {
         this.attackerNameTextField.setText("");
         this.defenderNameTextField.setText("");
     }
-
-    /* This method only simulates the end of the match and communicates the results
-     * to the controller; this entire method and the JButton related to it MUST BE REMOVED
-     * before considering this class complete.
-     * TODO: see above
-     */
-    /* private void testDoNotUse(final JPanel panel) {
-        final JButton jb = new JButton("Add fake result");
-        jb.addActionListener(new ActionListener() {
-            private Random rand = new Random();
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                MatchResult attackerResult;
-                MatchResult defenderResult;
-                MatchResult[] possibleResults = MatchResult.values();
-                attackerResult = possibleResults[rand.nextInt(3)];
-                defenderResult = possibleResults[rand.nextInt(3)];
-                controller.setEndMatchResults(attackerResult, defenderResult);
-            }
-
-        });
-        jb.setAlignmentX(SwingConstants.CENTER);
-        jb.setFont(Scene.FONT_MANAGER.getButtonFont());
-        panel.add(jb);
-    } */
 
     private void createLabel(final JPanel panel, final String labelContent) {
         final JLabel label = new JLabel();

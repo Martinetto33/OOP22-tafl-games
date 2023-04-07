@@ -1,5 +1,10 @@
 package taflgames.view.scenecontrollers;
 
+import java.util.Optional;
+
+import taflgames.common.Player;
+import taflgames.common.code.MatchResult;
+import taflgames.common.code.Pair;
 import taflgames.controller.Controller;
 import taflgames.view.View;
 import taflgames.view.scenes.HomeScene;
@@ -45,5 +50,27 @@ public final class GameOverControllerImpl extends AbstractBasicSceneController i
         this.getView().setScene(new UserRegistrationScene(
             new UserRegistrationControllerImpl(this.getView(), this.getController())
         ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Player> getWinner() {
+        final Optional<Pair<MatchResult, MatchResult>> result = this.getController().getMatchResult();
+        if (result.isEmpty()) {
+            throw new IllegalStateException("No match result obtained in the game over scene.");
+        }
+        final MatchResult attackerResult = result.get().getX();
+        final MatchResult defenderResult = result.get().getY();
+        if (attackerResult.equals(MatchResult.DRAW) && defenderResult.equals(MatchResult.DRAW)) {
+            return Optional.empty();
+        } else if (attackerResult.equals(MatchResult.VICTORY)) {
+            return Optional.of(Player.ATTACKER);
+        } else if (defenderResult.equals(MatchResult.VICTORY)) {
+            return Optional.of(Player.DEFENDER);
+        } else {
+            throw new IllegalStateException("Something wrong happened with the match result...");
+        }
     }
 }

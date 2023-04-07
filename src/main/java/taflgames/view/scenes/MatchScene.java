@@ -1,57 +1,85 @@
 package taflgames.view.scenes;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.Map;
-import java.util.Optional;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import taflgames.common.code.Position;
+import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.MatchSceneController;
+
 /**
- * TO DO: complete class
+ * This class implements the scene of the match.
  */
-public class MatchScene extends AbstractScene {
+public final class MatchScene extends AbstractScene {
+
     private static final String MATCH = "BATTLE!";
     private static final String GO_BACK = "Go Back";
-    private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+    private static final String UNDO = "Undo move";
+    private static final String PASS = "Pass turn";
     private static final int NUMB_CELLS_SIDE = 11;
 
-    private MatchSceneController controller;
-    private MatchPanelImpl matchState;
+    private final FontManager fontManager = AbstractScene.getFontManager();
 
-    private Optional<Position> source = Optional.empty();
-    private Optional<Position> destination = Optional.empty();
+    private final MatchSceneController controller;
+    private final MatchPanelImpl matchState;
 
+    /**
+     * Creates the match scene.
+     * @param controller the controller of the scene
+     */
     public MatchScene(final MatchSceneController controller) {
-        super(MatchScene.MATCH, Optional.of("home-background.jpeg"));
+        super(MatchScene.MATCH);
         this.controller = controller;
         final JPanel scene = super.getScene();
-        //this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Dimension screenSize = new Dimension(controller.getViewHeight(), controller.getViewWidth());
+        final Dimension screenSize = new Dimension(controller.getViewHeight(), controller.getViewWidth());
         scene.setSize(screenSize);
-        scene.setLayout(new FlowLayout());
+
+        final JPanel elementsPanel = new JPanel();
+        elementsPanel.setBackground(AbstractScene.getTransparency());
+        elementsPanel.setLayout(new BoxLayout(elementsPanel, BoxLayout.Y_AXIS));
         matchState = new MatchPanelImpl(MatchScene.NUMB_CELLS_SIDE, controller.getViewHeight());
+        matchState.setBackground(AbstractScene.getTransparency());
         matchState.setMatchController(this.controller);
-        scene.add(matchState);
-        final JPanel southPanel = new JPanel();
+        elementsPanel.add(matchState);
+
+        final JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setBackground(AbstractScene.getTransparency());
         final JButton goBackButton = new JButton(GO_BACK);
-        southPanel.add(goBackButton);
-        southPanel.setBackground(TRANSPARENT);
+        goBackButton.setFont(fontManager.getButtonFont());
+        final JButton undoButton = new JButton(UNDO);
+        undoButton.setFont(fontManager.getButtonFont());
+        final JButton passTurnButton = new JButton(PASS);
+        passTurnButton.setFont(fontManager.getButtonFont());
+
+        buttonsPanel.add(passTurnButton);
+        buttonsPanel.add(undoButton);
+        buttonsPanel.add(goBackButton);
 
         goBackButton.addActionListener((e) -> {
             this.controller.goToPreviousScene();
         });
 
-        scene.add(southPanel, FlowLayout.LEFT);
-        /*FORSE DA USARE ANCHE....
-         * drawAllPieces
-         * drawAllSpecialCells
-         * 
-         * ... per coerenza. DIPENDONO ENTRAMBI DA CONTROLLER.
-         */
-        /*da usare drawBackgroundcell insieme alle info del controller */
+        undoButton.addActionListener(e -> {
+            this.controller.undo();
+        });
+
+        passTurnButton.addActionListener(e -> {
+            if (!this.controller.passTurn()) {
+                JOptionPane.showMessageDialog(getScene(), "Cannot pass turn because "
+                    + this.controller.getPlayerInTurn().toString()
+                    + " has not made a move yet.",
+                    "No move made by current player",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        elementsPanel.add(buttonsPanel);
+        scene.add(elementsPanel);
 
         // When the match starts, cells and pieces are drawn for the first time.
         this.update();
@@ -64,49 +92,37 @@ public class MatchScene extends AbstractScene {
     public void drawAllPieces(final Map<Position, PieceImageInfo> piecesAlive) {
         this.matchState.drawAllPieces(piecesAlive);
     }
+
     /**
      * draws the special cells currently active.
      * @param cells
      */
-    public void drawAllSpecialCells(Map<Position, CellImageInfo> cells) {
+    public void drawAllSpecialCells(final Map<Position, CellImageInfo> cells) {
         this.matchState.drawAllSpecialCells(cells);
     }
+
     /**
      * draws the board in the background.
      * @param cells
      */
-    public void drawBackgroundCells(Map<Position, CellImageInfo> cells) {
+    public void drawBackgroundCells(final Map<Position, CellImageInfo> cells) {
         this.matchState.drawBackgroundCells(cells);
     }
-    /**
-     * Not used, but could turn out useful for more
-     * efficency in future versions of the game.
-     * @param originalPos
-     * @param newPosition
-     */
-    public void movePiece(Position originalPos, Position newPosition) {
-        this.matchState.movePiece(originalPos, newPosition);
-    }
+
     /**
      * unsets the icons of all jLabel-pieces on the board.
      */
     public void removeAllPiecesOnLayer() {
         this.matchState.removeAllIconsOnLayer(matchState.getMapPieces());
     }
+
     /**
      * unsets the icons of all jLabel-specialCells on the board.
      */
     public void removeAllSpecialCellsOnLayer() {
         this.matchState.removeAllIconsOnLayer(matchState.getMapSpecialCell());
     }
-    /**
-     * gives the position of the selected piece's moveset the MatchPanel
-     * has to colour.
-     */
-    public void givePositionToColour() {
-        /*utilizzato per dare le posizioni (date dal controller) che il
-        MatchPanel deve colorare.*/
-    }
+
     /**
      * updates the current state of the board by drawing only the pieces and
      * special cells that are currently active given as arguments in this method

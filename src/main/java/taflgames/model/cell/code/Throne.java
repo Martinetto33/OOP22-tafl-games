@@ -50,9 +50,12 @@ public final class Throne extends AbstractCell {
         return THRONE_TYPE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), new VectorImpl(0, 0), null);
     }
-    
+
 }

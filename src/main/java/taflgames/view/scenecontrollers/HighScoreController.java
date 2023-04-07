@@ -19,4 +19,8 @@ public interface HighScoreController extends BasicSceneController {
      */
     Map<String, Pair<Integer, Integer>> requestLeaderboard();
 
+    /**
+     * Asks the main controller to delete the file of the current Leaderboard.
+     */
+    void clearLeaderboard();
 }

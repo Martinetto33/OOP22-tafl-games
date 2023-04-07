@@ -26,7 +26,7 @@ import taflgames.view.scenes.HomeScene;
 public final class UserRegistrationControllerImpl extends AbstractBasicSceneController implements UserRegistrationController {
     private final LeaderboardSaver saver;
     private final Leaderboard leaderboard;
-    private Map<Player, MatchResult> result = null;
+    private Map<Player, MatchResult> result;
 
     /**
      * Creates a new user registration scene controller.
@@ -37,6 +37,7 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         super(view, controller);
         this.saver = new LeaderboardSaverImpl();
         this.leaderboard = this.saver.retrieveFromSave();
+        this.requestEndMatchResults();
     }
 
     /**
@@ -64,8 +65,8 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
      *{@inheritDoc}
      */
     @Override
-    public void getEndMatchResults() {
-        Optional<Pair<MatchResult, MatchResult>> matchRes = this.getController().getMatchResult();
+    public void requestEndMatchResults() {
+        final Optional<Pair<MatchResult, MatchResult>> matchRes = this.getController().getMatchResult();
         if (matchRes.isPresent()) {
             this.setEndMatchResults(matchRes.get().getX(), matchRes.get().getY());
             return;
@@ -99,4 +100,5 @@ public final class UserRegistrationControllerImpl extends AbstractBasicSceneCont
         this.leaderboard.addResult(defenderPlayer, this.result.get(Player.DEFENDER));
         this.saver.saveLeaderboard(this.leaderboard);
     }
+
 }

@@ -69,7 +69,7 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
 
     @Override
     public Map<Position, Cell> build() {
-        return this.cells;
+        return new HashMap<>(this.cells);
     }
 
 }

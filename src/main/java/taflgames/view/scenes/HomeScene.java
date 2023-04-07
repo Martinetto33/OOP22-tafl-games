@@ -1,13 +1,10 @@
 package taflgames.view.scenes;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.Optional;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -24,7 +21,6 @@ import javax.swing.JLabel;
 public class HomeScene extends AbstractScene {
 
     private static final String HOME = "Home";
-    private static final String BG_FILENAME = "home-background.jpeg";
     private static final String GAME_TITLE = "TAFL GAMES";
     private static final int TITLE_SIZE = 100;
     private static final String PLAY = "Play";
@@ -46,47 +42,50 @@ public class HomeScene extends AbstractScene {
      */
     public HomeScene(final HomeSceneController controller) {
 
-        super(HOME, Optional.of(BG_FILENAME));
+        super(HOME);
 
         this.controller = controller;
-        this.buttonDimension = new Dimension((int) (this.controller.getViewWidth() / WIDTH_RATIO),
-                                            (int) (this.controller.getViewHeight() / HEIGHT_RATIO));
+        this.buttonDimension = new Dimension(
+            (int) (this.controller.getViewWidth() / WIDTH_RATIO),
+            (int) (this.controller.getViewHeight() / HEIGHT_RATIO)
+        );
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultInsets()));
 
         final GridBagConstraints gbc = new GridBagConstraints();
 
         final JPanel titlePanel = new JPanel();
         final JLabel titleLabel = new JLabel(GAME_TITLE);
         titleLabel.setFont(fontManager.getModifiedFont(TITLE_SIZE, Font.PLAIN));
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setForeground(AbstractScene.getLabelTextColor());
         titlePanel.setBackground(AbstractScene.getTransparency());
         titlePanel.add(titleLabel);
 
         final JPanel buttonsPanel = new JPanel(new GridBagLayout());
         buttonsPanel.setBackground(AbstractScene.getTransparency());
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = AbstractScene.getDefaultInsets();
         gbc.ipadx = (int) (this.controller.getViewWidth() * BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * BTN_HEIGHT_PROP);
+
         final JButton playButton = new JButton(PLAY);
         playButton.setFont(fontManager.getButtonFont());
-        this.setButtonFixedDimension(playButton);
+        playButton.setPreferredSize(this.buttonDimension);
         buttonsPanel.add(playButton, gbc);
+
         final JButton highScoreButton = new JButton(HIGH_SCORE);
         highScoreButton.setFont(fontManager.getButtonFont());
-        this.setButtonFixedDimension(highScoreButton);
+        highScoreButton.setPreferredSize(this.buttonDimension);
         buttonsPanel.add(highScoreButton, gbc);
+
         final JButton exitButton = new JButton(EXIT);
         exitButton.setFont(fontManager.getButtonFont());
-        this.setButtonFixedDimension(exitButton);
+        exitButton.setPreferredSize(this.buttonDimension);
         buttonsPanel.add(exitButton, gbc);
 
-        playButton.addActionListener((e) -> {
-            this.controller.goToNextScene();
-        });
+        playButton.addActionListener((e) -> this.controller.goToNextScene());
 
         highScoreButton.addActionListener((e) -> this.controller.goToHighScoreScene());
 
@@ -94,10 +93,6 @@ public class HomeScene extends AbstractScene {
 
         scene.add(titlePanel, BorderLayout.NORTH);
         scene.add(buttonsPanel, BorderLayout.CENTER);
-    }
-
-    private void setButtonFixedDimension(final JButton button) {
-        button.setPreferredSize(this.buttonDimension);
     }
 
 }

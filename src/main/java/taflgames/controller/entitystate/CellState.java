@@ -18,7 +18,8 @@ public interface CellState {
     /**
      * @return the rotation of this cell on the board.
      */
-    Vector getOrientation();
+    Vector getOrientation(); // NOPMD
+    // The Vector class models a vector and provides features that a List does not support.
 
     /**
      * @return the Player associated with this cell (useful

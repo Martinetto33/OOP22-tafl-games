@@ -2,6 +2,9 @@ package taflgames.model.cell.code;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
@@ -12,6 +15,8 @@ import taflgames.controller.entitystate.CellStateImpl;
 import taflgames.model.pieces.api.Piece;
 import taflgames.model.cell.api.Cell;
 import taflgames.model.cell.api.SliderMediator;
+import taflgames.model.memento.api.CellComponentMemento;
+import taflgames.model.memento.api.CellMemento;
 import taflgames.model.board.api.Board;
 import taflgames.model.cell.api.Slider;
 
@@ -20,11 +25,11 @@ import taflgames.model.cell.api.Slider;
  */
 public final class SliderImpl extends AbstractCell implements Slider {
 
-    // Un versore che indica la direzione in cui questo slider punta
+    // A versor that indicates the direction of the sliding
     private Vector orientation = new VectorImpl(0, 1);  // NOPMD
     // The Vector class models a vector and provides features that a List does not support.
 
-    private boolean triggered; //dice se è già stata attivata in questo turno
+    private boolean triggered; // indicates if the slider has already been activated in this turn
     private SliderMediator mediator;
     private final Position sliderPos;
     private int lastActivityTurn;
@@ -64,8 +69,9 @@ public final class SliderImpl extends AbstractCell implements Slider {
     ) {
         if (this.sliderPos.equals(source) && !this.triggered && this.active) {
             this.triggered = true;
+            Objects.requireNonNull(this.mediator);
             final Position newPosition = this.mediator.requestMove(source, this.orientation);
-            /*Trovo la casella più lontana su cui ci si possa spostare seguendo la direzione del vettore orientamento */
+            // Find the furthest reachable cell in the direction defined by the orrientation of the slider
             this.mediator.updatePiecePos(this.sliderPos, newPosition, movedPiece.getPlayer());
 
             if (movedPiece.getCurrentPosition().equals(this.sliderPos)) {
@@ -120,12 +126,101 @@ public final class SliderImpl extends AbstractCell implements Slider {
      * {@inheritDoc}
      */
     @Override
-    public Vector getOrientation() {
+    public Vector getOrientation() {    // NOPMD
+        // The Vector class models a vector and provides features that a List does not support.
         return this.orientation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return new CellStateImpl(this.getType(), this.getOrientation(), null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CellMemento save() {
+        return this.new SliderMementoImpl(super.getCellComponents().stream()
+                    .map(component -> component.saveComponentState())
+                    .collect(Collectors.toUnmodifiableSet()),
+                super.getJustAddedComponents().stream()
+                    .map(component -> component.saveComponentState())
+                    .collect(Collectors.toUnmodifiableSet()),
+                super.isFree());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void restore(final CellMemento cm) {
+        super.restore(cm);
+    }
+
+    /**
+     * A class modelling a CellMemento for a Slider. Its methods override the
+     * onews of Abstract Cell, since Sliders have additional fields
+     * that need to be restored and saved. 
+     */
+    public class SliderMementoImpl implements CellMemento {
+
+        private final boolean innerTriggered; //dice se è già stata attivata in questo turno
+        private final int innerLastActivityTurn;
+        private final boolean innerActive;
+        private final boolean innerCellStatus;
+        private final Set<CellComponentMemento> innerComponents;
+        private final Set<CellComponentMemento> innerJustAddedComponents;
+
+        /**
+         * Builds a new SliderMementoImpl.
+         * @param components the Set of all the {@link taflgames.model.cell.api.CellComponent} attached
+         * to this Cell.
+         * @param justAddedComponents the Set of all the {@link taflgames.model.cell.api.CellComponent}
+         * that were attached this turn.
+         * @param cellStatus the status of this Cell (true if this Cell is free, false if it is occupied).
+         */
+        public SliderMementoImpl(final Set<CellComponentMemento> components,
+                                 final Set<CellComponentMemento> justAddedComponents, final boolean cellStatus) {
+            this.innerTriggered = SliderImpl.this.triggered;
+            this.innerLastActivityTurn = SliderImpl.this.lastActivityTurn;
+            this.innerActive = SliderImpl.this.active;
+            this.innerComponents = components.stream().collect(Collectors.toUnmodifiableSet());
+            this.innerJustAddedComponents = justAddedComponents.stream().collect(Collectors.toUnmodifiableSet());
+            this.innerCellStatus = cellStatus;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void restore() {
+            SliderImpl.this.restore(this);
+            SliderImpl.this.active = this.innerActive;
+            SliderImpl.this.lastActivityTurn = this.innerLastActivityTurn;
+            SliderImpl.this.triggered = this.innerTriggered;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean getCellStatus() {
+            return this.innerCellStatus;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<CellComponentMemento> getComponentMementos() {
+            if (!this.innerJustAddedComponents.isEmpty()) {
+                this.innerComponents.removeAll(this.innerJustAddedComponents);
+            }
+            return this.innerComponents.stream().toList();
+        }
     }
 }

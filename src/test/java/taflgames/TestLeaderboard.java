@@ -2,8 +2,6 @@ package taflgames;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +49,8 @@ class TestLeaderboard {
         assertEquals(TestLeaderboard.MAP_SIZE, TestLeaderboard.EXPECTED_RESULTS.size());
         TestLeaderboard.sampleLeaderboard = new LeaderBoardImpl();
 
-        for (final var playerName : TestLeaderboard.EXPECTED_RESULTS.keySet()) {
+        for (final var result : TestLeaderboard.EXPECTED_RESULTS.entrySet()) {
+            final String playerName = result.getKey();
             final List<MatchResult> a = new ArrayList<>();
             /*In case the player has 0 victories and 0 losses, and they have never
              * been registered before, it is assumed that their first match or streak
@@ -117,12 +116,12 @@ class TestLeaderboard {
     @Test
     void testSave() {
         final LeaderboardSaver saver = new LeaderboardSaverImpl();
-        saver.setPath(saver.getTestPath()); //working directory of test classes differs from the one of the main classes
+        //saver.setPath(saver.getTestPath()); //working directory of test classes differs from the one of the main classes
         saver.saveLeaderboard(TestLeaderboard.sampleLeaderboard);
         Leaderboard sixElementsLeaderboard = saver.retrieveFromSave();
         assertEquals(TestLeaderboard.MAP_SIZE, sixElementsLeaderboard.getLeaderboard().size());
         sixElementsLeaderboard.addResult("Fenrir", MatchResult.DEFEAT);
-        sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
+        sixElementsLeaderboard.saveToFile(saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
         assertTrue(sixElementsLeaderboard.getLeaderboard().containsKey("Fenrir"));
         /* The clear method empties the results map, so an empty map will be saved to file.
@@ -132,7 +131,7 @@ class TestLeaderboard {
          */
         sixElementsLeaderboard.clearLeaderboard();
         assertEquals(TestLeaderboard.MAP_SIZE, TestLeaderboard.EXPECTED_RESULTS.size());
-        sixElementsLeaderboard.saveToFile(saver.getTestPath(), saver);
+        sixElementsLeaderboard.saveToFile(saver);
         sixElementsLeaderboard = saver.retrieveFromSave();
         assertEquals(0, sixElementsLeaderboard.getLeaderboard().size());
     }
@@ -140,15 +139,11 @@ class TestLeaderboard {
     /**
      * Tests the behaviour of the application if no save file is found and "retrieveFromSave()"
      * is actually called.
-     * @throws IOException
      */
     @Test
-    void testIfNoSaveFileExists() throws IOException {
+    void testIfNoLeaderboardExists() {
         final LeaderboardSaver l = new LeaderboardSaverImpl();
-        final File file = new File(l.getTestPath());
-        if (file.exists() && file.isFile() && !file.delete()) {
-            throw new IOException("The file at " + l.getTestPath() + " could not be deleted.");
-        }
+        l.saveLeaderboard(new LeaderBoardImpl());
         final Leaderboard lead = l.retrieveFromSave();
         assertTrue(lead.getLeaderboard().isEmpty());
     }

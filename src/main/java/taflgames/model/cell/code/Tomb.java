@@ -18,9 +18,9 @@ import taflgames.model.pieces.api.Piece;
 import taflgames.common.Player;
 
 /**
- * This class models a Tomb, a special cell that appears when a piece dies.
- * When a Queen is adjacent to this cell she resurrect 
- * the last piece of the Player in turn that died on the tomb.
+ * The Tomb is a particular entity that can contain dead pieces of both teams.
+ * Only Queens can interact with them, spawning back an allied Piece if they
+ * land to a cell adjacent to the Tomb.
  */
 public final class Tomb extends AbstractCell implements CellComponent {
 
@@ -71,7 +71,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
         /* Controls if on the tomb there are any dead pieces of the current player */
         if (this.deadPieces.get(player) != null && !deadPieces.get(player).isEmpty()) {
             final Piece pieceToResume = deadPieces.get(player).poll();    // get the first piece in the queue
-            pieceToResume.reanimate();	// resurrect the piece, now it's alive
+            pieceToResume.reanimate();  // resurrect the piece, now it's alive
             cells.get(pieceToResume.getCurrentPosition()).setFree(false);
             pieces.get(player).put(pieceToResume.getCurrentPosition(), pieceToResume);
         }
@@ -123,6 +123,9 @@ public final class Tomb extends AbstractCell implements CellComponent {
         return TOMB_TYPE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CellMemento save() {
         return this.new TombMementoImpl();
@@ -136,18 +139,39 @@ public final class Tomb extends AbstractCell implements CellComponent {
         return this.new TombMementoImpl();
     }
 
+    /**
+     * Restores the state of this Tomb.
+     * @param tm the {@link taflgames.model.cell.code.Tomb.TombMementoImpl}
+     * containing the information about the previous state of this Tomb.
+     */
     public void restore(final TombMementoImpl tm) {
-        this.deadPieces = tm.getInnerDeadPieces();
+        this.deadPieces = tm.getInnerDeadPieces().entrySet().stream()
+            .map(entry -> {
+                /* This longer lambda creates a deep copy of the Queues, to
+                * ensure that modifications of the state of the match do not
+                * affect this snapshot of the queued dead pieces.
+                */
+                final Queue<Piece> queue = new LinkedList<>();
+                entry.getValue().stream().forEachOrdered(piece -> queue.add(piece));
+                return Map.entry(entry.getKey(), queue);
+            })
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         super.restore(tm);
     }
 
+    /**
+     * A class modelling a Memento for a Tomb.
+     */
     public final class TombMementoImpl implements CellMemento, CellComponentMemento {
         private final Map<Player, Queue<Piece>> innerDeadPieces;
         private final boolean isFree;
 
+        /**
+         * Builds a new TombMementoImpl that stores the state of a Tomb.
+         */
         public TombMementoImpl() {
             /* This way of copying maps should create a deep copy. */
-            this.innerDeadPieces = Tomb.this.deadPieces.entrySet().stream()
+            this.innerDeadPieces = Map.copyOf(Tomb.this.deadPieces).entrySet().stream()
                 .map(entry -> {
                     /* This longer lambda creates a deep copy of the Queues, to
                      * ensure that modifications of the state of the match do not
@@ -161,20 +185,33 @@ public final class Tomb extends AbstractCell implements CellComponent {
             this.isFree = Tomb.this.isFree();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void restore() {
             Tomb.this.restore(this);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean getCellStatus() {
             return this.isFree;
         }
 
+        /**
+         * Returns the dead pieces as they were at the moment of the save.
+         * @return a Map of dead pieces associated to their teams.
+         */
         public Map<Player, Queue<Piece>> getInnerDeadPieces() {
-            return this.innerDeadPieces;
+            return Map.copyOf(this.innerDeadPieces);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public List<CellComponentMemento> getComponentMementos() {
             return Collections.emptyList();
@@ -226,7 +263,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
      * The case of the Tomb is managed directly in the AbstractCell.
      */
     @Override
-    public final CellState getSubclassCellState() {
+    public CellState getSubclassCellState() {
         return null;
     }
 }

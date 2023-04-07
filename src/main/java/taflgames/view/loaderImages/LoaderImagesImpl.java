@@ -38,13 +38,15 @@ public class LoaderImagesImpl implements LoaderImages {
     private static final String CELL_TOMB_NEUTRAL = "CELL_TOMB_NEUTRAL.png";
     private static final String CELL_TOMB_ATTACKERS = "CELL_TOMB_ATTACKERS.png";
     private static final String CELL_TOMB_DEFENDERS = "CELL_TOMB_DEFENDERS.png";
+
+    private static final String CELL_SLIDER_NAME = "CELL_SLIDER";
+
     private static final String SEP = System.getProperty("file.separator");
     private static final String ROOT = "taflgames" + SEP + "images" + SEP;
 
     private static final int ANGLE_90 = 90;
     private static final int ANGLE_180 = 180;
     private static final int ANGLE_270 = 270;
-
 
     private final int unitToScale;
     private final Map<CellImageInfo, ImageIcon> cellImages = new HashMap<>();
@@ -65,19 +67,36 @@ public class LoaderImagesImpl implements LoaderImages {
      */
     @Override
     public void loadCellsImages() {
-        this.cellImages.put(new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)), getImage(CELL_BASIC));
-        this.cellImages.put(new CellImageInfo("CELL_EXIT", null, new VectorImpl(0, 0)), getImage(CELL_EXIT));
-        this.cellImages.put(new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, -1)), getImage(CELL_SLIDER));
         this.cellImages.put(
-            new CellImageInfo("CELL_SLIDER", null, new VectorImpl(-1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_90));
+            new CellImageInfo("CELL_BASIC", null, new VectorImpl(0, 0)), getImage(CELL_BASIC)
+        );
         this.cellImages.put(
-            new CellImageInfo("CELL_SLIDER", null, new VectorImpl(0, 1)), rotateImage(getImage(CELL_SLIDER), ANGLE_180));
+            new CellImageInfo("CELL_EXIT", null, new VectorImpl(0, 0)), getImage(CELL_EXIT)
+        );
         this.cellImages.put(
-            new CellImageInfo("CELL_SLIDER", null, new VectorImpl(1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_270));
-        this.cellImages.put(new CellImageInfo("CELL_THRONE", null, new VectorImpl(0, 0)), getImage(CELL_THRONE));
-        this.cellImages.put(new CellImageInfo("CELL_TOMB", null, new VectorImpl(0, 0)), getImage(CELL_TOMB_NEUTRAL));
-        this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.ATTACKER, new VectorImpl(0, 0)), getImage(CELL_TOMB_ATTACKERS));
-        this.cellImages.put(new CellImageInfo("CELL_TOMB", Player.DEFENDER, new VectorImpl(0, 0)), getImage(CELL_TOMB_DEFENDERS));
+            new CellImageInfo(CELL_SLIDER_NAME, null, new VectorImpl(0, -1)), getImage(CELL_SLIDER)
+        );
+        this.cellImages.put(
+            new CellImageInfo(CELL_SLIDER_NAME, null, new VectorImpl(-1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_90)
+        );
+        this.cellImages.put(
+            new CellImageInfo(CELL_SLIDER_NAME, null, new VectorImpl(0, 1)), rotateImage(getImage(CELL_SLIDER), ANGLE_180)
+        );
+        this.cellImages.put(
+            new CellImageInfo(CELL_SLIDER_NAME, null, new VectorImpl(1, 0)), rotateImage(getImage(CELL_SLIDER), ANGLE_270)
+        );
+        this.cellImages.put(
+            new CellImageInfo("CELL_THRONE", null, new VectorImpl(0, 0)), getImage(CELL_THRONE)
+        );
+        this.cellImages.put(
+            new CellImageInfo("CELL_TOMB", null, new VectorImpl(0, 0)), getImage(CELL_TOMB_NEUTRAL)
+        );
+        this.cellImages.put(
+            new CellImageInfo("CELL_TOMB", Player.ATTACKER, new VectorImpl(0, 0)), getImage(CELL_TOMB_ATTACKERS)
+        );
+        this.cellImages.put(
+            new CellImageInfo("CELL_TOMB", Player.DEFENDER, new VectorImpl(0, 0)), getImage(CELL_TOMB_DEFENDERS)
+        );
     }
 
     /**
@@ -115,7 +134,7 @@ public class LoaderImagesImpl implements LoaderImages {
      */
     @Override
     public Map<CellImageInfo, ImageIcon> getCellImageMap() {
-        return cellImages;
+        return new HashMap<>(cellImages);
     }
 
     /**
@@ -123,7 +142,7 @@ public class LoaderImagesImpl implements LoaderImages {
      */
     @Override
     public Map<PieceImageInfo, ImageIcon> getPieceImageMap() {
-        return pieceImages;
+        return new HashMap<>(pieceImages);
     }
 
     /**
@@ -133,11 +152,11 @@ public class LoaderImagesImpl implements LoaderImages {
      * @return am ImageIcon of the rotated image.
      */
     private ImageIcon rotateImage(final ImageIcon originalImg, final int rotation) {
-        final BufferedImage blankCanvas = new BufferedImage(originalImg.getIconWidth(), 
-                                                        originalImg.getIconHeight(), 
-                                                        BufferedImage.SCALE_SMOOTH);
+        final BufferedImage blankCanvas = new BufferedImage(
+                originalImg.getIconWidth(), originalImg.getIconHeight(), BufferedImage.SCALE_SMOOTH
+            );
         final Graphics2D g2 = (Graphics2D) blankCanvas.getGraphics();
-        g2.rotate(Math.toRadians(rotation), originalImg.getIconWidth() / 2, originalImg.getIconHeight() / 2);
+        g2.rotate(Math.toRadians(rotation), (double) originalImg.getIconWidth() / 2, (double) originalImg.getIconHeight() / 2);
         g2.drawImage(originalImg.getImage(), 0, 0, null);
         originalImg.setImage(blankCanvas);
         return new ImageIcon(originalImg.getImage());

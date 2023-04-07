@@ -1,6 +1,6 @@
 package taflgames;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import taflgames.model.pieces.api.Piece;
@@ -34,17 +34,17 @@ class TestCell {
 
     private static final int DEFAULT_BOARD_SIZE = 5;
 
-    private static AbstractCell classic;
-    private static AbstractCell exit;
-    private static AbstractCell slider;
-    private static AbstractCell throne;
-    private static AbstractCell tomb;
+    private AbstractCell classic;
+    private AbstractCell exit;
+    private AbstractCell slider;
+    private AbstractCell throne;
+    private AbstractCell tomb;
 
     /**
-     * Initializes a board before the first test.
+     * Initialize a cell for each cell's type of the game before each test.
      */
-    @BeforeAll
-    static void init() {
+    @BeforeEach
+    void init() {
         classic = new ClassicCell();
         exit = new Exit();
         slider = new SliderImpl(new Position(1, 1));

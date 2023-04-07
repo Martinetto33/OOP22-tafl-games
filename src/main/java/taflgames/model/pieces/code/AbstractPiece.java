@@ -27,14 +27,14 @@ public abstract class AbstractPiece implements Piece {
     /**
      * {@inheritDoc}.
      */
-    public FactoryBehaviourTypeOfPiece getFactory() {
+    public final FactoryBehaviourTypeOfPiece getFactory() {
         return this.factory;
     }
     /**
      * {@inheritDoc}.
      */
     @Override
-    public BehaviourTypeOfPiece getMyType() {
+    public final BehaviourTypeOfPiece getMyType() {
         return myType;
     }
     /**
@@ -56,7 +56,7 @@ public abstract class AbstractPiece implements Piece {
          */
         public PieceMementoImpl() {
             this.backupCurrentNumbOfLives = AbstractPiece.this.currentNumbOfLives;
-            this.backupPosition = AbstractPiece.this.currentPosition;
+            this.backupPosition = new Position(AbstractPiece.this.currentPosition);
         }
         /**
         * {@inheritDoc}.

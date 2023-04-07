@@ -5,9 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -25,7 +23,6 @@ import javax.swing.JOptionPane;
 public class GameChoiceScene extends AbstractScene {
 
     private static final String GAME_CHOICE = "Game Choice";
-    private static final String BG_FILENAME = "home-background.jpeg";
     private static final String HEADER = "Choose the game mode";
     private static final float HEADER_FONT_SIZE = 30.0f;
     private static final String PLAY_CLASSIC_MODE = "Play Classic Mode";
@@ -47,13 +44,13 @@ public class GameChoiceScene extends AbstractScene {
      */
     public GameChoiceScene(final GameChoiceSceneController controller) {
 
-        super(GAME_CHOICE, Optional.of(BG_FILENAME));
+        super(GAME_CHOICE);
 
         this.controller = controller;
 
         final JPanel scene = super.getScene();
         scene.setLayout(new BorderLayout());
-        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultBorderInsets()));
+        scene.setBorder(new EmptyBorder(AbstractScene.getDefaultInsets()));
 
         final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -71,7 +68,7 @@ public class GameChoiceScene extends AbstractScene {
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = AbstractScene.getDefaultInsets();
         gbc.ipadx = (int) (this.controller.getViewWidth() * MAIN_BTN_WIDTH_PROP);
         gbc.ipady = (int) (this.controller.getViewHeight() * MAIN_BTN_HEIGHT_PROP);
         final JButton playClassicButton = new JButton(PLAY_CLASSIC_MODE);

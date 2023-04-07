@@ -10,17 +10,30 @@ import javax.swing.JPanel;
 
 import taflgames.view.scenes.MatchPanelImpl;
 
-public class TestViewMatchPannel extends JFrame{
-    private static final long serialVersionUID = -6218820567019985015L;
-    public TestViewMatchPannel(int sizeFrame) {
+/**
+ * This class allows to test if the board and its elements are drawn correctly
+ * according to the mappings given by {@link EntitiesToDraw}.
+ */
+public class TestViewMatchPannel extends JFrame {
+
+    public static final long serialVersionUID = 2L;
+
+    private static final int BOARD_SIZE = 11;
+
+    /**
+     * Creates a frame that shows how the board and its elements are drawn
+     * according to the given mappings.
+     */
+    public TestViewMatchPannel() {
+
         this.setLayout(new FlowLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(screenSize);
-        Double scrensizeHight = screenSize.getHeight();
-        MatchPanelImpl a = new MatchPanelImpl(11, scrensizeHight.intValue());
+        final Double scrensizeHight = screenSize.getHeight();
+        final MatchPanelImpl a = new MatchPanelImpl(BOARD_SIZE, scrensizeHight.intValue());
         this.add(a);
-        EntitiesToDraw toDraw = new EntitiesToDrawImpl();
+        final EntitiesToDraw toDraw = new EntitiesToDrawImpl();
         toDraw.createPiecesAlive();
         toDraw.createBackgroundCells();
         toDraw.createSpecialCells();
@@ -33,8 +46,15 @@ public class TestViewMatchPannel extends JFrame{
         southPanel.add(goBackButton);
         this.add(southPanel, FlowLayout.LEFT);
         this.setVisible(true);
+
     }
-    public static void main(String[] args) throws java.io.IOException {
-        new TestViewMatchPannel(11); 
+
+    /**
+     * Creates the frame to test the drawing of the board and its elements.
+     * @param args unused
+     */
+    public static void main(final String[] args) {
+        new TestViewMatchPannel(); 
     }
+
 }

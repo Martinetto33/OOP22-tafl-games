@@ -3,6 +3,7 @@ package taflgames.view.scenecontrollers;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.controller.Controller;
 import taflgames.controller.mapper.CellImageMapper;
@@ -16,6 +17,9 @@ import taflgames.view.scenes.HomeScene;
 import taflgames.view.scenes.MatchScene;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * This class implements a scene controller for a {@link taflgames.view.scenes.MatchScene}.
+ */
 public final class MatchSceneControllerImpl extends AbstractBasicSceneController implements MatchSceneController {
 
     /* The controller has a reference to a Match Scene in order to update it when
@@ -24,12 +28,16 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     private final MatchScene matchScene;
     private final PieceImageMapper pieceMapper = new PieceTypeMapper();
     private final CellImageMapper cellMapper = new CellTypeMapper();
-    
-    protected MatchSceneControllerImpl(final View view, final Controller controller) {
+    private boolean wasMoveDone;
+
+    /**
+     * Creates a new match scene controller.
+     * @param view the view of the application
+     * @param controller the main controller of the application
+     */
+    public MatchSceneControllerImpl(final View view, final Controller controller) {
         super(view, controller);
         this.matchScene = new MatchScene(this);
-        //this.pieceMapper = new PieceTypeMapper();
-        //this.cellMapper = new CellTypeMapper();
     }
 
     @Override
@@ -62,13 +70,21 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     }
 
     @Override
-    public boolean isSourceSelectionValid(Position pos) {
+    public boolean isSourceSelectionValid(final Position pos) {
         return this.getController().isStartingPointValid(pos);
     }
 
     @Override
-    public boolean moveIfLegal(Position source, Position destination) {
-        return this.getController().moveIfLegal(source, destination);
+    public boolean moveIfLegal(final Position source, final Position destination) {
+        if (this.wasMoveDone) {
+            return false;
+        } else {
+            final boolean isMoveLegal = this.getController().moveIfLegal(source, destination);
+            if (isMoveLegal) {
+                this.wasMoveDone = true;
+            }
+            return isMoveLegal;
+        }
     }
 
     @Override
@@ -79,6 +95,38 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     @Override
     public boolean isMatchOver() {
         return this.getController().isOver();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void undo() {
+        this.getController().undo();
+        this.wasMoveDone = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean passTurn() {
+        if (!this.wasMoveDone) {
+            /* Cannot pass before a move was done. */
+            return false;
+        }
+        this.getController().passTurn();
+        this.wasMoveDone = false;
+        this.updateView();
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getPlayerInTurn() {
+        return this.getController().getCurrentPlayer();
     }
 
 }
