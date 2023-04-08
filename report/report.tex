@@ -98,7 +98,7 @@ La \texttt{View} si occupa del rendering grafico delle varie schermate dell'appl
 
 L'utente deve avere la possibilità di annullare la propria mossa, indipendentemente dal numero di eventi che questa ha causato, e lo stato della partita a seguito di un annullamento deve tornare precisamente alla situazione precedente. Mentre per la modalità classica questo compito è relativamente facile poiché a variare sulla \texttt{Board} sono solo la collocazione delle pedine ed il loro numero in seguito a delle mangiate, nella modalità variante intervengono più elementi oltre a questi, come ad esempio le \textbf{tombe} ed il loro contenuto, gli \textbf{sliders} ed il loro orientamento, movimenti articolati come quello degli \textbf{swappers} e così via.
 
-In ottica di estensibilità e nel rispetto del \textit{single-responsibility principle}, si rende necessario semplificare il più possibile il compito dell'unità responsabile dell'annullamento, evitando che questa sia a conoscenza dei dettagli interni di ciascuna delle entità da ripristinare ad uno stato precedente. Un altro importante problema è dato dal fatto che a ciascuna entità di cui si vuole salvare lo stato sia poi assegnato correttamente il \textit{proprio} stato. Infatti, essendo presenti molteplici entità concettualmente simili (ad esempio, varie \texttt{Piece} e varie \texttt{Cell}), è importante organizzare gli elementi che comporranno lo stato salvato (uno \textbf{snapshot}) in maniera da riuscire ad attribuire poi a ciascuna entità il proprio stato precedente.
+In ottica di estensibilità e nel rispetto del \textit{single-responsibility principle}, si rende necessario semplificare il più possibile il compito dell'unità responsabile dell'annullamento, evitando che questa sia a conoscenza dei dettagli interni di ciascuna delle entità da ripristinare ad uno stato precedente. Un altro importante problema è dato dal fatto che a ciascuna entità di cui si vuole salvare lo stato si deve poi assegnare correttamente il \textit{proprio} stato. Infatti, essendo presenti molteplici entità concettualmente simili (ad esempio, varie \texttt{Pieces} e varie \texttt{Cells}), è importante organizzare gli elementi che comporranno lo stato salvato (uno \textbf{snapshot}) in maniera da riuscire ad attribuire poi a ciascuna entità il proprio stato precedente.
 
 Infine, l'annullamento riguarda lo stato dell'intera partita, perciò tutte le entità principali (\texttt{Match}, \texttt{Board}, \texttt{Piece} e \texttt{Cell}) devono essere ripristinate in maniera sequenziale, facendo attenzione a non creare conflitti o paradossi (del tipo, ripristinare correttamente celle e pedine sulla griglia, ma non permettere più al giocatore di turno di riprovare con una nuova mossa perché il turno non viene ripristinato).
 
@@ -111,9 +111,9 @@ Infine, l'annullamento riguarda lo stato dell'intera partita, perciò tutte le e
 
 \textbf{Problema:} salvare lo stato di molteplici entità in un contenitore centrale su cui sia semplice operare, in una maniera indipendente dal contenuto delle entità e in modo tale da poter associare a ciascuna entità il proprio stato salvato. Il processo deve essere il più automatico possibile, in quanto ripristinare lo stato su ciascuna singola entità "manualmente" è estremamente brigoso a livello di chiamate di codice e può causare errori facilmente.
 \\\\
-\textbf{Soluzione:} si è adottato un sistema che riprende molti concetti del pattern Memento nella sua variante che sfrutta le Inner Classes del linguaggio Java, come visibile nella figura \ref{images:memento}. Tali Inner Classes sono pubbliche e per loro natura hanno accesso ai campi, anche privati, della Outer Class che le contiene. La variazione rispetto al pattern tuttavia consiste nel fatto che la chiamata al metodo di ripristino \texttt{restore()} non avviene sull'Originator (ossia l'entità che ha generato lo stato salvato, chiamato da qui in poi \textbf{"memento"}), ma sul memento stesso. Il vantaggio di questo approccio è che il memento, che altro non è che un'istanza di una Inner Class, ha sempre un riferimento alla Outer Class che lo ha generato. In questa maniera il Caretaker, cioè l'entità con lo scopo di mantenere lo storico dei memento, \textbf{non deve preoccuparsi di fare l'associazione fra ogni memento e l'entità che lo ha creato.}
+\textbf{Soluzione:} si è adottato un sistema che riprende molti concetti del \textbf{pattern Memento} nella sua variante che sfrutta le Inner Classes del linguaggio Java, come visibile nella figura \ref{images:memento}. Tali Inner Classes sono pubbliche e per loro natura hanno accesso ai campi, anche privati, della Outer Class che le contiene. La variazione rispetto al pattern tuttavia consiste nel fatto che la chiamata al metodo di ripristino \texttt{restore()} non avviene sull'Originator (ossia l'entità che ha generato lo stato salvato, chiamato da qui in poi \textbf{"memento"}), ma sul memento stesso. Il vantaggio di questo approccio è che il memento, che altro non è che un'istanza di una Inner Class, ha sempre un riferimento alla Outer Class che lo ha generato. In questa maniera il Caretaker, cioè l'entità con lo scopo di mantenere lo storico dei memento, \textbf{non deve preoccuparsi di fare l'associazione fra ogni memento e l'entità che lo ha creato.}
 
-Per quanto riguarda il ripristino delle entità nel corretto ordine, i vari memento sono stati composti fra di loro; in altre parole, a livello più basso ci sono i \texttt{CellMemento} e i \texttt{PieceMemento} che contengono, salvo eccezioni, soltanto informazioni sullo stato delle entità a cui si riferiscono; il \texttt{BoardMemento} contiene una collezione di \texttt{CellMemento} e \texttt{PieceMemento} oltre alle informazioni rilevanti sullo stato della \texttt{Board}, e infine il \texttt{MatchMemento} contiene un \texttt{BoardMemento}. Per salvare lo stato di una partita si crea un oggetto \texttt{CaretakerImpl}, il quale implementa l'interfaccia \texttt{Caretaker} e mantiene un riferimento ad una partita, e si chiama su di esso il metodo \texttt{updateHistory()}. Questo genera una catena di chiamate ai vari metodi pubblici \texttt{save()} delle entità che costituiscono il modello del dominio, e il risultato finale sarà un semplice \texttt{MatchMemento} che verrà conservato all'interno di uno stack (inteso come la struttura dati) nel CaretakerImpl. Per l'annullamento della mossa, sarà sufficiente chiamare il metodo \texttt{undo()} del Caretaker, che causerà la chiamata ai vari metodi \texttt{restore()} dei memento.
+Per quanto riguarda il ripristino delle entità nel corretto ordine, i vari memento sono stati composti fra di loro; in altre parole, a livello più basso ci sono i \texttt{CellMemento} e i \texttt{PieceMemento} che contengono, salvo eccezioni, soltanto informazioni sullo stato delle entità a cui si riferiscono; il \texttt{BoardMemento} contiene una collezione di \texttt{CellMemento} e \texttt{PieceMemento} oltre alle informazioni rilevanti sullo stato della \texttt{Board}, e infine il \texttt{MatchMemento} contiene un \texttt{BoardMemento}. Per salvare lo stato di una partita si crea un oggetto \texttt{CaretakerImpl}, il quale implementa l'interfaccia \texttt{Caretaker} e mantiene un riferimento ad una partita, e si chiama su di esso il metodo \texttt{updateHistory()}. Questo genera una catena di chiamate ai vari metodi pubblici \texttt{save()} delle entità che costituiscono il modello del dominio, e il risultato finale sarà un semplice \texttt{MatchMemento} che verrà conservato all'interno di uno Stack (inteso come la struttura dati) nel CaretakerImpl. Per l'annullamento della mossa, sarà sufficiente chiamare il metodo \texttt{undo()} del Caretaker, che causerà la chiamata ai vari metodi \texttt{restore()} dei memento.
 \\\\
 Questo sistema semplificato di salvataggio degli stati della partita può essere ulteriormente espanso, portando potenzialmente alla creazione di replay che siano costituiti dal semplice susseguirsi ordinato dei MatchMemento. Al momento l'applicazione consente di tornare indietro soltanto di una mossa, per due motivi:
 \begin{itemize}
@@ -125,7 +125,7 @@ Questo sistema semplificato di salvataggio degli stati della partita può essere
 
 Si vuole tenere traccia dei risultati dei giocatori, costruendo una classifica che mostri il nome di ogni giocatore che abbia voluto registrare il risultato di una partita ed il risultato ottenuto. Tale classifica, anche denominata \textbf{leaderboard}, deve essere ordinata in base al numero di vittorie ottenute; nel caso in cui ci siano dei pareggi fra giocatori, l'ordinamento avviene considerando il numero di sconfitte (chi ne ha subite di meno avrà il posto in classifica più alto). I giocatori non avranno dei profili veri e propri, ma saranno identificati semplicemente da un nickname non vuoto che inseriranno al termine di ogni partita di cui vorranno registrare il risultato. La leaderboard deve anche poter essere svuotata. La leaderboard costituisce un dato persistente, che dunque andrà salvato su file.
 \\\\
-Per effettuare il salvataggio su file è stata utilizzata la libreria esterna \textbf{SnakeYaml} (vedi documentazione \href{https://bitbucket.org/snakeyaml/snakeyaml/wiki/Documentation}{qui}), in quanto le associazioni fra giocatori e punteggi erano facilmente rappresentabili da una Map e la sintassi di Yaml consentiva un facile passaggio da e su file. Un problema riscontrato in questa fase è stato quello di trovarsi alle prese con il salvataggio di oggetti generici \texttt{Pair<X, Y>} che causavano difficoltà non indifferenti per via dei generici non reificati del linguaggio Java, ma alla fine ho optato per una soluzione più semplice che facesse uso di variabili facilmente gestibili come stringhe e interi, costruendo le Pair dinamicamente dopo la lettura di tali dati dal file.
+Per effettuare il salvataggio su file è stata utilizzata la libreria esterna \textbf{SnakeYaml} (si veda la documentazione \href{https://bitbucket.org/snakeyaml/snakeyaml/wiki/Documentation}{qui}), in quanto le associazioni fra giocatori e punteggi erano facilmente rappresentabili da una Map e la sintassi di Yaml consentiva un facile passaggio da e su file in questo caso. Un problema riscontrato in questa fase è stato quello di trovarsi alle prese con il salvataggio di oggetti generici \texttt{Pair<X, Y>} che causavano difficoltà non indifferenti per via dei generici non reificati del linguaggio Java, ma alla fine ho optato per una soluzione più semplice che facesse uso di variabili facilmente gestibili come stringhe e interi, costruendo le Pair dinamicamente dopo la lettura di tali dati dal file.
 
 \begin{figure}[H]
 	\centering
@@ -137,6 +137,25 @@ Per effettuare il salvataggio su file è stata utilizzata la libreria esterna \t
 La logica del salvataggio è stata inserita nel \texttt{LeaderboardSaver} (figura \ref{images:leaderboard}), mentre la gestione della leaderboard intesa come possibilità di aggiungere risultati e mostrare una classifica ordinata è affidata alla classe \texttt{Leaderboard} (figura \ref{images:leaderboard}). Il metodo \texttt{getPlayerResultAsString(String playerName)} è presente in vista di una potenziale funzionalità di filtraggio dei risultati della classifica, ma al momento per ragioni di tempo non è stato sfruttato nella creazione dell'interfaccia grafica. La \texttt{Scene} riservata alla visualizzazione della leaderboard è la \texttt{HighScoreScene}, pilotata dal \texttt{HighScoreController}. All'utente è consentito visualizzare e svuotare la leaderboard.
 
 \subsubsection{Tombe come CellComponents}
+
+La Tomba è un'entità particolare della modalità variante che viene piazzata sulla griglia di gioco in corrispondenza delle coordinate a cui è morta una qualsiasi pedina. Durante la fase di analisi la \texttt{Tomb} è sempre stata considerata come una \texttt{Cell} a tutti gli effetti. Tuttavia quando si è giunti al punto di dover scrivere il codice che creasse le Tombe una volta morte le pedine, sono emersi alcuni problemi legati a questa visione della Tomba:
+\begin{itemize}
+	\item la Tomba non deve rimpiazzare gli eventuali effetti delle celle su cui viene generata;
+	\item se una Tomba è vuota, deve poter essere rimossa tranquillamente senza il rischio di lasciare un buco nella griglia, e preferibilmente senza che entità esterne debbano memorizzare che tipo di cella era collocata a tali coordinate in precedenza;
+	\item lo stato della Tomba deve poter essere salvato agevolmente per permettere al giocatore di annullare una mossa in maniera coerente con le altre entità che producono dei memento, ma anche lo stato della cella precedente all'inserimento della Tomba deve essere mantenuto, il che implica che la cella precedente non dovrebbe essere eliminata.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/tomb-as-cellcomponent.png}
+	\caption{\texttt{Tomb} viene ora trattata come un CellComponent, che può essere attaccato o staccato a seconda di certi eventi che la \texttt{Board} si occuperà di rendere noti alla \texttt{Cell}.}
+	\label{images:tomb-as-cellcomponent}
+\end{figure}
+
+\textbf{Problema:} realizzare la \texttt{Tomb} in una maniera che catturi meglio la sua natura di caratteristica opzionale di \texttt{Cell} già esistenti, senza rimpiazzare le \texttt{Cells} già presenti alle coordinate della morte di una pedina.
+\\\\
+\textbf{Soluzione:} si è scelto di trattare la Tomba non più come una Cella a sé stante, ma come un componente da poter attaccare e staccare alle \texttt{Cells} normali (figura \ref{images:tomb-as-cellcomponent}). Per farlo è stato applicato il \textbf{pattern Composite}. Il \textbf{base component} è costituito dall'interfaccia \texttt{Cell}, che è il genere di entità di alto livello con cui opera la \texttt{Board}, la quale funge da \textbf{client}. I \textbf{leaf components}, ossia quelli che non hanno riferimento agli altri componenti e forniscono una implementazione base dei metodi del componente di base, sono tutte le celle ad eccezione della \texttt{Tomb}: \texttt{ClassicCell}, \texttt{Throne}, \texttt{Exit} e \texttt{Slider}. A fare da \textbf{composite} c'è la classe astratta \texttt{AbstractCell}, che implementa \texttt{Cell} e contiene la logica per attaccare, staccare e aggiornare i componenti. Infine la \texttt{Tomb} viene ora trattata come un \texttt{CellComponent}, e per piazzarne una su una qualsiasi altra casella è sufficiente che il client (la \texttt{Board}) attacchi un nuovo componente ad una \texttt{Cell} (questo avviene indirettamente tramite vari metodi che notificano eventi che potrebbero essere rilevanti o meno per le specifiche caselle). Per evitare duplicazioni di componenti, l'\texttt{AbstractCell} ha un Set di \texttt{CellComponents}. Ogni \texttt{CellComponent} ha anche un metodo \texttt{isActive()} mediante il quale può essere monitorato per capire quando è possibile staccarlo. Più in dettaglio, se la \texttt{Tomb} non contiene più alcun pezzo perché tutti sono stati resuscitati, allora la  \texttt{AbstractCell} stacca in autonomia tale componente quando viene notificata dalla \texttt{Board} che il turno è finito.
+\textit{Nota: sebbene in questa sottosezione vengano nominate molte classi, soltanto i metodi che riguardano il salvataggio dei CellMemento e i CellComponents sono mia responsabilità.}
 
 \subsection{Elena Boschetti}
 
@@ -218,10 +237,94 @@ In seguito a questa fase di design, mi sono occupata di implementare gli scene c
 
 \section{Metodologia di lavoro}
 
+\subsection{Alin Stefan Bordeianu}
+In autonomia mi sono occupato di:
+\begin{itemize}
+	\item creazione delle classi \texttt{Position}, \texttt{Vector} e \texttt{VectorImpl} (package taflgames.common.api e taflgames.common.code), che costituiscono il principale mezzo di comunicazione di tutti gli elementi dell'architettura;
+	
+	\item creazione del \texttt{Caretaker}, del sistema di registrazione degli stati della partita mediante il pattern Memento, scrittura delle InnerClass che implementano le varie interfacce Memento nel caso delle \texttt{Cells} e della \texttt{Board} (package taflgames.model.memento.api e taflgames.model.memento.code);
+	
+	\item creazione della \texttt{Leaderboard}, del \texttt{LeaderboardSaver} e della relativa \texttt{Scene}: \texttt{HighScoreScene} e il proprio \texttt{HighScoreController};
+	
+	\item la creazione di un \texttt{CellImageMapper} e di un \texttt{PieceImageMapper} che potessero associare a ciascuna pedina e cella uno stato (rispettivamente \texttt{CellState} e \texttt{PieceState}) utilizzabile poi nella View (package taflgames.controller.entitystate e taflgames.controller.mapper);
+	
+	\item un \texttt{FontManager} e un \texttt{Limiter} (un oggetto che limitasse il numero di caratteri inseribili in dei JTextFields utilizzati per la registrazione dei risultati degli utenti);
+	
+	\item creazione della scena \texttt{UserRegistrationScene} e relativo \texttt{UserRegistrationController}.
+\end{itemize}
+In collaborazione ho lavorato:
+
+\begin{itemize}
+	
+	\item con Elena Boschetti:
+	
+	\begin{itemize}
+		
+		\item sulla pianificazione di strategie per risolvere alcuni problemi fondamentali dell'applicazione, in particolare le dipendenze che le entità Tomb, Queen e Slider creavano fra i vari elementi del dominio;
+		
+		\item sulla realizzazione di un sistema indipendente dal sistema operativo per caricare il file leaderboard.yaml, in cui vengono salvati i risultati della Leaderboard;
+		
+		\item sul Controller dell'applicazione;
+		
+		\item sul MatchMemento, concordando sull'interfaccia da esporre al Caretaker;
+				
+	\end{itemize}
+
+	\item con Andrea Piermattei:
+	
+	\begin{itemize}
+		
+		\item sulla realizzazione del PieceMemento, concordando sull'interfaccia da esporre al Caretaker;
+		
+		\item solo a livello di pianificazione, sul come strutturare la MatchScene;
+		
+	\end{itemize}
+
+	\item con Margherita Raponi:
+	
+	\begin{itemize}
+		
+		\item sulla creazione della Tomba mediata dalla Board, e sul sistema che l'ha resa un CellComponent;
+		
+		\item sul debugging della Board e dell'Eaten;
+		
+		\item sulla condizione di patta;
+		
+		\item sui test delle varie Celle e comportamenti della Board.
+		
+	\end{itemize}
+
+\end{itemize}
+
 
 \section{Note di sviluppo}
 
 \subsection{Alin Stefan Bordeianu}
+
+\subsubsection{Uso di Lambda expressions}
+(costruttore del TombMementoImpl, metodo getLeaderboard in LeaderboardImpl)
+
+\subsubsection{Uso di Stream}
+(TestLeaderboard, tutti i memento con le varie collezioni, vari metodi restore e save)
+
+\subsubsection{Uso di Optional}
+(LeaderboardImpl in getScoreFromPlayer())
+
+\subsubsection{Uso della libreria esterna SnakeYaml}
+(LeaderboardSaverImpl)
+
+\subsubsection{Uso della libreria SLF4J}
+(LeaderboardSaverImpl)
+
+\subsubsection{Link a parti di codice esterne e link alle risorse utilizzate:}
+
+\begin{itemize}
+	
+	\item Codice della classe Pair presa dal docente: \url{https://bitbucket.org/mviroli/oop2022-esami/src/master/a01a/e1/Pair.java}
+	\item Font "Latin Runes v2.0": \url{ https://www.fontget.com/font/latin-runes/}
+	\item Immagine di una plancia di legno da mettere sotto alle labels della GUI: \href{https://get.pxhere.com/photo/background-tree-wood-boards-texture-wooden-background-old-brown-wood-texture-gray-wood-old-tree-old-fence-the-texture-of-the-wood-rustik-rustic-rural-wood-background-old-boards-fence-1370487.jpg}{pxhere.com}
+	
+\end{itemize}
 
 \subsection{Elena Boschetti}
 
@@ -266,13 +369,28 @@ Permalink: [uso in RulesScene.java]
 
 \section{Autovalutazione e lavori futuri}
 
+\subsection{Alin Stefan Bordeianu}
+Ho avuto l'occasione di confrontarmi con problemi non banali e ho allenato le mie capacità di trovarvi soluzioni, collaborando all'interno di un team. Grazie al tempo speso seguendo le lezioni e facendo prove per conto mio, sono stato capace di sfruttare meccanismi avanzati del linguaggio Java come gli Stream e le Lambda che mi hanno permesso di scrivere più agevolmente del codice che fosse di qualità e anche facilmente testabile.
+
+Penso di aver fatto un buon lavoro anche per quello che concerne le scritture dei test delle parti di mia competenza, che fortunatamente non hanno dato troppi problemi, ma anche sfruttando gli strumenti che mi venivano forniti dall'IDE in fase di debugging e di merge conflicts. Una delle principali vittorie che ho ottenuto è stata prendere confidenza con Git, strumento che avrei voluto conoscere fin dal primo giorno di università. 
+
+Sono soddisfatto di essere riuscito ad andare oltre agli elementi visti a lezione, apprendendo qualcosa in più sulla libreria SnakeYaml e sui file di configurazione. 
+
+Uno dei rimpianti che ho è non aver avuto molto tempo di ripassare sul codice scritto per effettuare operazioni di refactoring; ho scoperto alcune parti dove invece piccole modifiche avrebbero ripulito un po' il design (banalmente, per fare un esempio, le varie interfacce del Memento avevano tutte in comune un metodo void, restore(), che poteva stare bene in un'interfaccia a sé da cui tutte le altre estendessero). 
+
+L'autocritica maggiore che posso farmi è che ho la sensazione di non aver contribuito molto alla scrittura di parti davvero sostanziali dell'applicazione, per quanto il Memento sia stato divertente. Forse quest'ultima considerazione è data dal fatto che il mio obiettivo è arrivare a lavorare nell'ambito dello sviluppo dei videogiochi e non sento di aver toccato con mano le meccaniche fondamentali dello Hnefatafl. Se trovassi del tempo in futuro, mi piacerebbe molto estendere l'applicazione, magari introducendo la possibilità di registrare dei replay grazie al Memento, inserire suoni e nuove modalità di gioco, pedine o celle, e magari spaziare anche su più aspetti di grafica, Java Swing permettendo.
+
 \section{Difficoltà incontrate e commenti per i docenti}
 
+\subsection{Alin Stefan Bordeianu}
+Il corso è il più impegnativo che abbia affrontato in tutto il corso di laurea. Nonostante apprezzi le sfide e le occasioni di espandere i miei orizzonti, devo ammettere che questo corso non lascia molto spazio per altro, in quanto il progetto richiede un grande sforzo per finire in tempo e spesso e volentieri si sacrificano ore di lezione (e di sonno) per la sua realizzazione. Un suggerimento potrebbe essere quello di consentire agli studenti di fare la proposta di progetto e almeno l'analisi già durante il corso stesso. Vorrei ribadire anche il fatto che si potrebbero approfondire meglio gli aspetti legati al DVCS, magari dedicando una lezione di laboratorio a un mini progettino su cui lavorare a coppie, giusto per aiutare gli studenti a prendere confidenza con i vari pull, push, commit, merge, ecc.
 
 
 \appendix
 
 \chapter{Guida utente}
+
+Si rende presente il fatto che nelle varie partite bisogna cliccare il tasto "Pass turn" dopo ogni mossa per permettere al gioco di avanzare.
 
 \chapter{Esercitazioni di laboratorio}
 
