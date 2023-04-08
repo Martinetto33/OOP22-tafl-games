@@ -8,7 +8,7 @@ package taflgames.model.memento.api;
  * 
  * Each saved object has a public inner class: this choice was made consciously,
  * since no operations on these Memento objects have any side-effects and since
- * the Inner Classes in Java have a reference to their Outer Classes, this
+ * the Inner Classes in Java have a reference to their Outer Classes. This
  * helps deal with the problem of associating each instance of multiple
  * objects of the same type (such as Pieces and Cells) to their specific Memento
  * from which they can restore their previous state.
