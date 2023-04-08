@@ -63,6 +63,12 @@ public abstract class AbstractPiece implements Piece {
         /**
          * creates an object of PieceMementoImpl.
          */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = """
+                Positions are immutable objects.
+                """
+        )
         public PieceMementoImpl() {
             this.backupCurrentNumbOfLives = AbstractPiece.this.currentNumbOfLives;
             this.backupPosition = new Position(AbstractPiece.this.currentPosition);

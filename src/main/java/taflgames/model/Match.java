@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.apache.commons.collections4.iterators.LoopingIterator;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Pair;
@@ -100,19 +101,28 @@ public final class Match implements Model {
      * This inner class implements a {@link MatchMemento}, which is responsible
      * for saving the current state of the match and provide it on request.
      */
-    public final class MatchMementoImpl implements MatchMemento {
-
+    public static final class MatchMementoImpl implements MatchMemento {
+        /* This class was made static to solve SpotBugs warning. */
         private final int turnNumber;
         private final Player activePlayer;
         private final BoardMemento boardMemento;
 
         /**
          * Creates a new snapshot of the current state of the match.
+         * @param turnNumber the current turn number
+         * @param activePlayer the player in turn
          * @param boardMemento the snapshot of the current state of the {@link Board}
          */
-        public MatchMementoImpl(final BoardMemento boardMemento) {
-            this.turnNumber = Match.this.turnNumber;
-            this.activePlayer = Match.this.activePlayer;
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = """
+                A method to get a copy of an object of type BoardMemento is not provided.
+                BoardMemento are guaranteed not to be changed by any code.
+                """
+        )
+        public MatchMementoImpl(final int turnNumber, final Player activePlayer, final BoardMemento boardMemento) {
+            this.turnNumber = turnNumber;
+            this.activePlayer = activePlayer;
             this.boardMemento = boardMemento;
         }
 
@@ -135,7 +145,7 @@ public final class Match implements Model {
 
     @Override
     public MatchMemento save() {
-        return new MatchMementoImpl(this.board.save());
+        return new MatchMementoImpl(this.turnNumber, this.activePlayer, this.board.save());
     }
 
     @Override

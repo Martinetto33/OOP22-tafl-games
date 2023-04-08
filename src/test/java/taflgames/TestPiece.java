@@ -26,6 +26,10 @@ import taflgames.model.pieces.code.Swapper;
  * testing piece.
  */
 class TestPiece {
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     /*private final FactoryHitbox facHit = new ImplFactoryHitbox();
     private final FactoryMoveSet facMov = new ImplFactoryMoveset();
     private final FactoryBehaviourTypeOfPiece facBe = 
@@ -308,4 +312,5 @@ class TestPiece {
         np.setCurrentPosition(p2);
         assertEquals(p2, np.getCurrentPosition());
     }
+    // CPD-ON
 }

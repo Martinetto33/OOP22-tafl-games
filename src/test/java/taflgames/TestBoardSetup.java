@@ -44,6 +44,10 @@ import taflgames.common.Player;
  */
 class TestBoardSetup {
 
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(TestBoardSetup.class);
     private static final int BOARD_SIZE = 11;
 
@@ -321,5 +325,5 @@ class TestBoardSetup {
                                 .collect(Collectors.toSet()))
                 .collect(HashSet::new, HashSet::addAll, HashSet::addAll);
     }
-
+    // CPD-ON
 }

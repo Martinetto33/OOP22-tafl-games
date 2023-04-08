@@ -38,7 +38,10 @@ import taflgames.model.pieces.api.Piece;
  * behaves naturally after calls to the Match object.
  */
 class TestCellComponents {
-
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
     private static final String TOMB = "Tomb";
@@ -252,4 +255,5 @@ class TestCellComponents {
         /* Since there was no resurrection, the tomb component should still be active. */
         assertTrue(tomb.isActive());
     }
+    // CPD-ON
 }

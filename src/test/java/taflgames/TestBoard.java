@@ -30,7 +30,10 @@ import taflgames.model.cell.code.Throne;
  * JUnit tests for {@link Board}.
  */
 class TestBoard {
-
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     private static final int DEFAULT_BOARD_SIZE = 5;
 
     private static Board board;
@@ -340,4 +343,5 @@ class TestBoard {
         assertTrue(board4.isDraw(p1));
 
     }
+    // CPD-ON
 }

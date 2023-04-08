@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.controller.Controller;
 import taflgames.controller.ControllerImpl;
 import taflgames.view.scenecontrollers.HomeSceneControllerImpl;
@@ -85,6 +86,12 @@ public final class ViewImpl implements View {
         this.currentScene.update();
     }
 
+    @SuppressFBWarnings(
+            value = "DM_EXIT",
+            justification = """
+                Closing the application is intentional at this point.
+                """
+        )
     @Override
     public void close() {
         System.exit(0);

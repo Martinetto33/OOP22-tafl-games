@@ -32,6 +32,10 @@ import taflgames.model.builders.PiecesCollectionBuilderImpl;
  * JUnit tests for {@link Model}.
  */
 class TestMatch {
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
@@ -1050,5 +1054,5 @@ class TestMatch {
     }
 
     // CHECKSTYLE: MagicNumber ON
-
+    // CPD-ON
 }
