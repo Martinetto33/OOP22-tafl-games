@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.common.code.Pair;
 import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.HighScoreController;
@@ -41,6 +43,12 @@ public class HighScoreScene extends AbstractScene {
      * @param controller the {@link taflgames.view.scenecontrollers.HighScoreController}
      * associated to this scene.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The scene controller cannot be created inside the class that implements the scene:"
+                + "at the moment of the creation of the scene controller, it must get a reference to the View and the Controller"
+                + "of the application and the class implementing the scene does not have access to them."
+    )
     public HighScoreScene(final HighScoreController controller) {
         super(HighScoreScene.SCENE_NAME);
         this.controller = controller;

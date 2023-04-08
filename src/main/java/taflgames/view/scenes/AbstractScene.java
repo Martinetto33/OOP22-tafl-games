@@ -2,6 +2,7 @@ package taflgames.view.scenes;
 
 import javax.swing.JPanel;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.view.fontmanager.FontManager;
 
 import java.awt.Graphics;
@@ -58,6 +59,11 @@ public abstract class AbstractScene implements Scene {
         return this.sceneName;
     }
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Providing a base scene with some common parameters already set"
+                + "is one of the purposes of this class."
+    )
     @Override
     public final JPanel getScene() {
         return this.scene;

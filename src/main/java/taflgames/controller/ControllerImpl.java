@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
@@ -42,6 +43,11 @@ public final class ControllerImpl implements Controller {
      * Instantiates a controller for the application.
      * @param view the view of the application
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "It is necessary since the Controller of the application is created when the View is created"
+                + "and the Controller must have a reference to the View."
+    )
     public ControllerImpl(final View view) {
         this.view = view;
     }

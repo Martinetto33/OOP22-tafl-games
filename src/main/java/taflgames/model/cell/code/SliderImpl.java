@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
@@ -59,6 +60,11 @@ public final class SliderImpl extends AbstractCell implements Slider {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+        value = "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+        justification = "SliderImpl.mediator is initialized in BoardImpl constructor,"
+                + "since the mediator of the slider must have a reference to the Board."
+    )
     @Override
     public void notify(
         final Position source,

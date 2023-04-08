@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.view.fontmanager.FontManager;
 import taflgames.view.limiter.Limiter;
 import taflgames.view.scenecontrollers.UserRegistrationController;
@@ -51,6 +52,12 @@ public class UserRegistrationScene extends AbstractScene {
      * Creates the user registration scene.
      * @param controller the scene controller
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The scene controller cannot be created inside the class that implements the scene:"
+                + "at the moment of the creation of the scene controller, it must get a reference to the View and the Controller"
+                + "of the application and the class implementing the scene does not have access to them."
+    )
     public UserRegistrationScene(final UserRegistrationController controller) {
 
         super(USER_REGISTRATION);
