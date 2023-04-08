@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -24,7 +23,6 @@ import javax.swing.JOptionPane;
 public class GameChoiceScene extends AbstractScene {
 
     private static final String GAME_CHOICE = "Game Choice";
-    private static final String BG_FILENAME = "home-background.jpeg";
     private static final String HEADER = "Choose the game mode";
     private static final float HEADER_FONT_SIZE = 30.0f;
     private static final String PLAY_CLASSIC_MODE = "Play Classic Mode";
@@ -46,7 +44,7 @@ public class GameChoiceScene extends AbstractScene {
      */
     public GameChoiceScene(final GameChoiceSceneController controller) {
 
-        super(GAME_CHOICE, Optional.of(BG_FILENAME));
+        super(GAME_CHOICE);
 
         this.controller = controller;
 

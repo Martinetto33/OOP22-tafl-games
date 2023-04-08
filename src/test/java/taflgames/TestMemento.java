@@ -318,7 +318,7 @@ class TestMemento {
         final Cell tombPositionCell = this.variantBoard.getMapCells().get(expectedKillPosition);
 
         assertTrue(tombPositionCell.isFree());
-        assertTrue(tombPositionCell.getComponents().size() == 1);
+        assertEquals(1, tombPositionCell.getComponents().size());
         final CellComponent tomb = tombPositionCell.getComponents().stream()
                                     .findFirst().get();
         assertTrue(tomb.isActive());

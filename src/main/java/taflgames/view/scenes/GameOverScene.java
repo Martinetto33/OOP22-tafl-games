@@ -37,7 +37,7 @@ public class GameOverScene extends AbstractScene {
      */
     public GameOverScene(final GameOverController controller) {
 
-        super(GameOverScene.GAME_OVER, Optional.of("home-background.jpeg"));
+        super(GameOverScene.GAME_OVER);
 
         this.controller = controller;
 
@@ -107,7 +107,7 @@ public class GameOverScene extends AbstractScene {
     }
 
     private void displayWinnerRole() {
-        Optional<Player> possibleWinner = this.controller.getWinner();
+        final Optional<Player> possibleWinner = this.controller.getWinner();
         if (possibleWinner.isPresent()) {
             JOptionPane.showMessageDialog(getScene(), possibleWinner.get().toString()
                 + " WINS!", "Game Over", JOptionPane.OK_OPTION);

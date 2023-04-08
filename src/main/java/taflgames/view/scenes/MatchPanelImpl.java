@@ -20,14 +20,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import taflgames.common.code.Position;
-import taflgames.view.loaderImages.LoaderImages;
-import taflgames.view.loaderImages.LoaderImagesImpl;
+import taflgames.view.imagesloader.LoaderImages;
+import taflgames.view.imagesloader.LoaderImagesImpl;
 import taflgames.view.scenecontrollers.MatchSceneController;
 
 /**
  * Implementation of MatchPanel.
  */
 public class MatchPanelImpl extends JPanel implements MatchPanel {
+
+    public static final long serialVersionUID = 1L;
 
     private final Map<JButton, Position> mapButtons = new HashMap<>();
     private final Map<Position, JLabel> mapPieces = new HashMap<>();
@@ -41,6 +43,11 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     private Optional<Position> destination = Optional.empty();
     private MatchSceneController controller;
 
+    /**
+     * Creates the panel that shows the board.
+     * @param numbCellsInGrid the number of cells of the grid
+     * @param sizeOfSide the dimension of the grid (expressed in number of cells on one side)
+     */
     public MatchPanelImpl(final int numbCellsInGrid, final int sizeOfSide) {
         final LoaderImages loader = new LoaderImagesImpl(sizeOfSide, numbCellsInGrid);
         loader.loadCellsImages();
@@ -109,9 +116,9 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     @Override
     public void drawAllSpecialCells(final Map<Position, CellImageInfo> cells) {
         cells.entrySet().stream()
-                        .filter(elem -> elem.getValue().getName() != "CELL_BASIC"
-                                            && elem.getValue().getName() != "CELL_EXIT"
-                                            && elem.getValue().getName() != "CELL_THRONE")
+                        .filter(elem -> !("CELL_BASIC".equals(elem.getValue().getName()))
+                                            && !("CELL_EXIT".equals(elem.getValue().getName()))
+                                            && !("CELL_THRONE".equals(elem.getValue().getName())))
                         .forEach(elem -> {
                             this.mapSpecialCell.get(elem.getKey()).setIcon(null);
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
@@ -124,9 +131,9 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     @Override
     public void drawBackgroundCells(final Map<Position, CellImageInfo> cells) {
         cells.entrySet().stream()
-                        .filter(elem -> elem.getValue().getName() == "CELL_BASIC"
-                                            || elem.getValue().getName() == "CELL_EXIT"
-                                            || elem.getValue().getName() == "CELL_THRONE")
+                        .filter(elem -> "CELL_BASIC".equals(elem.getValue().getName())
+                                            || "CELL_EXIT".equals(elem.getValue().getName())
+                                            || "CELL_THRONE".equals(elem.getValue().getName()))
                         .forEach(elem -> {
                             this.mapSpecialCell.get(elem.getKey()).setIcon(null);
                             this.mapSpecialCell.get(elem.getKey()).setIcon(this.mapCellsImageIcons.get(elem.getValue()));
@@ -289,7 +296,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      */
     @Override
     public Map<JButton, Position> getMapButtons() {
-        return this.mapButtons;
+        return new HashMap<>(this.mapButtons);
     }
 
     /**
@@ -297,7 +304,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      */
     @Override
     public Map<Position, JLabel> getMapPieces() {
-        return this.mapPieces;
+        return new HashMap<>(this.mapPieces);
     }
 
     /**
@@ -305,7 +312,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      */
     @Override
     public Map<Position, JLabel> getMapSpecialCell() {
-        return this.mapSpecialCell;
+        return new HashMap<>(this.mapSpecialCell);
     }
 
     /**
@@ -313,7 +320,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      */
     @Override
     public Map<Position, JLabel> getMapBoard() {
-        return this.mapBoard;
+        return new HashMap<>(this.mapBoard);
     }
 
     /**

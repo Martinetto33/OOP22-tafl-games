@@ -17,6 +17,8 @@ import taflgames.common.code.Position;
 import taflgames.model.builders.CellsCollectionBuilder;
 import taflgames.model.builders.PiecesCollectionBuilder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -28,14 +30,14 @@ import org.xml.sax.SAXException;
  */
 public final class SettingsLoaderImpl implements SettingsLoader {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettingsLoaderImpl.class);
+
     private static final String SEP = System.getProperty("file.separator");
     private static final String PATH = "taflgames" + SEP + "config" + SEP;
     private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettings.xml";
     private static final String VARIANT_CONFIG_FILE = "VariantModeSettings.xml";
 
     private Element settings;
-    private CellsCollectionBuilder cellsCollBuilder;
-    private PiecesCollectionBuilder piecesCollBuilder;
 
     @Override
     public void loadClassicModeConfig(
@@ -43,13 +45,11 @@ public final class SettingsLoaderImpl implements SettingsLoader {
         final PiecesCollectionBuilder piecesCollBuilder
     ) throws IOException {
         this.settings = getSettingsFromFile(CLASSIC_CONFIG_FILE);
-        this.cellsCollBuilder = cellsCollBuilder;
-        this.piecesCollBuilder = piecesCollBuilder;
-        this.loadBoardSize();
-        this.loadKingAndThroneData();
-        this.loadExitsData();
-        this.loadClassicCellsData();
-        this.loadBasicPiecesData();
+        this.loadBoardSize(cellsCollBuilder);
+        this.loadKingAndThroneData(cellsCollBuilder, piecesCollBuilder);
+        this.loadExitsData(cellsCollBuilder);
+        this.loadClassicCellsData(cellsCollBuilder);
+        this.loadBasicPiecesData(cellsCollBuilder, piecesCollBuilder);
     }
 
     @Override
@@ -58,18 +58,16 @@ public final class SettingsLoaderImpl implements SettingsLoader {
         final PiecesCollectionBuilder piecesCollBuilder
     ) throws IOException {
         this.settings = getSettingsFromFile(VARIANT_CONFIG_FILE);
-        this.cellsCollBuilder = cellsCollBuilder;
-        this.piecesCollBuilder = piecesCollBuilder;
-        this.loadBoardSize();
-        this.loadKingAndThroneData();
-        this.loadExitsData();
-        this.loadSlidersData();
-        this.loadClassicCellsData();
-        this.loadBasicPiecesData();
-        this.loadQueensData();
-        this.loadArchersData();
-        this.loadShieldsData();
-        this.loadSwappersData();
+        this.loadBoardSize(cellsCollBuilder);
+        this.loadKingAndThroneData(cellsCollBuilder, piecesCollBuilder);
+        this.loadExitsData(cellsCollBuilder);
+        this.loadSlidersData(cellsCollBuilder);
+        this.loadClassicCellsData(cellsCollBuilder);
+        this.loadBasicPiecesData(cellsCollBuilder, piecesCollBuilder);
+        this.loadQueensData(cellsCollBuilder, piecesCollBuilder);
+        this.loadArchersData(cellsCollBuilder, piecesCollBuilder);
+        this.loadShieldsData(cellsCollBuilder, piecesCollBuilder);
+        this.loadSwappersData(cellsCollBuilder, piecesCollBuilder);
     }
 
     private Element getSettingsFromFile(final String filename) throws IOException {
@@ -82,19 +80,27 @@ public final class SettingsLoaderImpl implements SettingsLoader {
             document.getDocumentElement().normalize();
             final NodeList nodeList = document.getElementsByTagName("Settings");
             return (Element) nodeList.item(0);
-        } catch (final IOException | ParserConfigurationException | SAXException e) {
-            throw new IOException("An error occurred while trying to get or parse the configuration file.");
+        } catch (final IOException | ParserConfigurationException | SAXException exception) {
+            final String errorMsg = "An error occurred while trying to get or parse the configuration file.";
+            LOGGER.error(errorMsg, exception);
+            throw new IOException(errorMsg);    // NOPMD
+            // Original stack trace is already shown using the logger.
         }
     }
 
-    private void loadBoardSize() {
+    private void loadBoardSize(final CellsCollectionBuilder cellsCollBuilder) {
+        Objects.requireNonNull(settings);
         final int boardSize = Integer.parseInt(
             settings.getElementsByTagName("BoardSize").item(0).getTextContent()
         );
         cellsCollBuilder.addBoardSize(boardSize);
     }
 
-    private void loadKingAndThroneData() {
+    private void loadKingAndThroneData(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) {
+        Objects.requireNonNull(settings);
         final Element kingPosElem = (Element) settings.getElementsByTagName("KingPosition").item(0);
         final Element posElem = (Element) kingPosElem.getElementsByTagName("Position").item(0);
         final Position kingPos = new Position(
@@ -105,58 +111,73 @@ public final class SettingsLoaderImpl implements SettingsLoader {
         cellsCollBuilder.addThrone(kingPos);
     }
 
-    private void loadExitsData() {
+    private void loadExitsData(final CellsCollectionBuilder cellsCollBuilder) {
         final Set<Position> exitsPositions = getPositionsByTagName("ExitsPositions");
         cellsCollBuilder.addExits(exitsPositions);
     }
 
-    private void loadSlidersData() {
+    private void loadSlidersData(final CellsCollectionBuilder cellsCollBuilder) {
         cellsCollBuilder.addSliders(
             getPositionsByTagName("SlidersPositions")
         );
     }
 
-    private void loadClassicCellsData() {
+    private void loadClassicCellsData(final CellsCollectionBuilder cellsCollBuilder) {
         cellsCollBuilder.addBasicCells();
     }
 
-    private void loadBasicPiecesData() {
+    private void loadBasicPiecesData(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("BasicPieces");
         piecesCollBuilder.addBasicPieces(positionsForEachTeam);
         for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(positions);
+            setCellsStateAsOccupied(cellsCollBuilder, positions);
         }
     }
 
-    private void loadQueensData() {
+    private void loadQueensData(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Queens");
         piecesCollBuilder.addQueens(positionsForEachTeam);
         for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(positions);
+            setCellsStateAsOccupied(cellsCollBuilder, positions);
         }
     }
 
-    private void loadArchersData() {
+    private void loadArchersData(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Archers");
         piecesCollBuilder.addArchers(positionsForEachTeam);
         for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(positions);
+            setCellsStateAsOccupied(cellsCollBuilder, positions);
         }
     }
 
-    private void loadShieldsData() {
+    private void loadShieldsData(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Shields");
         piecesCollBuilder.addShields(positionsForEachTeam);
         for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(positions);
+            setCellsStateAsOccupied(cellsCollBuilder, positions);
         }
     }
 
-    private void loadSwappersData() {
+    private void loadSwappersData(
+        final CellsCollectionBuilder cellsCollBuilder,
+        final PiecesCollectionBuilder piecesCollBuilder
+    ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Swappers");
         piecesCollBuilder.addSwappers(positionsForEachTeam);
         for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(positions);
+            setCellsStateAsOccupied(cellsCollBuilder, positions);
         }
     }
 
@@ -168,6 +189,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     }
 
     private Set<Position> getPositionsByTagName(final String tagName) {
+        Objects.requireNonNull(settings);
         final Set<Position> positions = new HashSet<>();
         final Element positionsElement = (Element) settings.getElementsByTagName(tagName).item(0);
         final int length = positionsElement.getElementsByTagName("Position").getLength();
@@ -181,8 +203,8 @@ public final class SettingsLoaderImpl implements SettingsLoader {
         return positions;
     }
 
-    private void setCellsStateAsOccupied(final Set<Position> positions) {
-        positions.stream().forEach(pos -> this.cellsCollBuilder.setCellAsOccupied(pos));
+    private void setCellsStateAsOccupied(final CellsCollectionBuilder cellsCollBuilder, final Set<Position> positions) {
+        positions.stream().forEach(pos -> cellsCollBuilder.setCellAsOccupied(pos));
     }
 
 }

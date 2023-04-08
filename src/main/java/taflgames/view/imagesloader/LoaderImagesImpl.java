@@ -1,4 +1,4 @@
-package taflgames.view.loaderImages;
+package taflgames.view.imagesloader;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -15,7 +15,7 @@ import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
 /**
- * This class models a LoaderImages {@link taflgames.view.loaderImages.LoaderImages}.
+ * This class models a LoaderImages {@link taflgames.view.imagesloader.LoaderImages}.
  */
 public class LoaderImagesImpl implements LoaderImages {
 
@@ -134,7 +134,7 @@ public class LoaderImagesImpl implements LoaderImages {
      */
     @Override
     public Map<CellImageInfo, ImageIcon> getCellImageMap() {
-        return cellImages;
+        return new HashMap<>(cellImages);
     }
 
     /**
@@ -142,7 +142,7 @@ public class LoaderImagesImpl implements LoaderImages {
      */
     @Override
     public Map<PieceImageInfo, ImageIcon> getPieceImageMap() {
-        return pieceImages;
+        return new HashMap<>(pieceImages);
     }
 
     /**
@@ -156,7 +156,7 @@ public class LoaderImagesImpl implements LoaderImages {
                 originalImg.getIconWidth(), originalImg.getIconHeight(), BufferedImage.SCALE_SMOOTH
             );
         final Graphics2D g2 = (Graphics2D) blankCanvas.getGraphics();
-        g2.rotate(Math.toRadians(rotation), originalImg.getIconWidth() / 2, originalImg.getIconHeight() / 2);
+        g2.rotate(Math.toRadians(rotation), (double) originalImg.getIconWidth() / 2, (double) originalImg.getIconHeight() / 2);
         g2.drawImage(originalImg.getImage(), 0, 0, null);
         originalImg.setImage(blankCanvas);
         return new ImageIcon(originalImg.getImage());

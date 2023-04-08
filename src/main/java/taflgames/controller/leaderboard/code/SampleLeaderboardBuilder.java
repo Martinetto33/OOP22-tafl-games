@@ -20,15 +20,17 @@ public final class SampleLeaderboardBuilder {
     public static void createSampleLeaderboard() {
         final LeaderboardSaver leaderboardManager = new LeaderboardSaverImpl();
         final Leaderboard leaderboard = leaderboardManager.retrieveFromSave();
+        final String player1 = "Alin";
+        final String player2 = "Andrea";
 
-        leaderboard.addResult("Alin", MatchResult.VICTORY);
-        leaderboard.addResult("Alin", MatchResult.VICTORY);
-        leaderboard.addResult("Alin", MatchResult.VICTORY);
-        leaderboard.addResult("Alin", MatchResult.DEFEAT);
-        leaderboard.addResult("Andrea", MatchResult.VICTORY);
-        leaderboard.addResult("Andrea", MatchResult.VICTORY);
-        leaderboard.addResult("Andrea", MatchResult.DEFEAT);
-        leaderboard.addResult("Andrea", MatchResult.DEFEAT);
+        leaderboard.addResult(player1, MatchResult.VICTORY);
+        leaderboard.addResult(player1, MatchResult.VICTORY);
+        leaderboard.addResult(player1, MatchResult.VICTORY);
+        leaderboard.addResult(player1, MatchResult.DEFEAT);
+        leaderboard.addResult(player2, MatchResult.VICTORY);
+        leaderboard.addResult(player2, MatchResult.VICTORY);
+        leaderboard.addResult(player2, MatchResult.DEFEAT);
+        leaderboard.addResult(player2, MatchResult.DEFEAT);
 
         leaderboardManager.saveLeaderboard(leaderboard);
     }

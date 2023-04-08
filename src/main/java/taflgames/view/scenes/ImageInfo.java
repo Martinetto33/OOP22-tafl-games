@@ -2,6 +2,9 @@ package taflgames.view.scenes;
 
 import taflgames.common.Player;
 
+/**
+ * This interface allows to get information about the images.
+ */
 public interface ImageInfo {
 
     /**

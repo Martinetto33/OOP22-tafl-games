@@ -26,14 +26,14 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
      */
     @Override
     public void setMoveSet(final Set<Vector> moveSet) {
-        this.moveSet = moveSet;
+        this.moveSet = Set.copyOf(moveSet);
     }
     /**
      * {@inheritDoc}.
      */
     @Override
     public void setHitbox(final Set<Position> hitbox) {
-        this.hitbox = hitbox;
+        this.hitbox = Set.copyOf(hitbox);
     }
     /**
      * {@inheritDoc}.
@@ -58,7 +58,7 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
         if (this.moveSet.isEmpty()) {
             setMoveSet(this.generateMoveSet());
         }
-        return this.moveSet;
+        return Set.copyOf(this.moveSet);
     }
     /**
      * {@inheritDoc}.
@@ -68,7 +68,7 @@ public abstract class AbstractBehaviourTypeOfPiece implements BehaviourTypeOfPie
        if (this.hitbox.isEmpty()) {
         setHitbox(this.generateHitbox());
        }
-       return this.hitbox;
+       return Set.copyOf(this.hitbox);
     }
     /**
      * {@inheritDoc}.

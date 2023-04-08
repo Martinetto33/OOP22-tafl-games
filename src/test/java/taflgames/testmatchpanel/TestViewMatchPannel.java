@@ -1,4 +1,4 @@
-package taflgames.testViewMatchPannel;
+package taflgames.testmatchpanel;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,10 +10,20 @@ import javax.swing.JPanel;
 
 import taflgames.view.scenes.MatchPanelImpl;
 
+/**
+ * This class allows to test if the board and its elements are drawn correctly
+ * according to the mappings given by {@link EntitiesToDraw}.
+ */
 public class TestViewMatchPannel extends JFrame {
+
+    public static final long serialVersionUID = 2L;
 
     private static final int BOARD_SIZE = 11;
 
+    /**
+     * Creates a frame that shows how the board and its elements are drawn
+     * according to the given mappings.
+     */
     public TestViewMatchPannel() {
 
         this.setLayout(new FlowLayout());
@@ -39,7 +49,11 @@ public class TestViewMatchPannel extends JFrame {
 
     }
 
-    public static void main(final String[] args) throws java.io.IOException {
+    /**
+     * Creates the frame to test the drawing of the board and its elements.
+     * @param args unused
+     */
+    public static void main(final String[] args) {
         new TestViewMatchPannel(); 
     }
 

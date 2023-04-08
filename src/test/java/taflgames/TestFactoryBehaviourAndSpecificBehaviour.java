@@ -134,9 +134,6 @@ class TestFactoryBehaviourAndSpecificBehaviour {
     }
     @Test
     void testCreateSwapperBehaviour() {
-        final Set<Position> k = new HashSet<>();
-        k.add(new Position(2, 1));
-        k.add(new Position(0, 2));
         final var toTest = n.createSwapperBehaviour(); 
         final var hitb = h.createBasicHitbox();
         final var movs = m.createBasicMoveSet();

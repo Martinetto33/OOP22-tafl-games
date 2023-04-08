@@ -1,4 +1,4 @@
-package taflgames.testViewMatchPannel;
+package taflgames.testmatchpanel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,10 @@ import taflgames.common.code.VectorImpl;
 import taflgames.view.scenes.CellImageInfo;
 import taflgames.view.scenes.PieceImageInfo;
 
+/**
+ * This class creates and provides on request the mapping of the positions
+ * on the grid to the information about cells and pieces at each position.
+ */
 public final class EntitiesToDrawImpl implements EntitiesToDraw {
 
     private static final String BASIC_PIECE_NAME = "BASIC_PIECE";
@@ -50,16 +54,16 @@ public final class EntitiesToDrawImpl implements EntitiesToDraw {
 
     @Override
     public Map<Position, PieceImageInfo> getPiecesAlive() {
-        return this.piecesAlive;
+        return Map.copyOf(this.piecesAlive);
     }
 
     @Override
     public Map<Position, CellImageInfo> getBackgroundCells() {
-        return this.backgroundCells;
+        return Map.copyOf(this.backgroundCells);
     }
 
     @Override
     public Map<Position, CellImageInfo> getSpecialCells() {
-        return this.specialCells;
+        return Map.copyOf(this.specialCells);
     }
 }

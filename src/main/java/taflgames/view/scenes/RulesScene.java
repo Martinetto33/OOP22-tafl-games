@@ -13,8 +13,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import java.util.Optional;
-
 import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.RulesSceneController;
 
@@ -24,7 +22,6 @@ import taflgames.view.scenecontrollers.RulesSceneController;
 public class RulesScene extends AbstractScene {
 
     private static final String RULES = "Rules";
-    private static final String BG_FILENAME = "home-background.jpeg";
     private static final String BASE_LOCATION = "taflgames/rules/";
     private static final String GO_BACK = "Go Back";
 
@@ -38,7 +35,7 @@ public class RulesScene extends AbstractScene {
      */
     public RulesScene(final RulesSceneController controller) {
 
-        super(RULES, Optional.of(BG_FILENAME));
+        super(RULES);
 
         this.controller = controller;
 

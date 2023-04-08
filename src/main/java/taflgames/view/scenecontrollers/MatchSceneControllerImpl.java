@@ -28,7 +28,7 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
     private final MatchScene matchScene;
     private final PieceImageMapper pieceMapper = new PieceTypeMapper();
     private final CellImageMapper cellMapper = new CellTypeMapper();
-    private boolean wasMoveDone = false;
+    private boolean wasMoveDone;
 
     /**
      * Creates a new match scene controller.

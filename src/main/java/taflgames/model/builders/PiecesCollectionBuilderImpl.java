@@ -83,7 +83,7 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
 
     @Override
     public Map<Player, Map<Position, Piece>> build() {
-        return this.pieces;
+        return new HashMap<>(this.pieces);
     }
 
 }

@@ -1,6 +1,5 @@
 package taflgames.view.scenes;
 
-import java.util.Optional;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -54,7 +53,7 @@ public class UserRegistrationScene extends AbstractScene {
      */
     public UserRegistrationScene(final UserRegistrationController controller) {
 
-        super(USER_REGISTRATION, Optional.of("home-background.jpeg"));
+        super(USER_REGISTRATION);
 
         this.controller = controller;
 

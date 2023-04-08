@@ -1,6 +1,7 @@
 package taflgames.model.board.code;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,11 +53,19 @@ public final class BoardImpl implements Board, TimedEntity {
      * @param size the size of the board.
      */
     public BoardImpl(final Map<Player, Map<Position, Piece>> pieces, final Map<Position, Cell> cells, final int size) {
-        this.pieces = pieces;
-        this.cells = cells;
+        if (pieces != null) {
+            this.pieces = new HashMap<>(pieces);
+        } else {
+            this.pieces = new HashMap<>();
+        }
+        if (cells != null) {
+            this.cells = new HashMap<>(cells);
+        } else {
+            this.cells = new HashMap<>();
+        }
         this.size = size;
         this.eatingManager = new EatenImpl(this);
-        for (final Slider slider : cells.values().stream()
+        for (final Slider slider : this.cells.values().stream()
                             .filter(cell -> SLIDER.equals(cell.getType()))
                             .map(slider -> (Slider) slider)
                             .collect(Collectors.toSet())) {
@@ -94,7 +103,6 @@ public final class BoardImpl implements Board, TimedEntity {
             }
         } else if (THRONE.equals(cells.get(dest).getType()) 
                 || EXIT.equals(cells.get(dest).getType())
-                //|| SLIDER.equals(cells.get(start).getType()) && !cells.get(dest).isFree()
                 || !cells.get(dest).isFree() && getPieceAtPosition(dest).getPlayer().equals(player)) {
                 return false;
         }
@@ -339,17 +347,16 @@ public final class BoardImpl implements Board, TimedEntity {
                         .findAny()
                         .get();
         /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
-
-        if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
-                || king.getCurrentPosition().getX() == this.size - 1 || king.getCurrentPosition().getX() == this.size - 1) {
-
-                if (getAdjacentPositions(king.getCurrentPosition()).stream()
+        final Position kingPos = king.getCurrentPosition();
+        if (
+            (kingPos.getX() == 0 || kingPos.getY() == 0 || kingPos.getX() == this.size - 1 || kingPos.getY() == this.size - 1)
+            && getAdjacentPositions(king.getCurrentPosition()).stream()
                     .filter(pos -> !cells.get(pos).isFree())
                     .filter(pos -> pieces.get(Player.ATTACKER).keySet().contains(pos))
                     .collect(Collectors.toSet())
-                    .size() == 3) {
-                                return true;
-                }
+                    .size() == 3
+        ) {
+            return true;
         }
 
         /* If there are no pieces that can move for the player in turn, it is automatically a draw. */
@@ -435,7 +442,7 @@ public final class BoardImpl implements Board, TimedEntity {
         private final Position innerCurrentPos;
         private final List<PieceMemento> piecesMemento;
         private final List<CellMemento> cellsMemento;
-        private Set<Slider> innerSlidersEntities;
+        private final Set<Slider> innerSlidersEntities;
 
         /**
          * Creates a BoardMemento from which the board will be able to restore its previous state.
@@ -443,20 +450,22 @@ public final class BoardImpl implements Board, TimedEntity {
          * @param cellsMemento a List of the saved states of the cells.
          */
         public BoardMementoImpl(final List<PieceMemento> piecesMemento, final List<CellMemento> cellsMemento) {
-            this.innerCells = BoardImpl.this.cells.entrySet().stream()
+            this.innerCells = new HashMap<>(BoardImpl.this.cells).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            this.innerAttackerPieces = BoardImpl.this.pieces.get(Player.ATTACKER).entrySet().stream()
+            this.innerAttackerPieces = new HashMap<>(BoardImpl.this.pieces).get(Player.ATTACKER).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            this.innerDefenderPieces = BoardImpl.this.pieces.get(Player.DEFENDER).entrySet().stream()
+            this.innerDefenderPieces = new HashMap<>(BoardImpl.this.pieces).get(Player.DEFENDER).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             this.innerCurrentPos = BoardImpl.this.currentPos;
             if (BoardImpl.this.slidersEntities != null) {
-                this.innerSlidersEntities = BoardImpl.this.slidersEntities.stream()
+                this.innerSlidersEntities = new HashSet<>(BoardImpl.this.slidersEntities).stream()
                     .collect(Collectors.toSet());
+            } else {
+                this.innerSlidersEntities = null;
             }
 
-            this.piecesMemento = piecesMemento;
-            this.cellsMemento = cellsMemento;
+            this.piecesMemento = List.copyOf(piecesMemento);
+            this.cellsMemento = List.copyOf(cellsMemento);
         }
 
         /**
@@ -464,7 +473,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public List<PieceMemento> getPiecesMemento() {
-            return this.piecesMemento;
+            return List.copyOf(this.piecesMemento);
         }
 
         /**
@@ -472,7 +481,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public List<CellMemento> getCellsMemento() {
-            return this.cellsMemento;
+            return List.copyOf(this.cellsMemento);
         }
 
         /**
@@ -480,7 +489,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Map<Position, Cell> getInnerCells() {
-            return this.innerCells;
+            return new HashMap<>(this.innerCells);
         }
 
         /**
@@ -488,7 +497,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Map<Position, Piece> getInnerAttackerPieces() {
-            return this.innerAttackerPieces;
+            return new HashMap<>(this.innerAttackerPieces);
         }
 
         /**
@@ -496,7 +505,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Map<Position, Piece> getInnerDefenderPieces() {
-            return this.innerDefenderPieces;
+            return new HashMap<>(this.innerDefenderPieces);
         }
 
         /**
@@ -512,7 +521,7 @@ public final class BoardImpl implements Board, TimedEntity {
          */
         @Override
         public Set<Slider> getInnerSlidersEntities() {
-            return this.innerSlidersEntities != null ? this.innerSlidersEntities : null;
+            return this.innerSlidersEntities != null ? new HashSet<>(this.innerSlidersEntities) : null;
         }
 
         /**
