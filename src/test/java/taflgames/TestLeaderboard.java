@@ -31,6 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 class TestLeaderboard {
 
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     private static final int MAP_SIZE = 6;
     private static final Map<String, Pair<Integer, Integer>> EXPECTED_RESULTS = new HashMap<>();
     private static Leaderboard sampleLeaderboard;
@@ -147,4 +151,5 @@ class TestLeaderboard {
         final Leaderboard lead = l.retrieveFromSave();
         assertTrue(lead.getLeaderboard().isEmpty());
     }
+    // CPD-ON
 }

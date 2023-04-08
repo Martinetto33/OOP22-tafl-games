@@ -21,6 +21,10 @@ import taflgames.common.code.VectorImpl;
  * testing factoryMoveSet.
  */
 class TestFactoryMoveSet {
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     @Test
     void testCreateBasicMoveSet() {
         final FactoryMoveSet f = new ImplFactoryMoveset();
@@ -50,4 +54,5 @@ class TestFactoryMoveSet {
         assertNotEquals(f.createSwapperMoveSet(enemyPositions), new HashSet<>());
         assertNotEquals(f.createSwapperMoveSet(enemyPositions), null);
     }
+    // CPD-ON
 }

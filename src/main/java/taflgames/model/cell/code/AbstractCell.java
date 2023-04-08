@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.common.Player;
 import taflgames.common.code.Position;
 import taflgames.common.code.VectorImpl;
@@ -176,6 +177,13 @@ public abstract class AbstractCell implements Cell {
          * @param componentMementos the list of the mementos
          * of the components of this cell.
          */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = """
+                A method to get a copy of an object of type CellComponentMemento is not provided.
+                CellComponentMemento are guaranteed not to be changed by any code.
+                """
+        )
         public CellMementoImpl(final List<CellComponentMemento> componentMementos) {
             this.innerCellStatus = AbstractCell.this.cellStatus;
             this.componentMementos = List.copyOf(componentMementos);

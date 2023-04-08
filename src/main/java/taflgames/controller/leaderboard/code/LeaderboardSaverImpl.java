@@ -45,11 +45,10 @@ public class LeaderboardSaverImpl implements LeaderboardSaver {
         try {
             final URL leaderboardFileURL = ClassLoader.getSystemResource(PATH + LEADERBOARD_SAVE_FILE_NAME);
             final File leaderboardFile = new File(leaderboardFileURL.toURI());
-            final FileWriter writer = new FileWriter(leaderboardFile, StandardCharsets.UTF_8);
-            final Yaml yaml = new Yaml();
-            yaml.dump(otherMap, writer);
-            writer.flush();
-            writer.close();
+            try (FileWriter writer = new FileWriter(leaderboardFile, StandardCharsets.UTF_8)) {
+                final Yaml yaml = new Yaml();
+                yaml.dump(otherMap, writer);
+            }
         } catch (IOException e) {
             LOGGER.error("Error while trying to access the save file for the leaderboard.", e);
         } catch (URISyntaxException e) {
