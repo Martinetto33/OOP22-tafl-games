@@ -224,7 +224,111 @@ L'implementazione di ogni scene controller deve quindi implementare la sua speci
 In seguito a questa fase di design, mi sono occupata di implementare gli scene controller delle scene di mia competenza.
 
 \subsection{Andrea Piermattei}
+\subsubsection{Progettazione delle pedine}
+I criteri principali che ho cercato di rispettare durante l'intero processo di progettazione delle pedine sono:
+\begin{itemize}
+\item \textbf{semplicità} e \textbf{flessibilità} nel creare sia nuovi tipi di pedine, sia istanze di pedine e nel modificare quelle già esistenti;
+\item progettare classi relativamente \textbf{semplici} e \textbf{specializzate}, che possano operare il più \textbf{indipendentemente} possibile tra loro;
+\item \textbf{estendibilità} del codice.
+\end{itemize}
 
+Per rispettare questi criteri sono stati usati questi tipi di \textbf{pattern}:
+\begin{itemize}
+\item un pattern ispirato al \textbf{pattern component} (interfacce correlate \texttt{BehaviourTypeOfPiece})
+\item tre \textbf{factory methods} distinte (interfacce correlate: \texttt{FactoryHitbox}, \texttt{FactoryMoveset}, \texttt{FactoryBehaviourTypeOfPiece})
+\end{itemize}
+
+Per poter capire meglio il pattern che ho creato, vorrei spiegare brevemente in cosa consiste il pattern component.
+Questo tipo di pattern è caratterizzato da un'unica \textbf{entità} che si occupa di più \textbf{domini} distinti tra loro. Ognuno di essi
+ha un compito ben preciso ed è contenuto all'interno di una classe a parte, che chiameremo \textbf{component}. In questo modo \textbf{l'entità
+principale} che si vuole modellare, non è altro che un \textbf{contenitore} di component a cui vengono delegati i compiti da fare. Un esempio
+di pattern component è il GameObject che può possedere più componenti: GraphycsComponent, InputComponent, PhysicsController...
+La scelta dell'architettura usata nell'applicazione e la natura stessa delle pedine mi hanno portato ad usare una versione \textbf{semplificata} e 
+\textbf{specializzata} del pattern component. Al posto della classe estremamente generica GameObject, abbiamo una classe più specializzata, nominata \texttt{Piece} 
+(l'interfaccia principale implementata da \texttt{AbstractPiece} che comunica direttamente con la \texttt{Board}), che rappresenta i \textbf{pezzi generici} che l'utente può muovere durante la partita. 
+Essa contiene tutti i campi e i metodi comuni alle pedine \textbf{indipendentemente} dal loro tipo, come per esempio
+la posizione corrente, la squadra di appartenenza e il numero corrente di vite.
+Bisogna però specificare che quest'ultimo viene inizializzato con il numero totale di vite contenuto in \texttt{BehaviourTypeOfPiece}. L'unico componente dell'\texttt{AbstractPiece} è la
+\texttt{BehaviourTypeOfPiece} (implementato da \texttt{AbstractBehaviourTypeOfPiece}), 
+che contiene tutti i metodi e i campi che caratterizzano il comportamento di uno specifico tipo di pedina, quali la hitBox e la moveSet assolute 
+(create prendendo come punto di riferimento la posizione (0,0)), il numero totale
+di vite e i metodi abstract \texttt{.wasHit(...)}, \texttt{.generate()}, \texttt{.generateHitbox()} e \texttt{.generateMoveSet()}.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/component-pattern.png}
+\caption{Schema UML che rappresenta il design del pattern ispirato al pattern component.}
+\label{images:component-pattern}
+\end{figure}
+Questo sistema ha alcuni vantaggi: 
+\begin{itemize}
+\item nel caso in cui volessi aggiungere nuove funzionalità o fare degli accorgimenti a \texttt{TypeBehaviourOfPiece}, non è detto che sia costretto a modificare il
+codice già esistente della \texttt{AbstractPiece} (se non qualche piccola aggiunta);
+\item semplifica la classe \texttt{AbstractPiece}.
+\end{itemize}
+Insieme al pattern component vengono anche usate tre \textbf{factory method} diverse:
+\begin{itemize} 
+\item \texttt{FactoryHitbox} (interfaccia implementata da \texttt{ImplFactoryHitbox}): crea diversi tipi di hibox assolute.
+\item \texttt{FactoryMoveset} (interfaccia implementata da \texttt{ImplFactoryMoveset}): crea diversi tipi di moveset assolute.
+Queste prime due factory vengono utilizzate dentro la \texttt{AbstractBehaviourTypeOfPiece}, ma possono essere usati anche da altre entità.
+\item \texttt{FactoryBehaviourTypeOfPiece} (interfaccia implementata da \texttt{ImplFactoryBehaviourTypeOfPiece}): si trova all'interno della \texttt{AbstractPiece} e
+crea i diversi tipi di component \texttt{BehaviourTypeOfPiece}, che verranno usati dalle classi che estendono \texttt{AbstractPiece} (cioè le \textbf{pedine effettive} che verranno usate dalla \texttt{Board}). E' qui che bisognerà 
+implementare i metodi abstract della \texttt{AbstractBehaviourTypeOfPiece}.
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/factory-pattern.png}
+\caption{Schema UML che rappresenta i tre factory method.}
+\label{images:factory-pattern}
+\end{figure}
+Questo sistema ci permette di semplificare il codice da scrivere sia nella \texttt{TypeBehaviourOfPiece} per la scelta delle \texttt{hitbox} e \texttt{moveset}, sia nelle implementazioni delle pedine che estendono \texttt{AbstractPiece}
+per sceglire la \texttt{BehaviourTypeOfPiece}; basta infatti chiamare all'interno della classe il metodo desiderato della \textbf{factory} in questione che farà tutto ciò che serve.
+L'utilizzo di questi due pattern ci permette di creare implementazioni di pedine molto piccole e facili da usare da entità esterne come la \texttt{Board}; il loro costruttore ha bisogno di sapere solo qual è la \textbf{posizione iniziale} e il \textbf{player} a cui appartiene.
+
+\subsubsection{Meccanica della mangiata delle pedine}
+
+La meccanica della mangiata all'interno delle pedine è rappresentata dai due metodi \texttt{.wasKilled(...)} di \texttt{Piece} e \texttt{.wasHit(...)} di \texttt{BehaviourTypeOfPiece}, i quali vengono chiamati
+solo quando una pedina, che denomineremo \textbf{"vittima"}, viene \textbf{"minacciata"} da una o più pedine nemiche. Questo corrisponde a dire che la pedina
+\textbf{"vittima"} si trova in corrispondenza di una o più \textbf{hitbox} nemiche. Non è detto che una pedina minacciata venga ogni volta mangiata, infatti le \textbf{condizioni 
+di morte} di una pedina vengono determinate da \texttt{.wasHit(...)} a partire dai dati forniti direttamente dalla \texttt{Board} (una collezione di posizioni nemiche e l'ultima pedina nemica mossa).
+La \texttt{.wasKilled(...)} si limita ad interrogare la \texttt{.wasHit(...)}.
+
+Questo intero sistema ha dei grandi vantaggi:
+\begin{itemize} 
+\item rende la \texttt{Board} più semplice, visto che non si deve preoccupare di tutte le possibili combinazioni di mangiata di una pedina, ma basta che vada ad interrogare
+la pedina vittima stessa;
+\item possiamo creare qualsiasi tipo di \textbf{hitbox} e \textbf{condizione di morte} (cioè il contenuto di \texttt{.wasHit(...)})senza dover modificare la \texttt{Board} o la \texttt{Piece}.
+\end{itemize}
+
+\subsubsection{Altre scelte di design degne di nota}
+\begin{itemize}
+\item \texttt{whereToMove(...)} e \texttt{whereToHit(...)}: sono due metodi che prendono rispettivamente la moveset e la hitbox assolute contenute nel component \texttt{TypeBehaviourOfPiece} e le adattano alla posizione corrente della pedina. In questo modo evitiamo di creare questi due dati dal nulla ogni volta che viene interrogata la pedina, ma partiamo da uno 'stampo' per generare l'ouput finale.
+\item \texttt{getTypeBehaviour()}: restituisce \texttt{BehaviourTypeOfPiece}, permettendoci di accedere a tutti i suoi metodi. In questo modo possiamo limitare possibili modifiche alla \texttt{AbstractPiece}, nel caso si volessero aggiungere nuove funzionalità specifiche al tipo di pedina che si vuole implementare.
+\end{itemize}
+\subsubsection{MatchPanel}
+
+Questa interfaccia (implementata da \texttt{MatchPanelImpl}) estende JPanel e ha due compiti: uno di mostrare ai giocatori la \textbf{situazione attuale} del tabellone e l'altro di ricevere più \textbf{input} dall'utente. Questo JPanel è organizzato in quattro \textbf{livelli} (JPanel) ben distinti (usando un \texttt{OverlayLayout}), ognuno contenente una griglia 11x11.
+\begin{itemize}
+\item il primo livello contiene i \textbf{bottoni} (con il relativo \texttt{actionListener}) usati dal giocatore di turno per selezionare le pedine della sua squadra e decidere dove spostarle;
+\item il secondo livello contiene le immagini delle \textbf{pedine} ancora vive;
+\item il terzo livello contiene le immagine delle \textbf{celle speciali} attualmente attive;
+\item il quarto rappresenta il \textbf{tavolo da gioco} e contiene le \textbf{celle di base}.
+\end{itemize}
+Tutti gli elementi di questi livelli sono contenuti anche dentro quattro Map distinte (\texttt{mapButtons}, \texttt{mapPieces}, \texttt{mapSpecialCells}, \texttt{mapBoard}) per
+renderli più facilmente reperibili.
+Il \texttt{MatchPanel} fornisce alla \texttt{MatchScene} tutti i metodi necessari per fare l'update del tavolo da gioco, 
+ripulendo prima di tutto i livelli che contengono JLabel (attraverso il metodo \texttt{.removeAllIconsOnLayer(...)})
+per poi ridisegnare le pedine e le celle che gli servono (attraverso i metodi \texttt{.drawAllSpecialCells(...)} e \texttt{.drawBackgroundCells(...)}). 
+Per fare questo ha bisogno di reperire le immagini di pedine e celle attraverso 
+i metodi dell'interfaccia LoaderImages all'interno del costruttore di MatchScene. 
+
+\texttt{ImageInfo} è una interfaccia utilizzata per rappresentare le caratteristiche fondamentali delle immagini e di conseguenza degli oggetti 
+che rappresentano. Essa è implementata dalla classe \texttt{CellImageInfo} e dalla classe \texttt{PieceImageInfo}.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/match-panel.png}
+\caption{Schema UML che rappresenta la MatchPanel e le sue classi correlate.}
+\label{images:match-panel}
+\end{figure}
 \subsection{Margherita Raponi}
 
 
@@ -298,6 +402,29 @@ In collaborazione ho lavorato:
 
 \end{itemize}
 
+\subsection{Andrea Piermattei}
+\begin{itemize}
+\item realizzazione dell'implementazione del PieceMemento (ideato da Alin)
+\item progettazione e realizzazione della parte di model riguardante le pedine:
+\begin{itemize}
+\item FactoryHitbox e ImplFactoryHitbox
+\item FactoryMoveSet e ImplFactoryMoveSet
+\item BehaviourTypeOfPiece e AbstractBehaviourTypeOfPiece
+\item Piece e AbstractPiece
+\item Archer
+\item Queen
+\item King
+\item Swapper
+\item Shield
+\item BasicPiece
+\item FactoryBehaviourTypeOfPiece e ImplFactoryBehaviourTypeOfPiece
+\end{itemize}
+\item progettazione e realizzazione, in collaborazione con Margherita, del MatchPanel
+\item creazione dell'interfaccia ImageInfo e PieceImageInfo
+\item realizzazione del MatchScene in collaborazione con Margherita
+\item realizzazione degli assets .png delle pedine, delle celle e l'icona
+\end{itemize}
+
 
 \section{Note di sviluppo}
 
@@ -361,6 +488,14 @@ Permalink: [utilizzo in Match.java e/o TestMatch.java]
 Permalink: [uso in RulesScene.java]
 
 \subsection{Andrea Piermattei}
+\subsubsection{Uso delle lambda expressions}
+Permalink:[AbstractPiece.java, ImplFactoryTypeOfPiece.java, ImplfactoryMoveset.java,MatchPanelImpl.java]
+
+\subsubsection{Uso di \texttt{Stream}}
+Permalink:[AbstractPiece.java, ImplFactoryTypeOfPiece.java, ImplfactoryMoveset.java,MatchPanelImpl.java]
+
+\subsubsection{Uso di \texttt{Optional}}
+Permalink:[MatchPanelImpl.java]
 
 \subsection{Margherita Raponi}
 
@@ -381,6 +516,12 @@ Sono soddisfatto di essere riuscito ad andare oltre agli elementi visti a lezion
 Uno dei rimpianti che ho è non aver avuto molto tempo di ripassare sul codice scritto per effettuare operazioni di refactoring; ho scoperto alcune parti dove invece piccole modifiche avrebbero ripulito un po' il design (banalmente, per fare un esempio, le varie interfacce del Memento avevano tutte in comune un metodo void, restore(), che poteva stare bene in un'interfaccia a sé da cui tutte le altre estendessero). 
 
 L'autocritica maggiore che posso farmi è che ho la sensazione di non aver contribuito molto alla scrittura di parti davvero sostanziali dell'applicazione, per quanto il Memento sia stato divertente. Forse quest'ultima considerazione è data dal fatto che il mio obiettivo è arrivare a lavorare nell'ambito dello sviluppo dei videogiochi e non sento di aver toccato con mano le meccaniche fondamentali dello Hnefatafl. Se trovassi del tempo in futuro, mi piacerebbe molto estendere l'applicazione, magari introducendo la possibilità di registrare dei replay grazie al Memento, inserire suoni e nuove modalità di gioco, pedine o celle, e magari spaziare anche su più aspetti di grafica, Java Swing permettendo.
+
+\subsection{Andrea Piermattei}
+Questo progetto è stata una esperienza particolare per me: non è certo la prima volta che ho lavorato in un gruppo, ma non mi è mai capitato di dover realizzare un intero videogioco praticamente dal nulla, utilizzando numerosi software di cui non avevo molta esperienza. 
+Nonostante le difficoltà riscontrate durante questi mesi di lavoro, è stato piacevole provare a cimentarmi con la progettazione di un sistema che non solo funzionasse, ma rispettasse anche i principi base della programmazione ad oggetti.
+Tutto sommato penso di aver fatto un lavoro discreto e mi sento abbastanza soddisfatto.
+Questo non significa che il codice non si possa migliorare. Un esempio palese è la pedina swapper: nonostante sia una entità concettualmente molto diversa dalla pedina di base, a livello di implementazione non cambia praticamente alcunchè. L'intero funzionamento dello swapper si appoggia sull'uso del .canSwap() di Piece e su come la Board decide di usare questo metodo. Il sistema risulta di conseguenza poco estendibile, soprattutto se si pensa di creare nuove pedine simili allo swapper. Un modo migliore di fare le cose sarebbe quella di creare una entità Mediator che possa comunicare con la Board per sapere le posizioni delle pedine per poi passarle alla FactoryMoveset. Quest'ultima potrà poi usare il metodo .createSwapperMoveSet(...) già presente nel codice e funzionante ma mai usato, per creare effettivamente un nuovo tipo di hitbox e rendere il codice più estendibile. Un altro esempio è la MatchPanel: invece di ridisegnare tutte le pedine, anche quando non avviene una mangiata, si potrebbe usare la .movePiece(...) (un altro metodo funzionante ma mai usato effettivamente nel codice). Sfortunatamente non è stato possibile sviluppare ulteriormente queste funzionalità per mancanza di tempo.
 
 \section{Difficoltà incontrate e commenti per i docenti}
 

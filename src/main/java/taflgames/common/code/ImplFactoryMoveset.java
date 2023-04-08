@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import taflgames.common.api.FactoryMoveSet;
 import taflgames.common.api.Vector;
 /**
-*{@inheritDoc}.
+*Implements FactoryMoveSet.
 */
 public class ImplFactoryMoveset implements FactoryMoveSet {
     /**

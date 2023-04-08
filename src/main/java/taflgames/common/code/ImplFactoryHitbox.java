@@ -7,7 +7,7 @@ import java.util.Set;
 import taflgames.common.api.FactoryHitbox;
 
  /**
- * {@inheritDoc}.
+ * Implements FactoryHitbox.
 */
 public class ImplFactoryHitbox implements FactoryHitbox {
     /**

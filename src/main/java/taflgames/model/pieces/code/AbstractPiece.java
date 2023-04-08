@@ -16,14 +16,13 @@ import taflgames.model.pieces.api.Piece;
 import taflgames.model.memento.api.PieceMemento;
 
 /**
-* {@inheritDoc}.
+* Implements Piece.
 */
 public abstract class AbstractPiece implements Piece {
     private Position currentPosition;
     private int currentNumbOfLives;
     private BehaviourTypeOfPiece myType;
     private Player myPlayer;
-    /**la factory sarà usata dal costruttore delle implementazioni per creare la type.*/
     private final FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
     /**
      * {@inheritDoc}.
