@@ -111,8 +111,8 @@ public abstract class AbstractScene implements Scene {
                 super.paintComponent(g);
                 final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + COMPONENT_BACKGROUND);
                 final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
-                final Image resizedImage = customResize(image, width, height);
-                g.drawImage(resizedImage, 0, 0, getWidth(), getHeight(), this);
+                image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
         paintedPanel.add(component);
@@ -124,10 +124,9 @@ public abstract class AbstractScene implements Scene {
      * @param image the Image to be resized.
      * @param width the new width of the Image.
      * @param height the new height of the Image.
-     * @return the resized image
      */
-    public Image customResize(final Image image, final int width, final int height) {
-        return image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    public void customResize(final Image image, final int width, final int height) {
+        image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     }
 
 }
