@@ -18,6 +18,8 @@ import taflgames.controller.entitystate.PieceState;
 import taflgames.controller.leaderboard.api.LeaderboardSaver;
 import taflgames.controller.leaderboard.code.LeaderBoardImpl;
 import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
+import taflgames.controller.settingsloader.SettingsLoader;
+import taflgames.controller.settingsloader.SettingsLoaderImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
 import taflgames.model.builders.CellsCollectionBuilder;
