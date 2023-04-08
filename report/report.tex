@@ -12,7 +12,7 @@
 
 \usepackage[italian]{cleveref}
 
-\title{TaflGames\\\large Relazione per il progetto \\ del corso di \\ Object-Oriented Programming \\ A.A. 2022/23}
+\title{Tafl Games\\\large Relazione per il progetto \\ del corso di \\ Programmazione ad Oggetti \\ A.A. 2022/23}
 \author{Alin Stefan Bordeianu \\ Elena Boschetti \\ Andrea Piermattei \\ Margherita Raponi}
 \date{\today}	
 
@@ -84,11 +84,22 @@ Internamente, la \texttt{Board} contiene la collezione di celle e la collezione 
 
 Come pattern architetturale, è stato scelto MVC in quanto permette di separare la logica dell'applicazione da ciò che viene mostrato all'utente, portando ad un'organizzazione interna dell'applicazione più pulita e più facilmente gestibile.
 
-L'interfaccia \texttt{Model} racchiude la logica del dominio di gioco, isolandola da tutti gli altri componenti dell'architettura. Idealmente, il gioco potrebbe funzionare anche senza alcuna componente grafica, direttamente ricevendo input da linea di comando.
+L'interfaccia \texttt{Model} racchiude la logica del dominio di gioco, isolandola da tutti gli altri componenti dell'architettura. Idealmente, il gioco potrebbe funzionare anche senza alcuna componente grafica, ricevendo direttamente l'input da linea di comando.
 
-Il \texttt{Controller} si occupa del coordinamento fra Model e View, permettendo ai cambiamenti di stato della partita di essere visualizzati dall'utente. Il Controller gestisce anche alcune risorse non inerenti alla parte grafica dell'applicazione, ad esempio file di configurazione per il setup della partita e file per il salvataggio e il caricamento della leaderboard.
+Il \texttt{Controller} si occupa del coordinamento fra Model e View, permettendo ai cambiamenti di stato della partita di essere visualizzati dall'utente. Il rapporto tra Controller e Model si limita all'inizializzazione dello stato del Model (il setup della partita) e alle richieste del Controller al Model per ottenere informazioni sul suo stato interno.
 
-La \texttt{View} si occupa del rendering grafico delle varie schermate dell'applicazione. A ciascuna schermata è associata una specifica \texttt{Scene} e ciascuna di esse è legata ad un proprio \texttt{SceneController} che gestisce il comportamento della scena e la comunicazione tra la \texttt{Scene} stessa, la \texttt{View} (la quale è, in pratica, un container di \texttt{Scene}) e il \texttt{Controller}.
+Un passaggio del turno o l'annullamento di un mossa durante la partita implicano un cambiamento nello stato interno del Model (come minimo, la mossa di una pedina); tali cambiamenti devono essere riflessi dalla View, per cui il Controller segnala alla View la necessità di un'aggiornamento. A questo punto, la View si occupa di richiedere le informazioni necessarie al Controller, il quale le chiede a sua volta al Model.
+Il Controller gestisce, inoltre, alcune risorse non inerenti alla parte grafica dell'applicazione, ad esempio file di configurazione per il setup della partita e file per il salvataggio e il caricamento della leaderboard.
+
+Per quanto riguarda la View, essa è composta da più scene che si alternano tra loro, ognuna delle quali è rappresentata dall'entità \texttt{Scene}; in pratica, la View è un container di \texttt{Scene}. La comunicazione della Scene verso il Controller (ad esempio, per la richiesta dei dati necessari all'aggiornamento della view della board) e verso la View (ad esempio, per il cambio di scena) avviene mediante delle entità intermedie, indicate con il termine "scene controllers"; ogni scena ha un proprio scene controller, che si occupa dell'invio delle richieste specifiche di quella scena.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/architecture.png}
+\caption{Schema UML dell'architettura dell'applicazione.}
+\label{images:architecture}
+\end{figure}
+
 
 \section{Design dettagliato}
 
@@ -194,8 +205,6 @@ Le implementazioni concrete di ogni scena estendono \texttt{AbstractScene} e def
 \label{images:scenes}
 \end{figure}
 
-In seguito a questa fase di design, mi sono occupata di implementare la scena della home del gioco (\texttt{HomeScene}), la scena della scelta della modalità di gioco (\texttt{GameChoiceScene}) e della scena che mostra il regolamento (\texttt{RulesScene}).
-
 \subsubsection{Scene Controllers}
 
 Nello sviluppo delle funzionalità delle scene, si è rivelato quasi sempre necessario che la scena interagisse con la \texttt{View} (che, come detto precedentemente, ha la funzione di wrapper della scena) o con il Controller dell'applicazione. Per questo motivo, ho deciso di introdurre delle entità, a cui mi riferisco con il termine "scene controllers", che regolano il comportamento della scena e che hanno il ruolo di mediatore tra \texttt{Scene}, \texttt{View} e \texttt{Controller}.
@@ -221,8 +230,6 @@ L'implementazione di ogni scene controller deve quindi implementare la sua speci
 \label{images:game-choice-scene-controller}
 \end{figure}
 
-In seguito a questa fase di design, mi sono occupata di implementare gli scene controller delle scene di mia competenza.
-
 \subsection{Andrea Piermattei}
 
 \subsection{Margherita Raponi}
@@ -234,6 +241,8 @@ In seguito a questa fase di design, mi sono occupata di implementare gli scene c
 
 \section{Testing automatizzato}
 
+Il testing automatizzato dell'applicazione ha riguardato la parte logica dell'applicazione. Data la natura piuttosto articolata e "gerarchica" del dominio di gioco, il testing è stato portato avanti con un approccio bottom-up. Sono prima stati testati singolarmente i componenti più piccoli del dominio (celle e pedine), controllando che il loro stato interno fosse inizializzato correttamente. Essi sono successivamente stati testati sulla griglia di gioco, verificando che si ottenessero gli effetti desiderati dall'interazione tra le diverse pedine e celle. Chiaramente, è stata testata anche la corretta configurazione iniziale di celle e pedine secondo quanto stabilito dal regolamento delle due modalità di gioco. Infine, il tutto è stato testato nel contesto della partita, considerando quindi un ambiente di gioco completo e l'alternanza dei turni tra i giocatori.
+Per la scrittura e lo svolgimento dei test, è stato utilizzato il framework JUnit 5.
 
 \section{Metodologia di lavoro}
 
@@ -296,6 +305,36 @@ In collaborazione ho lavorato:
 		
 	\end{itemize}
 
+\end{itemize}
+
+\subsubsection{Elena Boschetti}
+
+Di seguito, sono elencate la parti di cui mi sono occupata in autonomia.
+
+\begin{itemize}
+	\item Mi sono occupata dell'implementazione dell'interfaccia del Model dell'applicazione, nello specifico della classe \texttt{taflgames.model.Match}.
+	\item Ho realizzato i builder per la costruzione delle collezioni di celle e pedine (package \texttt{taflgames.model.builders}).
+	\item Mi sono occupata del caricamento da file XML della configurazione della griglia di gioco in base alla modalità scelta e dell'inizializzazione delle collezioni di celle e pedine coerentemente con essa (package \texttt{taflgames.controller.settingsloader});
+	\item Mi sono occupata del design della view, sia per quanto riguarda le scene (package \texttt{taflgames.view.scenes}), sia per quanto riguarda gli scene controllers (package \texttt{taflgames.view.scenecontrollers}), e ho realizzato le interfacce e le classi di base di entrambi (\texttt{Scene}, \texttt{AbstractScene}, \texttt{BasicSceneController}, \texttt{AbstractBasicSceneController}).
+	\item Ho implementato le scene e gli scene controllers della schermata della home dell'applicazione (\texttt{HomeScene}, \texttt{HomeSceneController} e relativa implementazione), della schermata di scelta del gioco (\texttt{GameChoiceScene}, \texttt{GameChoiceSceneController} e relativa implementazione) e della schermata del regolamento di gioco (\texttt{RulesScene}, \texttt{RulesSceneController} e relativa implementazione). Per quanto concerne il regolamento, mi sono occupata anche della sua stesura su file HTML, in modo da avere una resa grafica migliore.
+	
+\end{itemize}
+
+Ho inoltre collaborato:
+
+\begin{itemize}
+	\item con Alin Stefan Bordeianu:
+		\begin{itemize}
+			\item per la risoluzione di alcuni problemi legati al rapporto tra le entità del dominio,
+confrontandoci per valutare idee diverse al fine di progettare delle buone soluzioni in termini di design, che minimizzassero le dipendenze tra le entità;
+			\item per l'implementazione dell'interfaccia \texttt{MatchMemento} all'interno della classe \texttt{Match};
+			\item per il design e l'implementazione del Controller dell'applicazione;
+			\item per alcuni dettagli implementativi delle classi atte al caricamento e al salvataggio della leaderboard, in particolare per quanto riguarda il caricamento del file.
+		\end{itemize}
+	\item con Margherita Raponi:
+		\begin{itemize}
+			\item per il debugging della \texttt{Board} a seguito di problemi emersi in fase di testing del \texttt{Match} e della \texttt{Board}.
+		\end{itemize}
 \end{itemize}
 
 

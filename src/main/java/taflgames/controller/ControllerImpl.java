@@ -18,6 +18,8 @@ import taflgames.controller.entitystate.PieceState;
 import taflgames.controller.leaderboard.api.LeaderboardSaver;
 import taflgames.controller.leaderboard.code.LeaderBoardImpl;
 import taflgames.controller.leaderboard.code.LeaderboardSaverImpl;
+import taflgames.controller.settingsloader.SettingsLoader;
+import taflgames.controller.settingsloader.SettingsLoaderImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
 import taflgames.model.builders.CellsCollectionBuilder;
@@ -100,26 +102,26 @@ public final class ControllerImpl implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public boolean isStartingPointValid(final Position p) {
-        return this.match.selectSource(p);
+    public boolean selectSource(final Position start) {
+        return this.match.selectSource(start);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isDestinationValid(final Position startPos, final Position endPos) {
-        return this.match.selectDestination(startPos, endPos);
+    public boolean selectDestination(final Position start, final Position destination) {
+        return this.match.selectDestination(start, destination);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean moveIfLegal(final Position startPos, final Position endPos) {
-        final boolean isMoveLegal = this.match.selectSource(startPos) && this.match.selectDestination(startPos, endPos);
+    public boolean moveIfLegal(final Position start, final Position destination) {
+        final boolean isMoveLegal = this.match.selectSource(start) && this.match.selectDestination(start, destination);
         if (isMoveLegal) {
-            this.match.makeMove(startPos, endPos);
+            this.match.makeMove(start, destination);
             // The move has been performed, so the board view must be updated.
             this.view.update();
         }
@@ -166,7 +168,7 @@ public final class ControllerImpl implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public Map<Position, CellState> getCellsDisposition() {
+    public Map<Position, CellState> getCellsMapping() {
         return this.match.getCellsMapping();
     }
 
@@ -174,7 +176,7 @@ public final class ControllerImpl implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public Map<Position, PieceState> getPiecesDisposition() {
+    public Map<Position, PieceState> getPiecesMapping() {
         return this.match.getPiecesMapping();
     }
 
@@ -183,7 +185,8 @@ public final class ControllerImpl implements Controller {
      */
     @Override
     public void undo() {
-        /* If history was not updated, this
+        /* 
+         * If history was not updated, this
          * method should do nothing.
          */
         if (this.caretaker.isLocked()) {
