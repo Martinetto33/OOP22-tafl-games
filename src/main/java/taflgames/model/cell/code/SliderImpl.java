@@ -189,6 +189,13 @@ public final class SliderImpl extends AbstractCell implements Slider {
          * that were attached this turn.
          * @param cellStatus the status of this Cell (true if this Cell is free, false if it is occupied).
          */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = """
+                A method to get a copy of an object of type CellComponentMemento is not provided.
+                CellComponentMemento are guaranteed not to be changed by any code.
+                """
+        )
         public SliderMementoImpl(final Set<CellComponentMemento> components,
                                  final Set<CellComponentMemento> justAddedComponents, final boolean cellStatus) {
             this.innerTriggered = SliderImpl.this.triggered;

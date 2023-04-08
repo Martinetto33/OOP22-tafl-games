@@ -40,7 +40,10 @@ import org.junit.jupiter.api.BeforeEach;
  * to save normal and variant matches status.
  */
 class TestMemento {
-
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
     private Model classicMatch;
@@ -373,5 +376,6 @@ class TestMemento {
         this.variantMatch.makeMove(startPos, endPos);
         this.variantMatch.setNextActivePlayer();
     }
+    // CPD-ON
 }
 

@@ -28,7 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 class TestCell {
-
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     private static final int DEFAULT_BOARD_SIZE = 5;
 
     private AbstractCell classic;
@@ -207,4 +210,5 @@ class TestCell {
         assertTrue(cells.get(new Position(3, 1)).isFree());
         assertFalse(cells.get(new Position(0, 1)).isFree());
     }
+    // CPD-ON
 }

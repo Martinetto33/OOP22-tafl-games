@@ -19,6 +19,10 @@ import taflgames.common.code.Position;
  * testing factoryHitbox.
  */
 class TestFactoryHitbox {
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     @Test
     void testCreateBasicHitboxDistance() {
         final FactoryHitbox f = new ImplFactoryHitbox();
@@ -87,4 +91,5 @@ class TestFactoryHitbox {
         assertThrows(IllegalArgumentException.class, () -> f.createArcherHitbox(0));
         assertThrows(IllegalArgumentException.class, () -> f.createArcherHitbox(-9));
     }
+    // CPD-ON
 }

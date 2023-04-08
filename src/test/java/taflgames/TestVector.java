@@ -19,6 +19,10 @@ import taflgames.common.code.VectorImpl;
 @SuppressWarnings("PMD.ReplaceVectorWithList") /*suppressed as the design requires
 some specific methods and Lists wouldn't come in handy in this case */
 class TestVector {
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     /**
      * Tests multiplication by a scalar.
      */
@@ -129,4 +133,5 @@ class TestVector {
         assertEquals(new VectorImpl(new Position(0, 0), new Position(5, 5)),
         v1.addVector(new VectorImpl(6, 9)));
     }
+    // CPD-ON
 }
