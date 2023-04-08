@@ -31,27 +31,27 @@ public interface Controller {
     /**
      * Checks if the first selected {@link taflgames.common.code.Position} represents
      * a valid starting point for a move.
-     * @param p the selected {@link taflgames.common.code.Position}
+     * @param start the selected {@link taflgames.common.code.Position}
      * @return true if the selection is a valid starting point for a move for the player
      * in turn.
      */
-    boolean isStartingPointValid(Position p);
+    boolean selectSource(Position start);
 
     /**
      * Checks if the move is valid.
-     * @param startPos the starting {@link taflgames.common.code.Position}.
-     * @param endPos the ending {@link taflgames.common.code.Position}.
+     * @param start the starting {@link taflgames.common.code.Position}.
+     * @param destination the ending {@link taflgames.common.code.Position}.
      * @return true if the move is valid.
      */
-    boolean isDestinationValid(Position startPos, Position endPos);
+    boolean selectDestination(Position start, Position destination);
 
     /**
      * Makes a move, only if starting point and ending point represent a legal move.
-     * @param startPos the starting {@link taflgames.common.code.Position}.
-     * @param endPos the ending {@link taflgames.common.code.Position}.
+     * @param start the starting {@link taflgames.common.code.Position}.
+     * @param destination the ending {@link taflgames.common.code.Position}.
      * @return true if the move is legal and then performed, false otherwise
      */
-    boolean moveIfLegal(Position startPos, Position endPos);
+    boolean moveIfLegal(Position start, Position destination);
 
     /**
      * @return true if the match is over.
@@ -89,14 +89,14 @@ public interface Controller {
      * other components are present, their types will follow at the successive
      * indexes.
      */
-    Map<Position, CellState> getCellsDisposition();
+    Map<Position, CellState> getCellsMapping();
 
     /**
      * Returns a map that might be useful for the purpose of the View, which
      * describes the current state of the pieces on the Board.
      * @return a Map describing the current state of the Pieces.
      */
-    Map<Position, PieceState> getPiecesDisposition();
+    Map<Position, PieceState> getPiecesMapping();
 
     /**
      * @return the player in turn.

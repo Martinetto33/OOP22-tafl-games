@@ -57,21 +57,21 @@ public final class MatchSceneControllerImpl extends AbstractBasicSceneController
 
     @Override
     public Map<Position, CellImageInfo> getCellsMapping() {
-        return this.getController().getCellsDisposition().entrySet().stream()
+        return this.getController().getCellsMapping().entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
                     Map.Entry::getKey, elem -> this.cellMapper.mapToImage(elem.getValue())));
     }
 
     @Override
     public Map<Position, PieceImageInfo> getPiecesMapping() {
-        return this.getController().getPiecesDisposition().entrySet().stream()
+        return this.getController().getPiecesMapping().entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
                     Map.Entry::getKey, elem -> this.pieceMapper.mapToImage(elem.getValue())));
     }
 
     @Override
     public boolean isSourceSelectionValid(final Position pos) {
-        return this.getController().isStartingPointValid(pos);
+        return this.getController().selectSource(pos);
     }
 
     @Override
