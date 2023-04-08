@@ -174,7 +174,7 @@ La Tomba è un'entità particolare della modalità variante che viene piazzata s
 
 La fase di setup della partita prevede la creazione della griglia di gioco e la disposizione delle pedine su di essa; in termini di codice, ciò corrisponde alla creazione di un oggetto di tipo \texttt{Board} e all'inizializzazione delle collezioni di celle e pedine che essa conserva internamente. 
 
-La costruzione delle due collezioni fa uso di due diversi builder: \\ \texttt{CellsCollectionBuilder} per la collezione di celle e \texttt{PiecesCollectionBuilder} per la collezione di pedine. Ogni metodo delle interfacce dei builder permette di aggiungere alle collezioni un sottoinsiemi di pedine e celle di un determinato tipo. Da notare che i builder ricevono le coordinate a cui posizionare celle e pedine dall'esterno (in quanto passate come parametri ai diversi metodi), quindi i builder operano in maniera indipendente dal modo in cui la configurazione iniziale di celle e pedine viene fornita.
+La costruzione delle due collezioni fa uso di due diversi builder: \\ \texttt{CellsCollectionBuilder} per la collezione di celle e \texttt{PiecesCollectionBuilder} per la collezione di pedine. Ogni metodo delle interfacce dei builder permette di aggiungere alle collezioni un sottoinsieme di pedine e celle di un determinato tipo. Da notare che i builder ricevono le coordinate a cui posizionare celle e pedine dall'esterno (in quanto passate come parametri ai diversi metodi), quindi i builder operano in maniera indipendente dal modo in cui la configurazione iniziale di celle e pedine viene fornita.
 
 La configurazione iniziale dipende dalla modalità di gioco (classica o variante). Il caricamento della configurazione per ogni modalità viene avviato mediante l'interfaccia \texttt{SettingsLoader}. Dietro tale interfaccia, si possono definire diverse possibilità per quanto riguarda il reperimento della configurazione, creando per ciascuna di esse una classe che implementi l'interfaccia. L'implementazione di \texttt{SettingsLoader} da me definita prevede il caricamento della configurazione da un file XML (uno per ogni modalità di gioco), ma sarebbe possibile definire altre classi che la ottengano in maniera differente. È una possibilità che potrebbe essere utile anche nel caso in cui si verifichino problemi: ad esempio, se il caricamento da file XML non va a buon fine per qualche motivo, si può decidere di procedere per una via alternativa, creando un nuovo tipo di loader che cerchi di reperire la configurazione in altro modo.
 
@@ -192,7 +192,7 @@ Per costruire le collezioni di pedine e celle secondo la configurazione, il \tex
 La view dell'applicazione, realizzata utilizzando la Java Swing API, è composta da un serie di scene.
 L'implementazione della \texttt{View} prevede la creazione del container più esterno della view (un \texttt{JFrame}) e l'alternarsi delle diverse scene viene gestito impostando il frame con un opportuno layout (\texttt{CardLayout}) che consente di sostituire il container interno (un \texttt{JPanel}) che viene mostrato, il quale corrisponde alla scena.
 
-Considerando la chiara differenza di ogni scena a livello grafico e le differenze di comportamento che ogni scena può avere (ad esempio, in risposta ad un input dell'utente), ho deciso di racchiudere il concetto di scena in un'entità a sè stante. L'interazione diretta con ogni scena avviene mediante l'interfaccia \texttt{Scene}, la quale consente di ottenere il container che costituisce la scena e di interagire con essa, ad esempio per il suo aggiornamento mediante il metodo \texttt{update()}. L'implementazione della \texttt{View} ha un riferimento alla \texttt{Scene} attualmente mostrata, il quale permette che un'interazione con la \texttt{View} abbia un effetto sulla scena corrente; ad esempio, se il controller dell'applicazione richiede l'aggiornamento della view mediante il metodo \texttt{update()} della \texttt{View}, in tale metodo viene richiamato il metodo \texttt{update()} della scena corrente.
+Considerando la chiara differenza di ogni scena a livello grafico e le differenze di comportamento che ogni scena può avere (ad esempio, in risposta ad un input dell'utente), ho deciso di racchiudere il concetto di scena in un'entità a sé stante. L'interazione diretta con ogni scena avviene mediante l'interfaccia \texttt{Scene}, la quale consente di ottenere il container che costituisce la scena e di interagire con essa, ad esempio per il suo aggiornamento mediante il metodo \texttt{update()}. L'implementazione della \texttt{View} ha un riferimento alla \texttt{Scene} attualmente mostrata, il quale permette che un'interazione con la \texttt{View} abbia un effetto sulla scena corrente; ad esempio, se il controller dell'applicazione richiede l'aggiornamento della view mediante il metodo \texttt{update()} della \texttt{View}, in tale metodo viene richiamato il metodo \texttt{update()} della scena corrente.
 
 Riflettendo sugli aspetti comuni che possono esserci tra le scene (ad esempio, la creazione del container e alcune sue impostazioni, oppure l'uso di altri parametri comuni, come il font) ho ritenuto che fosse utile definire una classe astratta (\texttt{AbstractScene}) che implementasse tali aspetti comuni tra le scene. 
 
@@ -424,7 +424,9 @@ L'autocritica maggiore che posso farmi è che ho la sensazione di non aver contr
 \section{Difficoltà incontrate e commenti per i docenti}
 
 \subsection{Alin Stefan Bordeianu}
-Il corso è il più impegnativo che abbia affrontato in tutto il corso di laurea. Nonostante apprezzi le sfide e le occasioni di espandere i miei orizzonti, devo ammettere che questo corso non lascia molto spazio per altro, in quanto il progetto richiede un grande sforzo per finire in tempo e spesso e volentieri si sacrificano ore di lezione (e di sonno) per la sua realizzazione. Un suggerimento potrebbe essere quello di consentire agli studenti di fare la proposta di progetto e almeno l'analisi già durante il corso stesso. Vorrei ribadire anche il fatto che si potrebbero approfondire meglio gli aspetti legati al DVCS, magari dedicando una lezione di laboratorio a un mini progettino su cui lavorare a coppie, giusto per aiutare gli studenti a prendere confidenza con i vari pull, push, commit, merge, ecc.
+Il corso è il più impegnativo che abbia affrontato in tutta la triennale. Nonostante apprezzi le sfide e le occasioni di espandere i miei orizzonti, devo ammettere che questo corso non lascia molto spazio per altro, in quanto il progetto richiede un grande sforzo per essere finito in tempo e spesso e volentieri si sacrificano ore di lezione (e di sonno) per la sua realizzazione. Un suggerimento potrebbe essere quello di consentire agli studenti di fare la proposta di progetto e almeno l'analisi già durante il corso stesso. Vorrei ribadire anche il fatto che si potrebbero approfondire ancora di più gli aspetti legati al DVCS, magari dedicando una lezione di laboratorio a un mini progettino su cui lavorare a coppie, giusto per aiutare gli studenti a prendere confidenza con i vari pull, push, commit, merge, ecc. quando ad utilizzare lo strumento si è in più di uno.
+
+Aggiungo anche una considerazione sul laboratorio di C\#: purtroppo non è stato dedicata sufficiente attenzione a quella parte del corso (ad esempio i test che dovevamo usare per verificare il nostro codice erano errati e malfunzionanti), e per queste ragioni il primo impatto con tale linguaggio non è stato molto gradevole.
 
 
 \appendix
@@ -436,6 +438,20 @@ Si rende presente il fatto che nelle varie partite bisogna cliccare il tasto "Pa
 \chapter{Esercitazioni di laboratorio}
 
 \subsection{alinstefan.bordeianu@studio.unibo.it}
+
+\begin{itemize}
+	\item Laboratorio 05: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=114647#p169729}
+	
+	\item Laboratorio 06: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=115548#p171164}
+	
+	\item Laboratorio 09: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=118995#p175327}
+	
+	\item Laboratorio 10: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=119938#p176526}
+\end{itemize}
+
+\subsection{elena.boschetti@studio.unibo.it}
+
+\subsection{andrea.piermattei@studio.unibo.it}
 
 \subsection{margherita.raponi@studio.unibo.it}
 
