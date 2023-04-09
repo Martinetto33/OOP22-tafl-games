@@ -102,7 +102,7 @@ public final class Match implements Model {
      * for saving the current state of the match and provide it on request.
      */
     public static final class MatchMementoImpl implements MatchMemento {
-        /* This class was made static to solve SpotBugs warning. */
+
         private final int turnNumber;
         private final Player activePlayer;
         private final BoardMemento boardMemento;
@@ -115,10 +115,8 @@ public final class Match implements Model {
          */
         @SuppressFBWarnings(
             value = "EI_EXPOSE_REP",
-            justification = """
-                A method to get a copy of an object of type BoardMemento is not provided.
-                BoardMemento are guaranteed not to be changed by any code.
-                """
+            justification = "A method to get a copy of an object of type BoardMemento is not provided."
+                + "BoardMemento are guaranteed not to be changed by any code."
         )
         public MatchMementoImpl(final int turnNumber, final Player activePlayer, final BoardMemento boardMemento) {
             this.turnNumber = turnNumber;
