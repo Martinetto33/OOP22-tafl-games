@@ -32,7 +32,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SettingsLoaderImpl.class);
 
-    private static final String SEP = System.getProperty("file.separator");
+    private static final String SEP = "/";
     private static final String PATH = "taflgames" + SEP + "config" + SEP;
     private static final String CLASSIC_CONFIG_FILE = "ClassicModeSettings.xml";
     private static final String VARIANT_CONFIG_FILE = "VariantModeSettings.xml";

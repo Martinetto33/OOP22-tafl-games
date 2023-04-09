@@ -20,7 +20,7 @@ public abstract class AbstractScene implements Scene {
 
     private final String sceneName;
     private final JPanel scene;
-    private static final String SEP = System.getProperty("file.separator");
+    private static final String SEP = "/";
     private static final String ROOT = "taflgames" + SEP;
     private static final String BG_FILE_NAME = "background.jpeg";
     private static final String COMPONENT_BACKGROUND = "wooden-plank.jpg";

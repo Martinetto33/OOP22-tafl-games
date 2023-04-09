@@ -12,7 +12,7 @@ import taflgames.view.scenes.GameChoiceScene;
  */
 public final class RulesSceneControllerImpl extends AbstractBasicSceneController implements RulesSceneController {
 
-    private static final String SEP = System.getProperty("file.separator");
+    private static final String SEP = "/";
     private static final String FILE_NAME = "Rules.html"; 
     private static final String FILE_PATH = "taflgames"
             + SEP + "rules"

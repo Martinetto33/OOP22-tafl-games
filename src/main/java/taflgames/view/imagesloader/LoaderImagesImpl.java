@@ -41,7 +41,7 @@ public class LoaderImagesImpl implements LoaderImages {
 
     private static final String CELL_SLIDER_NAME = "CELL_SLIDER";
 
-    private static final String SEP = System.getProperty("file.separator");
+    private static final String SEP = "/";
     private static final String ROOT = "taflgames" + SEP + "images" + SEP;
 
     private static final int ANGLE_90 = 90;
