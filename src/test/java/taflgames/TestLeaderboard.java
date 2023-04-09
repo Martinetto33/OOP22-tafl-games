@@ -44,6 +44,9 @@ class TestLeaderboard {
      */
     @BeforeAll
     static void initialise() {
+        if (!Installer.doesDirectoryExist() || !Installer.doesFileExist()) {
+            Installer.createFile();
+        }
         TestLeaderboard.EXPECTED_RESULTS.put("Alin Bordeianu", new Pair<>(0, 10));
         TestLeaderboard.EXPECTED_RESULTS.put("Elena Boschetti", new Pair<>(3, 3));
         TestLeaderboard.EXPECTED_RESULTS.put("Andrea Piermattei", new Pair<>(4, 2));
