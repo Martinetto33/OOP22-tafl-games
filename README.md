@@ -30,6 +30,10 @@ Il progetto è stato realizzato per il corso di Programmazione ad Oggetti del co
 
         java -jar filepath/tafl-games-all.jar
 
+## Guida Utente
+
+Per giocare è necessario premere il tasto "Pass Turn" in seguito a ciascuna mossa.
+
 ## Autori
 <ul>
     <li>Alin Stefan Bordeianu</li>
