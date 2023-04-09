@@ -17,6 +17,19 @@ Il progetto è stato realizzato per il corso di Programmazione ad Oggetti del co
 
 ## Setup
 
+- Prima di avviare l'applicazione, assicurarsi di avere il Java Runtime Environment (versione 17 o successive), scaricabile [qui](https://www.oracle.com/java/technologies/downloads/#java8).
+- In ambiente Linux, eseguire con:
+
+        .\gradlew run
+
+- Su Windows, eseguire con:
+
+        .\gradlew.bat run
+
+- E' anche possibile scaricare il .jar ed eseguirlo con:
+
+        java -jar filepath/tafl-games-all.jar
+
 ## Autori
 <ul>
     <li>Alin Stefan Bordeianu</li>
