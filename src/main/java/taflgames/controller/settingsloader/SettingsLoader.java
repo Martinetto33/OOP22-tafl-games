@@ -1,4 +1,4 @@
-package taflgames.controller;
+package taflgames.controller.settingsloader;
 
 import java.io.IOException;
 

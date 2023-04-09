@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
-import taflgames.controller.SettingsLoader;
-import taflgames.controller.SettingsLoaderImpl;
+import taflgames.controller.settingsloader.SettingsLoader;
+import taflgames.controller.settingsloader.SettingsLoaderImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
 import taflgames.model.board.api.Board;
