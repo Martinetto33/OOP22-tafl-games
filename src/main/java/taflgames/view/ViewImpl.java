@@ -3,7 +3,9 @@ package taflgames.view;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -23,6 +25,9 @@ public final class ViewImpl implements View {
     private static final double DEFAULT_FRAME_HEIGHT_PROP = 0.67;
     private static final double MIN_FRAME_WIDTH_PROP = 0.60;
     private static final double MIN_FRAME_HEIGHT_PROP = 0.60;
+    private static final String SEP = "/";
+    private static final String PATH = "taflgames" + SEP + "images" + SEP;
+    private static final String ICON_FILE_NAME = "ICON_GAME.png";
 
     private final JFrame frame;
     private final CardLayout frameLayout;
@@ -49,6 +54,10 @@ public final class ViewImpl implements View {
             (int) (screenWidth * MIN_FRAME_WIDTH_PROP),
             (int) (screenHeight * MIN_FRAME_HEIGHT_PROP)
         ));
+
+        final URL imgURL = ClassLoader.getSystemResource(PATH + ICON_FILE_NAME);
+        final ImageIcon icon = new ImageIcon(imgURL);
+        frame.setIconImage(icon.getImage());
 
         // Set frame layout as CardLayout to implement switching between different scenes
         frameLayout = new CardLayout();

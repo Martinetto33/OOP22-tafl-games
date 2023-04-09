@@ -26,7 +26,7 @@ import taflgames.controller.leaderboard.api.LeaderboardSaver;
  */
 public class LeaderboardSaverImpl implements LeaderboardSaver {
 
-    private static final String SEP = System.getProperty("file.separator");
+    private static final String SEP = "/";
     private static final String PATH = "taflgames" + SEP + "leaderboardSave" + SEP;
     private static final String LEADERBOARD_SAVE_FILE_NAME = "leaderboard.yaml";
     private static final Logger LOGGER = LoggerFactory.getLogger(LeaderboardSaverImpl.class);

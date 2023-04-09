@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FontManager {
 
-    private static final String SEP = System.getProperty("file.separator");
+    private static final String SEP = "/";
     private static final String PATH = "taflgames" + SEP + "font" + SEP;
     private static final String FONT_FILE_NAME = "latin_runes_v20.ttf";
     private static final int DEFAULT_BUTTON_TEXT_SIZE = 18;
