@@ -12,7 +12,7 @@
 
 \usepackage[italian]{cleveref}
 
-\title{TaflGames\\\large Relazione per il progetto \\ del corso di \\ Object-Oriented Programming \\ A.A. 2022/23}
+\title{TaflGames\\\large Relazione per il progetto \\ del corso di \\ Programmazione ad Oggetti \\ A.A. 2022/23}
 \author{Alin Stefan Bordeianu \\ Elena Boschetti \\ Andrea Piermattei \\ Margherita Raponi}
 \date{\today}	
 
@@ -207,8 +207,6 @@ Le implementazioni concrete di ogni scena estendono \texttt{AbstractScene} e def
 \label{images:scenes}
 \end{figure}
 
-In seguito a questa fase di design, mi sono occupata di implementare la scena della home del gioco (\texttt{HomeScene}), la scena della scelta della modalità di gioco (\texttt{GameChoiceScene}) e della scena che mostra il regolamento (\texttt{RulesScene}).
-
 \subsubsection{Scene Controllers}
 
 Nello sviluppo delle funzionalità delle scene, si è rivelato quasi sempre necessario che la scena interagisse con la \texttt{View} (che, come detto precedentemente, ha la funzione di wrapper della scena) o con il Controller dell'applicazione. Per questo motivo, ho deciso di introdurre delle entità, a cui mi riferisco con il termine "scene controllers", che regolano il comportamento della scena e che hanno il ruolo di mediatore tra \texttt{Scene}, \texttt{View} e \texttt{Controller}.
@@ -233,8 +231,6 @@ L'implementazione di ogni scene controller deve quindi implementare la sua speci
 \caption{Schema UML che rappresenta il design di uno scene controller (in questo caso, lo scene controller della scena di scelta del gioco).}
 \label{images:game-choice-scene-controller}
 \end{figure}
-
-In seguito a questa fase di design, mi sono occupata di implementare gli scene controller delle scene di mia competenza.
 
 \subsection{Andrea Piermattei}
 \subsubsection{Progettazione delle pedine}
@@ -421,7 +417,8 @@ Queste due mappe verranno poi sfruttate, durante tutto il corso della partita, d
 \section{Testing automatizzato}
 
 Il testing automatizzato dell'applicazione ha riguardato la parte logica dell'applicazione. Data la natura piuttosto articolata e "gerarchica" del dominio di gioco, il testing è stato portato avanti con un approccio bottom-up. Sono prima stati testati singolarmente i componenti più piccoli del dominio (celle e pedine), controllando che il loro stato interno fosse inizializzato correttamente. Essi sono successivamente stati testati sulla griglia di gioco, verificando che si ottenessero gli effetti desiderati dall'interazione tra le diverse pedine e celle. Chiaramente, è stata testata anche la corretta configurazione iniziale di celle e pedine secondo quanto stabilito dal regolamento delle due modalità di gioco. Infine, il tutto è stato testato nel contesto della partita, considerando quindi un ambiente di gioco completo e l'alternanza dei turni tra i giocatori.
-Per la scrittura e lo svolgimento dei test, è stato utilizzato il framework JUnit 5.
+
+Per la scrittura e lo svolgimento dei test, è stato utilizzato il framework \texttt{JUnit 5}.
 
 \section{Metodologia di lavoro}
 
@@ -496,6 +493,37 @@ In collaborazione ho lavorato:
 		
 	\end{itemize}
 
+\end{itemize}
+
+\subsection{Elena Boschetti}
+
+Di seguito, sono elencate la parti di cui mi sono occupata in autonomia.
+
+\begin{itemize}
+	\item Mi sono occupata dell'implementazione dell'interfaccia del Model dell'applicazione, nello specifico della classe \texttt{taflgames.model.Match}.
+	\item Ho realizzato i builder per la costruzione delle collezioni di celle e pedine (package \texttt{taflgames.model.builders}).
+	\item Mi sono occupata del caricamento da file XML della configurazione della griglia di gioco in base alla modalità scelta e dell'inizializzazione delle collezioni di celle e pedine coerentemente con essa (package \texttt{taflgames.controller.settingsloader});
+	\item Mi sono occupata del design della view, sia per quanto riguarda le scene (package \texttt{taflgames.view.scenes}), sia per quanto riguarda gli scene controllers (package \texttt{taflgames.view.scenecontrollers}), e ho realizzato le interfacce e le classi di base di entrambi (\texttt{Scene}, \texttt{AbstractScene}, \texttt{BasicSceneController}, \texttt{AbstractBasicSceneController}).
+	\item Ho implementato le scene e gli scene controllers della schermata della home dell'applicazione (\texttt{HomeScene}, \texttt{HomeSceneController} e relativa implementazione), della schermata di scelta del gioco (\texttt{GameChoiceScene}, \texttt{GameChoiceSceneController} e relativa implementazione) e della schermata del regolamento di gioco (\texttt{RulesScene}, \texttt{RulesSceneController} e relativa implementazione). Per quanto concerne il regolamento, mi sono occupata anche della sua stesura su file HTML, in modo da avere una resa grafica migliore.
+	
+\end{itemize}
+
+Ho inoltre collaborato:
+
+\begin{itemize}
+	\item con Alin Stefan Bordeianu:
+		\begin{itemize}
+			\item per la risoluzione di alcuni problemi legati al rapporto tra le entità del dominio,
+confrontandoci per valutare idee diverse al fine di progettare delle buone soluzioni in termini di design, che minimizzassero le dipendenze tra le entità;
+			\item per l'implementazione dell'interfaccia \texttt{MatchMemento} all'interno della classe \texttt{Match};
+			\item per il design e l'implementazione del Controller dell'applicazione;
+			\item per alcuni dettagli implementativi delle classi atte al caricamento e al salvataggio della leaderboard, in particolare per quanto riguarda il caricamento del file.
+		\end{itemize}
+	\item con Margherita Raponi:
+		\begin{itemize}
+			\item per l'integrazione tra Match e Board;
+			\item per il debugging della \texttt{Board} a seguito di problemi emersi in fase di testing del \texttt{Match} e della \texttt{Board}.
+		\end{itemize}
 \end{itemize}
 
 \subsection{Andrea Piermattei}
@@ -648,7 +676,7 @@ Uno dei rimpianti che ho è non aver avuto molto tempo di ripassare sul codice s
 
 L'autocritica maggiore che posso farmi è che ho la sensazione di non aver contribuito molto alla scrittura di parti davvero sostanziali dell'applicazione, per quanto il Memento sia stato divertente. Forse quest'ultima considerazione è data dal fatto che il mio obiettivo è arrivare a lavorare nell'ambito dello sviluppo dei videogiochi e non sento di aver toccato con mano le meccaniche fondamentali dello Hnefatafl. Se trovassi del tempo in futuro, mi piacerebbe molto estendere l'applicazione, magari introducendo la possibilità di registrare dei replay grazie al Memento, inserire suoni e nuove modalità di gioco, pedine o celle, e magari spaziare anche su più aspetti di grafica, Java Swing permettendo.
 
-\subsubsection{Elena Boschetti}
+\subsection{Elena Boschetti}
 
 Questo progetto è stata un'esperienza davvero interessante e mi ha insegnato molto. Ora ho un'idea più chiara di come viene condotto lo sviluppo di un prodotto software e sono più consapevole dei problemi che possono emergere in corso d'opera e delle buone pratiche per previnirli ed affrontarli. Non sono infatti mancate le difficoltà, sia di carattere tecnico che organizzativo, ma ho sempre cercato di farvi fronte in modo pratico e utilizzando tutte le risorse che avevo a disposizione.
 
