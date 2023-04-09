@@ -109,7 +109,7 @@ public abstract class AbstractScene implements Scene {
             @Override
             public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
-                final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + COMPONENT_BACKGROUND);
+                final URL imgURL = ClassLoader.getSystemResource(ROOT + "images" + SEP + COMPONENT_BACKGROUND);
                 final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
                 image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
