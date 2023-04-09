@@ -91,7 +91,7 @@ Il \texttt{Controller} si occupa del coordinamento fra Model e View, permettendo
 Un passaggio del turno o l'annullamento di un mossa durante la partita implicano un cambiamento nello stato interno del Model (come minimo, la mossa di una pedina); tali cambiamenti devono essere riflessi dalla View, per cui il Controller segnala alla View la necessità di un'aggiornamento. A questo punto, la View si occupa di richiedere le informazioni necessarie al Controller, il quale le chiede a sua volta al Model.
 Il Controller gestisce, inoltre, alcune risorse non inerenti alla parte grafica dell'applicazione, ad esempio file di configurazione per il setup della partita e file per il salvataggio e il caricamento della leaderboard.
 
-Per quanto riguarda la View, essa è composta da più scene che si alternano tra loro, ognuna delle quali è rappresentata dall'entità \texttt{Scene}; in pratica, la View è un container di \texttt{Scene}. La comunicazione della Scene verso il Controller (ad esempio, per la richiesta dei dati necessari all'aggiornamento della view della board) e verso la View (ad esempio, per il cambio di scena) avviene mediante delle entità intermedie, indicate con il termine "scene controllers"; ogni scena ha un proprio scene controller, che si occupa dell'invio delle richieste specifiche di quella scena.
+Per quanto riguarda la View, essa è composta da più scene che si alternano tra loro, ognuna delle quali è rappresentata dall'entità \texttt{Scene}; in pratica, la View è un container di \texttt{Scene}. La comunicazione della Scene verso il Controller (ad esempio, per la richiesta dei dati necessari all'aggiornamento della view della board) e verso la View (ad esempio, per il cambio di scena) avviene mediante delle entità intermedie, indicate con il termine "scene controllers"; ogni scena ha un proprio scene controller, che si occupa dell'invio delle richieste specifiche di quella scena. Questa scelta è stata fatta per dividere le diverse responsabilità legate alla scena: la \texttt{Scene} si occupa di costruire la parte strettamente grafica, mentre le interazioni con la View e il Controller legate alle funzionalità della scena sono delegate allo \texttt{Scene Controller}.
 
 \begin{figure}[H]
 \centering
@@ -172,13 +172,15 @@ La Tomba è un'entità particolare della modalità variante che viene piazzata s
 
 \subsubsection{Match setup}
 
-La fase di setup della partita prevede la creazione della griglia di gioco e la disposizione delle pedine su di essa; in termini di codice, ciò corrisponde alla creazione di un oggetto di tipo \texttt{Board} e all'inizializzazione delle collezioni di celle e pedine che essa conserva internamente. 
+La fase di setup della partita prevede la creazione della griglia di gioco e la disposizione delle pedine su di essa. 
 
-La costruzione delle due collezioni fa uso di due diversi builder: \\ \texttt{CellsCollectionBuilder} per la collezione di celle e \texttt{PiecesCollectionBuilder} per la collezione di pedine. Ogni metodo delle interfacce dei builder permette di aggiungere alle collezioni un sottoinsieme di pedine e celle di un determinato tipo. Da notare che i builder ricevono le coordinate a cui posizionare celle e pedine dall'esterno (in quanto passate come parametri ai diversi metodi), quindi i builder operano in maniera indipendente dal modo in cui la configurazione iniziale di celle e pedine viene fornita.
+Per la costruzione della collezione di celle e della collezione di pedine, sono usati due diversi builder: \texttt{CellsCollectionBuilder} e \\ \texttt{PiecesCollectionBuilder}. Ogni metodo delle interfacce dei builder permette di aggiungere alle collezioni un sottoinsieme di pedine e celle di un determinato tipo. Da notare che i builder ricevono le coordinate a cui posizionare celle e pedine dall'esterno (in quanto passate come parametri ai diversi metodi), quindi i builder operano in maniera indipendente dal modo in cui la configurazione iniziale di celle e pedine viene fornita.
 
 La configurazione iniziale dipende dalla modalità di gioco (classica o variante). Il caricamento della configurazione per ogni modalità viene avviato mediante l'interfaccia \texttt{SettingsLoader}. Dietro tale interfaccia, si possono definire diverse possibilità per quanto riguarda il reperimento della configurazione, creando per ciascuna di esse una classe che implementi l'interfaccia. L'implementazione di \texttt{SettingsLoader} da me definita prevede il caricamento della configurazione da un file XML (uno per ogni modalità di gioco), ma sarebbe possibile definire altre classi che la ottengano in maniera differente. È una possibilità che potrebbe essere utile anche nel caso in cui si verifichino problemi: ad esempio, se il caricamento da file XML non va a buon fine per qualche motivo, si può decidere di procedere per una via alternativa, creando un nuovo tipo di loader che cerchi di reperire la configurazione in altro modo.
 
-Per costruire le collezioni di pedine e celle secondo la configurazione, il \texttt{SettingsLoader} riceve un \texttt{CellsCollectionBuilder} e un \\ \texttt{PiecesCollectionBuilder} e interagisce con essi per creare e posizionare correttamente ogni tipologia di celle e pedine; ad esempio, il \texttt{SettingsLoader} ottiene le posizioni delle Exit Cells e successivamente chiama il metodo \texttt{addExits()} del \texttt{CellsCollectionBuilder}, passando tali posizioni. Una volta completata la costruzione delle due collezioni, esse vengono passate alla \texttt{Board} che viene istanziata, la quale viene a sua volta passata all'istanza di \texttt{Match} che viene creata.
+Per costruire le collezioni di pedine e celle secondo la configurazione, il \texttt{SettingsLoader} riceve un \texttt{CellsCollectionBuilder} e un \\ \texttt{PiecesCollectionBuilder} e interagisce con essi per creare e posizionare correttamente ogni tipologia di celle e pedine; ad esempio, il \texttt{SettingsLoader} ottiene le posizioni delle Exit Cells e successivamente chiama il metodo \texttt{addExits()} del \texttt{CellsCollectionBuilder}, passando tali posizioni.
+
+Una volta completata la costruzione delle due collezioni, esse vengono passate alla \texttt{Board} che viene istanziata, la quale viene a sua volta passata all'istanza di \texttt{Match} che viene creata.
 
 \begin{figure}[H]
 \centering
@@ -190,13 +192,13 @@ Per costruire le collezioni di pedine e celle secondo la configurazione, il \tex
 \subsubsection{Scenes}
 
 La view dell'applicazione, realizzata utilizzando la Java Swing API, è composta da un serie di scene.
-L'implementazione della \texttt{View} prevede la creazione del container più esterno della view (un \texttt{JFrame}) e l'alternarsi delle diverse scene viene gestito impostando il frame con un opportuno layout (\texttt{CardLayout}) che consente di sostituire il container interno (un \texttt{JPanel}) che viene mostrato, il quale corrisponde alla scena.
+L'implementazione della \texttt{View} prevede la creazione del container più esterno della view e l'alternarsi delle diverse scene viene gestito impostando il frame con un opportuno layout che consente di sostituire il container interno che viene mostrato, il quale corrisponde alla scena.
 
-Considerando la chiara differenza di ogni scena a livello grafico e le differenze di comportamento che ogni scena può avere (ad esempio, in risposta ad un input dell'utente), ho deciso di racchiudere il concetto di scena in un'entità a sé stante. L'interazione diretta con ogni scena avviene mediante l'interfaccia \texttt{Scene}, la quale consente di ottenere il container che costituisce la scena e di interagire con essa, ad esempio per il suo aggiornamento mediante il metodo \texttt{update()}. L'implementazione della \texttt{View} ha un riferimento alla \texttt{Scene} attualmente mostrata, il quale permette che un'interazione con la \texttt{View} abbia un effetto sulla scena corrente; ad esempio, se il controller dell'applicazione richiede l'aggiornamento della view mediante il metodo \texttt{update()} della \texttt{View}, in tale metodo viene richiamato il metodo \texttt{update()} della scena corrente.
+Considerando la chiara differenza di ogni scena a livello grafico e di comportamento (ad esempio, in risposta ad un'azione dell'utente), ho deciso di racchiudere il concetto di scena in un'entità a sé stante. L'interazione diretta con ogni scena avviene mediante l'interfaccia \texttt{Scene}. L'implementazione della \texttt{View} ha un riferimento alla \texttt{Scene} attualmente mostrata, il quale permette che un'interazione con la \texttt{View} abbia un effetto sulla scena corrente; ad esempio, se il controller dell'applicazione richiede l'aggiornamento della view mediante il metodo \texttt{update()} della \texttt{View}, in tale metodo viene richiamato il metodo \texttt{update()} della scena corrente.
 
-Riflettendo sugli aspetti comuni che possono esserci tra le scene (ad esempio, la creazione del container e alcune sue impostazioni, oppure l'uso di altri parametri comuni, come il font) ho ritenuto che fosse utile definire una classe astratta (\texttt{AbstractScene}) che implementasse tali aspetti comuni tra le scene. 
+Riflettendo sugli aspetti comuni che possono esserci tra le scene (ad esempio, alcune impostazioni grafiche come lo sfondo o il font) ho ritenuto che fosse utile definire una classe astratta (\texttt{AbstractScene}) che si occupasse di implementare tali aspetti comuni, ad esempio creando una scena con alcuni parametri già impostati e di fornendone altri su richiesta. 
 
-Le implementazioni concrete di ogni scena estendono \texttt{AbstractScene} e definiscono tutto ciò che è inerente alla specifica scena; in particolare, ogni classe costruisce la parte grafica della scena e definisce altri eventuali metodi utili all'interazione dalla \texttt{View} alla scena. Ad esempio, qualora una scena debba avere un aggiornamento a seguito di un input dell'utente, esso può essere innescato chiamando il metodo \texttt{update()}, come detto precedentemente.
+Le implementazioni concrete di ogni scena estendono \texttt{AbstractScene} e definiscono ciò che è inerente alla specifica scena; in particolare, ogni classe costruisce la parte grafica della scena corrispondente e, se necessario, ridefinisce i metodi di interazione tra \texttt{View} alla scena, come il metodo \texttt{update()} menzionato precedentemente.
 
 \begin{figure}[H]
 \centering
@@ -211,7 +213,7 @@ Nello sviluppo delle funzionalità delle scene, si è rivelato quasi sempre nece
 
 Tutte le scene hanno alcune funzionalità e necessità in comune, come il passaggio alla scena successiva o precedente e la necessità di conoscere le dimensioni della view per dimensionare i componenti interni; per questo motivo, ho deciso di raggruppare queste in un'unica interfaccia (\texttt{BasicSceneController}). Successivamente, ho notato che gli scene controllers condividevano anche parte della loro implementazione: ad esempio, contengono tutti un riferimento alla \texttt{View} e al \texttt{Controller} e ottengono dalla view le informazioni utili per il dimensionamento nello stesso modo; ho quindi deciso di realizzare una classe astratta (\texttt{AbstractSceneController}) che implementasse tali aspetti comuni.
 
-Ogni scena ha poi le proprie specifiche funzionalità; ciò rende necessario che lo scene controller di ogni scena fornisca degli ulteriori metodi per poterle attuare, oltre a quelli stabiliti nel \texttt{BasicSceneController}. Ad esempio, Lo scene controller della home scene permette anche il passaggio alla scena che mostra gli high scores e permette di comunicare alla \texttt{View} la richiesta di chiusura dell'applicazione. Lo scene controller della scena di scelta del gioco, invece, permette la creazione della partita nella modalità scelta e permette di passare alla scena che mostra il regolamento di gioco. Ho quindi deciso che, per ogni scena, il rispettivo scene controller dovesse avere una propria interfaccia, che estendesse \texttt{BasicSceneController} (si veda la \Cref{images:scene-controllers-interfaces} in relazione agli esempi appena fatti). 
+Ogni scena ha poi le proprie specifiche funzionalità; ciò rende necessario che lo scene controller di ogni scena fornisca degli ulteriori metodi per poterle attuare, oltre a quelli stabiliti nel \texttt{BasicSceneController}. Ad esempio, lo scene controller della home scene permette anche il passaggio alla scena che mostra gli high scores e permette di comunicare alla \texttt{View} la richiesta di chiusura dell'applicazione. Lo scene controller della scena di scelta del gioco, invece, permette la creazione della partita nella modalità scelta e permette di passare alla scena che mostra il regolamento di gioco. Ho quindi deciso che, per ogni scena, il rispettivo scene controller dovesse avere una propria interfaccia, che estendesse \texttt{BasicSceneController} (si veda la \Cref{images:scene-controllers-interfaces} in relazione agli esempi appena fatti). 
 
 \begin{figure}[H]
 \centering
@@ -241,10 +243,20 @@ L'implementazione di ogni scene controller deve quindi implementare la sua speci
 
 \section{Testing automatizzato}
 
-Il testing automatizzato dell'applicazione ha riguardato la parte logica dell'applicazione. Data la natura piuttosto articolata e "gerarchica" del dominio di gioco, il testing è stato portato avanti con un approccio bottom-up. Sono prima stati testati singolarmente i componenti più piccoli del dominio (celle e pedine), controllando che il loro stato interno fosse inizializzato correttamente. Essi sono successivamente stati testati sulla griglia di gioco, verificando che si ottenessero gli effetti desiderati dall'interazione tra le diverse pedine e celle. Chiaramente, è stata testata anche la corretta configurazione iniziale di celle e pedine secondo quanto stabilito dal regolamento delle due modalità di gioco. Infine, il tutto è stato testato nel contesto della partita, considerando quindi un ambiente di gioco completo e l'alternanza dei turni tra i giocatori.
-Per la scrittura e lo svolgimento dei test, è stato utilizzato il framework JUnit 5.
+Il testing automatizzato ha riguardato la parte logica dell'applicazione. Data la natura piuttosto articolata e "gerarchica" del dominio di gioco, il testing è stato portato avanti con un approccio bottom-up. Sono prima stati testati singolarmente i componenti più piccoli del dominio (celle e pedine), controllando che il loro stato interno fosse inizializzato correttamente. Essi sono successivamente stati testati sulla griglia di gioco, verificando che si ottenessero gli effetti desiderati dall'interazione tra le diverse pedine e celle. Chiaramente, è stata testata anche la corretta configurazione iniziale di celle e pedine secondo quanto stabilito dal regolamento delle due modalità di gioco. Infine, il tutto è stato testato nel contesto della partita, considerando quindi un ambiente di gioco completo e l'alternanza dei turni tra i giocatori.
+Per la scrittura e lo svolgimento dei test, è stato utilizzato il framework \texttt{JUnit 5}.
 
 \section{Metodologia di lavoro}
+
+La prima parte del progetto è consistita nella definizione delle entità principali del dominio di gioco e nella definizione delle loro interfacce. In questa fase, abbiamo lavorato insieme, cercando di far emergere dal confronto le scelte migliori che potessero portarci ad un buon design architetturale da cui partire. 
+
+Una volta stabilita l'architettura di base, ciascun membro del gruppo si è dedicato al design dettagliato della parte del Model di propria competenza e successivamente alla sua implementazione, lavorando ciascuno su un branch personale. Considerando le inevitabili dipendenze tra le diverse parti del dominio (il Match utilizza la Board e la Board utilizza l'implementazione delle pedine e delle celle), si sono rilvelati necessari alcuni accorgimenti per poter comunque permettere lo sviluppo delle parti in parallelo. Ad esempio, fino a che l'implementazione delle pedine non è stata completa, durante lo sviluppo della Board sono state impiegate delle classi fittizie da utilizzare come "placeholder" delle implementazioni reali, in modo da poter comunque sviluppare buona parte delle funzionalità della Board e renderla parzialmente testabile. Discorso simile vale per il Match e per il setup della partita finché non è stata completata l'implementazione della Board, con la differenza che il testing del Match è stato necessariamente fatto solo dopo che la Board è stata completata, in quanto le dipendenze tra le funzionalità del Match da quelle della Board sono più estese e una classe fittizia non permetteva un adeguato testing. A seguito dell'integrazione delle sottoparti complete (ad esempio, l'integrazione della Board nel Match), in fase di testing sono talvolta emersi alcuni bug che non si erano verificati testando la sottoparte singolarmente in un contesto non altrettanto completo, e ciò ha richiesto alcuni aggiustamenti.
+
+Dopo che l'implementazione di tutte le parti di Model è stata completata e testata, è iniziata la costruzione della View. Parallelamente con essa, è stata portata avanti anche la costruzione del Controller, mano a mano che si delineavano le interazioni necessarie a ciascuna parte della View. Si rende noto, inoltre, che lo Scene Controller non era un elemento previsto nell'architettura iniziale ed è stato intodotto proprio durante questa fase.
+
+Quando anche le funzionalità base della View e del Controller sono state realizzate, ci si è curati di migliorare l'applicazione, collaudando altre funzionalità (ad esempio, l'annullamento delle mosse), risolvendo alcuni bug di lieve entità e apportando alcuni rifinimenti grafici.
+
+Durante tutta la fase implementativa del progetto, è stato utilizzato Git come DVCS, secondo le modalità descritte a lezione: ogni volta che un componente del gruppo ha avuto necessità di lavorare su una particolare feature, è sempre stato creato un branch secondario su cui svolgere tutto il lavoro fino completamento della feature, dopo il quale veniva fatto il merge del feature branch nel branch \texttt{develop}. 
 
 \subsection{Alin Stefan Bordeianu}
 In autonomia mi sono occupato di:
@@ -254,6 +266,8 @@ In autonomia mi sono occupato di:
 	\item creazione del \texttt{Caretaker}, del sistema di registrazione degli stati della partita mediante il pattern Memento, scrittura delle InnerClass che implementano le varie interfacce Memento nel caso delle \texttt{Cells} e della \texttt{Board} (package taflgames.model.memento.api e taflgames.model.memento.code);
 	
 	\item creazione della \texttt{Leaderboard}, del \texttt{LeaderboardSaver} e della relativa \texttt{Scene}: \texttt{HighScoreScene} e il proprio \texttt{HighScoreController};
+
+	\item creazione della classe \texttt{Installer} che si occupa della creazione del file di salvataggio della leaderboard nella home dell'utente;
 	
 	\item la creazione di un \texttt{CellImageMapper} e di un \texttt{PieceImageMapper} che potessero associare a ciascuna pedina e cella uno stato (rispettivamente \texttt{CellState} e \texttt{PieceState}) utilizzabile poi nella View (package taflgames.controller.entitystate e taflgames.controller.mapper);
 	
@@ -333,6 +347,7 @@ confrontandoci per valutare idee diverse al fine di progettare delle buone soluz
 		\end{itemize}
 	\item con Margherita Raponi:
 		\begin{itemize}
+			\item per l'integrazione tra Match e Board;
 			\item per il debugging della \texttt{Board} a seguito di problemi emersi in fase di testing del \texttt{Match} e della \texttt{Board}.
 		\end{itemize}
 \end{itemize}
@@ -421,6 +436,18 @@ Uno dei rimpianti che ho è non aver avuto molto tempo di ripassare sul codice s
 
 L'autocritica maggiore che posso farmi è che ho la sensazione di non aver contribuito molto alla scrittura di parti davvero sostanziali dell'applicazione, per quanto il Memento sia stato divertente. Forse quest'ultima considerazione è data dal fatto che il mio obiettivo è arrivare a lavorare nell'ambito dello sviluppo dei videogiochi e non sento di aver toccato con mano le meccaniche fondamentali dello Hnefatafl. Se trovassi del tempo in futuro, mi piacerebbe molto estendere l'applicazione, magari introducendo la possibilità di registrare dei replay grazie al Memento, inserire suoni e nuove modalità di gioco, pedine o celle, e magari spaziare anche su più aspetti di grafica, Java Swing permettendo.
 
+\subsubsection{Elena Boschetti}
+
+Questo progetto è stata un'esperienza davvero interessante e mi ha insegnato molto. Ora ho un'idea più chiara di come viene condotto lo sviluppo di un prodotto software e sono più consapevole dei problemi che possono emergere in corso d'opera e delle buone pratiche per previnirli ed affrontarli. Non sono infatti mancate le difficoltà, sia di carattere tecnico che organizzativo, ma ho sempre cercato di farvi fronte in modo pratico e utilizzando tutte le risorse che avevo a disposizione.
+
+Le fasi che mi hanno messo più alla prova sono state le fasi di analisi e di design, in merito alle quali non avevo esperienze pregresse nell'ambito di un progetto di dimensioni medio-grandi come questo. Considerando ciò, sono complessivamente soddisfatta del design finale delle parti di mia competenza, anche se è sicuramente possibile fare dei miglioramenti. Questo vale particolarmente per la progettazione che ho svolto per parte di view dell'applicazione: tutte le scelte prese sono state ragionate, ma mi chiedo come si sarebbe potuto avere un design meno articolato e come si potrebbe rendere più semplice l'interazione tra Controller e View. Sono invece più soddisfatta per quanto riguarda il design le parti di Model e Controller che ho realizzato, per le quali ritengo di essere giunta a delle buone soluzioni.
+
+Sono inoltre contenta di aver acquisito maggiore dimestichezza con la programmazione ad oggetti e con gli strumenti introdotti durante il corso, quali Git e Gradle, e di aver deciso di sperimentare con altre tecnologie, come ho fatto per la configurazione della board su file XML e per la scrittura del regolamento in HTML.
+
+L'esperienza del lavoro di gruppo è stata anch'essa molto formativa: la divisione e la sincronizzazione del lavoro tra più persone non sono aspetti banali come potrebbe sembrare e la collaborazione è fondamentale per il raggiungimento di un buon risultato finale, motivo per cui mi sono sempre resa disponibile in caso di problemi. Ritengo che il mio contributo all'interno del gruppo sia stato positivo.
+
+Penso che in futuro mi dedicherò nuovamente a questo progetto con molto piacere: dopo tutto l'impegno messo e il lavoro svolto, sarebbe gratificante migliorare il software e renderlo più completo, aggiungendo funzionalità, migliorando la parte grafica e facendo del refactoring.
+
 \section{Difficoltà incontrate e commenti per i docenti}
 
 \subsection{Alin Stefan Bordeianu}
@@ -448,8 +475,6 @@ Si rende presente il fatto che nelle varie partite bisogna cliccare il tasto "Pa
 	
 	\item Laboratorio 10: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=119938#p176526}
 \end{itemize}
-
-\subsection{elena.boschetti@studio.unibo.it}
 
 \subsection{andrea.piermattei@studio.unibo.it}
 
