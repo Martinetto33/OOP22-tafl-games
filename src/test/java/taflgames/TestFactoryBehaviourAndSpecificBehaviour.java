@@ -31,6 +31,10 @@ import taflgames.model.pieces.code.ImplFactoryBehaviourTypeOfPiece;
   * testing factory and implementation of behaviour.
   */
 class TestFactoryBehaviourAndSpecificBehaviour {
+    // CPD-OFF
+    /* CPD suppressed because tests are naturally repetitive and their purpose
+     * should be clear enough.
+     */
     private final FactoryBehaviourTypeOfPiece n = new ImplFactoryBehaviourTypeOfPiece();
     private final FactoryHitbox h = new ImplFactoryHitbox();
     private final FactoryMoveSet m = new ImplFactoryMoveset();
@@ -195,4 +199,5 @@ class TestFactoryBehaviourAndSpecificBehaviour {
         assertEquals("ARCHER", toTest.getTypeOfPiece());
         assertEquals(1, toTest.getTotalNumbOfLives());
     }
+    // CPD-ON
 }

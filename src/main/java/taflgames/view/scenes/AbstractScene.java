@@ -2,6 +2,7 @@ package taflgames.view.scenes;
 
 import javax.swing.JPanel;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.view.fontmanager.FontManager;
 
 import java.awt.Graphics;
@@ -58,6 +59,11 @@ public abstract class AbstractScene implements Scene {
         return this.sceneName;
     }
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Providing a base scene with some common parameters already set"
+                + "is one of the purposes of this class."
+    )
     @Override
     public final JPanel getScene() {
         return this.scene;
@@ -105,7 +111,7 @@ public abstract class AbstractScene implements Scene {
                 super.paintComponent(g);
                 final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + COMPONENT_BACKGROUND);
                 final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
-                customResize(image, width, height);
+                image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -113,20 +119,14 @@ public abstract class AbstractScene implements Scene {
         mainPanel.add(paintedPanel);
     }
 
-    // CHECKSTYLE: FinalParametersCheck OFF
-    /* The check was disabled because the parameter image
-     * is reassigned in the code and cannot be final for this
-     * to happen.
-     */
-
     /**
      * Resizes an Image object to specified dimensions.
      * @param image the Image to be resized.
      * @param width the new width of the Image.
      * @param height the new height of the Image.
      */
-    public void customResize(Image image, final int width, final int height) {
-        image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    public void customResize(final Image image, final int width, final int height) {
+        image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     }
-    // CHECKSTYLE: FinalParametersCheck ON
+
 }

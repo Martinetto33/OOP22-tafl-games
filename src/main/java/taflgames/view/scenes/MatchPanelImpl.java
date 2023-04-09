@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -20,13 +22,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import taflgames.common.code.Position;
-import taflgames.view.loaderImages.LoaderImages;
-import taflgames.view.loaderImages.LoaderImagesImpl;
+import taflgames.view.imagesloader.LoaderImages;
+import taflgames.view.imagesloader.LoaderImagesImpl;
 import taflgames.view.scenecontrollers.MatchSceneController;
 
 /**
  * Implementation of MatchPanel.
  */
+@SuppressFBWarnings(
+    value = "SE_BAD_FIELD",
+    justification = "The match panel is not meant to be serialized, since it is neither saved into a file"
+            + "nor sent over the network"
+)
 public class MatchPanelImpl extends JPanel implements MatchPanel {
 
     public static final long serialVersionUID = 1L;

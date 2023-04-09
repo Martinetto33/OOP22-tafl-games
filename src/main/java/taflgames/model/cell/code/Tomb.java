@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+//import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.common.code.Position;
 import taflgames.controller.entitystate.CellState;
 import taflgames.model.cell.api.Cell;
@@ -169,6 +171,10 @@ public final class Tomb extends AbstractCell implements CellComponent {
         /**
          * Builds a new TombMementoImpl that stores the state of a Tomb.
          */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = "A method to get a copy of an object of type Piece is not provided."
+        )
         public TombMementoImpl() {
             /* This way of copying maps should create a deep copy. */
             this.innerDeadPieces = Map.copyOf(Tomb.this.deadPieces).entrySet().stream()
@@ -181,7 +187,7 @@ public final class Tomb extends AbstractCell implements CellComponent {
                     entry.getValue().stream().forEachOrdered(piece -> queue.add(piece));
                     return Map.entry(entry.getKey(), queue);
                 })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
             this.isFree = Tomb.this.isFree();
         }
 

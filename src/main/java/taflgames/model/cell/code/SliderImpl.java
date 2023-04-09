@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
@@ -59,6 +60,11 @@ public final class SliderImpl extends AbstractCell implements Slider {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+        value = "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+        justification = "SliderImpl.mediator is initialized in BoardImpl constructor,"
+                + "since the mediator of the slider must have a reference to the Board."
+    )
     @Override
     public void notify(
         final Position source,
@@ -144,7 +150,7 @@ public final class SliderImpl extends AbstractCell implements Slider {
      */
     @Override
     public CellMemento save() {
-        return this.new SliderMementoImpl(super.getCellComponents().stream()
+        return this.new SliderMementoImpl(super.getComponents().stream()
                     .map(component -> component.saveComponentState())
                     .collect(Collectors.toUnmodifiableSet()),
                 super.getJustAddedComponents().stream()
@@ -163,7 +169,7 @@ public final class SliderImpl extends AbstractCell implements Slider {
 
     /**
      * A class modelling a CellMemento for a Slider. Its methods override the
-     * onews of Abstract Cell, since Sliders have additional fields
+     * ones of Abstract Cell, since Sliders have additional fields
      * that need to be restored and saved. 
      */
     public class SliderMementoImpl implements CellMemento {
@@ -183,6 +189,13 @@ public final class SliderImpl extends AbstractCell implements Slider {
          * that were attached this turn.
          * @param cellStatus the status of this Cell (true if this Cell is free, false if it is occupied).
          */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = """
+                A method to get a copy of an object of type CellComponentMemento is not provided.
+                CellComponentMemento are guaranteed not to be changed by any code.
+                """
+        )
         public SliderMementoImpl(final Set<CellComponentMemento> components,
                                  final Set<CellComponentMemento> justAddedComponents, final boolean cellStatus) {
             this.innerTriggered = SliderImpl.this.triggered;

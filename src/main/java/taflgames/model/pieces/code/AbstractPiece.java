@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.common.Player;
 import taflgames.common.api.Vector;
 import taflgames.common.code.Position;
@@ -15,14 +16,13 @@ import taflgames.model.pieces.api.Piece;
 import taflgames.model.memento.api.PieceMemento;
 
 /**
-* {@inheritDoc}.
+* Implements Piece.
 */
 public abstract class AbstractPiece implements Piece {
     private Position currentPosition;
     private int currentNumbOfLives;
     private BehaviourTypeOfPiece myType;
     private Player myPlayer;
-    /**la factory sarà usata dal costruttore delle implementazioni per creare la type.*/
     private final FactoryBehaviourTypeOfPiece factory = new ImplFactoryBehaviourTypeOfPiece();
     /**
      * {@inheritDoc}.
@@ -33,6 +33,10 @@ public abstract class AbstractPiece implements Piece {
     /**
      * {@inheritDoc}.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "A method to get a copy of an object of type BehaviourTypeOfPiece is not provided."
+    )
     @Override
     public final BehaviourTypeOfPiece getMyType() {
         return myType;
@@ -40,6 +44,10 @@ public abstract class AbstractPiece implements Piece {
     /**
      * {@inheritDoc}.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "A method to get a copy of an object of type BehaviourTypeOfPiece is not provided."
+    )
     public void setMyType(final BehaviourTypeOfPiece myType) {
         Objects.requireNonNull(myType);
         this.myType = myType;
@@ -54,6 +62,12 @@ public abstract class AbstractPiece implements Piece {
         /**
          * creates an object of PieceMementoImpl.
          */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = """
+                Positions are immutable objects.
+                """
+        )
         public PieceMementoImpl() {
             this.backupCurrentNumbOfLives = AbstractPiece.this.currentNumbOfLives;
             this.backupPosition = new Position(AbstractPiece.this.currentPosition);

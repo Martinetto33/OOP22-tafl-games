@@ -333,17 +333,16 @@ public final class BoardImpl implements Board, TimedEntity {
                         .findAny()
                         .get();
         /*If the king is on the border, the position adjacent to it are controlled to see if the king is trapped */
-
-        if (king.getCurrentPosition().getX() == 0 || king.getCurrentPosition().getY() == 0
-                || king.getCurrentPosition().getX() == this.size - 1 || king.getCurrentPosition().getY() == this.size - 1) {
-
-                if (getAdjacentPositions(king.getCurrentPosition()).stream()
+        final Position kingPos = king.getCurrentPosition();
+        if (
+            (kingPos.getX() == 0 || kingPos.getY() == 0 || kingPos.getX() == this.size - 1 || kingPos.getY() == this.size - 1)
+            && getAdjacentPositions(king.getCurrentPosition()).stream()
                     .filter(pos -> !cells.get(pos).isFree())
                     .filter(pos -> pieces.get(Player.ATTACKER).keySet().contains(pos))
                     .collect(Collectors.toSet())
-                    .size() == 3) {
-                                return true;
-                }
+                    .size() == 3
+        ) {
+            return true;
         }
 
         /* If there are no pieces that can move for the player in turn, it is automatically a draw. */

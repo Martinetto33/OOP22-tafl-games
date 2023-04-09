@@ -1,4 +1,4 @@
-package taflgames.testViewMatchPannel;
+package taflgames.testmatchpanel;
 
 import java.util.HashMap;
 import java.util.Map;

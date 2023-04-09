@@ -2,6 +2,7 @@ package taflgames.model.memento.code;
 
 import java.util.Stack;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import taflgames.model.Model;
 import taflgames.model.memento.api.Caretaker;
 import taflgames.model.memento.api.MatchMemento;
@@ -28,6 +29,12 @@ public class CaretakerImpl implements Caretaker {
      * Builds a new Caretaker.
      * @param originator the Match to save the state of.
      */
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP",
+            justification = """
+                A method to get a copy of an object of type Model is not provided.
+                """
+        )
     public CaretakerImpl(final Model originator) {
         this.originator = originator;
         this.history = new Stack<>();

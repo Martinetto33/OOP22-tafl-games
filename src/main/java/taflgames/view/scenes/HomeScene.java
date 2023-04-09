@@ -32,7 +32,6 @@ public class HomeScene extends AbstractScene {
     private static final int HEIGHT_RATIO = 200;
 
     private final FontManager fontManager = AbstractScene.getFontManager();
-    private final Dimension buttonDimension;
 
     private final HomeSceneController controller;
 
@@ -45,7 +44,7 @@ public class HomeScene extends AbstractScene {
         super(HOME);
 
         this.controller = controller;
-        this.buttonDimension = new Dimension(
+        final Dimension buttonDimension = new Dimension(
             (int) (this.controller.getViewWidth() / WIDTH_RATIO),
             (int) (this.controller.getViewHeight() / HEIGHT_RATIO)
         );
@@ -72,17 +71,17 @@ public class HomeScene extends AbstractScene {
 
         final JButton playButton = new JButton(PLAY);
         playButton.setFont(fontManager.getButtonFont());
-        playButton.setPreferredSize(this.buttonDimension);
+        playButton.setPreferredSize(buttonDimension);
         buttonsPanel.add(playButton, gbc);
 
         final JButton highScoreButton = new JButton(HIGH_SCORE);
         highScoreButton.setFont(fontManager.getButtonFont());
-        highScoreButton.setPreferredSize(this.buttonDimension);
+        highScoreButton.setPreferredSize(buttonDimension);
         buttonsPanel.add(highScoreButton, gbc);
 
         final JButton exitButton = new JButton(EXIT);
         exitButton.setFont(fontManager.getButtonFont());
-        exitButton.setPreferredSize(this.buttonDimension);
+        exitButton.setPreferredSize(buttonDimension);
         buttonsPanel.add(exitButton, gbc);
 
         playButton.addActionListener((e) -> this.controller.goToNextScene());
