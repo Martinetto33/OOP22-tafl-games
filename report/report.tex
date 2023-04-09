@@ -334,9 +334,9 @@ che rappresentano. Essa è implementata dalla classe \texttt{CellImageInfo} e da
 \subsubsection{Board e Eaten}
 
 Per modellare la logica di gioco ho identificato due momenti principali all’interno di ogni turno e ho deciso di affidarli a due oggetti distinti \texttt{Board}  e \texttt{Eaten} seguendo il \textbf{pattern Strategy}. Essendo la mangiata di uno o più pezzi un evento che al suo interno richiede di svolgere diversi controlli, ho preferito separarlo dal resto della logica di gioco implementandolo a parte in \texttt{Eaten}. Per questo motivo e in ottica di estendibilità ho scelto di sfruttare il pattern sopra citato.
-All’interfaccia \texttt{Board} è affidata la logica di selezione della pedina, la logica dei controlli inerenti movimento e spostamento di quest’ultima e la logica dei controlli riguardanti lo stato della partita come la patta e la vittoria. Il setup della griglia di gioco viene passato come parametro alla \texttt{Board} attraverso due mappe: una rappresenta la disposizione delle celle sul tabellone di gioco, la seconda la disposizione delle pedine di entrambi i giocatori. Entrambe vengono passate ad inizio partita dall'interfaccia \texttt{Match}.
+All’interfaccia \texttt{Board} è affidata la logica di selezione della pedina, la logica dei controlli inerenti movimento e spostamento di quest’ultima e la logica dei controlli riguardanti lo stato della partita come la patta e la vittoria. Il setup della griglia di gioco viene passato come parametro alla \texttt{Board} attraverso due mappe: una rappresenta la disposizione delle celle sul tabellone di gioco, la seconda la disposizione delle pedine di entrambi i giocatori. Le mappe vengono passate ad inizio partita dalla classe \texttt{Match}.
 La \texttt{Board} si occupa di aggiornare le due mappe in base alle azioni svolte dai giocatori. Inoltre durante ogni turno comunica con l'interfaccia \texttt{Piece}, per avere informazioni legate ai pezzi e per settarne la posizione e con l'interfaccia \texttt{Cell} per settare e avere informazioni riguardanti le celle e per notificare loro lo spostamento della pedina. In aggiunta attraverso il metodo \texttt{notifyTurnHasEnded(...)} la \texttt{Board} notifica la fine di ogni turno ad una particolare tipologia di cella detta \texttt{Slider}.
-L'interfaccia \texttt{Eaten}, invece, presenta i controlli necessari per capire se un pezzo mosso ha effettuato una mangiata. Viene sfruttata dalla \texttt{Board} nel suo metodo \texttt{eat()} in cui avviene la chiamata in modo sequenziale dei diversi metodi di \texttt{Eaten}. La \texttt{Board} stessa passa a questi metodi tutti i parametri necessari per la verifica della magiata.
+L'interfaccia \texttt{Eaten}, invece, presenta i controlli necessari per capire se un pezzo mosso ha effettuato una mangiata. Viene utilizzata dalla classe \texttt{BoardImpl}, che implementa \texttt{Board} nel suo metodo \texttt{eat()} in cui avviene la chiamata sequenziale dei diversi metodi di \texttt{Eaten}  i quali, a loro volta, sfruttano i metodi messi a disposizione da \texttt{Piece}. La \texttt{Board} stessa passa ai metodi di \texttt{Eaten} i parametri necessari per la verifica della magiata.
 La scelta di isolare i controlli legati alla mangiata in una classe a parte offre la possibilità di implementare nuovi o più tipi di mangiata in eventuali future versioni del gioco.
 
 \begin{figure}[H]
@@ -365,7 +365,7 @@ L'interfaccia \texttt{Cell} modella le varie celle e presenta metodi che permett
 
 \subsubsection{Slider}
 
-Lo \texttt{Slider} è una Cell che presenta un effetto speciale, ovvero quando una pedina ci finisce sopra se attivo sposta la pedina nella posizione più lontana raggiungibile da quest’ultima lungo una direzione decisa dallo \texttt{Slider} stesso.
+Lo \texttt{Slider} è una \texttt{Cell} che presenta un effetto speciale, ovvero quando una pedina ci finisce sopra se attivo sposta la pedina nella posizione più lontana raggiungibile da quest’ultima lungo una direzione decisa dallo \texttt{Slider} stesso.
 
 \begin{figure}[H]
 \centering
@@ -381,9 +381,9 @@ Lo \texttt{Slider} è una Cell che presenta un effetto speciale, ovvero quando u
 \end{enumerate}
 \textbf{Soluzione:} 
 \begin{enumerate}
-\item in ottica di estendibilità ho pensato che la necessità di essere aggiornati sul turno di gioco e di avere uno o più campi che devono essere resettati alla fine di ogni turno può essere una necessità anche di altre tipologie di celle che potrebbero essere implementate in futuro. Per questo motivo ho creato due interfacce \texttt{Resettable} e \texttt{TimedEntity}, la prima con un metodo per resettare i campi la seconda con un metodo che informa sul numero del turno appena terminato. L'interfaccia Slider estende oltre a \texttt{Cell}, essendo a tutti gli effetti una cella, sia \texttt{Resettable} e \texttt{TimedEntity}.
+\item in ottica di estendibilità ho pensato che la necessità di essere aggiornati sul turno di gioco e di avere uno o più campi che devono essere resettati alla fine di ogni turno può essere una necessità anche di altre tipologie di celle che potrebbero essere implementate in futuro. Per questo motivo ho creato due interfacce \texttt{Resettable} e \texttt{TimedEntity}, la prima con un metodo per resettare i campi e la seconda con un metodo che informa sul numero del turno appena terminato. L'interfaccia Slider estende oltre a \texttt{Cell}, sia \texttt{Resettable} che \texttt{TimedEntity}.
 \item ho risolto questo problema grazie al  \textbf{pattern Mediator} implementando l’interfaccia \texttt{SliderMediator} che permette a \texttt{Board} e \texttt{Slider} di comunicare, in particolare \texttt{Slider} potrà sfruttare i metodi
-\texttt{getFurthestReachablePos(...)} e \texttt{movePlaceholder(...)} per effettuare i calcoli necessari per spostare il pezzo. Anche dal punto di vista dell’estendibilità l’utizzo di questo pattern può far comodo poichè evita che gli oggetti siano direttamente collegati fra loro evitando dipendenze difficili da modificare per future modifiche del gioco.
+\texttt{getFurthestReachablePos(...)} e \texttt{movePlaceholder(...)} di \texttt{SliderMediator}per effettuare i controlli necessari per spostare il pezzo. Anche dal punto di vista dell’estendibilità l’utizzo di questo pattern può far comodo poichè evita che gli oggetti siano direttamente collegati fra loro evitando dipendenze difficili da modificare in vista di future versioni del gioco.
 \end{enumerate}
 
 \subsubsection{Caricamento delle immagini di gioco}
@@ -395,10 +395,10 @@ Lo \texttt{Slider} è una Cell che presenta un effetto speciale, ovvero quando u
 \label{images:loader-images}
 \end{figure}
 
-\textbf{Problema:} il gioco presenta circa una ventina di immagini per rappresentare tutte le celle e le pedine. Il caricamento di immagini risulta essere però un processo oneroso che richiede tempo, perciò non è conveniente che queste vengano caricate nuovamente all'inizio di ogni turno. 
+\textbf{Problema:} il gioco presenta circa una ventina di immagini per rappresentare tutte le celle e le pedine. Il caricamento di immagini risulta essere però un processo oneroso che richiede tempo, perciò non è conveniente che queste vengano caricate ogni volta all'inizio di ogni turno. 
 \\\\
-\textbf{Soluzione:}  l'interfaccia \texttt{LoaderImages} carica tutte le immagini necessarie al gioco all’interno di due mappe, una avrà le immagini delle pedine l’altra delle celle. All’interno di queste mappe ad ogni immagine è associato un oggetto di tipo \texttt{CellImageInfo} o \texttt{PieceImageInfo} che rispettivamente danno informazioni riguardanti il tipo cella e il tipo di pedina nell’immagine corrispondente.
-Queste due mappe verranno poi sfruttate, durante tutto il corso della partita, dalla classe \texttt{MatchPanelImpl} per poter disegnare le varie entità in gioco. Questo approccio permette di caricare le immagini una sola volta all'inizio della partita e poi usufruire di queste senza caricarle nuovamente. 
+\textbf{Soluzione:}  l'interfaccia \texttt{LoaderImages} carica tutte le immagini necessarie al gioco all’interno di due mappe, una avrà le immagini delle pedine l’altra delle celle. All’interno di queste mappe ad ogni immagine è associato un oggetto di tipo \texttt{CellImageInfo} o \texttt{PieceImageInfo} che rispettivamente danno informazioni riguardanti il tipo cella e il tipo di pedina dell’immagine corrispondente.
+Queste due mappe verranno poi sfruttate, durante tutto il corso della partita, dalla classe \texttt{MatchPanelImpl} per poter disegnare le varie entità in gioco. Questo approccio permette di caricare le immagini una sola volta all'inizio della partita e poi usufruirne  senza caricarle nuovamente. 
 
 
 
@@ -627,6 +627,9 @@ Nonostante le difficoltà riscontrate durante questi mesi di lavoro, è stato pi
 Tutto sommato penso di aver fatto un lavoro discreto e mi sento abbastanza soddisfatto.
 Questo non significa che il codice non si possa migliorare. Un esempio palese è la pedina swapper: nonostante sia una entità concettualmente molto diversa dalla pedina di base, a livello di implementazione non cambia praticamente alcunchè. L'intero funzionamento dello swapper si appoggia sull'uso del .canSwap() di Piece e su come la Board decide di usare questo metodo. Il sistema risulta di conseguenza poco estendibile, soprattutto se si pensa di creare nuove pedine simili allo swapper. Un modo migliore di fare le cose sarebbe quella di creare una entità Mediator che possa comunicare con la Board per sapere le posizioni delle pedine per poi passarle alla FactoryMoveset. Quest'ultima potrà poi usare il metodo .createSwapperMoveSet(...) già presente nel codice e funzionante ma mai usato, per creare effettivamente un nuovo tipo di hitbox e rendere il codice più estendibile. Un altro esempio è la MatchPanel: invece di ridisegnare tutte le pedine, anche quando non avviene una mangiata, si potrebbe usare la .movePiece(...) (un altro metodo funzionante ma mai usato effettivamente nel codice). Sfortunatamente non è stato possibile sviluppare ulteriormente queste funzionalità per mancanza di tempo.
 
+\subsection{Margherita Raponi}
+La realizzazione di questo progetto è stata un'esperienza che ci ha messo a dura prova ma nella totalità posso dire essere stata stimolante. Grazie ad esso ho avuto la possibilità di approfondire il linguaggio Java imparando a sfruttare meglio Stream e Lambda e mi ha permesso di scoprire design pattern di cui non ero a conoscenza. Ho approfondto anche Git il quale mi sembrava molto macchinoso e complesso all'inizio, quando anche un semplice commit mi spaventava, adesso posso dire di non avere più problemi con le operazioni di base come push, commit e la creazione di nuovi branch. Ho avuto la possibilità di lavorare sia individualmente che collaborando con gli altri supportandoci a aiutandoci a vicenda. Nonostante non sia la prima volta che mi trovo a lavorare in team comunque ho imparato a coordinarmi meglio con altri quando si lavora assieme. All'inizio ho fatto un po' fatica a capire la struttura del progetto, di conseguenza ho cercato molto un confronto con i miei compagni. Ho avuto momenti in cui ho programmato senza problemi in autonomia ma ho anche incontrato momenti di blocco in cui con l'aiuto dei miei colleghi sono riuscita ad andare avanti. Nonostante io non sia un'appasionata di videogiochi ho travato il progetto un'esperienza entusiasmante a cui man mano che ci lavoravo mi appassionavo sempre di più. In conclusione posso dirmi soddisfatta del lavoro svolto anche se con più tempo si poteva fare un po' di refactoring per migliorare l'estendibilità e le dipendenze fra classi. 
+
 \section{Difficoltà incontrate e commenti per i docenti}
 
 \subsection{Alin Stefan Bordeianu}
@@ -644,6 +647,12 @@ Si rende presente il fatto che nelle varie partite bisogna cliccare il tasto "Pa
 \subsection{alinstefan.bordeianu@studio.unibo.it}
 
 \subsection{margherita.raponi@studio.unibo.it}
+\begin{itemize}
+\item Laboratorio 06: \url{https://github.com/meg13/lab-06.git}
+\item Laboratorio 07: \url{https://github.com/meg13/lab-07.git}
+\item Laboratorio 08: \url{https://github.com/meg13/lab-08.git}
+\end{itemize}
+
 
 
 \end{document}
