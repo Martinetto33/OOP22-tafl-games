@@ -331,6 +331,75 @@ che rappresentano. Essa è implementata dalla classe \texttt{CellImageInfo} e da
 \end{figure}
 \subsection{Margherita Raponi}
 
+\subsubsection{Board e Eaten}
+
+Per modellare la logica di gioco ho identificato due momenti principali all’interno di ogni turno e ho deciso di affidarli a due oggetti distinti \texttt{Board}  e \texttt{Eaten} seguendo il \textbf{pattern Strategy}. Essendo la mangiata di uno o più pezzi un evento che al suo interno richiede di svolgere diversi controlli, ho preferito separarlo dal resto della logica di gioco implementandolo a parte in \texttt{Eaten}. Per questo motivo e in ottica di estendibilità ho scelto di sfruttare il pattern sopra citato.
+All’interfaccia \texttt{Board} è affidata la logica di selezione della pedina, la logica dei controlli inerenti movimento e spostamento di quest’ultima e la logica dei controlli riguardanti lo stato della partita come la patta e la vittoria. Il setup della griglia di gioco viene passato come parametro alla \texttt{Board} attraverso due mappe: una rappresenta la disposizione delle celle sul tabellone di gioco, la seconda la disposizione delle pedine di entrambi i giocatori. Entrambe vengono passate ad inizio partita dall'interfaccia \texttt{Match}.
+La \texttt{Board} si occupa di aggiornare le due mappe in base alle azioni svolte dai giocatori. Inoltre durante ogni turno comunica con l'interfaccia \texttt{Piece}, per avere informazioni legate ai pezzi e per settarne la posizione e con l'interfaccia \texttt{Cell} per settare e avere informazioni riguardanti le celle e per notificare loro lo spostamento della pedina. In aggiunta attraverso il metodo \texttt{notifyTurnHasEnded(...)} la \texttt{Board} notifica la fine di ogni turno ad una particolare tipologia di cella detta \texttt{Slider}.
+L'interfaccia \texttt{Eaten}, invece, presenta i controlli necessari per capire se un pezzo mosso ha effettuato una mangiata. Viene sfruttata dalla \texttt{Board} nel suo metodo \texttt{eat()} in cui avviene la chiamata in modo sequenziale dei diversi metodi di \texttt{Eaten}. La \texttt{Board} stessa passa a questi metodi tutti i parametri necessari per la verifica della magiata.
+La scelta di isolare i controlli legati alla mangiata in una classe a parte offre la possibilità di implementare nuovi o più tipi di mangiata in eventuali future versioni del gioco.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/board-and-eaten.png}
+\caption{Schema UML che rappresenta il design di Board e Eaten e delle entità a loro legate.}
+\label{images:board-and-eaten}
+\end{figure}
+
+\subsubsection{Cell}
+
+Una delle entità principali oltre alla \texttt{Board} sono le celle che compongono la griglia di gioco. 
+L'interfaccia \texttt{Cell} modella le varie celle e presenta metodi che permettono di interrogarle e di settarle, ampiamente sfruttati dalla  \texttt{Board}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/cells.png}
+\caption{Schema UML che rappresenta il design delle celle e delle entità a loro collegate.}
+\label{images:cells}
+\end{figure}
+
+
+\textbf{Problema:} la griglia di gioco sia della versione classica che della variante è composta da diverse tipologie di celle ognuna con un comportamento differente, in particolare nella variante è presente anche un \texttt{CellComponent} chiamato \texttt{Tomb}. Questi oggetti per quanto diversi sono caratterizzati da alcuni comportamenti comuni.
+\\\\
+\textbf{Soluzione:} per evitare duplicazione e ridondanza ho scelto di creare una classe astratta \texttt{AbstractCell} che implementa l’interfaccia \texttt{Cell}. \texttt{AbstractCell} implementa i metodi \texttt{setFree()} e \texttt{isFree()} comuni a tutte le celle e a \texttt{Tomb}. Ognuna delle classi che modella i diversi tipi di cella (\texttt{ClassicCell}, \texttt{Exit}, \texttt{SliderImpl}, \texttt{Throne}) e \texttt{Tomb} estende questa classe astratta aggiungendo poi i metodi necessari per completare il comportamento di quel determinato oggetto. 
+
+\subsubsection{Slider}
+
+Lo \texttt{Slider} è una Cell che presenta un effetto speciale, ovvero quando una pedina ci finisce sopra se attivo sposta la pedina nella posizione più lontana raggiungibile da quest’ultima lungo una direzione decisa dallo \texttt{Slider} stesso.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/slider.png}
+\caption{Schema UML che rappresenta il design di uno Slider.}
+\label{images:Slider}
+\end{figure}
+
+\textbf{Problema:}
+\begin{enumerate}
+\item a differenza delle altre celle lo \texttt{Slider} ha bisogno di conoscere il numero del turno e deve poter disattivarsi una volta usato poiché non si può sfruttare più volte all’interno dello stesso turno. Una volta concluso il turno deve poi riattivarsi.
+\item per poter spostare il pezzo finito su esso, questa particolare cella, ha bisogno di comunicare con la \texttt{Board} per sapere in che posizione mandare il pezzo e aggiornare le due mappe che identificano le celle e le pedine del gioco.
+\end{enumerate}
+\textbf{Soluzione:} 
+\begin{enumerate}
+\item in ottica di estendibilità ho pensato che la necessità di essere aggiornati sul turno di gioco e di avere uno o più campi che devono essere resettati alla fine di ogni turno può essere una necessità anche di altre tipologie di celle che potrebbero essere implementate in futuro. Per questo motivo ho creato due interfacce \texttt{Resettable} e \texttt{TimedEntity}, la prima con un metodo per resettare i campi la seconda con un metodo che informa sul numero del turno appena terminato. L'interfaccia Slider estende oltre a \texttt{Cell}, essendo a tutti gli effetti una cella, sia \texttt{Resettable} e \texttt{TimedEntity}.
+\item ho risolto questo problema grazie al  \textbf{pattern Mediator} implementando l’interfaccia \texttt{SliderMediator} che permette a \texttt{Board} e \texttt{Slider} di comunicare, in particolare \texttt{Slider} potrà sfruttare i metodi
+\texttt{getFurthestReachablePos(...)} e \texttt{movePlaceholder(...)} per effettuare i calcoli necessari per spostare il pezzo. Anche dal punto di vista dell’estendibilità l’utizzo di questo pattern può far comodo poichè evita che gli oggetti siano direttamente collegati fra loro evitando dipendenze difficili da modificare per future modifiche del gioco.
+\end{enumerate}
+
+\subsubsection{Caricamento delle immagini di gioco}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/loader-images.png}
+\caption{Schema UML che rappresenta il design dell'interfaccia \texttt{LoaderImages}.}
+\label{images:loader-images}
+\end{figure}
+
+\textbf{Problema:} il gioco presenta circa una ventina di immagini per rappresentare tutte le celle e le pedine. Il caricamento di immagini risulta essere però un processo oneroso che richiede tempo, perciò non è conveniente che queste vengano caricate nuovamente all'inizio di ogni turno. 
+\\\\
+\textbf{Soluzione:}  l'interfaccia \texttt{LoaderImages} carica tutte le immagini necessarie al gioco all’interno di due mappe, una avrà le immagini delle pedine l’altra delle celle. All’interno di queste mappe ad ogni immagine è associato un oggetto di tipo \texttt{CellImageInfo} o \texttt{PieceImageInfo} che rispettivamente danno informazioni riguardanti il tipo cella e il tipo di pedina nell’immagine corrispondente.
+Queste due mappe verranno poi sfruttate, durante tutto il corso della partita, dalla classe \texttt{MatchPanelImpl} per poter disegnare le varie entità in gioco. Questo approccio permette di caricare le immagini una sola volta all'inizio della partita e poi usufruire di queste senza caricarle nuovamente. 
+
 
 
 \chapter{Sviluppo}
@@ -425,6 +494,33 @@ In collaborazione ho lavorato:
 \item realizzazione degli assets .png delle pedine, delle celle e l'icona
 \end{itemize}
 
+\subsection{Margherita Raponi}
+In autonomia mi sono occupata di:
+\begin{itemize}
+	\item implementazione dell'interfacce \texttt{Board} e \texttt{Eaten}, nello specifico delle classi \texttt{BoardImpl} e \texttt{EatenImpl} che costuituiscono la logica del gioco (package taflgames.model.board.api e taflgames.model.board.code).
+	\item implementazione dell'interfaccia \texttt{Cell} e delle varie classi per la creazione delle diverse tipologia di cella (package taflgames.model.cell.api e package taflgames.model.cell.code).
+	\item creazione delle classi \texttt{LoaderImages} e \texttt{LoaderImagesImpl} (package taflgames.view.imagesloader).
+\end{itemize}
+In collaborazione ho lavorato:
+
+\begin{itemize}
+	\item con  Alin Stefan Bordeianu:
+		\begin{itemize}
+			\item sulla creazione della Tomba;
+			\item sul debugging della \texttt{Board} e dell'\texttt{Eaten};
+			\item sull'analisi delle condizioni di patta;
+			\item sui test delle varie Celle e comportamenti della \texttt{Board}.
+		\end{itemize}
+	\item con Elena Boschetti:
+		\begin{itemize}
+			\item per il debugging della \texttt{Board} durante la fase di testing del \texttt{Match} e della \texttt{Board}.
+		\end{itemize}
+	\item con Andrea Piermattei:
+		\begin{itemize}
+			\item sulla realizzazione della classe \texttt{MatchPanelImpl}, implementando i metodi per disegnare le celle e implementando il comportamento dei bottoni del Panel.
+			\item sulla realizzazione della classe \texttt{MatchScene}.
+		\end{itemize}
+\end{itemize}
 
 \section{Note di sviluppo}
 
@@ -499,6 +595,14 @@ Permalink:[MatchPanelImpl.java]
 
 \subsection{Margherita Raponi}
 
+\subsubsection{Uso di Stream}
+Usati in vari punti. Un esempio è \url{https://github.com/Martinetto33/OOP22-tafl-games/blob/b3906dae75f2fe3908410cf72c30a889f55919ed/src/main/java/taflgames/model/board/code/BoardImpl.java#L344-L348}
+
+\subsubsection{Uso di Lambda expressions}
+Usate in vari punti. Un esempio è \url{https://github.com/Martinetto33/OOP22-tafl-games/blob/b3906dae75f2fe3908410cf72c30a889f55919ed/src/main/java/taflgames/model/board/code/EatenImpl.java#L110-L111}
+
+\subsubsection{Uso di Optional}
+Permalink: \url{https://github.com/Martinetto33/OOP22-tafl-games/blob/b3906dae75f2fe3908410cf72c30a889f55919ed/src/main/java/taflgames/model/board/code/BoardImpl.java#L374-L392}
 
 
 \chapter{Commenti finali}
