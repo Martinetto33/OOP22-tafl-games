@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import taflgames.common.Player;
 import taflgames.common.code.MatchResult;
 import taflgames.common.code.Position;
-import taflgames.controller.SettingsLoader;
-import taflgames.controller.SettingsLoaderImpl;
+import taflgames.controller.settingsloader.SettingsLoader;
+import taflgames.controller.settingsloader.SettingsLoaderImpl;
 import taflgames.model.board.code.BoardImpl;
 import taflgames.model.Model;
 import taflgames.model.Match;
@@ -32,10 +32,6 @@ import taflgames.model.builders.PiecesCollectionBuilderImpl;
  * JUnit tests for {@link Model}.
  */
 class TestMatch {
-    // CPD-OFF
-    /* CPD suppressed because tests are naturally repetitive and their purpose
-     * should be clear enough.
-     */
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMatch.class);
 
@@ -1054,5 +1050,4 @@ class TestMatch {
     }
 
     // CHECKSTYLE: MagicNumber ON
-    // CPD-ON
 }
