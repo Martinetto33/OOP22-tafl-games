@@ -109,24 +109,24 @@ public final class BoardImpl implements Board, TimedEntity {
 
         /*This set represent the possible movements of a piece expressed by Vector*/
         final Set<Vector> vectors = piece.whereToMove();
-        /* Nel caso delle pedine normali, i vettori restituiti saranno (-1,0), (0,1), (1,0), (0,-1).
+        /* In the case of basic pieces, the returned vectors will be (-1,0), (0,1), (1,0), (0,-1).
         *
-        * NOTA1: uno spostamento equivale a sommare la posizione di partenza a un vettore v
-        * che indica lo spostamento: start + v = dest
+        * NOTE1: a displacement is equivalent to adding the starting position to a vector v 
+        * indicating the displacement: start + v = dest
         *
-        * NOTA2: per fare un esempio, se una pedina si sposta di N caselle a destra,
-        * ciò equivale a dire che dest = start + N * (0, 1);
-        * ciò equivale anche a dire che lo spostamento dato dal vettore (0, 1) è applicato N volte.
+        * NOTE2: To give an example, if a pawn moves N cells to the right, 
+        * this is equivalent to saying that dest = start + N * (0, 1);
+        * this is also equivalent to saying that the displacement given by the vector (0, 1) is applied N times.
         *
-        * QUINDI, per verificare se una mossa è valida, si verifica se, per uno dei vettori (v) dati da piece.getVectors(),
-        * esiste uno scalare N t.c. start + N * v = dest.
-        * Se se ne trova uno, si deve verificare che tutte le celle nel percorso
-        * che porta la pedina da start a dest siano libere.
-        * Se lo sono, allora la mossa è valida, altrimenti non lo è e si deve continuare la ricerca.
+        * So to check whether a move is valid, we check whether, for one of the vectors (v) given by piece.getVectors(), 
+        * exists a scalar N such that start + N * v = dest.
+        * If one is found, it should be verified that all cells in the path 
+        * that takes the piece from start to dest are free.
+        * If they are, then the move is valid, if not, then you should continue the search.
         */
 
-        // Controllo se la cella di arrivo è libera per lo swapper,
-        // poichè se la cella non fosse libera dovrei gestire lo swapper come viene fatto dopo questo if
+        /* checks if the destination cell is free,
+        since if it isn't the swapper needs to be handled in a different way */
         if (cells.get(dest).isFree()) {
             for (final Vector vector : vectors) { // NOPMD
                 // The Vector class models a vector and provides features that a List does not support.
@@ -139,23 +139,19 @@ public final class BoardImpl implements Board, TimedEntity {
             }
         }
 
-        /*SUPPONIAMO di non averne trovato nessuno. Allora si procede a verificare se è comunque uno spostamento valido secondo
-        * altre proprietà della pedina.
-        * QUINDI, per trattare il caso dello Swapper (che nel nostro caso è l'unico con una mossa speciale), possiamo dotare
-        * qualsiasi pedina di un metodo canSwap(), che chiaramente ritorna true nel caso sia uno Swapper e false altrimenti.
+        /* Not all cells in the path were free.
+        * Proceeds to check whether it is still a valid move according to other properties of the piece.
+        * To deal with the case of the Swapper (which in our case is the only one with a special move), 
+        * we can equip any piece with a canSwap() method, which returns true in case it is a Swapper and false otherwise.
         */
         if (piece.canSwap() 
             && (!EXIT.equals(cells.get(dest).getType()) || !THRONE.equals(cells.get(dest).getType()))
             && !cells.get(dest).isFree()) {
-            // Si verifica se la posizione dest è una delle posizioni occupate da una pedina avversaria.
-            // Se lo è, allora la mossa è valida, altrimenti no.
+            /* It is checked whether the dest position is one of the positions occupied by an opposing piece. 
+            * If it is, then the move is valid, otherwise not. */
 
-            // trovo la tipologia di pedina nella casella di destinazione dopodichè controllo
-            // che non sia un re poichè lo swapper non può scambiare posizione con un re
+            /* check that the piece is not a king since the swapper cannot swap positions with a king */
             final Piece destPiece = getPieceAtPosition(dest);
-            /* if(destPiece != null && !KING.equals(destPiece.getMyType().getTypeOfPiece())) {
-                return true;
-            } */
             return !(destPiece != null && KING.equals(destPiece.getMyType().getTypeOfPiece()));
         }
 
@@ -211,15 +207,6 @@ public final class BoardImpl implements Board, TimedEntity {
             if (reachablePos.getX() == this.size || reachablePos.getY() == this.size
                 || reachablePos.getX() < 0 || reachablePos.getY() < 0 
                 || !cells.get(reachablePos).canAccept(getPieceAtPosition(startPos))) {
-                    /* if (getPieceAtPosition(startPos).canSwap()) {
-                        if (!cells.get(reachablePos).isFree()
-                            && (!THRONE.equals(cells.get(reachablePos).getType()) 
-                                    || !EXIT.equals(cells.get(reachablePos).getType()))
-                            && SLIDER.equals(cells.get(startPos).getType())
-                            && getPieceAtPosition(reachablePos).getPlayer().equals(getPieceAtPosition(startPos).getPlayer())) {
-                            furthestReachable = reachablePos;
-                        }
-                    } */
                 break;
             } else {
                 furthestReachable = reachablePos;
@@ -236,14 +223,13 @@ public final class BoardImpl implements Board, TimedEntity {
      * @param movedPiece the Piece that was moved.
      */
     private void signalOnMove(final Position source, final Piece movedPiece) {
-        if (SLIDER.equals(cells.get(source).getType()) 
-            /*&& !movedPiece.getMyType().getTypeOfPiece().equals("SWAPPER")*/) {
+        if (SLIDER.equals(cells.get(source).getType())) {
             cells.get(source).notify(source, movedPiece, List.of(movedPiece.sendSignalMove()), pieces, cells);
         }
-        // Ottengo le posizioni delle celle che potrebbero avere interesse nel conoscere l'ultima mossa fatta
+        // Get the positions of the cells that might have interest in knowing the last move made.
         final Set<Position> triggeredPos = eatingManager.trimHitbox(movedPiece, pieces, cells, size).stream()
                 .collect(Collectors.toSet());
-        // Controllo se nelle posizioni ottenute ci sono entità; in caso, vengono triggerate
+        // Checking whether there are entities in the obtained positions; if so, they are triggered
         if (!triggeredPos.isEmpty()) {
             for (final Position pos : triggeredPos) {
                 final Cell cell = cells.get(pos);

@@ -42,6 +42,9 @@ class TestBoard {
     private static Player p1 = Player.ATTACKER;
     private static Player p2 = Player.DEFENDER;
 
+    /**
+     * Initializes a board before the first test.
+     */
     @BeforeAll
     static void init() {
         final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
@@ -61,6 +64,9 @@ class TestBoard {
         board = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
     }
 
+    /**
+     * Test the starting position of the player.
+     */
     @Test
     void testIsStartingPointValid() {
         assertTrue(board.isStartingPointValid(new Position(3, 3), p2));
@@ -69,8 +75,12 @@ class TestBoard {
         assertFalse(board.isStartingPointValid(new Position(2, 2), p1));
     }
 
+    /**
+     * Test the selection of the destination cell.
+     */
     @Test
     void testIsDestinationValid() {
+        /*Initialize a new board */
         Board board2;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
@@ -104,30 +114,39 @@ class TestBoard {
 
         board2 = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
 
+        /*testing the validity of a destination if the starting position is 0,0 */
         assertFalse(board2.isDestinationValid(new Position(0, 0), new Position(3, 0), p1));
         assertTrue(board2.isDestinationValid(new Position(0, 0), new Position(0, 3), p1));
         assertFalse(board2.isDestinationValid(new Position(0, 0), new Position(2, 2), p1));
-        assertTrue(board2.isDestinationValid(new Position(3, 4), new Position(0, 4), p1));
         assertFalse(board2.isDestinationValid(new Position(0, 0), new Position(1, 2), p1));
         assertFalse(board2.isDestinationValid(new Position(0, 0), new Position(3, 1), p1));
 
+        /*testing the validity of a destination if the starting position is 3,3 */
         assertTrue(board2.isDestinationValid(new Position(3, 3), new Position(3, 4), p2));
         assertTrue(board2.isDestinationValid(new Position(3, 3), new Position(0, 3), p2));
         assertFalse(board2.isDestinationValid(new Position(3, 3), new Position(2, 4), p2));
         assertFalse(board2.isDestinationValid(new Position(3, 3), new Position(3, 0), p2));
         assertFalse(board2.isDestinationValid(new Position(3, 3), new Position(3, 1), p2));
 
+        /*testing the validity of a destination for a swapper*/
         assertFalse(board2.isDestinationValid(new Position(1, 2), new Position(4, 2), p1));
         assertTrue(board2.isDestinationValid(new Position(1, 2), new Position(3, 1), p1));
         assertFalse(board2.isDestinationValid(new Position(1, 2), new Position(3, 4), p1));
 
+        assertTrue(board2.isDestinationValid(new Position(3, 4), new Position(0, 4), p1));
         assertFalse(board2.isDestinationValid(new Position(3, 4), new Position(3, 2), p1));
         assertFalse(board2.isDestinationValid(new Position(3, 1), new Position(3, 4), p2));
+
+        /*testing the validity of a destination if the moving piece is a king*/
         assertFalse(board2.isDestinationValid(new Position(4, 2), new Position(0, 2), p2));
     }
 
+    /**
+     * Test the update of the pieces'positions.
+     */
     @Test
     void testUpdatePiecePos() {
+        /*Initialize a new board */
         Board board3;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
@@ -151,7 +170,7 @@ class TestBoard {
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(false));
         board3 = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
 
-        //test the position update of a normal piece
+        /*test the position's update of a normal piece*/
         board3.updatePiecePos(new Position(0, 0), new Position(1, 1), p1);
         assertTrue(cells.get(new Position(0, 0)).isFree());
         assertFalse(cells.get(new Position(1, 1)).isFree());
@@ -159,7 +178,7 @@ class TestBoard {
         assertFalse(pieces.get(p1).keySet().contains(new Position(0, 0)));
         assertEquals(new Position(1, 1), pieces.get(p1).get(new Position(1, 1)).getCurrentPosition());
 
-        //test the position update of a swapper
+        /*test the position's update of a swapper*/
         piecesPlayer1.put(new Position(0, 3), new Swapper(new Position(0, 3), p1));
         pieces.put(p1, piecesPlayer1);
         cells.get(new Position(0, 3)).setFree(false);
@@ -181,8 +200,12 @@ class TestBoard {
 
     }
 
+    /**
+     * Test the calculation of the furthest reachable position.
+     */
     @Test
     void testgetFurthestReachablePos() {
+        /*Initialize a new board */
         Board board1;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
         final Map<Position, Cell> cells = new HashMap<>();
@@ -227,6 +250,9 @@ class TestBoard {
         assertEquals(new Position(2, 3), board1.getFurthestReachablePos(new Position(0, 3), new VectorImpl(1, 0)));
     }
 
+    /**
+     * Test the draw of the match.
+     */
     @Test
     void testIsDraw() {
         Board board4;

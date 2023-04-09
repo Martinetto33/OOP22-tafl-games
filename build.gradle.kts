@@ -11,8 +11,8 @@ plugins {
      * In order to create it, launch the "shadowJar" task.
      * The runnable jar will be found in build/libs/projectname-all.jar
      */
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.danilopianini.gradle-java-qa") version "0.43.1"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("org.danilopianini.gradle-java-qa") version "1.6.0"
 }
 
 repositories { // Where to search for dependencies

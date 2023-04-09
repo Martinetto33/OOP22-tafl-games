@@ -20,7 +20,7 @@ public abstract class AbstractScene implements Scene {
 
     private final String sceneName;
     private final JPanel scene;
-    private static final String SEP = System.getProperty("file.separator");
+    private static final String SEP = "/";
     private static final String ROOT = "taflgames" + SEP;
     private static final String BG_FILE_NAME = "background.jpeg";
     private static final String COMPONENT_BACKGROUND = "wooden-plank.jpg";
@@ -109,7 +109,7 @@ public abstract class AbstractScene implements Scene {
             @Override
             public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
-                final URL imgURL = ClassLoader.getSystemResource(ROOT + SEP + "images" + SEP + COMPONENT_BACKGROUND);
+                final URL imgURL = ClassLoader.getSystemResource(ROOT + "images" + SEP + COMPONENT_BACKGROUND);
                 final Image image = Toolkit.getDefaultToolkit().getImage(imgURL);
                 image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);

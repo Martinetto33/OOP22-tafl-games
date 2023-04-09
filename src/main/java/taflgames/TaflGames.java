@@ -15,6 +15,7 @@ public final class TaflGames {
      * @param args unused
      */
     public static void main(final String... args) {
+        Installer.createFile();
         new ViewImpl();
     }
 

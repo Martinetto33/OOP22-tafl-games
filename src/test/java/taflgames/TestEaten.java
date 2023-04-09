@@ -31,6 +31,9 @@ import org.junit.jupiter.api.Test;
 
 import taflgames.model.board.api.Eaten;
 
+/**
+ * JUnit tests for {@link Eaten}.
+ */
 class TestEaten {
     // CPD-OFF
     /* CPD suppressed because tests are naturally repetitive and their purpose
@@ -45,6 +48,9 @@ class TestEaten {
     private static Player p1 = Player.ATTACKER;
     private static Player p2 = Player.DEFENDER;
 
+    /**
+     * Initializes a board before the first test.
+     */
     @BeforeAll
     static void init() {
         final Map<Position, Piece> piecesPlayer1 = new HashMap<>();
@@ -73,19 +79,22 @@ class TestEaten {
         eat = new EatenImpl((BoardImpl) boardToCheckEaten);
     }
 
+    /**
+     * Test the trimming of pieces' hitbox.
+     */
     @Test 
     void trimHitbox() {
         Set<Position> expectedHitbox = new HashSet<>();
         expectedHitbox.add(new Position(1, 0));
         expectedHitbox.add(new Position(0, 1));
-        //pedina normale vicino al bordo
+        /*BasicPiece adjacent to one of the board's boarder*/
         assertEquals(expectedHitbox, eat.trimHitbox(new BasicPiece(new Position(0, 0), p1), pieces, cells, DEFAULT_BOARD_SIZE));
 
         expectedHitbox = new HashSet<>();
         expectedHitbox.add(new Position(3, 4));
         expectedHitbox.add(new Position(2, 3));
         expectedHitbox.add(new Position(4, 3));
-        //pedina normale al centro con vicino una della stessa squadra
+        /*BasicPiece at the center of the board with a piece of the same player adjacent*/
         assertEquals(expectedHitbox, eat.trimHitbox(new BasicPiece(new Position(3, 3), p2), pieces, cells, DEFAULT_BOARD_SIZE));
 
         expectedHitbox = new HashSet<>();
@@ -96,7 +105,7 @@ class TestEaten {
         expectedHitbox.add(new Position(1, 2));
         expectedHitbox.add(new Position(2, 2));
         expectedHitbox.add(new Position(4, 2));
-        //arciere al centro con vicino una della stessa squadra
+        /*Archer at the center of the board with a piece of the same player adjacent*/
         assertEquals(expectedHitbox, eat.trimHitbox(new Archer(new Position(3, 2), p2), pieces, cells, DEFAULT_BOARD_SIZE));
 
         expectedHitbox = new HashSet<>();
@@ -107,14 +116,17 @@ class TestEaten {
         expectedHitbox.add(new Position(2, 4));
         expectedHitbox.add(new Position(3, 4));
         expectedHitbox.add(new Position(4, 4));
-        //arciere vicino al bordo
+        /*Archer adjacent to one of the board's boarder*/
         assertEquals(expectedHitbox, eat.trimHitbox(new Archer(new Position(1, 4), p1), pieces, cells, DEFAULT_BOARD_SIZE));
 
-        //re
+        /*King */
         expectedHitbox = new HashSet<>();
         assertEquals(expectedHitbox, eat.trimHitbox(new King(new Position(4, 0)), pieces, cells, DEFAULT_BOARD_SIZE));
     }
 
+    /**
+     * Test the search for enemies that a piece threatens.
+     */
     @Test
     void testGetThreatenedPos() {
         Set<Position> hitbox = eat.trimHitbox(new Archer(new Position(1, 4), p1), pieces, cells, DEFAULT_BOARD_SIZE);
@@ -125,6 +137,7 @@ class TestEaten {
         enemies = new ArrayList<>();
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(3, 3), p2)));
 
+        /*Initialize a new board */
         final Eaten eat;
         final Board secondBoard;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
@@ -160,7 +173,7 @@ class TestEaten {
         secondBoard = new BoardImpl(pieces, cells, DEFAULT_BOARD_SIZE);
         eat = new EatenImpl(secondBoard);
 
-        //classic piece circondato da due nemici uno sopra e uno sotto
+        /*BasicPiece surrounded by two enemies, one one above and one below */
         hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         enemies.add(new BasicPiece(new Position(1, 0), p2));
@@ -168,26 +181,31 @@ class TestEaten {
         enemies.add(new King(new Position(0, 1)));
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 1), p1)));
 
-        //arciere che presenta un nemico nella sua hitbox
+        /*Archer with an enemy on one of his hitbox's position */
         hitbox = eat.trimHitbox(new Archer(new Position(4, 1), p1), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         enemies.add(new BasicPiece(new Position(4, 4), p2));
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new Archer(new Position(4, 1), p1)));
 
-        //classic piece vicino al bordo e con un nemico nella hitbox
+        /*BasicPiece adjacent to the board's boarder with an enemy on one of his hitbox's position */
         hitbox = eat.trimHitbox(new BasicPiece(new Position(1, 0), p2), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         enemies.add(new BasicPiece(new Position(1, 1), p1));
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new BasicPiece(new Position(1, 0), p2)));
 
-        //re con difianco un nemico
+        /*King with an enemy on his side */
         hitbox = eat.trimHitbox(new King(new Position(0, 1)), pieces, cells, DEFAULT_BOARD_SIZE);
         enemies = new ArrayList<>();
         assertEquals(enemies, eat.getThreatenedPos(hitbox, pieces, new King(new Position(0, 1))));
     }
 
+    /**
+     * Test the search for pieces of the same player as the last piece moved 
+     * that threaten the same enemies that the last piece moved threaten.
+     */
     @Test 
     void testCheckAllies() {
+        /*Initialize a new board */
         final Eaten eat;
         final Board thirdBoard;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();
@@ -249,8 +267,8 @@ class TestEaten {
             eat.checkAllies(enemies, pieces, new BasicPiece(new Position(1, 2), p2), cells, DEFAULT_BOARD_SIZE)
         );
 
-        /*creating a new map*/
-        /*king on the boarder of the map with 3 enemies around and an archer of the other team*/
+        /*creating a new asset of the players' pieces */
+        /*King on the boarder of the board with 3 enemies around and an Archer of the other player*/
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
         piecesPlayer1.clear();
@@ -283,8 +301,8 @@ class TestEaten {
             eat.checkAllies(enemies, pieces, new BasicPiece(new Position(2, 1), p1), cells, DEFAULT_BOARD_SIZE)
         );
 
-        /*creating a new map*/
-        /*basic piece between a king and a basic piece*/
+        /*creating a new asset of the players' pieces */
+        /*BasicPiece between a King and a BasicPiece */
         piecesPlayer1.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
         piecesPlayer2.entrySet().stream().forEach(piece -> cells.get(piece.getKey()).setFree(true));
         piecesPlayer1.clear();
@@ -314,6 +332,7 @@ class TestEaten {
 
     @Test
     void testNotifyAllThreatened() {
+        /*Initialize a new board */
         final Board fourthBoard;
         final Eaten eat;
         final Map<Player, Map<Position, Piece>> pieces = new HashMap<>();

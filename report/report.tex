@@ -12,7 +12,7 @@
 
 \usepackage[italian]{cleveref}
 
-\title{Tafl Games\\\large Relazione per il progetto \\ del corso di \\ Programmazione ad Oggetti \\ A.A. 2022/23}
+\title{TaflGames\\\large Relazione per il progetto \\ del corso di \\ Object-Oriented Programming \\ A.A. 2022/23}
 \author{Alin Stefan Bordeianu \\ Elena Boschetti \\ Andrea Piermattei \\ Margherita Raponi}
 \date{\today}	
 
@@ -84,9 +84,9 @@ Internamente, la \texttt{Board} contiene la collezione di celle e la collezione 
 
 Come pattern architetturale, è stato scelto MVC in quanto permette di separare la logica dell'applicazione da ciò che viene mostrato all'utente, portando ad un'organizzazione interna dell'applicazione più pulita e più facilmente gestibile.
 
-L'interfaccia \texttt{Model} racchiude la logica del dominio di gioco, isolandola da tutti gli altri componenti dell'architettura. Idealmente, il gioco potrebbe funzionare anche senza alcuna componente grafica, ricevendo direttamente l'input da linea di comando.
+L'interfaccia \texttt{Model} racchiude la logica del dominio di gioco, isolandola da tutti gli altri componenti dell'architettura. Idealmente, il gioco potrebbe funzionare anche senza alcuna componente grafica, direttamente ricevendo input da linea di comando.
 
-Il \texttt{Controller} si occupa del coordinamento fra Model e View, permettendo ai cambiamenti di stato della partita di essere visualizzati dall'utente. Il rapporto tra Controller e Model si limita all'inizializzazione dello stato del Model (il setup della partita) e alle richieste del Controller al Model per ottenere informazioni sul suo stato interno.
+Il \texttt{Controller} si occupa del coordinamento fra Model e View, permettendo ai cambiamenti di stato della partita di essere visualizzati dall'utente. Il Controller gestisce anche alcune risorse non inerenti alla parte grafica dell'applicazione, ad esempio file di configurazione per il setup della partita e file per il salvataggio e il caricamento della leaderboard.
 
 Un passaggio del turno o l'annullamento di un mossa durante la partita implicano un cambiamento nello stato interno del Model (come minimo, la mossa di una pedina); tali cambiamenti devono essere riflessi dalla View, per cui il Controller segnala alla View la necessità di un'aggiornamento. A questo punto, la View si occupa di richiedere le informazioni necessarie al Controller, il quale le chiede a sua volta al Model.
 Il Controller gestisce, inoltre, alcune risorse non inerenti alla parte grafica dell'applicazione, ad esempio file di configurazione per il setup della partita e file per il salvataggio e il caricamento della leaderboard.
@@ -207,6 +207,8 @@ Le implementazioni concrete di ogni scena estendono \texttt{AbstractScene} e def
 \label{images:scenes}
 \end{figure}
 
+In seguito a questa fase di design, mi sono occupata di implementare la scena della home del gioco (\texttt{HomeScene}), la scena della scelta della modalità di gioco (\texttt{GameChoiceScene}) e della scena che mostra il regolamento (\texttt{RulesScene}).
+
 \subsubsection{Scene Controllers}
 
 Nello sviluppo delle funzionalità delle scene, si è rivelato quasi sempre necessario che la scena interagisse con la \texttt{View} (che, come detto precedentemente, ha la funzione di wrapper della scena) o con il Controller dell'applicazione. Per questo motivo, ho deciso di introdurre delle entità, a cui mi riferisco con il termine "scene controllers", che regolano il comportamento della scena e che hanno il ruolo di mediatore tra \texttt{Scene}, \texttt{View} e \texttt{Controller}.
@@ -232,9 +234,184 @@ L'implementazione di ogni scene controller deve quindi implementare la sua speci
 \label{images:game-choice-scene-controller}
 \end{figure}
 
-\subsection{Andrea Piermattei}
+In seguito a questa fase di design, mi sono occupata di implementare gli scene controller delle scene di mia competenza.
 
+\subsection{Andrea Piermattei}
+\subsubsection{Progettazione delle pedine}
+I criteri principali che ho cercato di rispettare durante l'intero processo di progettazione delle pedine sono:
+\begin{itemize}
+\item \textbf{semplicità} e \textbf{flessibilità} nel creare sia nuovi tipi di pedine, sia istanze di pedine e nel modificare quelle già esistenti;
+\item progettare classi relativamente \textbf{semplici} e \textbf{specializzate}, che possano operare il più \textbf{indipendentemente} possibile tra loro;
+\item \textbf{estendibilità} del codice.
+\end{itemize}
+
+Per rispettare questi criteri sono stati usati questi tipi di \textbf{pattern}:
+\begin{itemize}
+\item un pattern ispirato al \textbf{pattern component} (interfacce correlate \texttt{BehaviourTypeOfPiece})
+\item tre \textbf{factory methods} distinte (interfacce correlate: \texttt{FactoryHitbox}, \texttt{FactoryMoveset}, \texttt{FactoryBehaviourTypeOfPiece})
+\end{itemize}
+
+Per poter capire meglio il pattern che ho creato, vorrei spiegare brevemente in cosa consiste il pattern component.
+Questo tipo di pattern è caratterizzato da un'unica \textbf{entità} che si occupa di più \textbf{domini} distinti tra loro. Ognuno di essi
+ha un compito ben preciso ed è contenuto all'interno di una classe a parte, che chiameremo \textbf{component}. In questo modo \textbf{l'entità
+principale} che si vuole modellare, non è altro che un \textbf{contenitore} di component a cui vengono delegati i compiti da fare. Un esempio
+di pattern component è il GameObject che può possedere più componenti: GraphycsComponent, InputComponent, PhysicsController...
+La scelta dell'architettura usata nell'applicazione e la natura stessa delle pedine mi hanno portato ad usare una versione \textbf{semplificata} e 
+\textbf{specializzata} del pattern component. Al posto della classe estremamente generica GameObject, abbiamo una classe più specializzata, nominata \texttt{Piece} 
+(l'interfaccia principale implementata da \texttt{AbstractPiece} che comunica direttamente con la \texttt{Board}), che rappresenta i \textbf{pezzi generici} che l'utente può muovere durante la partita. 
+Essa contiene tutti i campi e i metodi comuni alle pedine \textbf{indipendentemente} dal loro tipo, come per esempio
+la posizione corrente, la squadra di appartenenza e il numero corrente di vite.
+Bisogna però specificare che quest'ultimo viene inizializzato con il numero totale di vite contenuto in \texttt{BehaviourTypeOfPiece}. L'unico componente dell'\texttt{AbstractPiece} è la
+\texttt{BehaviourTypeOfPiece} (implementato da \texttt{AbstractBehaviourTypeOfPiece}), 
+che contiene tutti i metodi e i campi che caratterizzano il comportamento di uno specifico tipo di pedina, quali la hitBox e la moveSet assolute 
+(create prendendo come punto di riferimento la posizione (0,0)), il numero totale
+di vite e i metodi abstract \texttt{.wasHit(...)}, \texttt{.generate()}, \texttt{.generateHitbox()} e \texttt{.generateMoveSet()}.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/component-pattern.png}
+\caption{Schema UML che rappresenta il design del pattern ispirato al pattern component.}
+\label{images:component-pattern}
+\end{figure}
+Questo sistema ha alcuni vantaggi: 
+\begin{itemize}
+\item nel caso in cui volessi aggiungere nuove funzionalità o fare degli accorgimenti a \texttt{TypeBehaviourOfPiece}, non è detto che sia costretto a modificare il
+codice già esistente della \texttt{AbstractPiece} (se non qualche piccola aggiunta);
+\item semplifica la classe \texttt{AbstractPiece}.
+\end{itemize}
+Insieme al pattern component vengono anche usate tre \textbf{factory method} diverse:
+\begin{itemize} 
+\item \texttt{FactoryHitbox} (interfaccia implementata da \texttt{ImplFactoryHitbox}): crea diversi tipi di hibox assolute.
+\item \texttt{FactoryMoveset} (interfaccia implementata da \texttt{ImplFactoryMoveset}): crea diversi tipi di moveset assolute.
+Queste prime due factory vengono utilizzate dentro la \texttt{AbstractBehaviourTypeOfPiece}, ma possono essere usati anche da altre entità.
+\item \texttt{FactoryBehaviourTypeOfPiece} (interfaccia implementata da \texttt{ImplFactoryBehaviourTypeOfPiece}): si trova all'interno della \texttt{AbstractPiece} e
+crea i diversi tipi di component \texttt{BehaviourTypeOfPiece}, che verranno usati dalle classi che estendono \texttt{AbstractPiece} (cioè le \textbf{pedine effettive} che verranno usate dalla \texttt{Board}). E' qui che bisognerà 
+implementare i metodi abstract della \texttt{AbstractBehaviourTypeOfPiece}.
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/factory-pattern.png}
+\caption{Schema UML che rappresenta i tre factory method.}
+\label{images:factory-pattern}
+\end{figure}
+Questo sistema ci permette di semplificare il codice da scrivere sia nella \texttt{TypeBehaviourOfPiece} per la scelta delle \texttt{hitbox} e \texttt{moveset}, sia nelle implementazioni delle pedine che estendono \texttt{AbstractPiece}
+per sceglire la \texttt{BehaviourTypeOfPiece}; basta infatti chiamare all'interno della classe il metodo desiderato della \textbf{factory} in questione che farà tutto ciò che serve.
+L'utilizzo di questi due pattern ci permette di creare implementazioni di pedine molto piccole e facili da usare da entità esterne come la \texttt{Board}; il loro costruttore ha bisogno di sapere solo qual è la \textbf{posizione iniziale} e il \textbf{player} a cui appartiene.
+
+\subsubsection{Meccanica della mangiata delle pedine}
+
+La meccanica della mangiata all'interno delle pedine è rappresentata dai due metodi \texttt{.wasKilled(...)} di \texttt{Piece} e \texttt{.wasHit(...)} di \texttt{BehaviourTypeOfPiece}, i quali vengono chiamati
+solo quando una pedina, che denomineremo \textbf{"vittima"}, viene \textbf{"minacciata"} da una o più pedine nemiche. Questo corrisponde a dire che la pedina
+\textbf{"vittima"} si trova in corrispondenza di una o più \textbf{hitbox} nemiche. Non è detto che una pedina minacciata venga ogni volta mangiata, infatti le \textbf{condizioni 
+di morte} di una pedina vengono determinate da \texttt{.wasHit(...)} a partire dai dati forniti direttamente dalla \texttt{Board} (una collezione di posizioni nemiche e l'ultima pedina nemica mossa).
+La \texttt{.wasKilled(...)} si limita ad interrogare la \texttt{.wasHit(...)}.
+
+Questo intero sistema ha dei grandi vantaggi:
+\begin{itemize} 
+\item rende la \texttt{Board} più semplice, visto che non si deve preoccupare di tutte le possibili combinazioni di mangiata di una pedina, ma basta che vada ad interrogare
+la pedina vittima stessa;
+\item possiamo creare qualsiasi tipo di \textbf{hitbox} e \textbf{condizione di morte} (cioè il contenuto di \texttt{.wasHit(...)})senza dover modificare la \texttt{Board} o la \texttt{Piece}.
+\end{itemize}
+
+\subsubsection{Altre scelte di design degne di nota}
+\begin{itemize}
+\item \texttt{whereToMove(...)} e \texttt{whereToHit(...)}: sono due metodi che prendono rispettivamente la moveset e la hitbox assolute contenute nel component \texttt{TypeBehaviourOfPiece} e le adattano alla posizione corrente della pedina. In questo modo evitiamo di creare questi due dati dal nulla ogni volta che viene interrogata la pedina, ma partiamo da uno 'stampo' per generare l'ouput finale.
+\item \texttt{getTypeBehaviour()}: restituisce \texttt{BehaviourTypeOfPiece}, permettendoci di accedere a tutti i suoi metodi. In questo modo possiamo limitare possibili modifiche alla \texttt{AbstractPiece}, nel caso si volessero aggiungere nuove funzionalità specifiche al tipo di pedina che si vuole implementare.
+\end{itemize}
+\subsubsection{MatchPanel}
+
+Questa interfaccia (implementata da \texttt{MatchPanelImpl}) estende JPanel e ha due compiti: uno di mostrare ai giocatori la \textbf{situazione attuale} del tabellone e l'altro di ricevere più \textbf{input} dall'utente. Questo JPanel è organizzato in quattro \textbf{livelli} (JPanel) ben distinti (usando un \texttt{OverlayLayout}), ognuno contenente una griglia 11x11.
+\begin{itemize}
+\item il primo livello contiene i \textbf{bottoni} (con il relativo \texttt{actionListener}) usati dal giocatore di turno per selezionare le pedine della sua squadra e decidere dove spostarle;
+\item il secondo livello contiene le immagini delle \textbf{pedine} ancora vive;
+\item il terzo livello contiene le immagine delle \textbf{celle speciali} attualmente attive;
+\item il quarto rappresenta il \textbf{tavolo da gioco} e contiene le \textbf{celle di base}.
+\end{itemize}
+Tutti gli elementi di questi livelli sono contenuti anche dentro quattro Map distinte (\texttt{mapButtons}, \texttt{mapPieces}, \texttt{mapSpecialCells}, \texttt{mapBoard}) per
+renderli più facilmente reperibili.
+Il \texttt{MatchPanel} fornisce alla \texttt{MatchScene} tutti i metodi necessari per fare l'update del tavolo da gioco, 
+ripulendo prima di tutto i livelli che contengono JLabel (attraverso il metodo \texttt{.removeAllIconsOnLayer(...)})
+per poi ridisegnare le pedine e le celle che gli servono (attraverso i metodi \texttt{.drawAllSpecialCells(...)} e \texttt{.drawBackgroundCells(...)}). 
+Per fare questo ha bisogno di reperire le immagini di pedine e celle attraverso 
+i metodi dell'interfaccia LoaderImages all'interno del costruttore di MatchScene. 
+
+\texttt{ImageInfo} è una interfaccia utilizzata per rappresentare le caratteristiche fondamentali delle immagini e di conseguenza degli oggetti 
+che rappresentano. Essa è implementata dalla classe \texttt{CellImageInfo} e dalla classe \texttt{PieceImageInfo}.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/match-panel.png}
+\caption{Schema UML che rappresenta la MatchPanel e le sue classi correlate.}
+\label{images:match-panel}
+\end{figure}
 \subsection{Margherita Raponi}
+
+\subsubsection{Board e Eaten}
+
+Per modellare la logica di gioco ho identificato due momenti principali all’interno di ogni turno e ho deciso di affidarli a due oggetti distinti \texttt{Board}  e \texttt{Eaten} seguendo il \textbf{pattern Strategy}. Essendo la mangiata di uno o più pezzi un evento che al suo interno richiede di svolgere diversi controlli, ho preferito separarlo dal resto della logica di gioco implementandolo a parte in \texttt{Eaten}. Per questo motivo e in ottica di estendibilità ho scelto di sfruttare il pattern sopra citato.
+All’interfaccia \texttt{Board} è affidata la logica di selezione della pedina, la logica dei controlli inerenti movimento e spostamento di quest’ultima e la logica dei controlli riguardanti lo stato della partita come la patta e la vittoria. Il setup della griglia di gioco viene passato come parametro alla \texttt{Board} attraverso due mappe: una rappresenta la disposizione delle celle sul tabellone di gioco, la seconda la disposizione delle pedine di entrambi i giocatori. Le mappe vengono passate ad inizio partita dalla classe \texttt{Match}.
+La \texttt{Board} si occupa di aggiornare le due mappe in base alle azioni svolte dai giocatori. Inoltre durante ogni turno comunica con l'interfaccia \texttt{Piece}, per avere informazioni legate ai pezzi e per settarne la posizione e con l'interfaccia \texttt{Cell} per settare e avere informazioni riguardanti le celle e per notificare loro lo spostamento della pedina. In aggiunta attraverso il metodo \texttt{notifyTurnHasEnded(...)} la \texttt{Board} notifica la fine di ogni turno ad una particolare tipologia di cella detta \texttt{Slider}.
+L'interfaccia \texttt{Eaten}, invece, presenta i controlli necessari per capire se un pezzo mosso ha effettuato una mangiata. Viene utilizzata dalla classe \texttt{BoardImpl} (che implementa \texttt{Board}) nel suo metodo \texttt{eat()} in cui avviene la chiamata sequenziale dei diversi metodi di \texttt{Eaten}  i quali, a loro volta, sfruttano alcuni metodi messi a disposizione da \texttt{Piece}. La \texttt{Board} stessa passa ai metodi di \texttt{Eaten} i parametri necessari per la verifica della magiata.
+La scelta di isolare i controlli legati alla mangiata in una classe a parte offre la possibilità di implementare nuovi o più tipi di mangiata in eventuali future versioni del gioco.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/board-and-eaten.png}
+\caption{Schema UML che rappresenta il design di Board e Eaten e delle entità a loro legate.}
+\label{images:board-and-eaten}
+\end{figure}
+
+\subsubsection{Cell}
+
+Una delle entità principali oltre alla \texttt{Board} sono le celle che compongono la griglia di gioco. 
+L'interfaccia \texttt{Cell} modella le varie celle e presenta metodi che permettono di interrogarle e di settarle, ampiamente sfruttati dalla  \texttt{Board}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/cells.png}
+\caption{Schema UML che rappresenta il design delle celle e delle entità a loro collegate.}
+\label{images:cells}
+\end{figure}
+
+
+\textbf{Problema:} la griglia di gioco sia della versione classica che della variante è composta da diverse tipologie di celle ognuna con un comportamento differente, in particolare nella variante è presente anche un \texttt{CellComponent} chiamato \texttt{Tomb}. Questi oggetti per quanto diversi sono caratterizzati da alcuni comportamenti comuni.
+\\\\
+\textbf{Soluzione:} per evitare duplicazione e ridondanza ho scelto di creare una classe astratta \texttt{AbstractCell} che implementa l’interfaccia \texttt{Cell}. \texttt{AbstractCell} implementa i metodi \texttt{setFree()} e \texttt{isFree()} comuni a tutte le celle e a \texttt{Tomb}. Ognuna delle classi che modella i diversi tipi di cella (\texttt{ClassicCell}, \texttt{Exit}, \texttt{SliderImpl}, \texttt{Throne}) e \texttt{Tomb} estende questa classe astratta aggiungendo poi i metodi necessari per completare il comportamento di quel determinato oggetto. 
+
+\subsubsection{Slider}
+
+Lo \texttt{Slider} è una \texttt{Cell} che presenta un effetto speciale, ovvero quando una pedina ci finisce sopra se attivo sposta la pedina nella posizione più lontana raggiungibile da quest’ultima lungo una direzione decisa dallo \texttt{Slider} stesso.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/slider.png}
+\caption{Schema UML che rappresenta il design di uno Slider.}
+\label{images:Slider}
+\end{figure}
+
+\textbf{Problema:}
+\begin{enumerate}
+\item a differenza delle altre celle lo \texttt{Slider} ha bisogno di conoscere il numero del turno e deve poter disattivarsi una volta usato poiché non si può sfruttare più volte all’interno dello stesso turno. Una volta concluso il turno deve poi riattivarsi.
+\item per poter spostare il pezzo finito su esso, questa particolare cella, ha bisogno di comunicare con la \texttt{Board} per sapere in che posizione mandare il pezzo e aggiornare le due mappe che identificano le celle e le pedine del gioco.
+\end{enumerate}
+\textbf{Soluzione:} 
+\begin{enumerate}
+\item in ottica di estendibilità ho pensato che la necessità di essere aggiornati sul turno di gioco e di avere uno o più campi che devono essere resettati alla fine di ogni turno può essere una necessità anche di altre tipologie di celle che potrebbero essere implementate in futuro. Per questo motivo ho creato due interfacce \texttt{Resettable} e \texttt{TimedEntity}, la prima con un metodo per resettare i campi e la seconda con un metodo che informa sul numero del turno appena terminato. L'interfaccia Slider estende oltre a \texttt{Cell}, sia \texttt{Resettable} che \texttt{TimedEntity}.
+\item ho risolto questo problema grazie al  \textbf{pattern Mediator} implementando l’interfaccia \texttt{SliderMediator} che permette a \texttt{Board} e \texttt{Slider} di comunicare, in particolare \texttt{Slider} potrà sfruttare i metodi
+\texttt{getFurthestReachablePos(...)} e \texttt{movePlaceholder(...)} di \texttt{SliderMediator} per effettuare i controlli necessari per spostare il pezzo. Anche dal punto di vista dell’estendibilità l’utizzo di questo pattern può far comodo poichè evita che gli oggetti siano direttamente collegati fra loro evitando dipendenze difficili da modificare in vista di future versioni del gioco.
+\end{enumerate}
+
+\subsubsection{Caricamento delle immagini di gioco}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/loader-images.png}
+\caption{Schema UML che rappresenta il design dell'interfaccia \texttt{LoaderImages}.}
+\label{images:loader-images}
+\end{figure}
+
+\textbf{Problema:} il gioco presenta circa una ventina di immagini per rappresentare tutte le celle e le pedine. Il caricamento di immagini risulta essere però un processo oneroso che richiede tempo, perciò non è conveniente che queste vengano caricate ogni volta all'inizio di ogni turno. 
+\\\\
+\textbf{Soluzione:}  l'interfaccia \texttt{LoaderImages} carica tutte le immagini necessarie al gioco all’interno di due mappe, una avrà le immagini delle pedine l’altra delle celle. All’interno di queste mappe ad ogni immagine è associato un oggetto di tipo \texttt{CellImageInfo} o \texttt{PieceImageInfo} che rispettivamente danno informazioni riguardanti il tipo cella e il tipo di pedina dell’immagine corrispondente.
+Queste due mappe verranno poi sfruttate, durante tutto il corso della partita, dalla classe \texttt{MatchPanelImpl} per poter disegnare le varie entità in gioco. Questo approccio permette di caricare le immagini una sola volta all'inizio della partita e poi usufruirne  senza caricarle nuovamente. 
 
 
 
@@ -243,8 +420,8 @@ L'implementazione di ogni scene controller deve quindi implementare la sua speci
 
 \section{Testing automatizzato}
 
-Il testing automatizzato ha riguardato la parte logica dell'applicazione. Data la natura piuttosto articolata e "gerarchica" del dominio di gioco, il testing è stato portato avanti con un approccio bottom-up. Sono prima stati testati singolarmente i componenti più piccoli del dominio (celle e pedine), controllando che il loro stato interno fosse inizializzato correttamente. Essi sono successivamente stati testati sulla griglia di gioco, verificando che si ottenessero gli effetti desiderati dall'interazione tra le diverse pedine e celle. Chiaramente, è stata testata anche la corretta configurazione iniziale di celle e pedine secondo quanto stabilito dal regolamento delle due modalità di gioco. Infine, il tutto è stato testato nel contesto della partita, considerando quindi un ambiente di gioco completo e l'alternanza dei turni tra i giocatori.
-Per la scrittura e lo svolgimento dei test, è stato utilizzato il framework \texttt{JUnit 5}.
+Il testing automatizzato dell'applicazione ha riguardato la parte logica dell'applicazione. Data la natura piuttosto articolata e "gerarchica" del dominio di gioco, il testing è stato portato avanti con un approccio bottom-up. Sono prima stati testati singolarmente i componenti più piccoli del dominio (celle e pedine), controllando che il loro stato interno fosse inizializzato correttamente. Essi sono successivamente stati testati sulla griglia di gioco, verificando che si ottenessero gli effetti desiderati dall'interazione tra le diverse pedine e celle. Chiaramente, è stata testata anche la corretta configurazione iniziale di celle e pedine secondo quanto stabilito dal regolamento delle due modalità di gioco. Infine, il tutto è stato testato nel contesto della partita, considerando quindi un ambiente di gioco completo e l'alternanza dei turni tra i giocatori.
+Per la scrittura e lo svolgimento dei test, è stato utilizzato il framework JUnit 5.
 
 \section{Metodologia di lavoro}
 
@@ -321,37 +498,56 @@ In collaborazione ho lavorato:
 
 \end{itemize}
 
-\subsubsection{Elena Boschetti}
-
-Di seguito, sono elencate la parti di cui mi sono occupata in autonomia.
-
+\subsection{Andrea Piermattei}
 \begin{itemize}
-	\item Mi sono occupata dell'implementazione dell'interfaccia del Model dell'applicazione, nello specifico della classe \texttt{taflgames.model.Match}.
-	\item Ho realizzato i builder per la costruzione delle collezioni di celle e pedine (package \texttt{taflgames.model.builders}).
-	\item Mi sono occupata del caricamento da file XML della configurazione della griglia di gioco in base alla modalità scelta e dell'inizializzazione delle collezioni di celle e pedine coerentemente con essa (package \texttt{taflgames.controller.settingsloader});
-	\item Mi sono occupata del design della view, sia per quanto riguarda le scene (package \texttt{taflgames.view.scenes}), sia per quanto riguarda gli scene controllers (package \texttt{taflgames.view.scenecontrollers}), e ho realizzato le interfacce e le classi di base di entrambi (\texttt{Scene}, \texttt{AbstractScene}, \texttt{BasicSceneController}, \texttt{AbstractBasicSceneController}).
-	\item Ho implementato le scene e gli scene controllers della schermata della home dell'applicazione (\texttt{HomeScene}, \texttt{HomeSceneController} e relativa implementazione), della schermata di scelta del gioco (\texttt{GameChoiceScene}, \texttt{GameChoiceSceneController} e relativa implementazione) e della schermata del regolamento di gioco (\texttt{RulesScene}, \texttt{RulesSceneController} e relativa implementazione). Per quanto concerne il regolamento, mi sono occupata anche della sua stesura su file HTML, in modo da avere una resa grafica migliore.
-	
+\item realizzazione dell'implementazione del PieceMemento (ideato da Alin)
+\item progettazione e realizzazione della parte di model riguardante le pedine:
+\begin{itemize}
+\item FactoryHitbox e ImplFactoryHitbox
+\item FactoryMoveSet e ImplFactoryMoveSet
+\item BehaviourTypeOfPiece e AbstractBehaviourTypeOfPiece
+\item Piece e AbstractPiece
+\item Archer
+\item Queen
+\item King
+\item Swapper
+\item Shield
+\item BasicPiece
+\item FactoryBehaviourTypeOfPiece e ImplFactoryBehaviourTypeOfPiece
+\end{itemize}
+\item progettazione e realizzazione, in collaborazione con Margherita, del MatchPanel
+\item creazione dell'interfaccia ImageInfo e PieceImageInfo
+\item realizzazione del MatchScene in collaborazione con Margherita
+\item realizzazione degli assets .png delle pedine, delle celle e l'icona
 \end{itemize}
 
-Ho inoltre collaborato:
+\subsection{Margherita Raponi}
+In autonomia mi sono occupata di:
+\begin{itemize}
+	\item implementazione dell'interfacce \texttt{Board} e \texttt{Eaten}, nello specifico delle classi \texttt{BoardImpl} e \texttt{EatenImpl} che costuituiscono la logica del gioco (package taflgames.model.board.api e taflgames.model.board.code).
+	\item implementazione dell'interfaccia \texttt{Cell} e delle varie classi per la creazione delle diverse tipologia di cella (package taflgames.model.cell.api e package taflgames.model.cell.code).
+	\item creazione delle classi \texttt{LoaderImages} e \texttt{LoaderImagesImpl} (package taflgames.view.imagesloader).
+\end{itemize}
+In collaborazione ho lavorato:
 
 \begin{itemize}
-	\item con Alin Stefan Bordeianu:
+	\item con  Alin Stefan Bordeianu:
 		\begin{itemize}
-			\item per la risoluzione di alcuni problemi legati al rapporto tra le entità del dominio,
-confrontandoci per valutare idee diverse al fine di progettare delle buone soluzioni in termini di design, che minimizzassero le dipendenze tra le entità;
-			\item per l'implementazione dell'interfaccia \texttt{MatchMemento} all'interno della classe \texttt{Match};
-			\item per il design e l'implementazione del Controller dell'applicazione;
-			\item per alcuni dettagli implementativi delle classi atte al caricamento e al salvataggio della leaderboard, in particolare per quanto riguarda il caricamento del file.
+			\item sulla creazione della Tomba;
+			\item sul debugging della \texttt{Board} e dell'\texttt{Eaten};
+			\item sull'analisi delle condizioni di patta;
+			\item sui test delle varie Celle e comportamenti della \texttt{Board}.
 		\end{itemize}
-	\item con Margherita Raponi:
+	\item con Elena Boschetti:
 		\begin{itemize}
-			\item per l'integrazione tra Match e Board;
-			\item per il debugging della \texttt{Board} a seguito di problemi emersi in fase di testing del \texttt{Match} e della \texttt{Board}.
+			\item per il debugging della \texttt{Board} durante la fase di testing del \texttt{Match} e della \texttt{Board}.
+		\end{itemize}
+	\item con Andrea Piermattei:
+		\begin{itemize}
+			\item sulla realizzazione della classe \texttt{MatchPanelImpl}, implementando i metodi per disegnare le celle e implementando il comportamento dei bottoni del Panel.
+			\item sulla realizzazione della classe \texttt{MatchScene}.
 		\end{itemize}
 \end{itemize}
-
 
 \section{Note di sviluppo}
 
@@ -415,9 +611,25 @@ Permalink: [utilizzo in Match.java e/o TestMatch.java]
 Permalink: [uso in RulesScene.java]
 
 \subsection{Andrea Piermattei}
+\subsubsection{Uso delle lambda expressions}
+Permalink:[AbstractPiece.java, ImplFactoryTypeOfPiece.java, ImplfactoryMoveset.java,MatchPanelImpl.java]
+
+\subsubsection{Uso di \texttt{Stream}}
+Permalink:[AbstractPiece.java, ImplFactoryTypeOfPiece.java, ImplfactoryMoveset.java,MatchPanelImpl.java]
+
+\subsubsection{Uso di \texttt{Optional}}
+Permalink:[MatchPanelImpl.java]
 
 \subsection{Margherita Raponi}
 
+\subsubsection{Uso di Stream}
+Usati in vari punti. Un esempio di utilizzo è in BoardImpl.java: \url{https://github.com/Martinetto33/OOP22-tafl-games/blob/b3906dae75f2fe3908410cf72c30a889f55919ed/src/main/java/taflgames/model/board/code/BoardImpl.java#L344-L348}
+
+\subsubsection{Uso di Lambda expressions}
+Usate in vari punti. Un esempio di utilizzo è in EatenImpl.java: \url{https://github.com/Martinetto33/OOP22-tafl-games/blob/b3906dae75f2fe3908410cf72c30a889f55919ed/src/main/java/taflgames/model/board/code/EatenImpl.java#L110-L111}
+
+\subsubsection{Uso di Optional}
+Utilizzati in BoardImpl.java: \url{https://github.com/Martinetto33/OOP22-tafl-games/blob/b3906dae75f2fe3908410cf72c30a889f55919ed/src/main/java/taflgames/model/board/code/BoardImpl.java#L374-L392}
 
 
 \chapter{Commenti finali}
@@ -448,12 +660,19 @@ L'esperienza del lavoro di gruppo è stata anch'essa molto formativa: la divisio
 
 Penso che in futuro mi dedicherò nuovamente a questo progetto con molto piacere: dopo tutto l'impegno messo e il lavoro svolto, sarebbe gratificante migliorare il software e renderlo più completo, aggiungendo funzionalità, migliorando la parte grafica e facendo del refactoring.
 
+\subsection{Andrea Piermattei}
+Questo progetto è stata una esperienza particolare per me: non è certo la prima volta che ho lavorato in un gruppo, ma non mi è mai capitato di dover realizzare un intero videogioco praticamente dal nulla, utilizzando numerosi software di cui non avevo molta esperienza. 
+Nonostante le difficoltà riscontrate durante questi mesi di lavoro, è stato piacevole provare a cimentarmi con la progettazione di un sistema che non solo funzionasse, ma rispettasse anche i principi base della programmazione ad oggetti.
+Tutto sommato penso di aver fatto un lavoro discreto e mi sento abbastanza soddisfatto.
+Questo non significa che il codice non si possa migliorare. Un esempio palese è la pedina swapper: nonostante sia una entità concettualmente molto diversa dalla pedina di base, a livello di implementazione non cambia praticamente alcunchè. L'intero funzionamento dello swapper si appoggia sull'uso del .canSwap() di Piece e su come la Board decide di usare questo metodo. Il sistema risulta di conseguenza poco estendibile, soprattutto se si pensa di creare nuove pedine simili allo swapper. Un modo migliore di fare le cose sarebbe quella di creare una entità Mediator che possa comunicare con la Board per sapere le posizioni delle pedine per poi passarle alla FactoryMoveset. Quest'ultima potrà poi usare il metodo .createSwapperMoveSet(...) già presente nel codice e funzionante ma mai usato, per creare effettivamente un nuovo tipo di hitbox e rendere il codice più estendibile. Un altro esempio è la MatchPanel: invece di ridisegnare tutte le pedine, anche quando non avviene una mangiata, si potrebbe usare la .movePiece(...) (un altro metodo funzionante ma mai usato effettivamente nel codice). Sfortunatamente non è stato possibile sviluppare ulteriormente queste funzionalità per mancanza di tempo.
+
+\subsection{Margherita Raponi}
+La realizzazione di questo progetto è stata un'esperienza che ci ha messo a dura prova ma nella totalità posso dire essere stata stimolante. Grazie ad esso ho avuto la possibilità di approfondire il linguaggio Java imparando a sfruttare meglio Stream e Lambda e mi ha permesso di scoprire design pattern di cui non ero a conoscenza. Ho approfondto anche Git il quale mi sembrava molto macchinoso e complesso all'inizio, quando anche un semplice commit mi spaventava, adesso posso dire di non avere più problemi con le operazioni di base come push, commit e la creazione di nuovi branch. Ho avuto la possibilità di lavorare sia individualmente che collaborando con gli altri supportandoci a aiutandoci a vicenda. Nonostante non sia la prima volta che mi trovo a lavorare in team comunque ho imparato a coordinarmi meglio con altri quando si lavora assieme. All'inizio ho fatto un po' fatica a capire la struttura del progetto, di conseguenza ho cercato molto un confronto con i miei compagni. Ho avuto momenti in cui ho programmato senza problemi in autonomia ma ho anche incontrato momenti di blocco in cui con l'aiuto dei miei colleghi sono riuscita ad andare avanti. Nonostante io non sia un'appasionata di videogiochi ho travato il progetto un'esperienza entusiasmante a cui man mano che ci lavoravo mi appassionavo sempre di più. In conclusione posso dirmi soddisfatta del lavoro svolto anche se con più tempo si poteva fare un po' di refactoring per migliorare l'estendibilità e le dipendenze fra classi. 
+
 \section{Difficoltà incontrate e commenti per i docenti}
 
 \subsection{Alin Stefan Bordeianu}
-Il corso è il più impegnativo che abbia affrontato in tutta la triennale. Nonostante apprezzi le sfide e le occasioni di espandere i miei orizzonti, devo ammettere che questo corso non lascia molto spazio per altro, in quanto il progetto richiede un grande sforzo per essere finito in tempo e spesso e volentieri si sacrificano ore di lezione (e di sonno) per la sua realizzazione. Un suggerimento potrebbe essere quello di consentire agli studenti di fare la proposta di progetto e almeno l'analisi già durante il corso stesso. Vorrei ribadire anche il fatto che si potrebbero approfondire ancora di più gli aspetti legati al DVCS, magari dedicando una lezione di laboratorio a un mini progettino su cui lavorare a coppie, giusto per aiutare gli studenti a prendere confidenza con i vari pull, push, commit, merge, ecc. quando ad utilizzare lo strumento si è in più di uno.
-
-Aggiungo anche una considerazione sul laboratorio di C\#: purtroppo non è stato dedicata sufficiente attenzione a quella parte del corso (ad esempio i test che dovevamo usare per verificare il nostro codice erano errati e malfunzionanti), e per queste ragioni il primo impatto con tale linguaggio non è stato molto gradevole.
+Il corso è il più impegnativo che abbia affrontato in tutto il corso di laurea. Nonostante apprezzi le sfide e le occasioni di espandere i miei orizzonti, devo ammettere che questo corso non lascia molto spazio per altro, in quanto il progetto richiede un grande sforzo per finire in tempo e spesso e volentieri si sacrificano ore di lezione (e di sonno) per la sua realizzazione. Un suggerimento potrebbe essere quello di consentire agli studenti di fare la proposta di progetto e almeno l'analisi già durante il corso stesso. Vorrei ribadire anche il fatto che si potrebbero approfondire meglio gli aspetti legati al DVCS, magari dedicando una lezione di laboratorio a un mini progettino su cui lavorare a coppie, giusto per aiutare gli studenti a prendere confidenza con i vari pull, push, commit, merge, ecc.
 
 
 \appendix
@@ -476,9 +695,12 @@ Si rende presente il fatto che nelle varie partite bisogna cliccare il tasto "Pa
 	\item Laboratorio 10: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=119938#p176526}
 \end{itemize}
 
-\subsection{andrea.piermattei@studio.unibo.it}
-
 \subsection{margherita.raponi@studio.unibo.it}
+\begin{itemize}
+	\item Laboartorio 03: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=112846#p168213}
+	\item Laboratorio 05: \url{https://virtuale.unibo.it/mod/forum/discuss.php?d=114647#p170352}
+\end{itemize}
+
 
 
 \end{document}

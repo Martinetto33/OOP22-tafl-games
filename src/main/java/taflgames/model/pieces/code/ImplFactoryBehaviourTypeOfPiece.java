@@ -35,22 +35,6 @@ public class ImplFactoryBehaviourTypeOfPiece implements FactoryBehaviourTypeOfPi
         return test.size() == 1;
     }
     /**
-     * is may or may not be used.
-     * @param me
-     * @param enemies
-     * @param lastEnemyMoved
-     * @return true if valid, false otherwise
-     */
-    /*private boolean areMixedPieces(final Piece me, final Set<Piece> enemies, final Position lastEnemyMoved) {
-        final Set<Piece> test = new HashSet<>(enemies.stream()
-                .filter(t -> t.getPlayer().equals(me.getPlayer()))
-                .collect(Collectors.toSet()));
-        if (test.size() != enemies.size()) {
-            return true;
-        }
-        return false;
-    }*/
-    /**
      * {@inheritDoc}.
      */
     public boolean basicWasHit(final Set<Piece> enemies, final Position lastEnemyMoved) {
