@@ -18,3 +18,6 @@ bin/
 
 # Ignore yaml file for saves
 .yaml
+
+#Ignore pdf
+.pdf
