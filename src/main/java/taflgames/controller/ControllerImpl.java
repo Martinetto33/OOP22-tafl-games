@@ -92,7 +92,7 @@ public final class ControllerImpl implements Controller {
             this.caretaker = new CaretakerImpl(this.match);
             this.caretaker.updateHistory();
         } catch (final IOException exception) {
-            final String errorMsg = "Error: cannot initialize a new match. " + exception.getMessage();
+            final String errorMsg = "Error: cannot initialize a new match. ";
             LOGGER.error(errorMsg, exception);
             throw exception;
         }
