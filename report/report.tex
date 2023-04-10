@@ -37,8 +37,8 @@ Lo scopo del progetto è la realizzazione di un'applicazione incentrata su un gi
 	\item Entrambe la modalità prevedono tre tipi di celle.
 	\begin{itemize}
 		\item Le \textbf{celle classiche} non hanno alcun effetto o comportamento distintivo.
-		\item Il \textbf{trono} è la cella in cui è posizionato inizialmente il re. Ha la particolarità di avere una propria hitbox, comportandosi come una pedina se si cerca di fare una mangiata nelle celle adiacenti ad esso.
-		\item Le \textbf{uscite} sono celle presenti ad ognuno dei quattro angoli della griglia; se una di esse è raggiunta dal re, allora il difensore vince. Chiaramente, non è possibile posizionare sulle uscite nessuna pedina che non sia il re.
+		\item Il \textbf{trono} è la cella in cui è posizionato inizialmente il re. Il trono ha la particolarità di poter essere implicato nella cattura, contando come una pedina alleata sia per l'attaccante che per il difensore. In pratica schiacciare una pedina fra il trono e un'altra pedina corrisponde a catturarla.
+		\item Le \textbf{uscite} sono celle presenti ad ognuno dei quattro angoli della griglia; se una di esse è raggiunta dal re, allora il difensore vince. Chiaramente, non è possibile posizionare sulle uscite nessuna pedina che non sia il re. Anche le uscite, come il trono, possono essere implicate nella cattura secondo le stesse modalità.
 	\end{itemize}
 	\item La variante del gioco prevede quattro ulteriori tipi di pedine e due ulteriori tipi di celle.
 	\begin{itemize}
@@ -638,13 +638,29 @@ Permalink: \url{https://github.com/Martinetto33/OOP22-tafl-games/blob/09db6dcc6e
 
 \subsection{Andrea Piermattei}
 \subsubsection{Uso delle lambda expressions}
-Permalink:[AbstractPiece.java, ImplFactoryTypeOfPiece.java, ImplfactoryMoveset.java,MatchPanelImpl.java]
+Permalink:\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/09db6dcc6e6aed0e59f01fd4b5ac311bb6a8cb79/src/main/java/taflgames/model/pieces/code/AbstractPiece.java#L133-L134}
+...usati pervasivamente.\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/model/pieces/code/ImplFactoryBehaviourTypeOfPiece.java#L33}
+...usati pervasivamente.\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/model/pieces/code/ImplFactoryBehaviourTypeOfPiece.java#L174}\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/common/code/ImplFactoryMoveset.java#L36}\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/view/scenes/MatchPanelImpl.java#L114-L117}\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/view/scenes/MatchPanelImpl.java#L155}
+...usati pervasivamente.\\\\
 
 \subsubsection{Uso di \texttt{Stream}}
-Permalink:[AbstractPiece.java, ImplFactoryTypeOfPiece.java, ImplfactoryMoveset.java,MatchPanelImpl.java]
+Permalink:\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/09db6dcc6e6aed0e59f01fd4b5ac311bb6a8cb79/src/main/java/taflgames/model/pieces/code/AbstractPiece.java#L132-L135}
+...usati pervasivamente.\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/model/pieces/code/ImplFactoryBehaviourTypeOfPiece.java#L32-L34}
+...usati pervasivamente.\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/common/code/ImplFactoryMoveset.java#L35-L37}
 
 \subsubsection{Uso di \texttt{Optional}}
-Permalink:[MatchPanelImpl.java]
+Permalink:\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/view/scenes/MatchPanelImpl.java#L207-L223}\\\\
+\url{https://github.com/Martinetto33/OOP22-tafl-games/blob/5dc73630aea0869906d26fc6c0d7c2148217a038/src/main/java/taflgames/view/scenes/MatchPanelImpl.java#L49-L50}\\\\
 
 \subsection{Margherita Raponi}
 
