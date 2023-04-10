@@ -13,6 +13,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import taflgames.view.fontmanager.FontManager;
 import taflgames.view.scenecontrollers.RulesSceneController;
 
@@ -20,6 +23,8 @@ import taflgames.view.scenecontrollers.RulesSceneController;
  * Implementation of the scene that shows the rules of the game modes.
  */
 public class RulesScene extends AbstractScene {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RulesScene.class);
 
     private static final String RULES = "Rules";
     private static final String BASE_LOCATION = "taflgames/rules/";
@@ -54,7 +59,9 @@ public class RulesScene extends AbstractScene {
                 htmlDocument
             );
         } catch (final IOException ex) {
-            editor.setText("Error: could not load rules document.");
+            final String errorMsg = "Error: could not read rules document.";
+            LOGGER.error(errorMsg, ex);
+            editor.setText(errorMsg);
         }
         editor.setEditable(false);
         final JScrollPane scrollPane = new JScrollPane(editor);
