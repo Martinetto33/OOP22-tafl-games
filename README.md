@@ -20,7 +20,7 @@ Il progetto è stato realizzato per il corso di Programmazione ad Oggetti del co
 - Prima di avviare l'applicazione, assicurarsi di avere il Java Runtime Environment (versione 17 o successive), scaricabile [qui](https://www.oracle.com/java/technologies/downloads/#java8).
 - In ambiente Linux, eseguire con:
 
-        .\gradlew run
+        ./gradlew run
 
 - Su Windows, eseguire con:
 
