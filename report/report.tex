@@ -37,7 +37,7 @@ Lo scopo del progetto è la realizzazione di un'applicazione incentrata su un gi
 	\item Entrambe la modalità prevedono tre tipi di celle.
 	\begin{itemize}
 		\item Le \textbf{celle classiche} non hanno alcun effetto o comportamento distintivo.
-		\item Il \textbf{trono} è la cella in cui è posizionato inizialmente il re. Il trono ha la particolarità di poter essere implicato nella cattura, contando come una pedina alleata sia per l'attaccante che per il difensore. In pratica schiacciare una pedina fra il trono e un'altra pedina corrisponde a catturarla.
+		\item Il \textbf{trono} è la cella in cui è posizionato inizialmente il re, e solo il re può attraversare e/o fermarsi su questa cella. Il trono ha la particolarità di poter essere implicato nella cattura, contando come una pedina alleata sia per l'attaccante che per il difensore. In pratica schiacciare una pedina fra il trono e un'altra pedina corrisponde a catturarla.
 		\item Le \textbf{uscite} sono celle presenti ad ognuno dei quattro angoli della griglia; se una di esse è raggiunta dal re, allora il difensore vince. Chiaramente, non è possibile posizionare sulle uscite nessuna pedina che non sia il re. Anche le uscite, come il trono, possono essere implicate nella cattura secondo le stesse modalità.
 	\end{itemize}
 	\item La variante del gioco prevede quattro ulteriori tipi di pedine e due ulteriori tipi di celle.
@@ -53,7 +53,7 @@ Lo scopo del progetto è la realizzazione di un'applicazione incentrata su un gi
 	
 	\item Al momento della scelta della modalità di gioco, deve essere possibile visualizzare il regolamento di entrambe le modalità.
 	\item Durante il suo turno, ogni giocatore deve avere la possibilità di annullare la propria mossa ed effettuarne un'altra prima di passare il turno all'altro giocatore.
-	\item Al termine della partita, i giocatori devono avere la possibilità registrare il proprio risultato, immettendo anche il proprio nome; i risultati registrati dovranno poter essere visualizzati su una leaderboard.
+	\item Al termine della partita, i giocatori devono avere la possibilità di registrare il proprio risultato, immettendo anche il proprio nome; i risultati registrati dovranno poter essere visualizzati su una leaderboard.
 \end{itemize}
 
 \subsubsection{Requisiti non funzionali}
@@ -430,7 +430,7 @@ Dopo che l'implementazione di tutte le parti di Model è stata completata e test
 
 Quando anche le funzionalità base della View e del Controller sono state realizzate, ci si è curati di migliorare l'applicazione, collaudando altre funzionalità (ad esempio, l'annullamento delle mosse), risolvendo alcuni bug di lieve entità e apportando alcuni rifinimenti grafici.
 
-Durante tutta la fase implementativa del progetto, è stato utilizzato Git come DVCS, secondo le modalità descritte a lezione: ogni volta che un componente del gruppo ha avuto necessità di lavorare su una particolare feature, è sempre stato creato un branch secondario su cui svolgere tutto il lavoro fino completamento della feature, dopo il quale veniva fatto il merge del feature branch nel branch \texttt{develop}. 
+Durante tutta la fase implementativa del progetto, è stato utilizzato Git come DVCS, secondo le modalità descritte a lezione: ogni volta che un componente del gruppo ha avuto necessità di lavorare su una particolare feature, è sempre stato creato un branch secondario su cui svolgere tutto il lavoro fino completamento della feature, dopo il quale veniva fatto il merge della feature branch nel branch \texttt{develop}. 
 
 \subsection{Alin Stefan Bordeianu}
 In autonomia mi sono occupato di:
@@ -475,7 +475,7 @@ In collaborazione ho lavorato:
 		
 		\item sulla realizzazione del PieceMemento, concordando sull'interfaccia da esporre al Caretaker;
 		
-		\item solo a livello di pianificazione, sul come strutturare il MatchPanel;
+		\item solo a livello di pianificazione, su come strutturare il MatchPanel;
 		
 	\end{itemize}
 
