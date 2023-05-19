@@ -17,7 +17,7 @@ Il progetto è stato realizzato per il corso di Programmazione ad Oggetti del co
 
 ## Setup
 
-- Prima di avviare l'applicazione, assicurarsi di avere il Java Runtime Environment (versione 17 o successive), scaricabile [qui](https://www.oracle.com/java/technologies/downloads/#java8).
+- Prima di avviare l'applicazione, assicurarsi di aver installato il Java Development Kit (versione 17 o successive), scaricabile [qui](https://www.oracle.com/java/technologies/downloads/).
 - In ambiente Linux, eseguire con:
 
         ./gradlew run
