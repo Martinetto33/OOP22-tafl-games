@@ -17,7 +17,7 @@ This project has been realized for the Object-Oriented Programming course of the
 
 - Before starting the application, make sure to have the JDK (version 17 or later) installed; it can be downloaded [here](https://www.oracle.com/java/technologies/downloads/).
 
-- Start the application by running the ``tafl-games-all.jar`` file or, alternatively, by executing the command ``./gradlew run`` on Linux or ``.\gradlew.bat run`` on Windows.
+- Start the application by running the ``tafl-games-all.jar`` file or, alternatively, by executing the command ``./gradlew run`` (on Linux) / ``.\gradlew.bat run`` (on Windows) in the project root directory.
 
 ## User guide
 
