@@ -132,9 +132,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("BasicPieces");
         piecesCollBuilder.addBasicPieces(positionsForEachTeam);
-        for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(cellsCollBuilder, positions);
-        }
+        positionsForEachTeam.values().forEach(posSet -> setCellsStateAsOccupied(cellsCollBuilder, posSet));
     }
 
     private void loadQueensData(
@@ -143,9 +141,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Queens");
         piecesCollBuilder.addQueens(positionsForEachTeam);
-        for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(cellsCollBuilder, positions);
-        }
+        positionsForEachTeam.values().forEach(posSet -> setCellsStateAsOccupied(cellsCollBuilder, posSet));
     }
 
     private void loadArchersData(
@@ -154,9 +150,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Archers");
         piecesCollBuilder.addArchers(positionsForEachTeam);
-        for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(cellsCollBuilder, positions);
-        }
+        positionsForEachTeam.values().forEach(posSet -> setCellsStateAsOccupied(cellsCollBuilder, posSet));
     }
 
     private void loadShieldsData(
@@ -165,9 +159,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Shields");
         piecesCollBuilder.addShields(positionsForEachTeam);
-        for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(cellsCollBuilder, positions);
-        }
+        positionsForEachTeam.values().forEach(posSet -> setCellsStateAsOccupied(cellsCollBuilder, posSet));
     }
 
     private void loadSwappersData(
@@ -176,9 +168,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     ) {
         final var positionsForEachTeam = getPiecesPositionsForEachTeam("Swappers");
         piecesCollBuilder.addSwappers(positionsForEachTeam);
-        for (final var positions : positionsForEachTeam.values()) {
-            setCellsStateAsOccupied(cellsCollBuilder, positions);
-        }
+        positionsForEachTeam.values().forEach(posSet -> setCellsStateAsOccupied(cellsCollBuilder, posSet));
     }
 
     private Map<Player, Set<Position>> getPiecesPositionsForEachTeam(final String piecesName) {
@@ -204,7 +194,7 @@ public final class SettingsLoaderImpl implements SettingsLoader {
     }
 
     private void setCellsStateAsOccupied(final CellsCollectionBuilder cellsCollBuilder, final Set<Position> positions) {
-        positions.stream().forEach(pos -> cellsCollBuilder.setCellAsOccupied(pos));
+        positions.forEach(pos -> cellsCollBuilder.setCellAsOccupied(pos));
     }
 
 }

@@ -38,16 +38,12 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
 
     @Override
     public void addExits(final Set<Position> positions) {
-        for (final var pos : positions) {
-            this.cells.put(pos, new Exit());
-        }
+        positions.forEach(pos -> this.cells.put(pos, new Exit()));
     }
 
     @Override
     public void addSliders(final Set<Position> positions) {
-        for (final var pos : positions) {
-            this.cells.put(pos, new SliderImpl(pos));
-        }
+        positions.forEach(pos -> this.cells.put(pos, new SliderImpl(pos)));
     }
 
     @Override
