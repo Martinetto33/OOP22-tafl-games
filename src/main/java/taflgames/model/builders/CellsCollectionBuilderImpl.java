@@ -1,8 +1,11 @@
 package taflgames.model.builders;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import taflgames.common.code.Position;
 import taflgames.model.cell.code.ClassicCell;
@@ -48,14 +51,16 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
 
     @Override
     public void addBasicCells() {
-        for (int row = 0; row < this.boardSize; row++) {
-            for (int col = 0; col < this.boardSize; col++) {
-                final Position pos = new Position(row, col);
-                if (!this.cells.containsKey(pos)) {
-                    this.cells.put(pos, new ClassicCell());
-                }
-            }
-        }
+        // Generate all positions of the grid
+        final Set<Position> positions = Stream.iterate(0, row -> row + 1).limit(this.boardSize)
+                .map(row -> Stream.iterate(0, col -> col + 1).limit(this.boardSize)
+                                .map(col -> new Position(row, col))
+                                .collect(Collectors.toSet()))
+                .collect(HashSet::new, HashSet::addAll, HashSet::addAll);
+        // For each position where no other type of cell has been placed, place a classic cell
+        positions.stream()
+                .filter(pos -> !this.cells.containsKey(pos))
+                .forEach(pos -> this.cells.put(pos, new ClassicCell()));
     }
 
     @Override
