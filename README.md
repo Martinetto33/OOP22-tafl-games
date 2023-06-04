@@ -23,6 +23,10 @@ This project has been realized for the Object-Oriented Programming course of the
 
 The rules of both game modes are provided in an apposite section in the game mode choice menu of the application.
 
+To move a piece, first select it by left-clicking with the mouse. Then select the cell you want to move it to by left-clicking.
+
+Keep in mind that the Attackers (red pieces) are the first to start, and that normally all pieces can move horizontally or vertically by any number of cells until they meet an obstacle.
+
 ## Authors
 <ul>
     <li>Alin Stefan Bordeianu</li>
