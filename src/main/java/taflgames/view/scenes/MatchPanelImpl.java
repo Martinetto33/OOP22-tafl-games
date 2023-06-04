@@ -46,7 +46,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     private final Map<CellImageInfo, ImageIcon> mapCellsImageIcons = new HashMap<>();
 
     private final int mySize;
-    private Optional<Position> startingPosition = Optional.empty();
+    private Optional<Position> start = Optional.empty();
     private Optional<Position> destination = Optional.empty();
     private MatchSceneController controller;
 
@@ -213,10 +213,10 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
                 selectPosition(position);
                 /* you clicked the same piece or a cell of its moveset 
                     (coloured) */
-                if (startingPosition.isPresent() && destination.isPresent()
-                    || startingPosition.isEmpty()) {
+                if (start.isPresent() && destination.isPresent()
+                    || start.isEmpty()) {
                     deselectHighlightedMoves();
-                } else if (startingPosition.isPresent() && destination.isEmpty()) {
+                } else if (start.isPresent() && destination.isEmpty()) {
                     updateHighlightedMoves();
                 }
             }
@@ -243,18 +243,18 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     private void updateHighlightedMoves() {
         final Color highlightColor = new Color(255, 155, 155);
         mapPieces.forEach((x, y) -> {
-            if (!x.equals(startingPosition.get())) {
+            if (!x.equals(start.get())) {
                 y.setOpaque(false);
                 y.setBackground(null);
             }
         });
-        mapPieces.get(startingPosition.get()).setBackground(highlightColor);
-        mapPieces.get(startingPosition.get()).setOpaque(true);
+        mapPieces.get(start.get()).setBackground(highlightColor);
+        mapPieces.get(start.get()).setOpaque(true);
         if (destination.isPresent()) {
             mapPieces.get(destination.get()).setBackground(highlightColor);
             mapPieces.get(destination.get()).setOpaque(true);
-            mapPieces.get(startingPosition.get()).setOpaque(false);
-            mapPieces.get(startingPosition.get()).setBackground(null);
+            mapPieces.get(start.get()).setOpaque(false);
+            mapPieces.get(start.get()).setBackground(null);
         }
     }
 
@@ -269,14 +269,16 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     }
 
     private void selectPosition(final Position pos) {
-        if (this.startingPosition.isEmpty() && this.controller.isSourceSelectionValid(pos)) {
-            // If the source position is empty and the selected one is a valid source,
-            // then the selected position is set as source
-            this.startingPosition = Optional.of(pos);
-        } else if (this.startingPosition.isPresent() && this.startingPosition.get().equals(pos)) {
+        if (this.start.isEmpty()) {
+            if (this.controller.isSourceSelectionValid(pos)) {
+                // If the source position is empty and the selected one is a valid source,
+                // then the selected position is set as source
+                this.start = Optional.of(pos);
+            }
+        } else if (this.start.isPresent() && this.start.get().equals(pos)) {
             // If the current source is equal to the selected position,
             // this means that the source is deselected
-            this.startingPosition = Optional.empty();
+            this.start = Optional.empty();
         } else {
             // If the source is already set and it is not deselected,
             // then the selected position is the destination
@@ -288,10 +290,10 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
     }
 
     private void requestMove() {
-        if (this.startingPosition.isPresent() && this.destination.isPresent()) {
-            if (this.controller.moveIfLegal(this.startingPosition.get(), this.destination.get())) {
+        if (this.start.isPresent() && this.destination.isPresent()) {
+            if (this.controller.moveIfLegal(this.start.get(), this.destination.get())) {
                 // If the move is performed, startingPosition is reset
-                this.startingPosition = Optional.empty();
+                this.start = Optional.empty();
             }
             // Destination is reset whether the move has been made or not
             this.destination = Optional.empty();
@@ -343,7 +345,7 @@ public class MatchPanelImpl extends JPanel implements MatchPanel {
      */
     @Override
     public Optional<Position> getStartingPosition() {
-        return this.startingPosition;
+        return this.start;
     }
 
     /**

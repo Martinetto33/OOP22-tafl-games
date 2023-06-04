@@ -3,6 +3,7 @@ package taflgames.model.builders;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import taflgames.common.Player;
 import taflgames.common.code.Position;
@@ -38,52 +39,41 @@ public final class PiecesCollectionBuilderImpl implements PiecesCollectionBuilde
 
     @Override
     public void addQueens(final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Queen(pos, player));
-            }
-        });
+        addPieces(positions, Queen::new);
     }
 
     @Override
     public void addArchers(final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Archer(pos, player));
-            }
-        });
+        addPieces(positions, Archer::new);
     }
 
     @Override
     public void addShields(final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Shield(pos, player));
-            }
-        });
+        addPieces(positions, Shield::new);
     }
 
     @Override
     public void addSwappers(final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new Swapper(pos, player));
-            }
-        });
+        addPieces(positions, Swapper::new);
     }
 
     @Override
     public void addBasicPieces(final Map<Player, Set<Position>> positions) {
-        positions.forEach((player, posSet) -> {
-            for (final var pos : posSet) {
-                this.pieces.get(player).put(pos, new BasicPiece(pos, player));
-            }
-        });
+        addPieces(positions, BasicPiece::new);
     }
 
     @Override
     public Map<Player, Map<Position, Piece>> build() {
         return new HashMap<>(this.pieces);
+    }
+
+    private void addPieces(
+        final Map<Player, Set<Position>> positions,
+        final BiFunction<Position, Player, ? extends Piece> creator
+    ) {
+        positions.forEach((player, playerPosSet) -> {
+            playerPosSet.forEach(pos -> this.pieces.get(player).put(pos, creator.apply(pos, player)));
+        });
     }
 
 }

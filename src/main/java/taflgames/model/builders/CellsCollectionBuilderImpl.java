@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import taflgames.common.Utils;
 import taflgames.common.code.Position;
 import taflgames.model.cell.code.ClassicCell;
 import taflgames.model.cell.api.Cell;
@@ -38,28 +39,21 @@ public final class CellsCollectionBuilderImpl implements CellsCollectionBuilder 
 
     @Override
     public void addExits(final Set<Position> positions) {
-        for (final var pos : positions) {
-            this.cells.put(pos, new Exit());
-        }
+        positions.forEach(pos -> this.cells.put(pos, new Exit()));
     }
 
     @Override
     public void addSliders(final Set<Position> positions) {
-        for (final var pos : positions) {
-            this.cells.put(pos, new SliderImpl(pos));
-        }
+        positions.forEach(pos -> this.cells.put(pos, new SliderImpl(pos)));
     }
 
     @Override
     public void addBasicCells() {
-        for (int row = 0; row < this.boardSize; row++) {
-            for (int col = 0; col < this.boardSize; col++) {
-                final Position pos = new Position(row, col);
-                if (!this.cells.containsKey(pos)) {
-                    this.cells.put(pos, new ClassicCell());
-                }
-            }
-        }
+        // For each position of the grid where no other type of cell has been placed, place a classic cell
+        Utils.generateAllPositions(this.boardSize)
+                .stream()
+                .filter(pos -> !this.cells.containsKey(pos))
+                .forEach(pos -> this.cells.put(pos, new ClassicCell()));
     }
 
     @Override

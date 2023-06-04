@@ -1,40 +1,29 @@
 # Tafl Games
 
-Lo scopo del progetto è la realizzazione di un’applicazione incentrata su un gioco da tavolo denominato <b>“Hnefatafl”</b>, appartenente alla famiglia dei Tafl Games, un insieme di giochi di origine nordica e celtica.
-<br>Sono previste due modalità di gioco: 
+The heart of this project is the <b>"Hnefatafl"</b> game, one of a family of ancient Northern European board games that goes under the name of Tafl Games.
+<br>There are two different game modes:
 <ul>
     <li>
-        la <b>modalità classica</b>, che emula la versione originale del gioco;
+        the <b>classic mode</b>, that reproduces the original version of Hnefatafl;
     </li>
     <li>
-        la <b>modalità "variante"</b>, che presenta degli elementi aggiuntivi di nostra invenzione.
+        the <b>variant mode</b>, that presents some new features of our invention.
     </li>
 </ul>
 
-È possibile visualizzare il regolamento di gioco di entrambe le modalità all'interno dell'applicazione.
-
-Il progetto è stato realizzato per il corso di Programmazione ad Oggetti del corso di laurea triennale di Ingegneria e Scienze Informatiche dell'Università di Bologna, Campus di Cesena.
+This project has been realized for the Object-Oriented Programming course of the Bachelor's degree in Computer Science and Engineering at University of Bologna, Cesena Campus.
 
 ## Setup
 
-- Prima di avviare l'applicazione, assicurarsi di avere il Java Runtime Environment (versione 17 o successive), scaricabile [qui](https://www.oracle.com/java/technologies/downloads/#java8).
-- In ambiente Linux, eseguire con:
+- Before starting the application, make sure to have the JDK (version 17 or later) installed; it can be downloaded [here](https://www.oracle.com/java/technologies/downloads/).
 
-        ./gradlew run
+- Start the application by running the ``tafl-games-all.jar`` file or, alternatively, by executing the command ``./gradlew run`` (on Linux) / ``.\gradlew.bat run`` (on Windows) in the project root directory.
 
-- Su Windows, eseguire con:
+## User guide
 
-        .\gradlew.bat run
+The rules of both game modes are provided in an apposite section in the game mode choice menu of the application.
 
-- E' anche possibile scaricare il .jar ed eseguirlo con:
-
-        java -jar filepath/tafl-games-all.jar
-
-## Guida Utente
-
-Per giocare è necessario premere il tasto "Pass Turn" in seguito a ciascuna mossa.
-
-## Autori
+## Authors
 <ul>
     <li>Alin Stefan Bordeianu</li>
     <li>Elena Boschetti</li>

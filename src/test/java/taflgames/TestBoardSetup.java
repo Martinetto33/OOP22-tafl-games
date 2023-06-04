@@ -4,11 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +34,7 @@ import taflgames.model.pieces.code.Queen;
 import taflgames.model.pieces.code.Shield;
 import taflgames.model.pieces.code.Swapper;
 import taflgames.common.Player;
+import taflgames.common.Utils;
 
 /**
  * JUnit test for the setup of the board (which consists of the setup of the cells
@@ -105,7 +104,7 @@ class TestBoardSetup {
         // Check classic cells correct placement
         assertEquals(
             getPositions(cells, ClassicCell.class),
-            generateAllPositions()  // generates all the positions of the board
+            Utils.generateAllPositions(BOARD_SIZE)
                 .stream()
                 .filter(pos -> !pos.equals(new Position(5, 5)))     // filter out throne position
                 .filter(pos -> !getPositions(cells, Exit.class).contains(pos))    // filter out exits positions
@@ -221,7 +220,8 @@ class TestBoardSetup {
         // Check classic cells correct placement
         assertEquals(
             getPositions(cells, ClassicCell.class),
-            generateAllPositions().stream()
+            Utils.generateAllPositions(BOARD_SIZE)
+                .stream()
                 .filter(pos -> !pos.equals(new Position(5, 5)))     // filter out throne position
                 .filter(pos -> !getPositions(cells, Exit.class).contains(pos))    // filter out exits positions
                 .filter(pos -> !getPositions(cells, SliderImpl.class).contains(pos))    // filter out sliders psoitions
@@ -318,12 +318,5 @@ class TestBoardSetup {
                 .collect(Collectors.toSet());
     }
 
-    private Set<Position> generateAllPositions() {
-        return  Stream.iterate(0, row -> row + 1).limit(BOARD_SIZE)
-                .map(row -> Stream.iterate(0, col -> col + 1).limit(BOARD_SIZE)
-                                .map(col -> new Position(row, col))
-                                .collect(Collectors.toSet()))
-                .collect(HashSet::new, HashSet::addAll, HashSet::addAll);
-    }
     // CPD-ON
 }
